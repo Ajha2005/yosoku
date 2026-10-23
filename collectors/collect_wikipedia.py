@@ -20,15 +20,16 @@ from urllib.parse import quote, unquote
 
 import requests
 
-from common import DATA_DIR, RAW_DIR, cached, parse_date, read_csv, read_titles, request_json, write_csv
+from common import (RAW_DIR, add_data_dir_argument, cached, data_file, parse_date, read_csv, read_titles, request_json,
+                    use_data_dir, write_csv)
 
 LANGS = ["en", "ja", "hi", "ta", "te"]
 DAYS_BEFORE = 120
 DAYS_AFTER = 120
 FIRST_DAY = date(2015, 7, 1)  # the pageviews API has no earlier data
 
-ARTICLES_CSV = DATA_DIR / "wiki_articles.csv"
-DAILY_CSV = DATA_DIR / "wikipedia_daily.csv"
+ARTICLES_CSV = "wiki_articles.csv"
+DAILY_CSV = "wikipedia_daily.csv"
 CACHE = RAW_DIR / "wikipedia"
 
 SPARQL_URL = "https://query.wikidata.org/sparql"
@@ -88,7 +89,8 @@ def langlinks(article):
 
 def find_articles(titles):
     """Load data/wiki_articles.csv, look up titles missing from it, save it, and return {anilist_id: row}."""
-    known = {row["anilist_id"]: row for row in read_csv(ARTICLES_CSV)} if ARTICLES_CSV.exists() else {}
+    path = data_file(ARTICLES_CSV)
+    known = {row["anilist_id"]: row for row in read_csv(path)} if path.exists() else {}
     new = [t for t in titles if t["anilist_id"] not in known]
     if new:
         print(f"Finding Wikipedia articles for {len(new)} titles")
@@ -109,8 +111,8 @@ def find_articles(titles):
             }
             if i % 50 == 0:
                 print(f"  {i}/{len(new)}")
-        write_csv(ARTICLES_CSV, list(known.values()), ARTICLE_FIELDS)
-        print(f"Saved {ARTICLES_CSV}; check the rows marked 'search'")
+        write_csv(path, list(known.values()), ARTICLE_FIELDS)
+        print(f"Saved {path}; check the rows marked 'search'")
     return known
 
 
@@ -127,7 +129,8 @@ def fetch_views(lang, article, first, last):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.parse_args()
+    add_data_dir_argument(parser)
+    use_data_dir(parser.parse_args().data_dir)
 
     titles = read_titles()
     articles = find_articles(titles)
@@ -164,8 +167,8 @@ def main():
         if i % 100 == 0:
             print(f"Pageviews: {i}/{len(titles)} titles")
 
-    write_csv(DAILY_CSV, rows, DAILY_FIELDS)
-    print(f"Saved {len(rows)} daily rows to {DAILY_CSV}")
+    write_csv(data_file(DAILY_CSV), rows, DAILY_FIELDS)
+    print(f"Saved {len(rows)} daily rows to {data_file(DAILY_CSV)}")
 
 
 if __name__ == "__main__":

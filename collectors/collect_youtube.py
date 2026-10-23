@@ -26,12 +26,13 @@ from datetime import date, timedelta
 
 import requests
 
-from common import DATA_DIR, RAW_DIR, cached, load_json, parse_date, read_titles, request_json, save_json, write_csv
+from common import (RAW_DIR, add_data_dir_argument, cached, data_file, load_json, parse_date, read_titles, request_json,
+                    save_json, use_data_dir, write_csv)
 
 API_URL = "https://www.googleapis.com/youtube/v3/"
 CACHE = RAW_DIR / "youtube"
-VIDEOS_CSV = DATA_DIR / "youtube_videos.csv"
-COMMENTS_CSV = DATA_DIR / "youtube_comments.csv"
+VIDEOS_CSV = "youtube_videos.csv"
+COMMENTS_CSV = "youtube_comments.csv"
 MAX_UNITS_PER_TITLE = 300  # two searches plus comment pages; stops a run before it overshoots the budget
 
 VIDEO_FIELDS = [
@@ -184,7 +185,9 @@ def main():
     parser.add_argument("--videos-per-query", type=int, default=3)
     parser.add_argument("--comment-pages", type=int, default=10, help="pages of 100 comments per video")
     parser.add_argument("--no-hindi", dest="hindi", action="store_false", help="skip the Hindi-dub search (halves the cost)")
+    add_data_dir_argument(parser)
     args = parser.parse_args()
+    use_data_dir(args.data_dir)
 
     key = os.getenv("YOUTUBE_API_KEY")
     if not key:
@@ -218,9 +221,9 @@ def main():
         comment_rows += [{"anilist_id": title["anilist_id"], "video_id": video_id, **c}
                          for c in load_json(comments_path(video_id))]
 
-    write_csv(VIDEOS_CSV, video_rows, VIDEO_FIELDS)
-    write_csv(COMMENTS_CSV, comment_rows, COMMENT_FIELDS)
-    print(f"Saved {len(video_rows)} videos to {VIDEOS_CSV} and {len(comment_rows)} comments to {COMMENTS_CSV}")
+    write_csv(data_file(VIDEOS_CSV), video_rows, VIDEO_FIELDS)
+    write_csv(data_file(COMMENTS_CSV), comment_rows, COMMENT_FIELDS)
+    print(f"Saved {len(video_rows)} videos to {data_file(VIDEOS_CSV)} and {len(comment_rows)} comments to {data_file(COMMENTS_CSV)}")
     print(f"Quota units used this run: {youtube.units_used}")
 
 
