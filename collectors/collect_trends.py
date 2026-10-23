@@ -28,19 +28,19 @@ from datetime import date, timedelta
 from pytrends_modern import TrendReq
 from pytrends_modern.exceptions import TooManyRequestsError
 
-from common import (DATA_DIR, RAW_DIR, cached, load_json, parse_date, read_csv, read_titles, save_json, search_names,
-                    write_csv)
+from common import (RAW_DIR, add_data_dir_argument, cached, data_file, load_json, parse_date, read_csv, read_titles,
+                    save_json, search_names, use_data_dir, write_csv)
 
 DAYS_BEFORE = 90
 DAYS_AFTER = 120  # windows under 270 days come back as daily values
 CACHE = RAW_DIR / "trends"
 IST_OFFSET_MINUTES = -330  # Trends wants UTC minus local time
 
-OVERRIDES_CSV = DATA_DIR / "trends_overrides.csv"  # optional, written by hand: anilist_id,term
-TERMS_CSV = DATA_DIR / "trends_terms.csv"
-DAILY_CSV = DATA_DIR / "trends_india_daily.csv"
-STATES_CSV = DATA_DIR / "trends_india_states.csv"
-COUNTRIES_CSV = DATA_DIR / "trends_countries.csv"
+OVERRIDES_CSV = "trends_overrides.csv"  # optional, written by hand: anilist_id,term
+TERMS_CSV = "trends_terms.csv"
+DAILY_CSV = "trends_india_daily.csv"
+STATES_CSV = "trends_india_states.csv"
+COUNTRIES_CSV = "trends_countries.csv"
 
 # Topic types that mean "this suggestion is the show", e.g. "2020 anime series" or "Manga series".
 SHOW_TYPES = ("anime", "manga", "animat", "series", "franchise", "film", "novel")
@@ -138,11 +138,11 @@ def write_outputs(titles):
                    for r in result["states"]]
         countries += [{**base, "country": r["name"], "country_code": r["code"], "interest": r["interest"]}
                       for r in result["countries"]]
-    write_csv(TERMS_CSV, terms, TERMS_FIELDS)
-    write_csv(DAILY_CSV, daily, DAILY_FIELDS)
-    write_csv(STATES_CSV, states, STATES_FIELDS)
-    write_csv(COUNTRIES_CSV, countries, COUNTRIES_FIELDS)
-    print(f"Saved Trends data for {len(terms)} titles to data/trends_*.csv")
+    write_csv(data_file(TERMS_CSV), terms, TERMS_FIELDS)
+    write_csv(data_file(DAILY_CSV), daily, DAILY_FIELDS)
+    write_csv(data_file(STATES_CSV), states, STATES_FIELDS)
+    write_csv(data_file(COUNTRIES_CSV), countries, COUNTRIES_FIELDS)
+    print(f"Saved Trends data for {len(terms)} titles to {data_file(TERMS_CSV).parent / 'trends_*.csv'}")
 
 
 def main():
@@ -151,10 +151,13 @@ def main():
     parser.add_argument("--anchor", default="Naruto",
                         help="fixed term in every India request, so titles are on one scale; never change it mid-collection")
     parser.add_argument("--pause", type=float, default=15, help="seconds to wait before each request")
+    add_data_dir_argument(parser)
     args = parser.parse_args()
+    use_data_dir(args.data_dir)
 
     titles = read_titles(args.limit)
-    overrides = {row["anilist_id"]: row["term"] for row in read_csv(OVERRIDES_CSV)} if OVERRIDES_CSV.exists() else {}
+    overrides_path = data_file(OVERRIDES_CSV)
+    overrides = {row["anilist_id"]: row["term"] for row in read_csv(overrides_path)} if overrides_path.exists() else {}
     trends = Trends(args.pause)
     yesterday = date.today() - timedelta(days=1)
     anchor_path = CACHE / "_anchor.json"

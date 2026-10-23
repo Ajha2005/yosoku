@@ -22,12 +22,13 @@ import sys
 
 import requests
 
-from common import DATA_DIR, RAW_DIR, normalize, parse_date, read_titles, session, write_csv
+from common import (RAW_DIR, add_data_dir_argument, data_file, normalize, parse_date, read_titles, session,
+                    use_data_dir, write_csv)
 
 NETFLIX_URL = "https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv"
 TSV_PATH = RAW_DIR / "netflix" / "all-weeks-countries.tsv"
-INDIA_CSV = DATA_DIR / "netflix_india_top10.csv"
-MATCHES_CSV = DATA_DIR / "netflix_matches.csv"
+INDIA_CSV = "netflix_india_top10.csv"
+MATCHES_CSV = "netflix_matches.csv"
 
 INDIA_FIELDS = ["week", "category", "weekly_rank", "show_title", "season_title", "cumulative_weeks_in_top_10"]
 MATCH_FIELDS = ["anilist_id", "title_english", "title_romaji", "days_from_start", *INDIA_FIELDS]
@@ -97,18 +98,20 @@ def match(india_rows, titles):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--refresh", action="store_true", help="download the file again even if it is already saved")
+    add_data_dir_argument(parser)
     args = parser.parse_args()
+    use_data_dir(args.data_dir)
 
     if args.refresh or not TSV_PATH.exists():
         download()
 
     india_rows = read_india_rows()
-    write_csv(INDIA_CSV, india_rows, INDIA_FIELDS)
-    print(f"Saved {len(india_rows)} India Top 10 rows to {INDIA_CSV}")
+    write_csv(data_file(INDIA_CSV), india_rows, INDIA_FIELDS)
+    print(f"Saved {len(india_rows)} India Top 10 rows to {data_file(INDIA_CSV)}")
 
     matches = match(india_rows, read_titles())
-    write_csv(MATCHES_CSV, matches, MATCH_FIELDS)
-    print(f"Matched {len(matches)} rows to {len({m['anilist_id'] for m in matches})} titles; saved {MATCHES_CSV}")
+    write_csv(data_file(MATCHES_CSV), matches, MATCH_FIELDS)
+    print(f"Matched {len(matches)} rows to {len({m['anilist_id'] for m in matches})} titles; saved {data_file(MATCHES_CSV)}")
 
 
 if __name__ == "__main__":

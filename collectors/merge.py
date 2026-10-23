@@ -19,7 +19,7 @@ import argparse
 
 import pandas as pd
 
-from common import DATA_DIR, TITLES_CSV, read_titles
+from common import add_data_dir_argument, data_file, read_titles, use_data_dir
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 WIKI_LANGS = ["en", "ja", "hi", "ta", "te"]
@@ -34,11 +34,11 @@ INDIC_SCRIPTS = {
     "kannada": "ಀ-೿",
     "malayalam": "ഀ-ൿ",
 }
-OUT_CSV = DATA_DIR / "dataset.csv"
+OUT_CSV = "dataset.csv"
 
 
 def load(name):
-    path = DATA_DIR / name
+    path = data_file(name)
     if not path.exists():
         print(f"  {name} not found; skipping it")
         return None
@@ -139,10 +139,11 @@ def trends(titles):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.parse_args()
+    add_data_dir_argument(parser)
+    use_data_dir(parser.parse_args().data_dir)
 
     read_titles()  # exits with a hint if titles.csv is missing
-    titles = pd.read_csv(TITLES_CSV, encoding="utf-8-sig").set_index("anilist_id")
+    titles = pd.read_csv(data_file("titles.csv"), encoding="utf-8-sig").set_index("anilist_id")
     parts = [titles]
     for source in (wikipedia, netflix, youtube, trends):
         part = source(titles)
@@ -152,8 +153,8 @@ def main():
             parts.append(part)
 
     dataset = pd.concat(parts, axis=1)
-    dataset.to_csv(OUT_CSV, encoding="utf-8-sig")
-    print(f"Saved {len(dataset)} titles x {dataset.shape[1]} columns to {OUT_CSV}")
+    dataset.to_csv(data_file(OUT_CSV), encoding="utf-8-sig")
+    print(f"Saved {len(dataset)} titles x {dataset.shape[1]} columns to {data_file(OUT_CSV)}")
 
 
 if __name__ == "__main__":

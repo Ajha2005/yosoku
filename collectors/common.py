@@ -14,9 +14,10 @@ import requests
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = ROOT / "data"
-RAW_DIR = DATA_DIR / "raw"  # cached API responses, so a rerun skips work already done
-TITLES_CSV = DATA_DIR / "titles.csv"
+# Cached API responses, so a rerun skips work already done. Shared by every data folder:
+# entries are keyed by title or article, so released and upcoming titles never collide.
+RAW_DIR = ROOT / "data" / "raw"
+_data_dir = ROOT / "data"
 
 load_dotenv(ROOT / ".env")
 
@@ -70,6 +71,22 @@ def save_json(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
+def add_data_dir_argument(parser):
+    parser.add_argument("--data-dir", default="data",
+                        help="folder holding titles.csv and the outputs (default: data); "
+                             "use e.g. data/upcoming for unreleased titles so they stay out of the training data")
+
+
+def use_data_dir(folder):
+    global _data_dir
+    _data_dir = ROOT / folder
+
+
+def data_file(name):
+    """Path of a file in the current data folder: data/ unless --data-dir chose another."""
+    return _data_dir / name
+
+
 def cached(path, fetch, save=True):
     """Return the JSON stored at `path`; if there is none, call fetch(), store its result and return it."""
     if path.exists():
@@ -95,10 +112,11 @@ def write_csv(path, rows, fields):
 
 
 def read_titles(limit=None):
-    """Rows of data/titles.csv, most popular first; only the first `limit` rows if given."""
-    if not TITLES_CSV.exists():
-        sys.exit("data/titles.csv not found. Run `python collectors/collect_titles.py` first.")
-    titles = read_csv(TITLES_CSV)
+    """Rows of titles.csv, most popular first; only the first `limit` rows if given."""
+    path = data_file("titles.csv")
+    if not path.exists():
+        sys.exit(f"{path} not found. Run `python collectors/collect_titles.py` first (with the same --data-dir).")
+    titles = read_csv(path)
     titles.sort(key=lambda row: int(row["popularity"] or 0), reverse=True)
     return titles[:limit] if limit else titles
 

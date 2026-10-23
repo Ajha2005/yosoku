@@ -5,7 +5,7 @@
 data/raw/
 
 # comment text gets large; share it outside git if needed
-data/youtube_comments.csv
+youtube_comments.csv
 
 # python
 __pycache__/

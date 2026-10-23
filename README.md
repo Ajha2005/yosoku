@@ -68,8 +68,27 @@ python collectors/merge.py
 ### Choosing titles
 
 `collect_titles.py` keeps the 50 most popular Japanese anime of each season from 2019 to 2025
-(about 1,400 titles). Change that with `--start-year`, `--end-year` and `--per-season`.
+(about 1,400 titles). Change that with `--start-year`, `--end-year`, `--per-season` and `--seasons`.
 YouTube and Trends are slow, so they only take the `--limit` most popular titles (default 200).
+Each title comes with its synopsis and its well-fitting, spoiler-free AniList tags, which the
+lookalike model uses.
+
+### Upcoming titles (live forecasts)
+
+Unreleased titles get their own folder, so they never mix into the training data. Give every step
+the same `--data-dir`:
+
+```
+python collectors/collect_titles.py --data-dir data/upcoming --start-year 2027 --end-year 2027 --seasons WINTER
+python collectors/collect_wikipedia.py --data-dir data/upcoming
+python collectors/collect_youtube.py --data-dir data/upcoming
+python collectors/collect_trends.py --data-dir data/upcoming
+python collectors/merge.py --data-dir data/upcoming
+```
+
+Their windows are still running, so these titles are fetched fresh on every run; rerun them before the demo
+for the latest buzz. The cache in `data/raw/` is shared between folders, which is safe because it is keyed by
+title. Netflix is skipped here: an unreleased title cannot be in a chart yet.
 
 ### Sharing the YouTube work between three keys
 
