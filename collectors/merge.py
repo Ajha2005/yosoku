@@ -1,0 +1,160 @@
+"""Step 6: join every collector's output into data/dataset.csv, one row per title.
+
+Works with whichever outputs exist so far; sources not collected yet are skipped.
+Daily values are summed or averaged over windows counted in days from the
+Japanese start date:
+
+  pre     the 28 days before start (all you know before launch)
+  week1   start day and the 6 days after
+  month1  start day and the 27 days after (the deck's "week 4" horizon)
+
+A blank cell means "no data", which is different from zero: a title with no
+Hindi Wikipedia article, a title not on Netflix, or one that started before
+Netflix published India charts. Keep the two apart in the India Demand Index.
+
+    python collectors/merge.py
+"""
+
+import argparse
+
+import pandas as pd
+
+from common import DATA_DIR, TITLES_CSV, read_titles
+
+WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
+WIKI_LANGS = ["en", "ja", "hi", "ta", "te"]
+NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
+NETFLIX_DAYS = 90
+# Comments typed in these scripts; Hinglish typed in Latin letters is not caught (see README).
+INDIC_SCRIPTS = {
+    "devanagari": "ऀ-ॿ",
+    "bengali": "ঀ-৿",
+    "tamil": "஀-௿",
+    "telugu": "ఀ-౿",
+    "kannada": "ಀ-೿",
+    "malayalam": "ഀ-ൿ",
+}
+OUT_CSV = DATA_DIR / "dataset.csv"
+
+
+def load(name):
+    path = DATA_DIR / name
+    if not path.exists():
+        print(f"  {name} not found; skipping it")
+        return None
+    return pd.read_csv(path, encoding="utf-8-sig")
+
+
+def window_totals(rows, value, how, index):
+    """{window: Series indexed by anilist_id} of rows[value] summed or averaged within each window."""
+    totals = {}
+    for window, (lo, hi) in WINDOWS.items():
+        inside = rows[rows["days_from_start"].between(lo, hi)]
+        totals[window] = inside.groupby("anilist_id")[value].agg(how).reindex(index)
+    return totals
+
+
+def wikipedia(titles):
+    daily, articles = load("wikipedia_daily.csv"), load("wiki_articles.csv")
+    if daily is None or articles is None:
+        return None
+    articles = articles.set_index("anilist_id").reindex(titles.index)
+    out = pd.DataFrame(index=titles.index)
+    for lang in WIKI_LANGS:
+        has_article = articles[lang].notna() & titles["start_date"].notna()
+        for window, views in window_totals(daily[daily["lang"] == lang], "views", "sum", titles.index).items():
+            # Days with no views are absent from the API's answer, so an article with no rows had 0 views.
+            out[f"wiki_{lang}_{window}"] = views.fillna(0).where(has_article)
+    return out
+
+
+def netflix(titles):
+    matches = load("netflix_matches.csv")
+    if matches is None:
+        return None
+    inside = matches[matches["days_from_start"].between(0, NETFLIX_DAYS)]
+    weeks = inside.groupby("anilist_id")["week"].nunique().reindex(titles.index).fillna(0)
+    charts_cover_it = titles["start_date"].fillna("") >= NETFLIX_CHARTS_START
+    on_netflix = titles["streaming_sites"].fillna("").str.contains("Netflix") | (weeks > 0)
+    return pd.DataFrame({
+        f"netflix_top10_weeks_{NETFLIX_DAYS}d": weeks.where(charts_cover_it & on_netflix),
+        f"netflix_best_rank_{NETFLIX_DAYS}d": inside.groupby("anilist_id")["weekly_rank"].min().reindex(titles.index),
+    })
+
+
+def youtube(titles):
+    videos = load("youtube_videos.csv")
+    if videos is None:
+        return None
+    out = pd.DataFrame(index=titles.index)
+    searched = titles.index.isin(videos["anilist_id"])
+    top = videos[videos["search_rank"] == 1]
+    for kind, suffix in (("trailer", "official trailer"), ("hindi", "hindi dub")):
+        first = top[top["query"].str.endswith(suffix)].drop_duplicates("anilist_id").set_index("anilist_id")
+        out[f"yt_{kind}_views"] = first["views"].reindex(titles.index)
+
+    comments = load("youtube_comments.csv")
+    if comments is None:
+        return out
+    start = pd.to_datetime(titles["start_date"])
+    published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
+    comments["days_from_start"] = (published - comments["anilist_id"].map(start)).dt.days
+    comments["one"] = 1
+    for window, count in window_totals(comments, "one", "sum", titles.index).items():
+        out[f"yt_comments_{window}"] = count.fillna(0).where(searched)
+    text = comments["text"].fillna("").astype(str)
+    for script, letters in INDIC_SCRIPTS.items():
+        comments[script] = text.str.contains(f"[{letters}]", regex=True)
+        out[f"yt_share_{script}"] = comments.groupby("anilist_id")[script].mean().reindex(titles.index)
+    return out
+
+
+def trends(titles):
+    terms, daily = load("trends_terms.csv"), load("trends_india_daily.csv")
+    if terms is None or daily is None:
+        return None
+    out = pd.DataFrame(index=titles.index)
+    collected = titles.index.isin(terms["anilist_id"])
+    for window, mean in window_totals(daily, "title_interest", "mean", titles.index).items():
+        # A collected title with no rows had too few searches for Trends to report: treat as 0.
+        out[f"trends_{window}"] = mean.fillna(0).where(collected)
+    anchor = daily.groupby("anilist_id")["anchor_interest"].mean().reindex(titles.index)
+    out["trends_month1_vs_anchor"] = out["trends_month1"] / anchor.where(anchor > 0)
+
+    countries = load("trends_countries.csv")
+    if countries is not None:
+        countries["rank"] = countries.groupby("anilist_id")["interest"].rank(ascending=False, method="min")
+        india = countries[countries["country_code"] == "IN"].set_index("anilist_id")
+        out["trends_india_country_interest"] = india["interest"].reindex(titles.index)
+        out["trends_india_country_rank"] = india["rank"].reindex(titles.index)
+
+    states = load("trends_india_states.csv")
+    if states is not None:
+        positive = states[states["interest"] > 0]
+        out["trends_states_with_interest"] = positive.groupby("anilist_id").size().reindex(titles.index).fillna(0).where(collected)
+        top = states.sort_values("interest", ascending=False).drop_duplicates("anilist_id").set_index("anilist_id")
+        out["trends_top_state"] = top["state"].where(top["interest"] > 0).reindex(titles.index)
+    return out
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.parse_args()
+
+    read_titles()  # exits with a hint if titles.csv is missing
+    titles = pd.read_csv(TITLES_CSV, encoding="utf-8-sig").set_index("anilist_id")
+    parts = [titles]
+    for source in (wikipedia, netflix, youtube, trends):
+        part = source(titles)
+        if part is not None:
+            covered = part.notna().any(axis=1).sum()
+            print(f"{source.__name__}: data for {covered} of {len(titles)} titles")
+            parts.append(part)
+
+    dataset = pd.concat(parts, axis=1)
+    dataset.to_csv(OUT_CSV, encoding="utf-8-sig")
+    print(f"Saved {len(dataset)} titles x {dataset.shape[1]} columns to {OUT_CSV}")
+
+
+if __name__ == "__main__":
+    main()

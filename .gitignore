@@ -1,0 +1,14 @@
+# secrets
+.env
+
+# cached API responses (big, and rebuilt by rerunning the collectors)
+data/raw/
+
+# comment text gets large; share it outside git if needed
+data/youtube_comments.csv
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
