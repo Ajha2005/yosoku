@@ -10,7 +10,8 @@ Japanese start date:
   early   Reddit only: days -90 to -29, before the T-28 forecast moment
 
 yt_india_* counts comments written by people in India (Indian scripts, Hinglish typed in Latin
-letters, or naming India); yt_share_<hub> is the share pointing to each language hub. If
+letters, or naming India); yt_share_<hub> is the share pointing to each language hub, and
+yt_dub_share the share of the Indian ones asking for or about an Indian-language dub. If
 comment_languages.csv exists (collectors/detect_languages.py), IndicLID helps find Hinglish.
 
 A blank cell means "no data", which is different from zero: a title with no
@@ -113,6 +114,9 @@ def youtube(titles):
         out[f"yt_india_{window}"] = count.fillna(0).where(searched)
     by_title = found.groupby(comments["anilist_id"])
     out["yt_share_india"] = by_title["india"].mean().reindex(titles.index)
+    # Of the Indian comments, the share asking for or about a Hindi, Tamil or other Indian-language dub.
+    india_count = by_title["india"].sum()
+    out["yt_dub_share"] = (by_title["dub_ask"].sum() / india_count.where(india_count > 0)).reindex(titles.index)
     for hub in HUBS:
         out[f"yt_share_{hub}"] = by_title[hub].mean().reindex(titles.index)
     return out

@@ -112,6 +112,14 @@ def test_end_to_end(fake):
     for moment, info in payload["evaluation"]["moments"].items():  # gate G4 fallback
         assert info["used"] == (info["main"] if info["beats_baseline"] else info["best_baseline"])
         assert payload["thresholds"][moment]["method"] == info["used"]
+    assert set(payload["window_evidence"]) == {"Festive season (Oct–Nov)", "Board exams (Feb–Mar)",
+                                               "IPL cricket (Apr–May)", "Other months"}
+    assert sum(w["n"] for w in payload["window_evidence"].values()) > 0
+    for title in payload["titles"]:
+        assert title["release_window"] in payload["window_evidence"]
+        for forecast in title["forecasts"].values():
+            dub = forecast["dub_demand"]
+            assert (dub["share"] is None) == (dub["titles"] == 0)
 
 
 def test_simple_rule_makes_the_forecast(fake):
@@ -183,3 +191,12 @@ def test_wikipedia_launch_article():
     related = lambda page, article: page in links  # noqa: E731
     assert launch_article("Demon Slayer: Kimetsu no Yaiba season 1", fetch, related)[0] == "Demon Slayer: Kimetsu no Yaiba"
     assert launch_article("Lazarus (Japanese TV series)", fetch, related) is None  # the Bible's Lazarus does not link to it; the list has too few views
+
+
+def test_dub_requests():
+    from yosoku.data import classify
+    text = pd.Series(["Hindi dub kab aayega", "please dub in tamil", "Tamil dubbed", "love from India",
+                      "Now in Hindi Dub on Crunchyroll! https://bit.ly/x", "dubbed version when"])
+    found = classify(text)
+    assert found["dub_ask"].tolist() == [True, True, True, False, False, False]  # links are channels announcing, not fans asking
+    assert (found["india"] | ~found["dub_ask"]).all()  # every dub request also counts as an Indian comment
