@@ -12,7 +12,7 @@ const PALETTES = [
   { sky: ["#4d0f20", "#ee6a4a"], sun: "#ffe8b0", far: "#8c1f35", near: "#3f0c1c", water: "#2a0612", line: "#ff9d7f", ink: "#1a0409" },
 ];
 
-import { esc, safeUrl } from "./data.js";
+import { esc, safeUrl } from "./data.js?v=2";
 
 const W = 200, H = 300;
 let uid = 0;
@@ -180,10 +180,10 @@ export function startPetals(canvas) {
 
   const start = () => { if (!running) { running = true; raf = requestAnimationFrame(frame); } };
   const stop = () => { running = false; cancelAnimationFrame(raf); };
-  resize();
-  addEventListener("resize", resize);
-  // Only animate while the hero is on screen.
+  // Resize with the canvas, which also covers the hero being shown again after another page; animate only while it is on screen.
+  const sizer = new ResizeObserver(resize);
+  sizer.observe(canvas);
   const watcher = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()));
   watcher.observe(canvas);
-  return () => { stop(); watcher.disconnect(); removeEventListener("resize", resize); };
+  return () => { stop(); watcher.disconnect(); sizer.disconnect(); };
 }

@@ -1,11 +1,11 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js";
-import { posterHTML, artSVG, startPetals } from "./art.js";
-import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js";
-import { createDetail, countUp } from "./detail.js";
-import { showTip, hideTip } from "./tip.js";
-import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=2";
+import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=2";
+import { createDetail, countUp } from "./detail.js?v=2";
+import { showTip, hideTip } from "./tip.js?v=2";
+import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=2";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -61,25 +61,46 @@ function initTheme() {
   sync();
 }
 
+const PAGES = { home: "Overview", forecasts: "Forecasts", record: "Track record", method: "Method" };
+const TITLE_HASH = /^#\/title\/(\d+)(?:\/([^/]+))?$/;
+const pageFromHash = (hash) => (hash.match(/^#\/(forecasts|record|method)\/?$/) || [, "home"])[1];
+
+function updateNav() {
+  // Over the hero the bar is transparent; on every other page, or once scrolled, it is solid.
+  $("#nav").classList.toggle("scrolled", state.page !== "home" || scrollY > 24);
+}
+
+/** Shows one page and marks its tab. Pages stay in the DOM, so a page keeps its filters while you look at another. */
+function showPage(page) {
+  const changed = state.page !== page;
+  state.page = page;
+  $$(".page").forEach((el) => {
+    const on = el.dataset.page === page;
+    el.hidden = !on;
+    if (on && changed && !reduced) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
+  });
+  $$("#tabs [role=tab]").forEach((tab) => {
+    const on = tab.dataset.page === page;
+    tab.setAttribute("aria-selected", on);
+    tab.tabIndex = on ? 0 : -1;
+  });
+  document.title = page === "home" ? "Yosoku 予測 · India launch forecasts for anime" : `${PAGES[page]} · Yosoku 予測`;
+  if (changed) scrollTo({ top: 0, behavior: "instant" });
+  updateNav();
+}
+
 function initNav() {
-  const nav = $("#nav");
-  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 24);
-  addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-  const links = new Map($$("[data-section]").map((a) => [a.dataset.section, a]));
-  const watcher = new IntersectionObserver((entries) => {
-    for (const entry of entries) if (entry.isIntersecting) links.forEach((a, key) => a.classList.toggle("on", key === entry.target.id));
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  links.forEach((_, key) => watcher.observe($(`#${key}`)));
-  // Smooth scroll for in-page links, instant when motion is reduced.
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest('a[href^="#"]:not([href^="#/"])');
-    if (!a || a.getAttribute("href") === "#") return;
-    const target = $(a.getAttribute("href"));
-    if (!target) return;
+  history.scrollRestoration = "manual";   // pages swap in place, so the browser's saved scroll positions would be wrong
+  addEventListener("scroll", updateNav, { passive: true });
+  // Arrow keys move between tabs, as in any tab bar.
+  $("#tabs").addEventListener("keydown", (e) => {
+    const tabs = $$("#tabs [role=tab]");
+    const at = tabs.indexOf(document.activeElement);
+    if (at < 0 || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
     e.preventDefault();
-    target.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-    history.replaceState(null, "", a.getAttribute("href"));
+    const next = e.key === "Home" ? 0 : e.key === "End" ? tabs.length - 1 : (at + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    tabs[next].focus();
+    location.hash = tabs[next].getAttribute("href");
   });
 }
 
@@ -118,7 +139,10 @@ function renderHero() {
   }).join("");
 
   const evaluation = bestEvaluation();
-  const stats = [{ n: app.data.titles.length, suffix: "", label: "titles forecast" }];
+  const stats = [
+    { n: app.data.titles.length, suffix: "", label: "titles forecast" },
+    { n: Object.keys(MOMENTS).length, suffix: "", label: "stages of the release cycle" },
+  ];
   if (evaluation) {
     const { info } = evaluation, label = MOMENTS[evaluation.key].label, used = info.used ?? info.main;
     if (Number.isFinite(info.table.mae[used])) stats.push({ n: info.table.mae[used], suffix: "", label: `average miss, in index points, on the 2024 titles (${label})`, decimals: 1 });
@@ -226,7 +250,7 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
   }).join("");
 
   const m = MOMENTS[state.moment];
-  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(ruleText(app.data.thresholds[state.moment], true))}`;
+  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>`;
 
   const list = visibleTitles();
   $("#grid").classList.toggle("still", keepFocus);
@@ -291,7 +315,10 @@ function renderRecord() {
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[used], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
       <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[used]) ? pct(t.top20[used]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
-    </div>${used !== info.main ? `<p class="note">At this stage our model did not beat the simple rule "${esc(used)}" on the 2024 titles, so that rule makes the forecasts and verdicts. The closest past titles still come from our model.</p>` : ""}` : "";
+    </div>
+    <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
+      <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
+      <span>Checked on the 2024 titles, which the model never saw in training.${used !== info.main ? ` So at this stage "${esc(used)}" makes the forecasts and verdicts; the closest past titles still come from our model.` : ""}</span></p>` : "";
 
   host.innerHTML = `
     <div class="record-top">
@@ -305,7 +332,7 @@ function renderRecord() {
         <p class="note">Each dot is one title. On the dotted line the forecast was exactly right. Open any dot to see why. The verdict lines were tuned on these same titles, so the Launch and Hold split looks a little better here than it will on new ones.</p></div>
       <div class="record-side">${score}<div class="tiles">${medians}</div></div>
     </div>
-    ${info ? `<div class="panel models"><h3>Our model against simple rules</h3>${modelBars(info)}
+    ${info ? `<div class="panel models"><h2>Our model against simple rules</h2>${modelBars(info)}
       <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}`;
 
   const draw = () => scatter($("#scatter"), rows, lines, MOMENTS[moment].label, state.hidden, (id) => { location.hash = `#/title/${id}/${encodeURIComponent(moment)}`; });
@@ -348,23 +375,30 @@ function initDotTips() {
 function renderMethod() {
   $("#method-body").innerHTML = `
     <div class="composition reveal">
-      <h3>Three signals, one index</h3>
+      <h2>Three signals, one index</h2>
       <div class="comp-bar" role="img" aria-label="${INDEX_PARTS.map((p) => `${p.name} ${p.weight}%`).join(", ")}">${INDEX_PARTS.map((p) =>
         `<span class="comp comp-${p.key}" style="flex:${p.weight}"><b>${p.weight}%</b></span>`).join("")}</div>
       <ul class="comp-legend">${INDEX_PARTS.map((p) => `<li><i class="swatch comp-${p.key}"></i><span><b>${esc(p.name)}</b>${esc(p.detail)}</span></li>`).join("")}</ul>
     </div>
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
-    <h3 class="sources-title reveal">Where the data comes from, and where it can mislead</h3>
+    <h2 class="sources-title reveal">Where the data comes from, and where it can mislead</h2>
     <div class="sources">${SOURCES.map((s, i) => `<article class="source reveal" style="--i:${i}">
-      <h4>${esc(s.name)}</h4>
+      <h3>${esc(s.name)}</h3>
       <dl><dt>What it tells us</dt><dd>${esc(s.tells)}</dd><dt>Bias and gaps</dt><dd>${esc(s.bias)}</dd><dt>Reliability</dt><dd>${esc(s.reliability)}</dd></dl></article>`).join("")}</div>`;
 }
 
 // ---------------------------------------------------------------- routing and boot
 
 function route() {
-  const match = location.hash.match(/^#\/title\/(\d+)(?:\/([^/]+))?$/);
-  if (!match) return detail.close();
+  const match = location.hash.match(TITLE_HASH);
+  if (!match) {
+    sheetPushed = false;
+    detail?.close();
+    showPage(pageFromHash(location.hash));
+    return;
+  }
+  if (!app.data) return;
+  if (!state.page) showPage("forecasts");   // a shared link opens straight onto a title: draw a page behind the sheet
   const id = Number(match[1]);
   const moment = match[2] ? decodeURIComponent(match[2]) : null;
   const title = app.data.titles.find((x) => x.anilist_id === id);
@@ -372,16 +406,19 @@ function route() {
     // Not in the slate as it is filtered now (a deep link, or a dot in the track record): browse its own group instead.
     detail.setOrder(groupTitles(title.group).sort((a, b) => a.name.localeCompare(b.name)).map((x) => x.anilist_id));
   }
-  if (detail.show(id, moment) === false) history.replaceState(null, "", location.pathname + location.search);
+  if (detail.show(id, moment) === false) history.replaceState(null, "", pageHash(state.page));
 }
+
+const pageHash = (page) => location.pathname + location.search + (page === "home" ? "" : `#/${page}`);
 
 function requestClose() {
   if (sheetPushed) { sheetPushed = false; history.back(); return; }
-  history.replaceState(null, "", location.pathname + location.search);
+  history.replaceState(null, "", pageHash(state.page));   // opened from a shared link: there is no earlier page to go back to
   detail.close();
 }
 
 function showError(error) {
+  showPage("forecasts");
   $("#grid").innerHTML = `<p class="callout error">${esc(error.message)}</p>`;
 }
 
@@ -402,6 +439,15 @@ async function boot() {
   initCovers();
   initTheme();
   initNav();
+  let previous = location.hash;
+  const first = TITLE_HASH.test(location.hash) ? "forecasts" : pageFromHash(location.hash);
+  showPage(first);   // right away, so a link to another page never flashes the overview
+  addEventListener("hashchange", () => {
+    const wasTitle = TITLE_HASH.test(previous), isTitle = TITLE_HASH.test(location.hash);
+    if (isTitle && !wasTitle) sheetPushed = true;
+    previous = location.hash;
+    route();
+  });
   let loaded;
   try { loaded = await loadData(); } catch (error) { showError(error); initReveal(); return; }
   app.data = loaded.data;
@@ -423,15 +469,7 @@ async function boot() {
   initTilt();
   initReveal();
 
-  let previous = "";
-  addEventListener("hashchange", () => {
-    const wasTitle = /^#\/title\//.test(previous), isTitle = /^#\/title\//.test(location.hash);
-    if (isTitle && !wasTitle) sheetPushed = true;
-    previous = location.hash;
-    route();
-  });
-  previous = location.hash;
-  if (/^#\/title\//.test(location.hash)) route();
+  route();
 }
 
 boot();

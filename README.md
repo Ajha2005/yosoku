@@ -136,7 +136,7 @@ python -m http.server -d web 8000  # the dashboard, at http://localhost:8000
 
 ## The website (static, for Vercel)
 
-`web/` is the dashboard, a plain static site (no server, no build step):
+`web/` is the dashboard, a plain static site (no server, no build step) with four tabs (Overview, Forecasts, Track record, Method):
 poster wall, a verdict card for every title, an India language-hub map, the backtest and the method. Vercel can
 host it because it is only HTML, CSS, JavaScript and two JSON files.
 

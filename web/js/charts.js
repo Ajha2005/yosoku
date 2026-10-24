@@ -1,7 +1,7 @@
 // Charts, hand-built from HTML and SVG so they stay light, crisp and themeable. Each returns markup (or fills a node).
 
-import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js";
-import { INDIA } from "./india-map.js";
+import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=2";
+import { INDIA } from "./india-map.js?v=2";
 
 const vclass = (verdict) => VERDICTS[verdict]?.cls ?? "test";
 

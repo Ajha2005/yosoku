@@ -1,9 +1,9 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js";
-import { posterHTML } from "./art.js";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap } from "./charts.js";
-import { showTip, hideTip, showToast } from "./tip.js";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
+import { posterHTML } from "./art.js?v=2";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap } from "./charts.js?v=2";
+import { showTip, hideTip, showToast } from "./tip.js?v=2";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CALENDAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 3v4M16 3v4"/></svg>';
