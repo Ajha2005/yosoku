@@ -57,7 +57,9 @@ export function safeUrl(url) {
 
 export const round = (n) => Math.round(Number(n));
 export const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
-export const pct = (n) => `${Math.round(n * 100)}%`;
+export const pct = (n) => (Number.isFinite(n) ? `${Math.round(n * 100)}%` : "–");
+/** n with `digits` decimals, or a dash when it is missing (e.g. a correlation that could not be computed). */
+export const fixed = (n, digits) => (Number.isFinite(n) ? n.toFixed(digits) : "–");
 export const titleCase = (s) => String(s).replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });

@@ -10,11 +10,19 @@ looked up again.
 Then it downloads daily views by people (bots excluded) from 120 days before to
 120 days after each title's Japanese start date, into data/wikipedia_daily.csv.
 
+An English article with no views at all in that window was usually written after launch
+(e.g. "Demon Slayer: Kimetsu no Yaiba season 1", split from the main article later). For those
+it tries the names readers used back then (the main article, "List of ... episodes") and keeps
+the one with the most views, among those that link to the article (so "Lazarus (Japanese TV
+series)" never becomes the Bible's Lazarus). Each swap is saved in wiki_articles.csv (match_method "fallback")
+and listed in wiki_articles_fixes.csv (action "fallback"); check them like the "search" rows.
+
     python collectors/collect_wikipedia.py
 """
 
 import argparse
 import hashlib
+import re
 from datetime import date, datetime, timedelta
 from urllib.parse import quote, unquote
 
@@ -28,7 +36,10 @@ DAYS_BEFORE = 120
 DAYS_AFTER = 120
 FIRST_DAY = date(2015, 7, 1)  # the pageviews API has no earlier data
 
+MIN_FALLBACK_VIEWS = 1000  # over the whole window; less is a redirect or an unrelated stub
 ARTICLES_CSV = "wiki_articles.csv"
+FIXES_CSV = "wiki_articles_fixes.csv"
+FIX_FIELDS = ["anilist_id", "title", "old_en", "action", "new_en", "hi", "ta", "te"]
 DAILY_CSV = "wikipedia_daily.csv"
 CACHE = RAW_DIR / "wikipedia"
 
@@ -89,6 +100,14 @@ def langlinks(article):
     return {link["lang"]: link["title"] for link in pages[0].get("langlinks", []) if link["lang"] in LANGS}
 
 
+def links_to(page, article):
+    """True if English Wikipedia's `page` (not a redirect) links to `article` today."""
+    params = {"action": "query", "prop": "links", "titles": page, "pltitles": article,
+              "format": "json", "formatversion": 2}
+    pages = request_json("GET", EN_API_URL, params=params)["query"]["pages"]
+    return bool(pages and pages[0].get("links"))
+
+
 def find_articles(titles):
     """Load data/wiki_articles.csv, look up titles missing from it, save it, and return {anilist_id: row}."""
     path = data_file(ARTICLES_CSV)
@@ -129,6 +148,33 @@ def fetch_views(lang, article, first, last):
         raise
 
 
+def launch_names(article):
+    """Names an English article may have had at launch, before it was split off or renamed; best guess first."""
+    base = re.sub(r"\s+(?:season \d+|\(season \d+\)|\((?:\d{4} )?(?:Japanese )?(?:TV series|film|anime)\))$", "", article)
+    names = [base] if base != article else []
+    if " – " in base:  # "Demon Slayer: Kimetsu no Yaiba – The Movie: Mugen Train"
+        names.append(base.split(" – ")[0])
+    names += [f"List of {name} episodes" for name in names or [article]]
+    return list(dict.fromkeys(n for n in names if n != article))
+
+
+def launch_article(article, fetch, related):
+    """(name, items) of the older name with the most views in the window, or None if none has MIN_FALLBACK_VIEWS.
+
+    `fetch(name)` returns the pageview items for that name in the window; `related(name, article)` says
+    whether that page is about the same show (it links to the article).
+    """
+    best = None
+    for name in launch_names(article):
+        if not related(name, article):
+            continue
+        items = fetch(name)
+        total = sum(item["views"] for item in items)
+        if total >= MIN_FALLBACK_VIEWS and (best is None or total > best[2]):
+            best = (name, items, total)
+    return best[:2] if best else None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_dir_argument(parser)
@@ -138,7 +184,7 @@ def main():
     articles = find_articles(titles)
     yesterday = date.today() - timedelta(days=1)
 
-    rows = []
+    rows, fixes = [], []
     for i, title in enumerate(titles, 1):
         start_date = parse_date(title["start_date"])
         if not start_date:
@@ -149,13 +195,26 @@ def main():
             continue
         window_complete = last == start_date + timedelta(days=DAYS_AFTER)
         for lang in LANGS:
-            article = articles[title["anilist_id"]][lang]
+            row = articles[title["anilist_id"]]
+            article = row[lang]
             if not article:
                 continue
-            key = hashlib.md5(article.encode()).hexdigest()[:8]
-            path = CACHE / f"{title['anilist_id']}_{lang}_{key}.json"
-            # A window that is still running is fetched fresh each time instead of cached.
-            items = cached(path, lambda: fetch_views(lang, article, first, last), save=window_complete)
+
+            def views(name):
+                key = hashlib.md5(name.encode()).hexdigest()[:8]
+                path = CACHE / f"{title['anilist_id']}_{lang}_{key}.json"
+                # A window that is still running is fetched fresh each time instead of cached.
+                return cached(path, lambda: fetch_views(lang, name, first, last), save=window_complete)
+
+            items = views(article)
+            if not items and lang == "en" and window_complete:
+                found = launch_article(article, views, links_to)
+                if found:
+                    fixes.append({"anilist_id": title["anilist_id"], "title": row["title"], "old_en": article,
+                                  "action": "fallback", "new_en": found[0],
+                                  **{k: row[k] for k in ("hi", "ta", "te")}})
+                    article, items = found
+                    row.update(en=article, match_method="fallback")
             for item in items:
                 day = datetime.strptime(item["timestamp"][:8], "%Y%m%d").date()
                 rows.append({
@@ -169,6 +228,11 @@ def main():
         if i % 100 == 0:
             print(f"Pageviews: {i}/{len(titles)} titles")
 
+    if fixes:
+        write_csv(data_file(ARTICLES_CSV), list(articles.values()), ARTICLE_FIELDS)
+        old = read_csv(data_file(FIXES_CSV)) if data_file(FIXES_CSV).exists() else []
+        write_csv(data_file(FIXES_CSV), old + fixes, FIX_FIELDS)
+        print(f"Swapped {len(fixes)} English articles that did not exist at launch; see {FIXES_CSV} (action 'fallback')")
     write_csv(data_file(DAILY_CSV), rows, DAILY_FIELDS)
     print(f"Saved {len(rows)} daily rows to {data_file(DAILY_CSV)}")
 

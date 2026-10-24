@@ -78,15 +78,19 @@ def metadata(titles, genres):
 
 
 def activity(titles, wiki, comments, moment, reddit=None):
-    """Wikipedia views, trailer comments and Reddit posts in each of the moment's windows, log1p; blank sources become 0 plus a flag."""
+    """Wikipedia views, trailer comments and Reddit posts in each of the moment's windows, log1p; unknown is blank, not 0."""
     out = pd.DataFrame(index=titles.index)
     cutoff = CUTOFF[moment]
     posts = None if reddit is None else reddit.assign(one=1)
     for window, (lo, hi) in WINDOWS[moment].items():
         if wiki is not None:
             for group, langs in WIKI_GROUPS.items():
-                views = window_total(wiki[wiki["lang"].isin(langs)], "views", lo, hi, cutoff, titles.index)
-                out[f"wiki_{group}_{window}"] = np.log1p(views.fillna(0))
+                rows = wiki[wiki["lang"].isin(langs)]
+                views = np.log1p(window_total(rows, "views", lo, hi, cutoff, titles.index).fillna(0))
+                if group != "india":  # India has has_india_article instead: few titles have such an article
+                    # No rows by the cutoff: the matched article did not exist yet, so the views are unknown.
+                    views = views.where(titles.index.isin(rows.loc[rows["days_from_start"] <= cutoff, "anilist_id"]))
+                out[f"wiki_{group}_{window}"] = views
         if comments is not None:
             for name, column in (("yt_comments", None), ("yt_india", "india")):
                 rows = comments.assign(one=1)

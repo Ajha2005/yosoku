@@ -19,6 +19,7 @@
   --muted: #aab0ca;
   --faint: #8189ac;
 
+  --k-default: #2a3270;             /* header glow in the forecast sheet when a title has no cover colour */
   --sun: #e5412d;                   /* the vermilion disc, a constant */
   --shu: #ff6a52;                   /* vermilion as text, lines and marks on a dark ground */
   --shu-fill: #d2381f;              /* vermilion as a fill under white text */
@@ -476,6 +477,18 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .result.in { box-shadow: inset 3px 0 0 var(--launch); }
 .result.out { box-shadow: inset 3px 0 0 var(--test); }
 
+.dub { display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--line); font-size: 14.5px; color: var(--muted); }
+.dub-n { flex: none; font: 800 44px/1 var(--font-display); font-variant-numeric: tabular-nums; color: var(--shu); }
+.wins { margin-bottom: var(--s-4); }
+.win { display: grid; grid-template-columns: minmax(130px, 220px) 1fr 40px 76px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.win-name em { display: block; font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--shu); }
+.win.is-mine { color: var(--text); font-weight: 600; }
+.win-track { position: relative; height: 10px; border-radius: 2px; background: var(--surface-2); overflow: hidden; }
+.win-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: var(--bar); }
+.win.is-mine .win-track i { background: var(--shu); }
+.win-val, .win-extra { text-align: right; font-variant-numeric: tabular-nums; }
+.win-val { font-weight: 700; }
+
 .d-section { margin-top: clamp(40px, 5vw, 60px); }
 .d-section h3 { margin-bottom: var(--s-4); padding-bottom: var(--s-3); border-bottom: 1px solid var(--line); font: 700 clamp(22px, 2.6vw, 28px)/1.2 var(--font-display); }
 .d-section h3 small { margin-left: 8px; font: 400 14px var(--font); color: var(--faint); }
@@ -738,7 +751,8 @@ svg.scatter { display: block; overflow: visible; }
   .hero-wall { opacity: 0.45; }
   .mast-sun { width: 210px; top: calc(var(--nav-h) - 36px); right: -64px; }
   .mast-kanji { top: calc(var(--nav-h) - 6px); bottom: auto; right: 12px; font-size: 72px; }
-  .d-hero-inner { grid-template-columns: 112px 1fr; align-items: end; gap: var(--s-4); }
+  .d-hero-inner { grid-template-columns: 112px 1fr; align-items: start; gap: var(--s-4); }
+  .win { grid-template-columns: 1fr 34px 64px; } .win-track { display: none; } .dub { align-items: flex-start; } .dub-n { font-size: 34px; }
   .stage { justify-items: start; }
   .d-score { flex-direction: column; align-items: flex-start; gap: 10px; }
   .drv { grid-template-columns: 1fr 64px; gap: 6px 10px; }
