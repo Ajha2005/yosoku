@@ -11,7 +11,10 @@ current ones.
 > hits. Its forecasts for next season are sealed, so you can check us. And the same pipeline runs for Indonesia,
 > Thailand, Brazil or Mexico by changing one setting."
 
-Judges here weigh the business case, scale and money most, so every stop below ends on what a buyer gets.
+The business case is told in the final presentation, not on the site: the prototype is what a buyer would use, and
+the business story is ours to explain. See "Business story (final presentation)" below; its numbers come from the site.
+
+## Site walkthrough (3 minutes)
 
 | Time | Where | Say |
 | --- | --- | --- |
@@ -21,20 +24,38 @@ Judges here weigh the business case, scale and money most, so every stop below e
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:15 | Print icon, then 稟 on the sheet | "Every title prints as a one-page brief for an executive who will never open the site, or as a Japanese 稟議書: conclusion, grounds, the closest past titles and what they share, risks, the next decision dates, and boxes for the approvers' seals. It goes straight into a Japanese licensor's approval process." |
 | 1:35 | Track record, *When will we know?* | "At Cold our model did not beat a simple rule (genre average), so the rule makes those forecasts and the page says so." Then the decision clock: "Before the premiere, waiting helps little: 0.29 seven weeks out, 0.38 one week out. Three days after it, 0.53. So: license small and early, decide the dub on day 3 to 7." |
-| 1:55 | **Business**, *What following our calls would have been worth* | "This is what a buyer gets. At T+7, 10 of the 11 titles we called *Launch* ended in the top third of real India demand; picking at random lands there one time in three. The lines were tuned on these titles, so that is optimistic: the sealed forecasts are the honest check." |
-| 2:15 | Business, *Who pays* | Four customers and the decision each makes: platforms (what to license, when, whether to dub), Japanese licensors (which titles to offer India, how to price the rights), cinema chains (which films, which languages), dubbing studios (which titles and languages). "The money is real: Demon Slayer: Infinity Castle took about ₹66 crore in Indian cinemas." |
-| 2:30 | Business, *Expansion* | "A market is a setting: the same collectors and model, with that country's Netflix chart and Wikipedia languages. India runs today; Indonesia, Thailand, Brazil and Mexico are set up. Outside India the index has two parts until a comment word list exists for their languages." Then *Why us*: built around the launch decision, India-specific signals, honest about its limits, cheap to run. |
+| 1:55 | Demand guide, *What India is asking for* | "1,197 Indian comments on 68 titles ask for a dub, mostly Hindi, or for when and where they can watch. Join where each title is already available in India, and this is a sales list: the titles India asks for and cannot get." |
+| 2:15 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then *What each signal is worth*: genre, format, source and audience carry Cold, global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7. |
 | 2:45 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air. Every season adds to a dated track record a newcomer cannot copy." |
 
-If there is time, or a judge asks how it works: **Demand guide → What India is asking for** ("1,197 Indian comments
-on 68 titles ask for a dub or for where to watch: joined with availability, that is a sales list") and **Method** (how
-a forecast becomes a verdict, the index checks with the six box office films, and *What each signal is worth*).
+## Business story (final presentation)
+
+Not on the site. Four slides, in this order; every number is from the site as committed.
+
+1. **What following our calls would have been worth.** At T+7, 10 of the 11 titles we called *Launch* ended in the top
+   third of real India demand (2024 titles, never trained on); picking at random lands there one time in three. At T−28,
+   4 of 4. At Cold every title is Test-market: before any buzz the ranges are too wide, which is itself the advice.
+   The lines were tuned on these titles, so the rates are optimistic; the sealed forecasts and the 2025 test are the honest checks.
+2. **Who pays, and for which decision.** Streaming platforms and TV channels (what to license, when, whether to dub);
+   Japanese studios and licensors (which titles to offer India, how to price the rights; every reason is already in
+   Japanese, and the 稟議書 brief fits their approval process); cinema chains (which films, which languages); dubbing
+   studios (which titles and languages). The money is real: Demon Slayer: Infinity Castle took about ₹66 crore in Indian cinemas.
+3. **Expansion.** A market is a setting (`collectors/markets.py`): the same collectors and model, with that country's
+   Netflix chart and Wikipedia languages. India runs today; Indonesia, Thailand, Brazil and Mexico are set up, none
+   collected yet. Outside India the index has two parts until a comment word list exists for their languages.
+   Roadmap: anime in India now → the same anime in more markets → K-dramas and films, any direction, with partner signals.
+4. **Why us.** Built around the launch decision (a verdict with reasons, not a dashboard); India-specific signals;
+   honest about its limits (where our model loses to a simple rule, the rule is shipped); cheap to run (public data).
+   Global firms such as Parrot Analytics already sell cross-country demand data to studios, so buyers pay for this kind of answer.
+
+`web/js/business.js` renders the same four sections from the site's data. It is kept in the repo but not linked from
+the site; to show it live, import `renderBusiness` in `web/js/main.js` and render it into a page.
 
 ## Business questions to prepare for
 
 - **Who pays?** Whoever makes an India launch decision with money on it: streaming platforms and TV channels (rights,
   timing, dubs), Japanese studios and licensors (which titles to offer India, at what price), cinema chains and film
-  distributors (which anime films, which languages), dubbing studios (which titles to pitch). The Business tab lists them.
+  distributors (which anime films, which languages), dubbing studios (which titles to pitch).
 - **How do you make money?** A season subscription for buyers (every new title at all three stages, refreshed as data
   arrives), one-page title briefs sold one at a time, and later a partner tier that adds a platform's own pre-launch
   signals. We have not tested prices with a buyer yet; say so if asked for numbers.
