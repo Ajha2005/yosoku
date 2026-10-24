@@ -5,6 +5,8 @@ import sys
 from datetime import date, datetime, timedelta
 from types import SimpleNamespace
 
+import pandas as pd
+
 from yosoku.data import ROOT
 
 sys.path.insert(0, str(ROOT / "collectors"))
@@ -139,3 +141,27 @@ def test_title_list_refresh_keeps_titles_that_slipped(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", args)
     collect_titles.main()
     assert [r["anilist_id"] for r in common.read_csv(tmp_path / "titles.csv")] == ["1"]  # without --keep, the list is replaced
+
+
+def test_daily_job_labels_new_comments_with_indiclid(tmp_path, monkeypatch, capsys):
+    """IndicLID runs between the YouTube refresh and the merge when fastText is installed; without it the daily job
+    says what is missing and carries on."""
+    from yosoku import daily
+    common.write_csv(tmp_path / "titles.csv", [{"anilist_id": 1, "season": "WINTER", "year": 2027}], ["anilist_id", "season", "year"])
+    calls = []
+
+    def fake_run(script, *args, check=True):
+        calls.append(script.rsplit("/", 1)[1])
+        if script.endswith("collect_youtube.py"):  # the refresh writes the comments
+            (tmp_path / "youtube_comments.csv").write_text("comment_id,text\n", encoding="utf-8")
+        return 0
+
+    monkeypatch.setattr(daily, "run", fake_run)
+    monkeypatch.setenv("YOUTUBE_API_KEY", "not-a-real-key")
+    for installed in (True, False):
+        monkeypatch.setattr(daily, "has_fasttext", lambda installed=installed: installed)
+        calls.clear()
+        daily.collect(tmp_path, pd.Timestamp("2027-01-20"))
+        assert calls == ["collect_titles.py", "collect_wikipedia.py", "collect_netflix.py", "collect_youtube.py",
+                         *(["detect_languages.py"] if installed else []), "merge.py"]
+    assert "pip install fasttext" in capsys.readouterr().out

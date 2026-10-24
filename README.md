@@ -183,9 +183,11 @@ python -m yosoku.daily --no-collect   # the same from the files already collecte
 ```
 
 - It runs the collectors for `data/upcoming`: `collect_titles.py --keep` (picks up announced start dates and never
-  drops a title already forecast), Wikipedia, Netflix (the weekly file fetched again on Wednesdays), and
+  drops a title already forecast), Wikipedia, Netflix (the weekly file fetched again on Wednesdays),
   `collect_youtube.py --refresh`, which fetches only comments newer than the cached ones, searches again weekly for
-  new trailers and logs today's view counts (kept 30 days, as YouTube's API policies require).
+  new trailers and logs today's view counts (kept 30 days, as YouTube's API policies require), then IndicLID on the
+  comments it has not labelled yet, so new comments are read the way the old ones were. IndicLID needs
+  `pip install fasttext` on the machine that runs the job; without it, the job says so and uses the word list alone.
 - Each title in play is forecast as of today with the decision clock's model; the forecast goes into
   `predictions/history.csv` (one row per title per day), and each upcoming title's sheet on the site draws it.
 - `reports/alerts.md` lists titles whose forecast has left the 80% range of their last verdict, or crossed a

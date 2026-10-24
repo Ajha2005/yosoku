@@ -6,7 +6,8 @@ titles before that point are collected and forecast again. The daily work grows 
 the archive; refitting and the backtests (python -m yosoku.run) only need rerunning when titles get their labels.
 
   1. collect   the collectors for the upcoming folder: titles (--keep), Wikipedia, Netflix's weekly charts (fetched
-               again on Wednesdays), YouTube in --refresh mode (new comments only, view counts logged), merge
+               again on Wednesdays), YouTube in --refresh mode (new comments only, view counts logged), IndicLID on
+               the comments not labelled yet (when fastText is installed), merge
   2. label     upcoming titles whose 28 days are over get their India Demand Index (yosoku.labels)
   3. forecast  every title in play, as of today: data up to yesterday, the decision clock's model and range
   4. log       predictions/history.csv, one row per title per day: the forecast as it stood that day
@@ -18,6 +19,7 @@ the archive; refitting and the backtests (python -m yosoku.run) only need rerunn
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import subprocess
@@ -131,23 +133,39 @@ def run(module, *args, check=True):
     return subprocess.run(command, cwd=ROOT, check=check).returncode
 
 
+def has_fasttext():
+    return importlib.util.find_spec("fasttext") is not None
+
+
 def collect(upcoming_dir, today):
-    """Step 1: the collectors for the titles still in play. A collector that fails is reported, not fatal."""
+    """Step 1: the collectors for the titles still in play, in order. A collector that fails is reported, not fatal."""
     titles = read(upcoming_dir / "titles.csv")
     years, seasons = titles["year"].astype(int), sorted(set(titles["season"]))
     folder_args = ["--data-dir", str(upcoming_dir)]
+    failed = []
+
+    def step(script, *args):
+        if run(script, *folder_args, *args, check=False):
+            failed.append(script)
+
     # --keep: a title that slips out of the top of its season stays tracked, so its sealed forecast can still be scored.
-    steps = [("collectors/collect_titles.py", [*folder_args, "--keep", "--start-year", str(years.min()),
-                                               "--end-year", str(years.max()), "--seasons", *seasons]),
-             ("collectors/collect_wikipedia.py", folder_args),
-             # Aired titles need their Netflix weeks for the label; Netflix publishes the week's lists on Tuesdays.
-             ("collectors/collect_netflix.py", [*folder_args, *(["--refresh"] if today.weekday() == 2 else [])])]
+    step("collectors/collect_titles.py", "--keep", "--start-year", str(years.min()), "--end-year", str(years.max()),
+         "--seasons", *seasons)
+    step("collectors/collect_wikipedia.py")
+    # Aired titles need their Netflix weeks for the label; Netflix publishes the week's lists on Tuesdays.
+    step("collectors/collect_netflix.py", *(["--refresh"] if today.weekday() == 2 else []))
     if os.getenv("YOUTUBE_API_KEY"):
-        steps.append(("collectors/collect_youtube.py", [*folder_args, "--refresh"]))
+        step("collectors/collect_youtube.py", "--refresh")
     else:
         print("No YOUTUBE_API_KEY: skipped YouTube; the forecasts use the comments collected so far.")
-    steps.append(("collectors/merge.py", folder_args))
-    failed = [name for name, args in steps if run(name, *args, check=False)]
+    # IndicLID reads the short Hinglish the word list misses, so new comments are counted the way the old ones were.
+    # It skips comments it has labelled already, so a day it misses is caught up the next.
+    if (upcoming_dir / "youtube_comments.csv").exists():
+        if has_fasttext():
+            step("collectors/detect_languages.py")
+        else:
+            print("No fastText: new comments are read by the word list alone. `pip install fasttext` adds IndicLID.")
+    step("collectors/merge.py")
     if failed:
         print(f"These collectors failed and will be retried tomorrow: {', '.join(failed)}")
 
