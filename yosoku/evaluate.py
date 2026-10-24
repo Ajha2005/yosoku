@@ -102,11 +102,6 @@ def evaluate(titles, labels, features):
         roll = rolling(moment, features, titles, labels)
         main = MAIN[moment]
         before_validation = roll[~roll["season"].str.endswith(str(2024))] if len(roll) else roll
-        width = conformal_width((before_validation[main] - labels.reindex(before_validation.index)).to_numpy()) \
-            if len(before_validation) else np.nan
-        if np.isnan(width):  # too few rolling seasons: fall back to validation errors, and say so
-            width = conformal_width((methods[main] - actual).to_numpy())
-        inside = ((methods[main] - actual).abs() <= width).mean()
 
         table = []
         for method in methods.columns:
@@ -126,24 +121,35 @@ def evaluate(titles, labels, features):
         beats = best is not None and table.loc[main, "spearman"] > others.loc[best, "spearman"] \
             and table.loc[main, "top20"] >= others.loc[best, "top20"] \
             and table.loc[main, "new_spearman"] > others.loc[best, "new_spearman"]
+        # Gate G4's fallback: where the model does not beat the best simple rule, that rule makes the forecasts.
+        used = main if beats or best is None else best
+        width = conformal_width((before_validation[used] - labels.reindex(before_validation.index)).to_numpy()) \
+            if len(before_validation) else np.nan
+        if np.isnan(width):  # too few rolling seasons: fall back to validation errors, and say so
+            width = conformal_width((methods[used] - actual).to_numpy())
+        inside = ((methods[used] - actual).abs() <= width).mean()
 
         lines += [f"## Moment: {moment}", "",
                   "| Method | Spearman (95% interval) | Top-20% hit | MAE | New shows | Sequels | Rolling seasons |",
                   "| --- | --- | --- | --- | --- | --- | --- |"]
         for method, r in table.iterrows():
-            mark = " **(main)**" if method == main else ""
+            mark = (" **(main)**" if method == main else "") + (" **(used)**" if method == used else "")
             lines.append(f"| {method}{mark} | {fmt(r.spearman)} ({fmt(r.low)} to {fmt(r.high)}) | {fmt(r.top20)} | "
                          f"{fmt(r.mae, 1)} | {fmt(r.new_spearman)} | {fmt(r.sequel_spearman)} | "
                          f"{fmt(r.rolling_spearman)} over {int(r.rolling_seasons)} |")
-        lines += ["", f"- 80% range: ± {fmt(width, 1)} points; contains the truth for **{inside:.0%}** of 2024 titles "
-                      "(target 70–90%).",
-                  f"- Best baseline: {best}. {main} beats it overall, on top-20% hits and for new shows: "
-                  f"**{'yes' if beats else 'no'}**.", ""]
-        results["moments"][moment] = {"main": main, "width": width, "coverage": float(inside), "beats_baseline": bool(beats),
-                                      "best_baseline": best, "table": json.loads(table.to_json())}
+        lines += ["", f"- Best baseline: {best}. {main} beats it overall, on top-20% hits and for new shows: "
+                      f"**{'yes' if beats else 'no'}**.",
+                  f"- Forecasts and verdicts use: **{used}**."
+                  + ("" if used == main else " The model does not beat this rule, so the rule is shipped (gate G4 fallback)."),
+                  f"- 80% range ({used}): ± {fmt(width, 1)} points; contains the truth for **{inside:.0%}** of 2024 titles "
+                  "(target 70–90%).", ""]
+        results["moments"][moment] = {"main": main, "used": used, "width": width, "coverage": float(inside),
+                                      "beats_baseline": bool(beats), "best_baseline": best,
+                                      "table": json.loads(table.to_json())}
     passed = all(m["beats_baseline"] for m in results["moments"].values())
     lines += ["## Gate G4", "", f"Main model beats the best baseline at every moment: **{'PASS' if passed else 'FAIL'}**. "
-              "If it fails, ship the best baseline plus the lookalike evidence, and report it."]
+              "Where it does not, the best baseline makes the forecasts and the model's lookalikes are kept as evidence "
+              "(marked **(used)** above)."]
     return "\n".join(lines) + "\n", results
 
 
