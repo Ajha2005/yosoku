@@ -24,34 +24,6 @@ export const SOURCES = [
     bias: "Today's popularity and score include the outcome, so they are never model inputs.", reliability: "Reliable; audience tags are the only age proxy in public data." },
 ];
 
-// The source scorecard on the Method page. Coverage comes from the data (predictions.json "sources");
-// the columns here are judgements, written once. `part` links a row to its numbers.
-export const SCORECARD = [
-  { part: "youtube", name: "YouTube trailer comments from India", role: "Index 50% · model input",
-    india: "High: Indian scripts, Hinglish or naming India", lead: "Months: trailers come out before launch",
-    bias: "Top 200 titles only; newest 1,000 comments per video unless kept up to date daily; misses Indian English" },
-  { part: "streaming", name: "Netflix India Top 10", role: "Index 33%",
-    india: "High: India's own chart", lead: "None: only after release",
-    bias: "Netflix titles only, from June 2021; a top-10 list hides the rest" },
-  { part: "wikipedia", name: "Wikipedia pageviews", role: "Index 17% · model input",
-    india: "Low: English views are global", lead: "Weeks: articles exist before launch",
-    bias: "Indian-language articles exist mostly for big titles" },
-  { name: "AniList metadata", role: "Model input", coverage: "1,400 of 1,400",
-    india: "None: describes the show", lead: "Full: known at announcement",
-    bias: "Popularity and score are today's values, so they are never inputs" },
-  { name: "India box office", role: "Check only", coverage: "6 films",
-    india: "High", lead: "None: only after release",
-    bias: "Six films with an India release; figures mix net and gross and some runs were unfinished" },
-];
-
-export const NOT_USED = [
-  { name: "X / Twitter", why: "No usable free public API for historical posts." },
-  { name: "AniList popularity and score", why: "Measured today, so they include how the show turned out: using them would be hindsight (leakage)." },
-  { name: "Whether a title was searched on YouTube", why: "Only the 200 most popular titles were, ranked by today's popularity, so the flag itself is hindsight. Their comment counts are used; the flag is not." },
-  { name: "Merchandise and ticket sales", why: "No public source by title and country." },
-  { name: "Reddit", why: "A collector is built (Arctic Shift archive), but no Reddit data is in the current forecasts. It is global rather than India-specific, so it would only ever be a model input, never part of the index." },
-];
-
 // How a forecast becomes a verdict, for the Method page. The per-stage table under it is read from the data.
 export const FORECAST_STEPS = [
   { title: "Closest past titles", body: "Find the 10 past titles most like this one by genres, tags, source, format, studio, audience and synopsis words, and average their India Demand Index, closest counting most." },
