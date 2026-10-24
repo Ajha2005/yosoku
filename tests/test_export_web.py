@@ -114,5 +114,6 @@ def test_beyond_india_agrees_with_the_country_charts():
     world = guide.build(ROOT / "data")["markets"]
     counts = [c["titles"] for c in world["by_country"]]
     assert counts == sorted(counts, reverse=True) and counts[0] <= world["titles"] and len(counts) == world["countries"]
-    assert world["by_country"][world["india_rank"] - 1]["iso2"] == "IN"
+    india = next(c for c in world["by_country"] if c["iso2"] == "IN")
+    assert world["india_rank"] == 1 + sum(c["titles"] > india["titles"] for c in world["by_country"])  # ties share a place
     assert 0.5 < world["auc"] <= 1  # the countries of similar titles beat chance at picking where a title charts

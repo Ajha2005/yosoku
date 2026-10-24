@@ -176,7 +176,7 @@ large one where demand for anime is barely measured.
    collector reads only India's rows today. "Where else does this title travel?" (Indonesia, the Philippines,
    Brazil, Mexico, the Gulf) is a short step, and comment language is easier to read there than Hinglish.
    *Built: every forecast lists where its closest earlier titles charted (88 countries; AUC 0.70 per country against
-   0.55 by genre), and the Demand guide shows where anime charts: India comes 39th of 88. Next: platforms beyond Netflix.*
+   0.55 by genre), and the Demand guide shows where anime charts: India comes joint 36th of 88. Next: platforms beyond Netflix.*
 8. **Money, once a partner shares it.** The index measures attention. India revenue or viewing hours for 30–50 titles
    from one rights holder or platform would let Yosoku forecast money. That is the single most valuable partnership to seek.
    *Built: the plumbing (`yosoku/money.py`): 30 or more titles of partner figures turn every forecast into a range in
@@ -270,7 +270,7 @@ Taking the comment text out of the public repo:
 - **毎日更新**：放送前後の作品は毎日予測し直し、判定の範囲を外れた作品をアラートでお知らせします。
 - **稟議書をそのまま出力**：各作品のページから、結論・根拠・前例（類似作品とその共通点、インドでの実績）・リスク・次の判断日をまとめた1枚の稟議書（案）を印刷できます。
 - **ヒットの確率**：放送3日後から、インドで上位3分の1に入る確率を示します（放送7日後の検証では、70%以上とした予測の94%が的中）。
-- **他の市場**：Netflixの88か国のTop 10から、類似作品がヒットした国を作品ごとに示します（インドは88か国中39位）。
+- **他の市場**：Netflixの88か国のTop 10から、類似作品がヒットした国を作品ごとに示します（インドは88か国中36位タイ）。
 - **売上見込み**：パートナーから過去30作品以上のインドでの実績をご提供いただければ、すべての予測に円建ての範囲を付けられます（非公開で運用）。
 - **インドが求めている作品**：インドのファンが吹替や視聴方法を求めたコメント（68作品、1,197件。うちヒンディー語吹替1,016件）を作品ごとに一覧にしています。
 - **現状の課題も正直に**：放送前（コールド）の予測はまだ弱く、指数の多くはインド固有ではない英語版Wikipediaの閲覧数に依存しています。インドからのWikipedia閲覧数、Google Trends API、インドの配信事業者のYouTubeチャンネルで、指数をインド固有のものにしていきます。

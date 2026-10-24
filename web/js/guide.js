@@ -169,7 +169,7 @@ export function renderGuide(app, host) {
       <p class="g-sub">Where anime reaches Netflix's weekly Top 10: of the ${esc(W.titles)} titles that charted in any of ${esc(W.countries)}
         countries within six months of their Japanese start, how many charted in each.</p>
       <ul class="wins">${top.map(row).join("")}${india && !top.includes(india) ? row(india) : ""}</ul>
-      <p class="note">India comes ${esc(ordinal(W.india_rank))} of ${esc(W.countries)}. Southeast and East Asia lead, after Japan itself.
+      <p class="note">India comes ${W.india_tied ? "joint " : ""}${esc(ordinal(W.india_rank))} of ${esc(W.countries)}. Southeast and East Asia lead, after Japan itself.
         Every forecast sheet lists the countries where titles like it charted (Where else it could travel).${W.auc ? ` Checked on past
         titles, that list ranks the titles that charted in a country above the rest at ${W.auc.toFixed(2)} on average over
         ${esc(W.countries_checked)} countries (0.5 is chance).` : ""} Netflix only: a title has to be on Netflix to chart.</p>

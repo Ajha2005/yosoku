@@ -65,7 +65,7 @@ def travel(titles, reach, names, target_ids):
                  "share": round(sum(s for i, s in near if c in reach[i]) / weight, 3),
                  "titles": sum(c in reach[i] for i, _ in near),
                  "typical": round(float(np.mean([c in reach[i] for i in past])), 3)} for c in countries]
-        rows.sort(key=lambda r: (-r["share"], -r["typical"]))
+        rows.sort(key=lambda r: (-r["share"], -r["typical"], r["iso2"]))  # the code last, so ties never reorder
         shown = rows[:SHOWN] + [r for r in rows[SHOWN:] if r["iso2"] == "IN"]
         out[int(target)] = {"of": len(near), "countries": shown}
     return out
@@ -98,7 +98,8 @@ def check(titles, reach):
 def summary(titles, reach, names):
     """The world view for the site: how many titles reached each country's Top 10, and India's place."""
     counts = pd.Series([c for i in reach for c in reach[i]]).value_counts()
-    order = list(counts.index)
+    counts = counts.loc[sorted(counts.index, key=lambda c: (-counts[c], c))]  # ties by code, the same every run
     return {"titles": len(reach), "countries": len(counts), **check(titles, reach),
-            "india_rank": order.index("IN") + 1 if "IN" in order else None,
+            "india_rank": int((counts > counts["IN"]).sum()) + 1 if "IN" in counts else None,  # ties share a place
+            "india_tied": int((counts == counts["IN"]).sum()) - 1 if "IN" in counts else 0,
             "by_country": [{"iso2": c, "name": names.get(c, c), "titles": int(n)} for c, n in counts.items()]}
