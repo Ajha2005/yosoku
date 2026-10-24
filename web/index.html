@@ -13,11 +13,11 @@
   <meta property="og:image" content="img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <script src="js/theme.js?v=6"></script>
+  <script src="js/theme.js?v=7"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -83,6 +83,7 @@
     <section class="section" id="slate" aria-labelledby="slate-title">
       <div class="controls reveal" id="controls"></div>
       <p class="legend" id="legend"></p>
+      <ul class="alerts" id="alerts" aria-label="Titles whose daily forecast moved" hidden></ul>
       <div class="grid" id="grid" aria-live="polite"></div>
       <div class="more" id="more" hidden><button class="btn btn-outline" type="button"></button></div>
       <p class="empty" id="empty" hidden>No titles match. Try another verdict, stage or search.</p>
@@ -137,6 +138,7 @@
       <div>
         <p class="footer-brand"><span class="brand-mark" aria-hidden="true">予</span> Yosoku <span lang="ja">予測</span></p>
         <p class="footer-credit">Thapar Japan Hackathon · GEEK-PS-01 · Team shecodes</p>
+        <p class="footer-credit" id="asof"></p>
       </div>
       <p class="fine">Cover art is loaded from <a href="https://anilist.co" rel="noopener">AniList</a> and belongs to its rights holders. Other artwork is drawn for this site. India map: Survey of India boundaries via <a href="https://github.com/udit-001/india-maps-data" rel="noopener">india-maps-data</a>. Japanese text on forecasts is machine-templated; have a fluent speaker check it before external use.</p>
     </div>
@@ -159,6 +161,6 @@
   <div class="tip" id="tip" role="tooltip" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Yosoku needs JavaScript to show the forecasts.</p></noscript>
-  <script type="module" src="js/main.js?v=6"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>
