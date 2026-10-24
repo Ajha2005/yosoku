@@ -118,16 +118,13 @@ function renderHero() {
   }).join("");
 
   const evaluation = bestEvaluation();
-  const stats = [
-    { n: app.data.titles.length, suffix: "", label: "titles forecast" },
-    { n: Object.keys(MOMENTS).length, suffix: "", label: "stages of the release cycle" },
-  ];
-  if (evaluation && Number.isFinite(evaluation.info.table.spearman[evaluation.info.main])) {
-    const { info } = evaluation;
-    stats.push({ n: info.table.spearman[info.main], suffix: "", label: `rank correlation on the 2024 backtest (${MOMENTS[evaluation.key].label})`, decimals: 2 });
-    stats.push({ n: Math.round(info.coverage * 100), suffix: "%", label: "of titles landed inside the 80% range" });
+  const stats = [{ n: app.data.titles.length, suffix: "", label: "titles forecast" }];
+  if (evaluation) {
+    const { info } = evaluation, label = MOMENTS[evaluation.key].label;
+    if (Number.isFinite(info.table.mae[info.main])) stats.push({ n: info.table.mae[info.main], suffix: "", label: `average miss, in index points, on the 2024 titles (${label})`, decimals: 1 });
+    if (Number.isFinite(info.coverage)) stats.push({ n: Math.round(info.coverage * 100), suffix: "%", label: "of 2024 titles landed inside the 80% range" });
   }
-  $("#hero-stats").innerHTML = stats.map((s) => `<div><dt>${s.label}</dt><dd data-to="${s.n}" data-dec="${s.decimals || 0}" data-suffix="${s.suffix}">${s.decimals ? s.n.toFixed(2) : s.n}${s.suffix}</dd></div>`).join("");
+  $("#hero-stats").innerHTML = stats.map((s) => `<div><dt>${s.label}</dt><dd data-to="${s.n}" data-dec="${s.decimals || 0}" data-suffix="${s.suffix}">${s.decimals ? s.n.toFixed(s.decimals) : s.n}${s.suffix}</dd></div>`).join("");
   const watcher = new IntersectionObserver(([entry]) => {
     if (!entry.isIntersecting) return;
     watcher.disconnect();
@@ -229,7 +226,7 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
   }).join("");
 
   const m = MOMENTS[state.moment];
-  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>`;
+  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(ruleText(app.data.thresholds[state.moment], true))}`;
 
   const list = visibleTitles();
   $("#grid").classList.toggle("still", keepFocus);
@@ -291,14 +288,10 @@ function renderRecord() {
   const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
   const score = info ? `
     <div class="scorecard">
-      <div class="tile"><span class="tile-label">Rank correlation</span><b>${fx(t.spearman[info.main], 2)}</b><span class="tile-note">95% range ${fx(t.low[info.main], 2)} to ${fx(t.high[info.main], 2)}</span></div>
-      <div class="tile"><span class="tile-label">Top-20% hit rate</span><b>${Number.isFinite(t.top20[info.main]) ? pct(t.top20[info.main]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[info.main], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
-    </div>
-    <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
-      <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
-      <span>Checked on the 2024 titles, which the model never saw in training.</span></p>` : "";
+      <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[info.main]) ? pct(t.top20[info.main]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
+    </div>` : "";
 
   host.innerHTML = `
     <div class="record-top">
@@ -312,8 +305,8 @@ function renderRecord() {
         <p class="note">Each dot is one title. On the dotted line the forecast was exactly right. Open any dot to see why. The verdict lines were tuned on these same titles, so the Launch and Hold split looks a little better here than it will on new ones.</p></div>
       <div class="record-side">${score}<div class="tiles">${medians}</div></div>
     </div>
-    ${info ? `<div class="panel models"><h3>The model against simple rules</h3>${modelBars(info)}
-      <p class="note">Rank correlation: 1 means the titles were put in exactly the right order, 0 is chance. The whiskers show the 95% range.</p></div>` : ""}`;
+    ${info ? `<div class="panel models"><h3>Our model against simple rules</h3>${modelBars(info)}
+      <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}`;
 
   const draw = () => scatter($("#scatter"), rows, lines, MOMENTS[moment].label, state.hidden, (id) => { location.hash = `#/title/${id}/${encodeURIComponent(moment)}`; });
   scatterObserver?.disconnect();
