@@ -579,7 +579,7 @@ svg.scatter { display: block; overflow: visible; }
   .hero { padding-top: 110px; padding-bottom: 130px; }
   .hero-sun { right: -30vw; width: 90vw; opacity: 0.85; }
   .hero-wall { opacity: 0.45; }
-  .d-hero-inner { grid-template-columns: 112px 1fr; align-items: end; gap: 16px; }
+  .d-hero-inner { grid-template-columns: 112px 1fr; align-items: start; gap: 16px; }
   .stage { justify-items: start; }
   .d-score { flex-direction: column; align-items: flex-start; gap: 10px; }
   .drv { grid-template-columns: 1fr 64px; gap: 6px 10px; }

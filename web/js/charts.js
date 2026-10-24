@@ -1,6 +1,6 @@
 // Charts, hand-built from HTML and SVG so they stay light, crisp and themeable. Each returns markup (or fills a node).
 
-import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js";
+import { VERDICTS, HUB_STATES, esc, round, pct, fixed, clamp } from "./data.js";
 import { INDIA } from "./india-map.js";
 
 const vclass = (verdict) => VERDICTS[verdict]?.cls ?? "test";
@@ -134,8 +134,10 @@ export function scatter(host, rows, lines, moment, hidden, onPick) {
 /** Models against simple baselines on the 2024 backtest: rank correlation with its 95% interval. */
 export function modelBars(info) {
   const t = info.table;
-  const names = Object.keys(t.spearman).sort((a, b) => t.spearman[b] - t.spearman[a]);
-  const lo = Math.min(-0.2, ...names.map((n) => t.low[n]));
+  // A rule whose input is the same for every title (e.g. too few have an India Wikipedia article) has no correlation.
+  const names = Object.keys(t.spearman).filter((n) => Number.isFinite(t.spearman[n])).sort((a, b) => t.spearman[b] - t.spearman[a]);
+  const unscored = Object.keys(t.spearman).filter((n) => !names.includes(n));
+  const lo = Math.min(-0.2, ...names.map((n) => t.low[n]).filter(Number.isFinite));
   const S = (v) => ((v - lo) / (1 - lo)) * 100;
   const rows = names.map((n) => {
     const main = n === info.main, base = n === info.best_baseline;
@@ -143,13 +145,14 @@ export function modelBars(info) {
       <span class="mb-name">${esc(n)}${main ? "<em>our model</em>" : base ? "<em>best simple rule</em>" : ""}</span>
       <span class="mb-track" aria-hidden="true">
         <u style="left:${S(0)}%"></u>
-        <i style="left:${S(t.low[n])}%;width:${S(t.high[n]) - S(t.low[n])}%"></i>
+        ${Number.isFinite(t.low[n]) && Number.isFinite(t.high[n]) ? `<i style="left:${S(t.low[n])}%;width:${S(t.high[n]) - S(t.low[n])}%"></i>` : ""}
         <b style="left:${S(t.spearman[n])}%"></b>
       </span>
-      <span class="mb-val">${t.spearman[n].toFixed(2)}</span>
+      <span class="mb-val">${fixed(t.spearman[n], 2)}</span>
       <span class="mb-extra">${pct(t.top20[n])}</span>
-      <span class="mb-extra">${t.mae[n].toFixed(1)}</span>
+      <span class="mb-extra">${fixed(t.mae[n], 1)}</span>
     </li>`;
   }).join("");
-  return `<div class="mb-head" aria-hidden="true"><span>Model</span><span>Rank correlation, with 95% range</span><span>ρ</span><span class="mb-extra">Top-20% hits</span><span class="mb-extra">Avg. miss (pts)</span></div><ul class="mbs">${rows}</ul>`;
+  return `<div class="mb-head" aria-hidden="true"><span>Model</span><span>Rank correlation, with 95% range</span><span>ρ</span><span class="mb-extra">Top-20% hits</span><span class="mb-extra">Avg. miss (pts)</span></div><ul class="mbs">${rows}</ul>${unscored.length
+    ? `<p class="note">Not scored, because its input is the same for nearly every title: ${unscored.map(esc).join(", ")}.</p>` : ""}`;
 }
