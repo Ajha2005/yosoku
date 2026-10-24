@@ -115,11 +115,17 @@ def test_end_to_end(fake):
     assert set(payload["window_evidence"]) == {"Festive season (Oct–Nov)", "Board exams (Feb–Mar)",
                                                "IPL cricket (Apr–May)", "Other months"}
     assert sum(w["n"] for w in payload["window_evidence"].values()) > 0
+    sources = payload["sources"]  # the Method page's scorecard
+    assert set(sources["parts"]) <= {"youtube", "streaming", "wikipedia"} and sources["released"] > 0
+    for part in sources["parts"].values():
+        assert part["pairs"] <= part["titles"] <= sources["released"]
     for title in payload["titles"]:
         assert title["release_window"] in payload["window_evidence"]
         for forecast in title["forecasts"].values():
             dub = forecast["dub_demand"]
             assert (dub["share"] is None) == (dub["titles"] == 0)
+            if forecast["regions"]:  # the map says how many comments it rests on
+                assert forecast["region_comments"] is not None and forecast["region_comments"] >= 0
 
 
 def test_simple_rule_makes_the_forecast(fake):

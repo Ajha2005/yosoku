@@ -119,6 +119,8 @@ def youtube(titles):
     out["yt_dub_share"] = (by_title["dub_ask"].sum() / india_count.where(india_count > 0)).reindex(titles.index)
     for hub in HUBS:
         out[f"yt_share_{hub}"] = by_title[hub].mean().reindex(titles.index)
+    # How many comments the regional view rests on: those pointing to at least one language hub.
+    out["yt_hub_comments"] = found[list(HUBS)].any(axis=1).groupby(comments["anilist_id"]).sum().reindex(titles.index)
     return out
 
 

@@ -21,7 +21,7 @@ export const MOMENTS = {
     detail: "No buzz is used, so a cold forecast can be made any time before launch." },
   "t-28": { label: "T−28", long: "28 days before the Japanese premiere", note: "Adds Wikipedia views and trailer comments from days −56 to −29.", days: [-56, -29], made: -28,
     detail: "Made 28 days before the Japanese premiere, from Wikipedia views and trailer comments dated days −56 to −29. The window is fixed on the calendar, not the gap between the trailer and the premiere." },
-  "t+7": { label: "T+7", long: "7 days after the Japanese premiere", note: "Adds the 4 weeks before the premiere and launch week (days 0 to 6). Most accurate.", days: [-56, 6], made: 7,
+  "t+7": { label: "T+7", long: "7 days after the Japanese premiere", note: "Adds the 4 weeks before the premiere and launch week (days 0 to 6). A nowcast rather than a forecast: that week is part of the 28 days being measured.", days: [-56, 6], made: 7,
     detail: "Made 7 days after the premiere. Adds the 4 weeks before it (days −28 to −1) and launch week (days 0 to 6)." },
 };
 
