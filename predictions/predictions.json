@@ -32,6 +32,26 @@
   "Kannada": "Karnataka",
   "Malayalam": "Kerala"
  },
+ "window_evidence": {
+  "Festive season (Oct–Nov)": {
+   "mean": 55.5,
+   "n": 45
+  },
+  "Board exams (Feb–Mar)": {
+   "mean": 43.9,
+   "n": 6
+  },
+  "IPL cricket (Apr–May)": {
+   "mean": 55.6,
+   "n": 44
+  },
+  "Other months": {
+   "mean": 54.4,
+   "n": 110
+  }
+ },
+ "min_evidence": 10,
+ "dub_typical": 0.305,
  "evaluation": {
   "moments": {
    "cold": {
@@ -320,6 +340,7 @@
    "synopsis": "When young adventurer Laios and his company are attacked and soundly thrashed by a dragon deep in a dungeon, the party loses all its money and provisions...and a member! They're eager to go back and save her, but there is just one problem: If they set out with no food or coin to speak of, they're sure to starve on the way! But Laios comes up with a brilliant idea: \"Let's eat the monsters!\" Slimes, basilisks, and even dragons...none are safe from the appetites of these dungeon-crawling gourmands! Note: A world premiere screening of Episode 1 was shown in the Studio TRIGGER panel at Anime Expo o",
    "actual_index": 51.8,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -379,7 +400,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 55.2,
@@ -434,7 +459,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 56.5,
@@ -502,7 +531,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   },
@@ -524,6 +557,7 @@
    "synopsis": "The third semester kicks off in high gear with a special boot camp deep in the mountains. Forcibly separated into groups along grade and gender lines, the first, second and third years alike must work together to survive the rugged terrain. Even worse? The leader of the group that comes in last will be expelled. Can Class D make it back to campus intact, or is this where they finally say goodbye to one of their own?",
    "actual_index": 68.6,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -583,7 +617,11 @@
       "Kannada": 0.085,
       "Malayalam": 0.062
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.241,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -638,7 +676,11 @@
       "Kannada": 0.085,
       "Malayalam": 0.062
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.241,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 58.3,
@@ -706,7 +748,11 @@
       "Kannada": 0.085,
       "Malayalam": 0.062
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.241,
+      "titles": 4
+     }
     }
    }
   },
@@ -729,6 +775,7 @@
    "synopsis": "After Mash Burnedead's clash with Magia Lupus, the secret about his powers is now out in the open. The short-lived celebration ends when the Bureau of Magic summons Mash before an audience of Divine Visionaries, who collectively decree Mash should reap the consequences and die. However, an evil shadow organization called Innocent Zero hijacks the inquiry to demand that Mash be kept alive. Mash proves that he is capable of dealing with Innocent Zero, but the Divine Visionaries' verdict remains unchanged. Luckily, Mash finds unexpected allies in Divine Visionary Rayne Ames and Headmaster Wahlber",
    "actual_index": 76.5,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -788,7 +835,11 @@
       "Kannada": 0.312,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.276,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 62.4,
@@ -843,7 +894,11 @@
       "Kannada": 0.312,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.276,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 62.9,
@@ -911,7 +966,11 @@
       "Kannada": 0.312,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.276,
+      "titles": 3
+     }
     }
    }
   },
@@ -933,6 +992,7 @@
    "synopsis": "Yuki Itose is just a typical student dealing with the pressures of college. She is struggling one day on the train when an upperclassman named Itsuomi Nagi helps her out. As he gradually opens a new world to her, Yuki develops feelings for Itsuomi. A pure love story begins to grow.",
    "actual_index": 62.2,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -992,7 +1052,11 @@
       "Kannada": 0.058,
       "Malayalam": 0.0
      },
-     "region_titles": 5
+     "region_titles": 5,
+     "dub_demand": {
+      "share": 0.176,
+      "titles": 5
+     }
     },
     "t-28": {
      "index": 52.7,
@@ -1047,7 +1111,11 @@
       "Kannada": 0.058,
       "Malayalam": 0.0
      },
-     "region_titles": 5
+     "region_titles": 5,
+     "dub_demand": {
+      "share": 0.176,
+      "titles": 5
+     }
     },
     "t+7": {
      "index": 63.6,
@@ -1115,7 +1183,11 @@
       "Kannada": 0.058,
       "Malayalam": 0.0
      },
-     "region_titles": 5
+     "region_titles": 5,
+     "dub_demand": {
+      "share": 0.176,
+      "titles": 5
+     }
     }
    }
   },
@@ -1137,6 +1209,7 @@
    "synopsis": "An ordinary walk home from school turns into an epic journey for Usato. After suddenly being dropped into another world with two fellow students, Usato learns he was summoned there by accident. But things turn around when he discovers a unique aptitude for healing magic! Now, he trains beyond human limitations, using his self-healing abilities to gain absurd strength and unrivaled stamina.",
    "actual_index": 61.4,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -1196,7 +1269,11 @@
       "Kannada": 0.101,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.287,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -1251,7 +1328,11 @@
       "Kannada": 0.101,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.287,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 59.6,
@@ -1319,7 +1400,11 @@
       "Kannada": 0.101,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.287,
+      "titles": 3
+     }
     }
    }
   },
@@ -1342,6 +1427,7 @@
    "synopsis": "After an eventful winter break, Kyoutarou Ichikawa and Anna Yamada reunite with a stronger bond. They continue to grow in their own ways, with Yamada taking on more challenging photoshoots and Ichikawa maturing both physically and emotionally as he tackles his affections for Yamada. However, spending time together outside of school allows for their relationship to deepen, and it becomes increasingly difficult to deny their budding romantic feelings. Grappling with these unexpected and new emotions, Ichikawa and Yamada realize that, with the passage of time, their relationship is bound to chang",
    "actual_index": 58.6,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -1401,7 +1487,11 @@
       "Kannada": 0.333,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.25,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 46.1,
@@ -1456,7 +1546,11 @@
       "Kannada": 0.333,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.25,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 52.3,
@@ -1524,7 +1618,11 @@
       "Kannada": 0.333,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.25,
+      "titles": 1
+     }
     }
    }
   },
@@ -1549,6 +1647,7 @@
    "release_window_flags": [
     "Board exams (Feb–Mar): students, the core audience, watch less"
    ],
+   "release_window": "Board exams (Feb–Mar)",
    "moments_available": [
     "cold",
     "t-28",
@@ -1608,7 +1707,11 @@
       "Kannada": 0.276,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 53.5,
@@ -1663,7 +1766,11 @@
       "Kannada": 0.276,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 54.4,
@@ -1731,7 +1838,11 @@
       "Kannada": 0.276,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     }
    }
   },
@@ -1753,6 +1864,7 @@
    "synopsis": "Rishe Irmgard Weitzner, a duke's daughter, has a secret: she died at the age of 20 and returned to the moment five years prior when her engagement was called off. She has already experienced this time loop six times and lived out those five years a different way each time, as a merchant, a doctor, a maid, a knight, and more. Now, on her seventh go-around, she's determined to live to a ripe old age and spend it relaxing. But the moment she flees the castle with that decision in her heart, she runs into the infamously cruel crown prince of a rival kingdom, Arnold Hein. He happens to be the one w",
    "actual_index": 62.8,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -1812,7 +1924,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.423,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 53.6,
@@ -1867,7 +1983,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.423,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 62.5,
@@ -1935,7 +2055,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.423,
+      "titles": 2
+     }
     }
    }
   },
@@ -1958,6 +2082,7 @@
    "synopsis": "Rentt Faina has hunted monsters for the last 10 years. Sadly, he’s not great at his job, stuck hunting slimes and goblins for a few coins each day. His luck turns when he finds an undiscovered path. At the path’s end, he meets his demise in the maw of a legendary dragon. But, he wakes up as an undead bag of bones! He sets out to achieve Existential Evolution and rejoin the land of the living. Note: Each episode streamed 3 days early on some streaming sites. The original TV broadcast started on January 8th, 2024.",
    "actual_index": 57.2,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -2017,7 +2142,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -2072,7 +2201,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 59.5,
@@ -2140,7 +2273,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -2163,6 +2300,7 @@
    "synopsis": "Sasaki is a middle-aged office worker living in Japan. Feeling drained by the vapid corporate world, he heads to the pet shop in search of a new companion. There he finds an adorable bird named Peeps and takes him home. But Sasaki quickly learns that Peeps isn’t your average bird…he’s a powerful mage from another world! Together, they embark on a magical adventure filled with swords and sorcery. Note: The first episode aired with a runtime of ~48 minutes.",
    "actual_index": 58.8,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -2222,7 +2360,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 53.5,
@@ -2277,7 +2419,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 59.2,
@@ -2345,7 +2491,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   },
@@ -2368,6 +2518,7 @@
    "synopsis": "MONSTERS: 103 Mercies Dragon Damnation by Eiichiro Oda tells the tale of Ryuuma, the legendary swordsman that hails from the Land of Wano in One Piece . A samurai's path leads him to a young waitress whose hometown was destroyed by a dragon. He doesn't want any trouble - but it finds them anyway.",
    "actual_index": 35.4,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -2420,7 +2571,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": null,
+      "titles": 0
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -2468,7 +2623,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": null,
+      "titles": 0
+     }
     },
     "t+7": {
      "index": 56.2,
@@ -2529,7 +2688,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": null,
+      "titles": 0
+     }
     }
    }
   },
@@ -2553,6 +2716,7 @@
    "synopsis": "Lum, the gorgeous daughter of an invading race of Oni Aliens is smitten with High School student Ataru Moroboshi. A dedicated womanizer, Ataru is unfazed by Lum’s fierce electric shock attacks and continues his daily hunt for pretty girls. With a host of other unique characters, including classmate Shinobu, elegant shrine maiden Sakura, Lum’s best friend’s Oyuki, Benten and Ran, Buddhist Monk Cherry, Ten, the little brat, heir to a wealthy family Shuutarou Mendou and the secretly female beauty Ryuunosuke… A classic slapstick love comedy where anything goes! Note: Sentai has labeled the 3rd and",
    "actual_index": 39.6,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -2612,7 +2776,11 @@
       "Kannada": 0.414,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.128,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 49.8,
@@ -2667,7 +2835,11 @@
       "Kannada": 0.414,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.128,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 46.2,
@@ -2735,7 +2907,11 @@
       "Kannada": 0.414,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.128,
+      "titles": 2
+     }
     }
    }
   },
@@ -2756,6 +2932,7 @@
    "synopsis": "The anime is set in Hiroshima Prefecture's Onomichi City, where a high school student Nashiko Jippensha was kicked out of her house. Without a place to play with her friends, she learns that the mahjong parlor that her father used to run is now vacant. She fixes the mahjong parlor and turns it into a place where she and her friends can have fun, cook, have tea, and sometimes play mahjong.",
    "actual_index": 42.5,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -2815,7 +2992,11 @@
       "Kannada": 0.102,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.244,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 53.6,
@@ -2870,7 +3051,11 @@
       "Kannada": 0.102,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.244,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 56.6,
@@ -2938,7 +3123,11 @@
       "Kannada": 0.102,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.244,
+      "titles": 4
+     }
     }
    }
   },
@@ -2962,6 +3151,7 @@
    "synopsis": "The action returns in this brand-new sequel to SHAMAN KING! Hana Asakura finds that being the son of Yoh & Anna Asakura isn't all it's cracked up to be, and his boredom has him itching for any kind of excitement. But when a fight comes straight to his doorstep, it's from a place he least expects—his own family? The battle for Asakura supremacy begins!",
    "actual_index": 42.1,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -3021,7 +3211,11 @@
       "Kannada": 0.168,
       "Malayalam": 0.367
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.097,
+      "titles": 5
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -3076,7 +3270,11 @@
       "Kannada": 0.168,
       "Malayalam": 0.367
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.097,
+      "titles": 5
+     }
     },
     "t+7": {
      "index": 51.6,
@@ -3144,7 +3342,11 @@
       "Kannada": 0.168,
       "Malayalam": 0.367
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.097,
+      "titles": 5
+     }
     }
    }
   },
@@ -3171,6 +3373,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -3230,7 +3433,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.565
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.062,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 66.4,
@@ -3285,7 +3492,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.565
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.062,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 56.8,
@@ -3353,7 +3564,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.565
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.062,
+      "titles": 3
+     }
     }
    }
   },
@@ -3379,6 +3594,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -3438,7 +3654,11 @@
       "Kannada": 0.066,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 42.7,
@@ -3493,7 +3713,11 @@
       "Kannada": 0.066,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 51.4,
@@ -3561,7 +3785,11 @@
       "Kannada": 0.066,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     }
    }
   },
@@ -3586,6 +3814,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -3645,7 +3874,11 @@
       "Kannada": 0.233,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.222,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -3700,7 +3933,11 @@
       "Kannada": 0.233,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.222,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 55.1,
@@ -3768,7 +4005,11 @@
       "Kannada": 0.233,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.222,
+      "titles": 2
+     }
     }
    }
   },
@@ -3794,6 +4035,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -3853,7 +4095,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -3908,7 +4154,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 52.5,
@@ -3976,7 +4226,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -4000,6 +4254,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -4059,7 +4314,11 @@
       "Kannada": 0.173,
       "Malayalam": 0.654
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -4114,7 +4373,11 @@
       "Kannada": 0.173,
       "Malayalam": 0.654
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 55.5,
@@ -4182,7 +4445,11 @@
       "Kannada": 0.173,
       "Malayalam": 0.654
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     }
    }
   },
@@ -4209,6 +4476,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -4268,7 +4536,11 @@
       "Kannada": 0.37,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -4323,7 +4595,11 @@
       "Kannada": 0.37,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 37.6,
@@ -4391,7 +4667,11 @@
       "Kannada": 0.37,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     }
    }
   },
@@ -4416,6 +4696,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -4475,7 +4756,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.468,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -4530,7 +4815,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.468,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 59.6,
@@ -4598,7 +4887,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.468,
+      "titles": 2
+     }
     }
    }
   },
@@ -4624,6 +4917,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -4676,7 +4970,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 55.2,
@@ -4724,7 +5022,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 60.3,
@@ -4785,7 +5087,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   },
@@ -4810,6 +5116,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -4869,7 +5176,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -4924,7 +5235,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 60.1,
@@ -4992,7 +5307,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   },
@@ -5017,6 +5336,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -5076,7 +5396,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.25
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.2,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -5131,7 +5455,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.25
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.2,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 54.4,
@@ -5199,7 +5527,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.25
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.2,
+      "titles": 1
+     }
     }
    }
   },
@@ -5223,6 +5555,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -5282,7 +5615,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -5337,7 +5674,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 58.9,
@@ -5405,7 +5746,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -5429,6 +5774,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -5488,7 +5834,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.247,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 55.2,
@@ -5543,7 +5893,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.247,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 55.2,
@@ -5611,7 +5965,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.247,
+      "titles": 2
+     }
     }
    }
   },
@@ -5637,6 +5995,7 @@
    "release_window_flags": [
     "IPL cricket (late Mar–May): competes for evening screen time"
    ],
+   "release_window": "IPL cricket (Apr–May)",
    "moments_available": [
     "cold",
     "t-28",
@@ -5689,7 +6048,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 53.6,
@@ -5737,7 +6100,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 54.0,
@@ -5798,7 +6165,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -5821,6 +6192,7 @@
    "synopsis": "Alya is a transfer student enjoying popularity at her new high school, often sporting a cold shoulder while earning high marks in class. She ignores her nerdy classmate, Kuze Masachika, except for when she blurts out a flirtatious line to him in Russian. Little does she know, Kuze understands Russian, though he pretends not to. Let’s see where this wacky love story takes them!",
    "actual_index": 52.0,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -5880,7 +6252,11 @@
       "Kannada": 0.1,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.342,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 53.5,
@@ -5935,7 +6311,11 @@
       "Kannada": 0.1,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.342,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 54.9,
@@ -6003,7 +6383,11 @@
       "Kannada": 0.1,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.342,
+      "titles": 3
+     }
     }
    }
   },
@@ -6027,6 +6411,7 @@
    "synopsis": "Aqua’s desire for revenge takes center stage as he navigates the dark underbelly of the entertainment world alongside his twin sister, Ruby. While Ruby follows in their slain mother’s footsteps to become an idol, Aqua joins a famous theater troupe in hopes of uncovering clues to the identity of his father — the man who arranged their mother’s untimely death, and the man who once starred in the same troupe Aqua hopes to infiltrate.",
    "actual_index": 50.1,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -6086,7 +6471,11 @@
       "Kannada": 0.391,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.1,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -6141,7 +6530,11 @@
       "Kannada": 0.391,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.1,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 49.4,
@@ -6209,7 +6602,11 @@
       "Kannada": 0.391,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.1,
+      "titles": 4
+     }
     }
    }
   },
@@ -6233,6 +6630,7 @@
    "synopsis": "A hard-working boy named Will enters a magic academy in hopes of becoming a great sorcerer. Unfortunately, there's a fatal flaw in his plan: he lacks the ability to use magic. Amid the cold stares of his classmates and instructors, Will feels discouraged at times, but he presses forward with unwavering determination. He can't use a wand, but he can wield a sword in his battle to reach the top of a magic-dominated world. He just needs to believe in his own unique strengths and remember the promise he made with someone precious to him...",
    "actual_index": 50.5,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -6292,7 +6690,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -6347,7 +6749,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 62.5,
@@ -6415,7 +6821,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -6439,6 +6849,7 @@
    "synopsis": "Touka always faded into the background at school. And when he’s summoned to another world with his classmates, that still doesn’t change! They all acquire top-rank skills, except Touka, who’s deemed a failure and cast to ancient ruins by the goddess Vicius. Turns out, his low-rank skills may not be so useless after all. Now, he seeks revenge against the goddess, and his true nature is revealed.",
    "actual_index": 58.7,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -6498,7 +6909,11 @@
       "Kannada": 0.621,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -6553,7 +6968,11 @@
       "Kannada": 0.621,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 59.4,
@@ -6621,7 +7040,11 @@
       "Kannada": 0.621,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -6644,6 +7067,7 @@
    "synopsis": "In the year 1333, the Kamakura shogunate government comes crumbling down. A trusted vassal, Ashikaga Takauji, betrays the shogunate and organizes a rebellion. Houjou Tokiyuki, the rightful heir, escapes the massacre with a Shinto priest named Suwa Yorishige to Kamakura. On the run and fighting to stay alive, Tokiyuki sets in motion his plan to reclaim his birthright.",
    "actual_index": 59.7,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -6703,7 +7127,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.305
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.135,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -6758,7 +7186,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.305
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.135,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 61.8,
@@ -6826,7 +7258,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.305
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.135,
+      "titles": 4
+     }
     }
    }
   },
@@ -6850,6 +7286,7 @@
    "synopsis": "“I have no interest in real girls!” So claims Okumura, the president of the school’s manga club. He’s your typical otaku, obsessed with a sexy (fictional) 2D manga character known as Lilliel. Then the new school year starts, and a (real!) 3D girl named Lilysa whose passion is cosplay joins the club. Lilysa convinces Okumura to become her photographer–and guess who her favorite manga character is? Not only that, but Lilysa is into modeling the fetishy stuff! The boundaries between 2D and 3D start to blur as this hot-blooded romantic comedy unfolds.",
    "actual_index": 53.0,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -6909,7 +7346,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 53.5,
@@ -6964,7 +7405,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 55.4,
@@ -7032,7 +7477,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -7055,6 +7504,7 @@
    "synopsis": "After twelve years of playing his favorite MMORPG game, Momonga logs in for the last time only to find himself transported into its world playing it indefinitely. Throughout his adventures, his avatar ascends to the title of Sorcerer King Ains Ooal Gown. Once prosperous but now on the brink of ruin, The Sacred Kingdom enjoyed years of peace after construction of an enormous wall protecting them from neighboring invasions. But, one day this comes to an end when the Demon Emperor Jaldabaoth arrives with an army of villainous demi-humans. Fearing invasion of their own lands, the neighboring terri",
    "actual_index": 32.1,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -7114,7 +7564,11 @@
       "Kannada": 0.088,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.269,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -7169,7 +7623,11 @@
       "Kannada": 0.088,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.269,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 51.4,
@@ -7237,7 +7695,11 @@
       "Kannada": 0.088,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.269,
+      "titles": 4
+     }
     }
    }
   },
@@ -7261,6 +7723,7 @@
    "synopsis": "What do you do once you're a couple? Although she struggles with her blossoming feelings, Sawako comes to terms with herself and tells Kazehaya how she feels about him. Attracted by Sawako's unnoticed efforts and genuine personality, Kazehaya also candidly makes his feelings known. Thus, their new relationship begins. Their first date, their school life together, joy, embarrassment and new struggles — everything is fresh and new as the couple awkwardly and gradually learns more about one another, all while their friends' love stories begin to take shape as well. This bittersweet and poignant s",
    "actual_index": 57.9,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -7320,7 +7783,11 @@
       "Kannada": 0.09,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.068,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 53.5,
@@ -7375,7 +7842,11 @@
       "Kannada": 0.09,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.068,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 59.0,
@@ -7443,7 +7914,11 @@
       "Kannada": 0.09,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.068,
+      "titles": 3
+     }
     }
    }
   },
@@ -7468,6 +7943,7 @@
    "synopsis": "Asa and Kame strike up an immediate friendship when they arrive at the same time for their first day of duty at the Ooku, the splendid pleasure palace housing the harem of Lord Tenshi. The two young women are there to join the many hundreds of other maidservants—men are barred from entering, with immediate beheading the price of trespassing. It soon becomes clear that behind the luxurious lifestyle and ritualized routines of the Ooku lie sinister schemes and cynical rivalries. Meanwhile, a mysterious wandering potion-peddler known only as the Medicine Seller subtly insinuates himself into the ",
    "actual_index": 39.2,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -7527,7 +8003,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.243,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 53.6,
@@ -7582,7 +8062,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.243,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 41.8,
@@ -7650,7 +8134,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.243,
+      "titles": 3
+     }
     }
    }
   },
@@ -7678,6 +8166,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -7737,7 +8226,11 @@
       "Kannada": 0.15,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.213,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -7792,7 +8285,11 @@
       "Kannada": 0.15,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.213,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 50.3,
@@ -7860,7 +8357,11 @@
       "Kannada": 0.15,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.213,
+      "titles": 4
+     }
     }
    }
   },
@@ -7889,6 +8390,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -7948,7 +8450,11 @@
       "Kannada": 0.353,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -8003,7 +8509,11 @@
       "Kannada": 0.353,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 41.7,
@@ -8071,7 +8581,11 @@
       "Kannada": 0.353,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 4
+     }
     }
    }
   },
@@ -8096,6 +8610,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -8155,7 +8670,11 @@
       "Kannada": 0.113,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.325,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 52.7,
@@ -8210,7 +8729,11 @@
       "Kannada": 0.113,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.325,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 74.5,
@@ -8278,7 +8801,11 @@
       "Kannada": 0.113,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.325,
+      "titles": 3
+     }
     }
    }
   },
@@ -8301,6 +8828,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -8360,7 +8888,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -8415,7 +8947,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 58.7,
@@ -8483,7 +9019,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -8510,6 +9050,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -8569,7 +9110,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.226,
+      "titles": 4
+     }
     },
     "t-28": {
      "index": 49.5,
@@ -8624,7 +9169,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.226,
+      "titles": 4
+     }
     },
     "t+7": {
      "index": 49.1,
@@ -8692,7 +9241,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 4
+     "region_titles": 4,
+     "dub_demand": {
+      "share": 0.226,
+      "titles": 4
+     }
     }
    }
   },
@@ -8717,6 +9270,7 @@
    "synopsis": "Kurozu-cho, a small fogbound town on the coast of Japan, is cursed. According to Shuichi Saito, the withdrawn boyfriend of teenager Kirie Goshima, their town is haunted not by a person or being but by a pattern: uzumaki, the spiral, the hypnotic secret shape of the world. It manifests itself in small ways: seashells, ferns, whirlpools in water, whirlwinds in air. And in large ways: the spiral marks on people's bodies, the insane obsessions of Shuichi's father, the voice from the cochlea in your inner ear. As the madness spreads, the inhabitants of Kurouzu-cho are pulled ever deeper, as if into",
    "actual_index": 64.4,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -8776,7 +9330,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.225,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -8831,7 +9389,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.225,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 58.1,
@@ -8899,7 +9461,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.225,
+      "titles": 2
+     }
     }
    }
   },
@@ -8922,6 +9488,7 @@
    "synopsis": "Six childhood friends make a vow one day to become treasure hunters, and eventually grow to be the strongest heroes in the world. During his first quest, Krai Andrey realizes he isn’t cut out for the job. Even so, his friends make him their leader. Underpowered in the face of great expectations, Krai embarks on a reluctant hero’s tale of glory, headaches, and wanting to retire early.",
    "actual_index": 55.5,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -8981,7 +9548,11 @@
       "Kannada": 0.13,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -9036,7 +9607,11 @@
       "Kannada": 0.13,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 58.3,
@@ -9104,7 +9679,11 @@
       "Kannada": 0.13,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -9127,6 +9706,7 @@
    "synopsis": "Haruka has been living his high school life as a loner, but all of a sudden, he and his classmates are summoned into another world. A God gives him a list of skills he can freely pick... Or at least that was how it was supposed to be, as all the valuable skills have been taken by the other classmates first. After Haruka scolded God, he snapped back and gave all the remaining bad skills to Haruka. Thanks to the \"Loner\" skill, Haruka begins his lonely adventure in another world. Note: Each episode streamed a week early on some streaming services. The original TV broadcast started on October 4th,",
    "actual_index": 49.6,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -9186,7 +9766,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -9241,7 +9825,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     },
     "t+7": {
      "index": 58.1,
@@ -9309,7 +9897,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 3
+     "region_titles": 3,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 3
+     }
     }
    }
   },
@@ -9333,6 +9925,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -9392,7 +9985,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.152,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 54.1,
@@ -9447,7 +10044,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.152,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 59.2,
@@ -9515,7 +10116,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.152,
+      "titles": 2
+     }
     }
    }
   },
@@ -9539,6 +10144,7 @@
    "synopsis": "It is a world where carnivores and herbivores coexist. Following the battle with the culprit who devoured his classmate at school, Legoshi decides to drop out and begins living alone at Beast Apartments. Louis has entered a prestigious university and resolves to face his father, Oguma. Haru also deals with many struggles as she tries to enjoy campus life. Meanwhile, the city sees an increase of devouring incidents. The fangs of the heinous criminal who is pulling all the strings begin to close in on Legoshi and the others...",
    "actual_index": 60.7,
    "release_window_flags": [],
+   "release_window": "Other months",
    "moments_available": [
     "cold",
     "t-28",
@@ -9598,7 +10204,11 @@
       "Kannada": 0.257,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t-28": {
      "index": 50.7,
@@ -9653,7 +10263,11 @@
       "Kannada": 0.257,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     },
     "t+7": {
      "index": 55.2,
@@ -9721,7 +10335,11 @@
       "Kannada": 0.257,
       "Malayalam": 0.0
      },
-     "region_titles": 2
+     "region_titles": 2,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 2
+     }
     }
    }
   },
@@ -9744,6 +10362,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -9796,7 +10415,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 59.0,
@@ -9844,7 +10467,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 54.2,
@@ -9905,7 +10532,11 @@
       }
      ],
      "regions": {},
-     "region_titles": 0
+     "region_titles": 0,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   },
@@ -9930,6 +10561,7 @@
    "release_window_flags": [
     "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"
    ],
+   "release_window": "Festive season (Oct–Nov)",
    "moments_available": [
     "cold",
     "t-28",
@@ -9989,7 +10621,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t-28": {
      "index": 53.1,
@@ -10044,7 +10680,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     },
     "t+7": {
      "index": 49.9,
@@ -10112,7 +10752,11 @@
       "Kannada": 0.0,
       "Malayalam": 0.0
      },
-     "region_titles": 1
+     "region_titles": 1,
+     "dub_demand": {
+      "share": 0.0,
+      "titles": 1
+     }
     }
    }
   }

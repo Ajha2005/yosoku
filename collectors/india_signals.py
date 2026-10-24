@@ -14,6 +14,9 @@ Most Indian fans comment in English or in Hinglish typed in Latin letters, not i
              only knows Indian languages and English, so it calls Spanish, Indonesian and emoji Indian too,
              and it mixes up which Indian language Hinglish is. Only its "Indian or not" is used.
 
+dub_ask marks comments asking for or about an Indian-language dub ("hindi dub kab aayega", "please dub in
+tamil"). Comments with a link are left out: those are mostly channels announcing a dub, not fans asking.
+
 Hubs (for the regional view): a script, the language's name ("tamil dub pls") or, for Hindi,
 Hinglish. A comment can point to no hub (English mentioning India) or to more than one.
 Mostly a word list: it misses some Indian English and will catch a few non-Indian comments.
@@ -40,12 +43,15 @@ LID_WORDS = (r"hoga|hogi|honge|hoge|liya|kiya|diya|badiya|badhiya|kha|kahan|kaha
              r"sundar|aaya|aya|gaya|raha|rahi|rahe|nai|tera|mera|tum|aap|hum|kar|karna|pura|pyar|maza|mazaa")
 LID_MIN_PROB = 0.5
 LID_MIN_WORDS = 3  # Latin words; shorter comments ("wow", "0:59") get confident but random labels
+LANGS = r"hindi|tamil|telugu|bengali|bangla|kannada|malayalam|marathi"
+DUB = (rf"\b(?:{LANGS})\s*(?:dub|dubbed|dubbing|version|audio|me|mein|mai)\b"
+       rf"|\bdub(?:bed|bing)?\s+(?:in|me|mein|mai)\s+(?:{LANGS})\b")
 MENTION = (r"india|indian|indians|hindi|marathi|tamil|telugu|bengali|bangla|kannada|malayalam|desi|"
            r"mumbai|delhi|bangalore|bengaluru|kolkata|chennai|hyderabad|pune|ahmedabad|jaipur|lucknow")
 
 
 def classify(text, indic=None):
-    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, and one column per hub.
+    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, dub_ask and one column per hub.
 
     `indic` (optional, same index) is True where IndicLID read the comment as an Indian language; see indic_flags.
     """
@@ -65,6 +71,7 @@ def classify(text, indic=None):
         out["hinglish"] |= out["lid"]
     out["mention"] = lower.str.contains(rf"\b(?:{MENTION})\b", regex=True)
     out["india"] = out["script"] | out["hinglish"] | out["mention"]
+    out["dub_ask"] = lower.str.contains(DUB, regex=True) & ~lower.str.contains("http", regex=False)
     for hub, (_, names) in HUBS.items():
         out[hub] = scripts[hub] | lower.str.contains(rf"\b(?:{names})\b", regex=True)
     out["hindi"] |= out["hinglish"]

@@ -423,6 +423,19 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .result { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding: 14px 18px; border-radius: 16px; background: var(--surface-2); font-size: 14.5px; color: var(--muted); }
 .result b { color: var(--text); }
 .result-n { font: 800 38px/1 var(--font-display); color: var(--text); min-width: 1.6em; text-align: center; }
+
+.dub { display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); font-size: 14.5px; color: var(--muted); }
+.dub-n { flex: none; font: 800 40px/1 var(--font-display); font-variant-numeric: tabular-nums; color: var(--accent); }
+.wins { margin-bottom: 16px; }
+.win { display: grid; grid-template-columns: minmax(130px, 220px) 1fr 40px 76px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.win-name em { display: block; font-style: normal; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.win.is-mine { color: var(--text); font-weight: 600; }
+.win-track { position: relative; height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.win-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; background: color-mix(in srgb, var(--faint) 70%, transparent); }
+.win.is-mine .win-track i { background: var(--accent); }
+.win-val, .win-extra { text-align: right; font-variant-numeric: tabular-nums; }
+.win-val { font-weight: 700; }
+@media (max-width: 560px) { .win { grid-template-columns: 1fr 34px 64px; } .win-track { display: none; } .dub { align-items: flex-start; } .dub-n { font-size: 32px; } }
 .result.in { box-shadow: inset 3px 0 0 var(--launch); }
 .result.out { box-shadow: inset 3px 0 0 var(--test); }
 
