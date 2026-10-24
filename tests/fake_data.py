@@ -103,6 +103,24 @@ def activity(rng, frame, folder, youtube_top=200):
     pd.DataFrame(comments).to_csv(folder / "youtube_comments.csv", index=False, encoding="utf-8-sig")
 
 
+def reddit(rng, frame, folder, top=200):
+    """Reddit posts for the most popular titles, in the shape collect_reddit.py writes."""
+    posts, finished = [], []
+    for row in frame.nlargest(top, "popularity").itertuples():
+        start = date.fromisoformat(row.start_date)
+        count = int(np.clip(rng.poisson(np.exp(row.demand + 1.5)), 0, 150))
+        for p in range(count):
+            day = int(rng.integers(-90, 28))
+            posts.append({"anilist_id": row.anilist_id, "subreddit": "anime", "post_id": f"r{row.anilist_id}_{p}",
+                          "created": (start + timedelta(days=day)).isoformat(), "days_from_start": day,
+                          "score": int(rng.integers(1, 500)), "num_comments": int(rng.integers(0, 100)), "flair": "",
+                          "match_name": row.title_english, "post_title": f"{row.title_english} episode discussion"})
+        finished.append({"anilist_id": row.anilist_id, "title": row.title_english, "subreddits": "anime",
+                         "names": row.title_english, "posts": count, "truncated": 0})
+    pd.DataFrame(posts).to_csv(folder / "reddit_posts.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame(finished).to_csv(folder / "reddit_titles.csv", index=False, encoding="utf-8-sig")
+
+
 def main(folder, seed=0, per_season=25):
     folder = Path(folder)
     rng = np.random.default_rng(seed)
@@ -110,6 +128,7 @@ def main(folder, seed=0, per_season=25):
     frame = titles(rng, range(2019, 2026), per_season)
     frame.drop(columns="demand").to_csv(folder / "titles.csv", index=False, encoding="utf-8-sig")
     activity(rng, frame, folder)
+    reddit(rng, frame, folder)
     upcoming = titles(rng, [2027], 8, first_id=90001)
     upcoming = upcoming[upcoming["season"] == "WINTER"]
     upcoming.drop(columns="demand").to_csv(folder / "upcoming" / "titles.csv", index=False, encoding="utf-8-sig")

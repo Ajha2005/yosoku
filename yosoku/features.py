@@ -3,7 +3,7 @@
 Days are counted from the Japanese start date (day 0). A moment may only use days up to its cutoff:
 
   cold   metadata only (genres, tags, source, format, audience, sequel), usable any time before launch
-  t-28   plus Wikipedia and YouTube activity in days -56 to -29
+  t-28   plus Wikipedia, YouTube and Reddit activity in days -56 to -29
   t+7    plus days -28 to -1 and the launch week, days 0 to 6
 
 Today's AniList popularity and score and YouTube view counts are never inputs: they are measured on
@@ -30,14 +30,14 @@ SOURCES = ["MANGA", "LIGHT_NOVEL", "ORIGINAL", "VIDEO_GAME", "WEB_NOVEL", "NOVEL
 # Drivers are reported per business signal: features that move together are summed, so their
 # separate coefficients can't offset each other on screen.
 SIGNALS = {
-    "wiki_en": "Global buzz", "wiki_ja": "Global buzz", "yt_comments": "Global buzz",
+    "wiki_en": "Global buzz", "wiki_ja": "Global buzz", "yt_comments": "Global buzz", "reddit_posts": "Global buzz",
     "wiki_india": "India buzz", "has_india_article": "India buzz", "yt_india": "India buzz",
     "has_youtube": "India buzz",
     "is_sequel": "Franchise history", "prequel_label": "Franchise history", "has_prequel_label": "Franchise history",
     "lookalike": "Similar past titles",
 }
 SIGNAL_NOTES = {
-    "Global buzz": "English and Japanese Wikipedia views and trailer comments worldwide",
+    "Global buzz": "English and Japanese Wikipedia views, trailer comments and Reddit posts worldwide",
     "India buzz": "Hindi, Tamil and Telugu Wikipedia views and trailer comments by people in India",
     "Franchise history": "whether it is a sequel, and how its prequel did in India",
     "Similar past titles": "the India index of the 10 most similar past titles",
@@ -77,10 +77,11 @@ def metadata(titles, genres):
     return out
 
 
-def activity(titles, wiki, comments, moment):
-    """Wikipedia views and trailer comments in each of the moment's windows, log1p; blank sources become 0 plus a flag."""
+def activity(titles, wiki, comments, moment, reddit=None):
+    """Wikipedia views, trailer comments and Reddit posts in each of the moment's windows, log1p; blank sources become 0 plus a flag."""
     out = pd.DataFrame(index=titles.index)
     cutoff = CUTOFF[moment]
+    posts = None if reddit is None else reddit.assign(one=1)
     for window, (lo, hi) in WINDOWS[moment].items():
         if wiki is not None:
             for group, langs in WIKI_GROUPS.items():
@@ -92,6 +93,10 @@ def activity(titles, wiki, comments, moment):
                 count = window_total(rows, column or "one", lo, hi, cutoff, titles.index)
                 # Only the most popular titles were searched on YouTube: the rest are blank, not zero.
                 out[f"{name}_{window}"] = np.log1p(count.fillna(0)).where(searched(titles, comments))
+        if posts is not None:
+            # Post counts only: scores and comment counts are archived after the post, so they would leak.
+            count = window_total(posts, "one", lo, hi, cutoff, titles.index)
+            out[f"reddit_posts_{window}"] = np.log1p(count.fillna(0)).where(searched_reddit(titles, posts))
     if WINDOWS[moment] and wiki is not None:
         langs = set(wiki.loc[wiki["lang"].isin(WIKI_GROUPS["india"]), "anilist_id"])
         out["has_india_article"] = titles.index.isin(langs).astype(int)
@@ -106,9 +111,16 @@ def searched(titles, comments):
     return pd.Series(titles.index.isin(comments["anilist_id"]), index=titles.index)
 
 
-def build(titles, wiki, comments, moment, genres):
+def searched_reddit(titles, posts):
+    """Titles whose Reddit posts were collected: the rest are blank, not zero."""
+    if "reddit_posts_month1" in titles:
+        return titles["reddit_posts_month1"].notna()
+    return pd.Series(titles.index.isin(posts["anilist_id"]), index=titles.index)
+
+
+def build(titles, wiki, comments, moment, genres, reddit=None):
     """Feature table for one moment; the lookalike and prequel inputs are added by the models."""
-    return pd.concat([metadata(titles, genres), activity(titles, wiki, comments, moment)], axis=1)
+    return pd.concat([metadata(titles, genres), activity(titles, wiki, comments, moment, reddit)], axis=1)
 
 
 def prequel_label(titles, labels):

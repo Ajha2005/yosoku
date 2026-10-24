@@ -158,9 +158,12 @@ Automatic matching makes mistakes. Before modelling, look through:
   dated comment counts (`yt_comments_pre`, `yt_comments_month1`).
 - **Comments are fetched newest first, up to 1,000 per video**, so a very popular trailer's launch-week comments may be missing.
   Compare with the video's total in the `comments` column.
-- **Reddit is global attention, not India.** It has no country signal, so `reddit_*` columns are hype inputs for the
-  models and are not part of the India Demand Index. Use `reddit_posts_early` (days −90 to −29) for the T−28 forecast;
-  scores and comment counts are as archived, after the post's date, so prefer post counts.
+- **Reddit is global attention, not India.** It has no country signal, so Reddit is not part of the India Demand
+  Index. It is a model input instead: `yosoku/features.py` reads `reddit_posts.csv` and adds `reddit_posts_<window>`
+  (log of the post count, same day windows and cutoffs as Wikipedia) to the T−28 and T+7 models, under "Global buzz".
+  It only runs when `reddit_posts.csv` exists, and that file is git-ignored: share it between laptops outside git,
+  or the model silently runs without it. Scores and comment counts are archived after the post's date, so only
+  post counts are used. The `reddit_*` columns in `dataset.csv` are for looking at the data.
 - **Trends values are relative** (0–100 within each request). `trends_month1_vs_anchor` puts titles on one scale by
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
 - **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
