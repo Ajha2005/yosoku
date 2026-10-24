@@ -273,7 +273,7 @@ split they share.
 
 ## The website (static, for Vercel)
 
-`web/` is the dashboard, a plain static site (no server, no build step) with six tabs (Overview, Forecasts, Track record, Business, Method, Demand guide):
+`web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Forecasts, Track record, Method, Demand guide):
 poster wall, a verdict card for every title (with its dub demand and release-window what-if) that prints as a one-page
 brief in English or as a Japanese 稟議書 (the 稟 button: conclusion, grounds, precedents, risks, next decision dates), an India language-hub map,
 the backtest, the decision clock ("When will we know?" on Track record), each title's forecast path (day by day for the
