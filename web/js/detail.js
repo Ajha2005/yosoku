@@ -1,9 +1,10 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=4";
-import { posterHTML } from "./art.js?v=4";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=4";
-import { showTip, hideTip, showToast } from "./tip.js?v=4";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=5";
+import { posterHTML } from "./art.js?v=5";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=5";
+import { showTip, hideTip, showToast } from "./tip.js?v=5";
+import { RULE_NOTES } from "./content.js?v=5";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -92,9 +93,14 @@ export function createDetail(app, { requestClose }) {
         <span class="result-n">${round(actual)}</span>
         <span><b>What actually happened</b><br>India Demand Index ${round(actual)}, ${actual - f.index >= 0 ? "+" : "−"}${Math.abs(round(actual - f.index))} against the forecast.
         ${inside ? "Inside" : "Outside"} the 80% range.</span></div>`;
+    const rule = RULE_NOTES[lines.method];
     const whySection = f.drivers.length
       ? `${drivers(f.drivers)}<p class="note">Exact contributions from the linear model: blue raises the index, red lowers it.</p>`
-      : `<p class="callout">At the cold stage there is no buzz yet, so the forecast is the India index of the most similar past titles below.</p>`;
+      : rule
+        ? `<p class="callout">At this stage a simple rule makes the forecast: <b>${esc(lines.method)}</b>, ${esc(rule)}. It beat our model on the 2024 titles, so we use it. The closest past titles below still come from our model.</p>`
+        : moment === "cold"
+          ? `<p class="callout">At the cold stage there is no buzz yet, so the forecast is the India index of the most similar past titles below.</p>`
+          : `<p class="callout">No single signal moved this forecast by half a point or more against an average title.</p>`;
     const regionsSection = f.regions && Object.keys(f.regions).length
       ? `${f.region_comments != null && f.region_comments < THIN_REGION ? `<p class="flag thin"><span><b>Thin evidence.</b> This map rests on only ${esc(f.region_comments)} comment${f.region_comments === 1 ? "" : "s"}; read it as a hint, not a measurement.</span></p>` : ""}
         ${regionMap(f.regions, app.data.hubs)}<p class="note">Estimated from ${f.region_comments != null ? `<b>${esc(f.region_comments)}</b> ` : ""}trailer comments that point to a language (its script, its name, or Hinglish for Hindi) on the ${esc(f.region_titles)} closest past titles that had any. English-speaking fans are spread across India and are not counted here; Hindi includes Marathi.</p>`
