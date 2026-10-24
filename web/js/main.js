@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=2";
-import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=2";
-import { createDetail, countUp } from "./detail.js?v=2";
-import { renderGuide } from "./guide.js?v=2";
-import { showTip, hideTip } from "./tip.js?v=2";
-import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=2";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=3";
+import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=3";
+import { createDetail, countUp } from "./detail.js?v=3";
+import { renderGuide } from "./guide.js?v=3";
+import { showTip, hideTip } from "./tip.js?v=3";
+import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=3";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
