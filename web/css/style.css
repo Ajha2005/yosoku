@@ -224,7 +224,7 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
 .seg button:hover:not(:disabled):not([aria-pressed="true"]) { color: var(--text); background: rgba(127, 127, 170, 0.14); }
 .seg button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
 .seg button:disabled { opacity: 0.35; cursor: not-allowed; }
-.seg .count { font-size: 12px; font-weight: 600; opacity: 0.85; }
+.seg .count { font-size: 12px; font-weight: 500; }
 .seg-sm button { padding: 7px 14px; font-size: 13px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -233,7 +233,7 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
   background: transparent; font-size: 14px; font-weight: 600; color: var(--muted); transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .chip .vicon { width: 15px; height: 15px; }
-.chip .count { font-size: 12px; opacity: 0.85; }
+.chip .count { font-size: 12px; font-weight: 500; }
 .chip:hover:not(:disabled) { color: var(--text); border-color: var(--text); }
 .chip:disabled { opacity: 0.35; cursor: not-allowed; }
 .chip[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
@@ -345,6 +345,11 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .d-hero::before { content: ""; position: absolute; z-index: -2; inset: 0; background: radial-gradient(900px 420px at 12% 0%, color-mix(in srgb, var(--k) 42%, transparent), transparent 70%); }
 .d-backdrop { position: absolute; z-index: -1; inset: 0; background-size: cover; background-position: center 25%; opacity: 0.32; filter: saturate(1.2); -webkit-mask-image: linear-gradient(#000 20%, transparent); mask-image: linear-gradient(#000 20%, transparent); }
 .d-hero-inner { display: grid; grid-template-columns: clamp(150px, 24vw, 250px) 1fr; gap: clamp(20px, 4vw, 40px); align-items: end; }
+/* With a frame from the anime itself behind it, the header turns cinematic (always dark) in either theme. */
+.d-hero.has-banner { --text: #f6f1e6; --muted: #c5cae4; --faint: #9ea4c6; --line-2: rgba(255, 255, 255, 0.26); --accent: #ff9ec4; color: var(--text); border-radius: 0 0 28px 28px; }
+.d-hero.has-banner .d-backdrop { opacity: 1; filter: none; -webkit-mask-image: none; mask-image: none; animation: frame-in 1.2s var(--ease) both; }
+.d-hero.has-banner::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(6, 9, 25, 0.9) 0%, rgba(6, 9, 25, 0.6) 48%, rgba(6, 9, 25, 0.22) 100%), linear-gradient(180deg, rgba(6, 9, 25, 0.2), rgba(6, 9, 25, 0.72)); }
+@keyframes frame-in { from { opacity: 0; transform: scale(1.06); } }
 .d-poster { aspect-ratio: 2 / 3; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow), 0 0 0 1px var(--line-2); animation: poster-in 0.7s var(--ease) both; }
 @keyframes poster-in { from { opacity: 0; transform: translateY(20px) scale(0.96) rotate(-1.5deg); } }
 .d-head { min-width: 0; padding-bottom: 6px; }
@@ -503,6 +508,7 @@ svg.scatter { display: block; overflow: visible; }
 .mb { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 .mb-name em { display: block; font-style: normal; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
 .mb.is-main { color: var(--text); font-weight: 600; }
+.mb.no-score .mb-name, .mb.no-score .mb-val, .mb.no-score .mb-extra { color: var(--faint); }
 .mb.is-main .mb-name em { color: var(--accent); }
 .mb-track { position: relative; height: 14px; }
 .mb-track::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: var(--surface-2); }

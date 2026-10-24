@@ -48,6 +48,7 @@ export function createDetail(app, { requestClose }) {
     const lines = app.data.thresholds[moment];
     const v = VERDICTS[f.verdict];
     const cover = app.covers[t.anilist_id];
+    const banner = safeUrl(cover?.b);   // a still frame from the anime itself
     const actual = t.actual_index;
     const inside = actual != null && actual >= f.low && actual <= f.high;
     const [prev, next] = neighbours();
@@ -72,8 +73,8 @@ export function createDetail(app, { requestClose }) {
       : `<p class="callout">None of the closest past titles had trailer comments pointing to an Indian language, so there is no regional estimate.</p>`;
 
     body.innerHTML = `<article class="detail v-${v.cls}" style="--k:${/^#[0-9a-f]{3,8}$/i.test(cover?.k) ? cover.k : "var(--accent-2)"}">
-      <header class="d-hero">
-        ${safeUrl(cover?.b) ? `<div class="d-backdrop" style="background-image:url('${safeUrl(cover.b)}')"></div>` : ""}
+      <header class="d-hero${banner ? " has-banner" : ""}">
+        ${banner ? `<div class="d-backdrop" style="background-image:url('${banner}')"></div>` : ""}
         <div class="d-hero-inner">
           <div class="d-poster">${posterHTML(t, cover)}</div>
           <div class="d-head">
