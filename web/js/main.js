@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=6";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=6";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=6";
-import { createDetail, countUp } from "./detail.js?v=6";
-import { renderGuide } from "./guide.js?v=6";
-import { showTip, hideTip } from "./tip.js?v=6";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES } from "./content.js?v=6";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=7";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=7";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=7";
+import { createDetail, countUp } from "./detail.js?v=7";
+import { renderGuide } from "./guide.js?v=7";
+import { showTip, hideTip } from "./tip.js?v=7";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=7";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -218,11 +218,14 @@ function renderControls() {
   });
 }
 
-function cardHTML(t, i) {
+const movedIds = () => new Set((app.daily?.alerts || []).map((a) => a.anilist_id));
+
+function cardHTML(t, i, moved = new Set()) {
   const f = forecastOf(t, state.moment), v = VERDICTS[f.verdict];
   return `<a class="card v-${v.cls}" href="#/title/${t.anilist_id}/${encodeURIComponent(state.moment)}" data-id="${t.anilist_id}" style="--i:${Math.min(i, 18)}">
     ${posterHTML(t, coverOf(t.anilist_id))}
     <span class="vtag">${verdictIcon(f.verdict)}${esc(f.verdict)}</span>
+    ${moved.has(t.anilist_id) ? `<span class="moved-tag" title="The daily forecast has left the range of its last verdict">Moved</span>` : ""}
     <span class="card-info">
       <span class="card-title">${esc(t.name)}</span>
       <span class="card-sub">${esc(t.season)} · ${esc(t.format)}</span>
@@ -252,11 +255,15 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
 
   const m = MOMENTS[state.moment];
   $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>${
-    state.group === "upcoming" ? sealLine() : ""}`;
+    state.group === "upcoming" ? dailyLine() + sealLine() : ""}`;
 
-  const list = visibleTitles();
+  const alerts = state.group === "upcoming" ? alertItems() : "";
+  $("#alerts").innerHTML = alerts;
+  $("#alerts").hidden = !alerts;
+
+  const list = visibleTitles(), moved = state.group === "upcoming" ? movedIds() : new Set();
   $("#grid").classList.toggle("still", keepFocus);
-  $("#grid").innerHTML = list.slice(0, state.shown).map(cardHTML).join("");
+  $("#grid").innerHTML = list.slice(0, state.shown).map((t, i) => cardHTML(t, i, moved)).join("");
   const left = list.length - state.shown;
   $("#more").hidden = left <= 0;
   if (left > 0) $("#more button").textContent = `Show ${Math.min(PAGE, left)} more · ${left} left`;
@@ -412,7 +419,38 @@ function sealLine() {
     Check it with <code>sha256sum</code>; when they air, we will be scored against it.</span>`;
 }
 
+/** The daily job's last run (yosoku/daily.py): when, how many titles it forecast, and how many moved. */
+function dailyLine() {
+  const d = app.daily;
+  if (!d?.date) return "";
+  const waiting = d.before_buzz ? `, ${esc(d.before_buzz)} of them still before any buzz` : "";
+  const moved = new Set(d.alerts.map((a) => a.anilist_id)).size;
+  return `<span class="seal-line daily-line"><b>Forecast again every day, last on ${esc(formatDate(d.date))}.</b>
+    ${esc(d.in_play)} titles in play${waiting}. ${moved
+      ? `${moved} ${moved > 1 ? "have" : "has"} moved out of the range of ${moved > 1 ? "their" : "its"} last verdict, listed below.`
+      : "None has moved out of the range of its last verdict."}</span>`;
+}
+
+/** The daily job's alerts, one line each, linking to the title's sheet. */
+function alertItems() {
+  return (app.daily?.alerts || []).map((a) => `<li><a href="#/title/${encodeURIComponent(a.anilist_id)}">${esc(a.name)}</a>
+    <small>day ${esc(dayText(a.day))}</small> ${esc(a.text)}</li>`).join("");
+}
+
 // ---------------------------------------------------------------- method
+
+/** How the project keeps up as data arrives every day: what freezes when, and what keeps the record honest. */
+function staysCurrent() {
+  return `<div class="scorecard-wrap reveal">
+      <h2>Keeping up as data arrives every day</h2>
+      <p class="lead-sm">Most of the data never changes again. A title's buzz windows close a week after its Japanese premiere,
+        its India Demand Index after 28 days and its Netflix weeks after 90. So each day only the titles still in play are
+        collected and forecast again: the daily work grows with the season, not with the archive.</p>
+      <ol class="steps">${STAYS_CURRENT.map((s, i) => `<li><span class="pn">${String(i + 1).padStart(2, "0")}</span><span><b>${esc(s.title)}</b>${esc(s.body)}</span></li>`).join("")}</ol>
+      <h3>What keeps the record honest as it grows</h3>
+      <ul class="notused">${KEPT_HONEST.map((n) => `<li><b>${esc(n.name)}</b><span>${esc(n.why)}</span></li>`).join("")}</ul>
+    </div>`;
+}
 
 function scorecard() {
   const src = app.data.sources;
@@ -527,6 +565,7 @@ function renderMethod() {
     </div>
     ${forecastSteps()}
     ${indexChecks()}
+    ${staysCurrent()}
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
     ${scorecard()}
     ${signalWorth()}
@@ -603,7 +642,9 @@ async function boot() {
   app.covers = loaded.covers;
   app.guide = loaded.guide;
   app.seal = loaded.seal;
+  app.daily = loaded.daily;
   if (app.data.mock) $("#mock-banner").hidden = false;
+  if (app.data.generated) $("#asof").textContent = `Forecasts as of ${formatDate(app.data.generated)}.`;
 
   detail = createDetail(app, { requestClose });
   const firstGroup = Object.keys(GROUPS).find((g) => groupTitles(g).length);

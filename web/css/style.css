@@ -314,6 +314,13 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
 .legend { margin: var(--s-5) auto var(--s-5); font-size: 14px; color: var(--muted); }
 .legend b { color: var(--text); font-weight: 600; }
 .legend span::before { content: "·"; margin: 0 8px; opacity: 0.5; }
+.legend .seal-line::before { content: none; }   /* the boxed lines start on their own row: no separator */
+/* The daily job's alerts (yosoku/daily.py) under the legend, and the badge on a title that moved. */
+.alerts { display: grid; gap: 8px; margin: calc(-1 * var(--s-2)) 0 var(--s-5); padding: 0; list-style: none; }
+.alerts li { padding: 10px 14px; border-left: 3px solid var(--shu); background: var(--surface); font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.alerts a { color: var(--text); font-weight: 600; }
+.alerts small { margin: 0 6px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.moved-tag { position: absolute; z-index: 2; top: 10px; right: 10px; padding: 5px 8px; border-radius: 2px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--shu-fill); }
 
 /* ------------------------------------------------------------------ poster cards */
 
@@ -421,6 +428,7 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .d-date b { color: var(--text); font-weight: 600; }
 .flag { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s-3); padding: 10px 14px; border-radius: var(--r); font-size: 14px; background: color-mix(in srgb, var(--test) 14%, transparent); border: 1px solid color-mix(in srgb, var(--test) 35%, transparent); }
 .flag .ico { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--test); }
+.flag.moved { margin: 0 0 var(--s-4); background: color-mix(in srgb, var(--shu) 12%, transparent); border-color: color-mix(in srgb, var(--shu) 35%, transparent); }
 
 .d-verdict, .d-section, .d-syn { margin: 0 clamp(18px, 4vw, 44px); }
 .d-verdict {

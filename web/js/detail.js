@@ -1,10 +1,10 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=6";
-import { posterHTML } from "./art.js?v=6";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=6";
-import { showTip, hideTip, showToast } from "./tip.js?v=6";
-import { RULE_NOTES } from "./content.js?v=6";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=7";
+import { posterHTML } from "./art.js?v=7";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=7";
+import { showTip, hideTip, showToast } from "./tip.js?v=7";
+import { RULE_NOTES } from "./content.js?v=7";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -48,7 +48,7 @@ function windowSection(t, evidence, minN) {
 }
 
 /** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
- *  Built only from evidence already on the sheet, so every step can be traced to a section below. */
+ *  Built from evidence on the sheet and the decision clock (Track record), so every step can be traced. */
 function launchPlan(t, f, moment, data) {
   const later = data.thresholds["t+7"];
   const steps = [];
@@ -56,7 +56,7 @@ function launchPlan(t, f, moment, data) {
     Launch: ["Commit to India", "License, market and schedule a full release now: the whole 80% range clears the launch line."],
     "Test-market": moment === "t+7"
       ? ["Stay in limited release", "A week in, it has shown neither enough to commit nor little enough to drop."]
-      : ["License for a limited release", "Subtitled streaming with little marketing spend: enough to learn, cheap to stop."],
+      : ["License for a limited release", "Subtitled streaming with little marketing spend, and a small minimum guarantee with a top-up tied to the T+7 verdict: enough to learn, cheap to stop."],
     Hold: moment === "t+7"
       ? ["Drop or delay the India push", "Launch-week attention from India stayed low."]
       : ["Don't commit yet", "The whole range sits under the hold line. Revisit only if launch-week buzz appears."],
@@ -68,8 +68,13 @@ function launchPlan(t, f, moment, data) {
       : `Launch if the low end reaches ${later.launch_line}, Hold if the high end stays under ${later.hold_line}`;
     const ev = data.evaluation?.moments || {}, r = (k) => ev[k]?.table.spearman[ev[k].used ?? ev[k].main];
     const now = r(moment), then = r("t+7");
-    const why = Number.isFinite(now) && Number.isFinite(then) && then > now
-      ? ` On 2024 titles, forecasts at this stage ranked titles at ${now.toFixed(2)}; a week after launch, at ${then.toFixed(2)}.` : "";
+    // The decision clock says how fast the evidence arrives: little before the premiere, most in its first days.
+    const clock = data.clock || [], at = (day) => clock.find((d) => d.day === day)?.rolling;
+    const [before, day3, day7] = [at(-7), at(3), at(7)];
+    const why = [before, day3, day7].every(Number.isFinite)
+      ? ` Over ${clock[0].seasons} seasons of backtests, forecasts ranked titles at ${before.toFixed(2)} a week before the premiere, ${day3.toFixed(2)} three days after it and ${day7.toFixed(2)} at T+7: line up the dub and marketing from day 3, commit at T+7.`
+      : Number.isFinite(now) && Number.isFinite(then) && then > now
+        ? ` On 2024 titles, forecasts at this stage ranked titles at ${now.toFixed(2)}; a week after launch, at ${then.toFixed(2)}.` : "";
     steps.push(["Decide again at T+7", `One week after the Japanese premiere, with launch-week signals in. ${rule}.${why}`]);
   }
   const dub = f.dub_demand || {}, typical = data.dub_typical;
@@ -109,9 +114,9 @@ function pathRows(t, clock) {
   return (t.history || []).map((h) => ({ day: h.day, value: h.index, lo: h.low, hi: h.high, date: h.date }));
 }
 
-/** How a 2024 title's forecast moved over the decision clock; for an upcoming title, how it is moving and when the
- *  next verdict comes. */
-function movedSection(t, data) {
+/** How a 2024 title's forecast moved over the decision clock; for an upcoming title, how it is moving (with the daily
+ *  job's alert, if it moved out of its verdict's range) and when the next verdict comes. */
+function movedSection(t, data, daily) {
   const clock = data.clock, rows = clock ? pathRows(t, clock) : [];
   const rules = Object.entries(data.thresholds).filter(([, th]) => th.method !== "Blend").map(([key]) => MOMENTS[key].label);
   const ruleNote = rules.length ? ` At ${esc(rules.join(" and "))} a simple rule makes the verdict instead, so the number above can differ.` : "";
@@ -125,7 +130,9 @@ function movedSection(t, data) {
         Shaded: that day's 80% range. From the premiere on it is a nowcast.${ruleNote}</p></section>`;
   } else if (rows.length) {
     const first = rows[0], last = rows[rows.length - 1];
+    const alerts = (daily?.alerts || []).filter((a) => a.anilist_id === t.anilist_id).map((a) => esc(a.text)).join(" ");
     chart = `<section class="d-section d-moved"><h3>How the forecast is moving <small>made again each day</small></h3>
+      ${alerts ? `<p class="flag moved"><span><b>Moved since its last verdict</b> (${esc(formatDate(daily.date))}). ${alerts}</span></p>` : ""}
       <div class="traj-host" id="traj"></div>
       <p class="note">Our model's forecast for this title as the daily job has made it: ${round(first.value)} on ${esc(formatDate(first.date))}${rows.length > 1
         ? `, ${round(last.value)} on ${esc(formatDate(last.date))}` : ""}. Shaded: the 80% range on each day. It fills in as the premiere nears.${ruleNote}</p></section>`;
@@ -251,7 +258,7 @@ export function createDetail(app, { requestClose }) {
         ${stageTimeline([moment], moment)}
         <p class="note">${esc(MOMENTS[moment].detail)}</p>
       </section>
-      ${movedSection(t, app.data)}
+      ${movedSection(t, app.data, app.daily)}
       <section class="d-section"><h3>Closest past titles <small>and how they did in India</small></h3>
         ${lookalikes(f.lookalikes, (l) => posterHTML({ anilist_id: l.anilist_id, title_japanese: "" }, app.covers[l.anilist_id]))}
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>

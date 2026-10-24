@@ -79,8 +79,9 @@ seasons (100 titles at today's 50 a season), and not by the archive. The archive
 
 - `python -m yosoku.daily`: collects for the titles in play, labels aired titles on the frozen scale, forecasts
   each title in play as of today with the decision clock's model, logs it to `predictions/history.csv`, writes
-  `reports/alerts.md` when buzz moves a forecast out of its verdict's range, and republishes the site, where each
-  upcoming title's sheet shows its forecast moving. Under a minute on today's data, collection aside.
+  `reports/alerts.md` when buzz moves a forecast out of its verdict's range, and republishes the site, which shows
+  the day's status and alerts, a *Moved* badge on those titles, and each upcoming title's forecast moving on its
+  sheet. Under a minute on today's data, collection aside.
 - `collect_youtube.py --refresh`: new comments only (newest first, until a cached one), a new search each week for
   later trailers, today's view counts kept for 30 days. A title in play costs a page or two of comments per video
   a day and one search a week.

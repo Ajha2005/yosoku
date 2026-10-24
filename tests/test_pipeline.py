@@ -351,6 +351,9 @@ def test_daily_job(fake, tmp_path):
     assert len(run("2027-01-20", "--no-publish")) == len(upcoming)  # twice on one day: the later run replaces the earlier
     assert len(run("2027-01-21")) == 2 * len(upcoming)
     assert (out / "reports" / "alerts.md").read_text(encoding="utf-8").startswith("# Alerts, 2027-01-21")
+    status = json.loads((out / "predictions" / "alerts.json").read_text(encoding="utf-8"))  # what the site shows
+    assert status["date"] == "2027-01-21" and status["in_play"] == len(upcoming) and 0 <= status["before_buzz"] <= len(upcoming)
+    assert all({"anilist_id", "name", "day", "text"} <= set(a) and a["day"] != "cold" for a in status["alerts"])
     payload = json.loads((out / "predictions" / "predictions.json").read_text(encoding="utf-8"))
     for title in (t for t in payload["titles"] if t["group"] == "upcoming"):
         assert title["history"][-1]["date"] == "2027-01-21"  # the log reaches the forecast sheet
