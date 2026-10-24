@@ -31,14 +31,14 @@ SOURCES = ["MANGA", "LIGHT_NOVEL", "ORIGINAL", "VIDEO_GAME", "WEB_NOVEL", "NOVEL
 # separate coefficients can't offset each other on screen.
 SIGNALS = {
     "wiki_en": "Global buzz", "wiki_ja": "Global buzz", "yt_comments": "Global buzz",
-    "wiki_india": "India buzz", "has_india_article": "India buzz", "yt_indic": "India buzz",
+    "wiki_india": "India buzz", "has_india_article": "India buzz", "yt_india": "India buzz",
     "has_youtube": "India buzz",
     "is_sequel": "Franchise history", "prequel_label": "Franchise history", "has_prequel_label": "Franchise history",
     "lookalike": "Similar past titles",
 }
 SIGNAL_NOTES = {
     "Global buzz": "English and Japanese Wikipedia views and trailer comments worldwide",
-    "India buzz": "Hindi, Tamil and Telugu Wikipedia views and trailer comments in Indian scripts",
+    "India buzz": "Hindi, Tamil and Telugu Wikipedia views and trailer comments by people in India",
     "Franchise history": "whether it is a sequel, and how its prequel did in India",
     "Similar past titles": "the India index of the 10 most similar past titles",
 }
@@ -87,7 +87,7 @@ def activity(titles, wiki, comments, moment):
                 views = window_total(wiki[wiki["lang"].isin(langs)], "views", lo, hi, cutoff, titles.index)
                 out[f"wiki_{group}_{window}"] = np.log1p(views.fillna(0))
         if comments is not None:
-            for name, column in (("yt_comments", None), ("yt_indic", "indic")):
+            for name, column in (("yt_comments", None), ("yt_india", "india")):
                 rows = comments.assign(one=1)
                 count = window_total(rows, column or "one", lo, hi, cutoff, titles.index)
                 # Only the most popular titles were searched on YouTube: the rest are blank, not zero.

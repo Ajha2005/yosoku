@@ -82,8 +82,23 @@ def test_end_to_end(fake):
     assert all(set(t["forecasts"]) == {"cold"} for t in upcoming)  # Winter 2027 is months away
 
 
-def test_raw_parts_youtube_zero_comments():
-    titles = pd.DataFrame({"yt_comments_month1": [0.0, 10.0, np.nan], "yt_share_devanagari": [np.nan, 0.2, np.nan],
-                           "netflix_top10_weeks_90d": [1, 2, 3], "wiki_en_month1": [1, 2, 3]})
+def test_india_comments():
+    from yosoku.data import classify
+    found = classify(pd.Series([
+        "Bhai ye Dan Da Dan ka Ep 2 hindi dub mai kab aayega",  # Hinglish, names Hindi
+        "Please release in India",                               # mentions India, no hub
+        "tamil dub pls",                                         # names Tamil
+        "चाला बागुंदी नमस्ते",                                     # Devanagari script
+        "hai hai ka ke ki",                                      # common words only: Japanese romaji, not Hindi
+        "The voices and dubbing quality are great",              # English, no India signal
+    ]))
+    assert found["india"].tolist() == [True, True, True, True, False, False]
+    assert found["hindi"].tolist() == [True, False, False, True, False, False]
+    assert found["tamil"].tolist() == [False, False, True, False, False, False]
+
+
+def test_youtube_part_is_india_comments():
+    titles = pd.DataFrame({"yt_india_month1": [0.0, 3.0, np.nan], "netflix_top10_weeks_90d": [1, 2, 3],
+                           "wiki_en_month1": [1, 2, 3]})
     parts = raw_parts(titles)
-    assert parts["youtube"].tolist()[:2] == [0.0, 2.0] and np.isnan(parts["youtube"].iloc[2])
+    assert parts["youtube"].tolist()[:2] == [0.0, 3.0] and np.isnan(parts["youtube"].iloc[2])

@@ -27,9 +27,10 @@ MOMENT_NAMES = {"cold": "Cold: before any buzz (metadata only)", "t-28": "T−28
 GROUP_NAMES = {"upcoming": "Upcoming (not released yet)", "validation": "Backtest: 2024 titles", "test": "Final test: 2025 titles"}
 
 SOURCES = pd.DataFrame([
-    ["YouTube trailer comments", "India's own voice: comments written in Devanagari, Tamil, Telugu, Bengali, Kannada, Malayalam scripts",
-     "Most popular 200 titles only; newest 1,000 comments per video, so launch-week comments of big hits can be missing; "
-     "Hinglish typed in Latin letters is not detected", "Strong for language hubs; noisy for small titles (few comments)"],
+    ["YouTube trailer comments", "India's own voice: comments in Indian scripts, Hinglish typed in Latin letters "
+     "(\"bhai hindi dub kab aayega\"), or naming India, an Indian language or city; about 1 in 100 comments",
+     "Most popular 200 titles only; newest 1,000 comments per video; a word list, so it misses some Indian English "
+     "and catches a few non-Indian comments", "Strong signal for big titles; sparse for small ones (many have none)"],
     ["Netflix India Top 10", "Real viewing in India, published by Netflix", "Only Netflix titles, only from June 2021; a top-10 list "
      "hides everything below rank 10", "Reliable but coarse; blank (not zero) for titles not on Netflix"],
     ["Wikipedia pageviews (en, ja, hi, ta, te)", "Daily attention, bots excluded, in five languages", "English views are global, not "
@@ -177,12 +178,12 @@ def main():
         st.subheader("Where in India: language hubs")
         if f["regions"]:
             st.plotly_chart(regions_chart(f["regions"], data["hubs"]), use_container_width=True)
-            st.caption(f"Estimated from trailer comments written in Indian scripts on the {f['region_titles']} closest past titles "
-                       "that had any. English-language fans are spread across India and are not counted here; Hindi includes "
-                       "Marathi (both use Devanagari).")
+            st.caption(f"Estimated from trailer comments that point to a language (its script, its name, or Hinglish for Hindi) "
+                       f"on the {f['region_titles']} closest past titles that had any. English-speaking fans are spread across "
+                       "India and are not counted here; Hindi includes Marathi.")
             st.dataframe(pd.DataFrame({"Hub": list(data["hubs"]), "States": list(data["hubs"].values())}), hide_index=True)
         else:
-            st.info("None of the closest past titles had trailer comments in Indian scripts, so there is no regional estimate.")
+            st.info("None of the closest past titles had trailer comments pointing to an Indian language, so there is no regional estimate.")
 
     with tabs[3]:
         st.subheader(f"{GROUP_NAMES[group]}: every title at a glance")
@@ -217,7 +218,7 @@ def main():
         st.subheader("How the India Demand Index is built")
         st.markdown(
             "- Measured over the **first 28 days** after the Japanese premiere, from three public signals: "
-            "**YouTube comments in Indian scripts (50%)**, **Netflix India Top-10 weeks (33%)**, **Wikipedia views (17%)**.\n"
+            "**YouTube comments by people in India (50%)**, **Netflix India Top-10 weeks (33%)**, **Wikipedia views (17%)**.\n"
             "- Each signal becomes a percentile among past titles; a missing signal is **left out, never counted as zero**, "
             "and the weights are rescaled. A title needs two signals to get an index.\n"
             "- Forecasts only use data available at the forecast moment; an automatic test fails the build if any input "

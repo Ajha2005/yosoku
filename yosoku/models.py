@@ -17,7 +17,7 @@ from sklearn.linear_model import RidgeCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler, normalize
 
-from yosoku.data import HUBS, INDIC_SCRIPTS
+from yosoku.data import HUBS
 from yosoku.features import prequel_label, signal
 
 K = 10
@@ -36,11 +36,11 @@ def meta_tokens(titles):
 
 
 def region_profiles(titles):
-    """Share of each language hub among a title's Indian-script trailer comments (rows sum to 1, or NaN)."""
-    columns = [f"yt_share_{script}" for script in INDIC_SCRIPTS]
+    """Share of each language hub among a title's hub-pointing trailer comments (rows sum to 1, or NaN)."""
+    columns = [f"yt_share_{hub}" for hub in HUBS]
     if not set(columns) <= set(titles.columns):
-        return pd.DataFrame(np.nan, index=titles.index, columns=list(INDIC_SCRIPTS))
-    shares = titles[columns].set_axis(list(INDIC_SCRIPTS), axis=1)
+        return pd.DataFrame(np.nan, index=titles.index, columns=list(HUBS))
+    shares = titles[columns].set_axis(list(HUBS), axis=1)
     total = shares.sum(axis=1)
     return shares.div(total.where(total > 0), axis=0)
 
@@ -86,7 +86,7 @@ class Lookalike:
             region = {}
             if has.any():
                 mix = np.average(profiles[has].to_numpy(), axis=0, weights=weights[has])
-                region = {HUBS[script][0]: round(float(v), 3) for script, v in zip(INDIC_SCRIPTS, mix)}
+                region = {HUBS[hub][0]: round(float(v), 3) for hub, v in zip(HUBS, mix)}
                 region["_titles"] = int(has.sum())
             rows.append({"forecast": forecast,
                          "lookalikes": [(int(train_ids[j]), round(float(sim[j]), 3)) for j in top],
@@ -164,7 +164,7 @@ def baselines(moment, features, titles, labels, train_ids, target_ids):
     if window:
         for name, columns in (("Global buzz (en+ja Wikipedia)", [f"wiki_en_{window}", f"wiki_ja_{window}"]),
                               ("India Wikipedia alone", [f"wiki_india_{window}"]),
-                              ("India YouTube alone", [f"yt_indic_{window}"])):
+                              ("India YouTube alone", [f"yt_india_{window}"])):
             if set(columns) <= set(features.columns):
                 x = features[columns].sum(axis=1, min_count=len(columns))
                 x = x.fillna(x.loc[train_ids].mean())
