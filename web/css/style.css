@@ -500,6 +500,10 @@ svg.scatter { display: block; overflow: visible; }
 .tile-test b, .tile-test .tile-label { color: var(--test); }
 .tile-hold b, .tile-hold .tile-label { color: var(--hold); }
 
+.verdict-line { padding: 14px 18px; border-radius: 16px; font-size: 14.5px; background: var(--surface); border: 1px solid var(--line); box-shadow: inset 3px 0 0 var(--accent-2); }
+.verdict-line.yes { box-shadow: inset 3px 0 0 var(--launch); } .verdict-line.no { box-shadow: inset 3px 0 0 var(--test); }
+.verdict-line span { display: block; margin-top: 4px; font-size: 13px; color: var(--faint); }
+
 .mb-head, .mb { display: grid; grid-template-columns: minmax(130px, 230px) 1fr 52px 100px; gap: 14px; align-items: center; }
 .mb-head { padding: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--faint); border-bottom: 1px solid var(--line); }
 .mb { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
