@@ -2,7 +2,7 @@
 // (ringi-sho): conclusion, grounds, precedents, risks and the next decision dates, with boxes for the approvers' seals.
 // Built only from what the sheet shows. The Japanese is templated by machine: a fluent speaker should check it first.
 
-import { VERDICTS, esc, round, pct } from "./data.js?v=9";
+import { VERDICTS, esc, round, pct } from "./data.js?v=10";
 
 const GENRE = {
   Action: "アクション", Adventure: "冒険", Comedy: "コメディ", Drama: "ドラマ", Ecchi: "お色気", Fantasy: "ファンタジー", Horror: "ホラー",

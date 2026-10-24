@@ -889,8 +889,6 @@ svg.scatter { display: block; overflow: visible; }
 .biz-proof p { font-size: 15px; line-height: 1.6; color: var(--muted); max-width: 640px; }
 .biz-proof b { color: var(--text); }
 .biz-calls thead .vicon { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
-.biz-price { display: block; font: 700 15px/1.3 var(--font-display); color: var(--shu); }
-.biz-small { font-size: 13px; font-weight: 400; color: var(--faint); margin-left: 6px; }
 .biz-seal a { color: inherit; }
 .roadmap li { grid-template-columns: 64px 1fr; }
 .srccard.biz-calls { min-width: 0; }

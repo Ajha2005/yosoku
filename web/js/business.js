@@ -1,7 +1,7 @@
 // The Business tab: what the forecasts are worth to a buyer, who pays, and how the method travels to other markets.
 
-import { MOMENTS, esc, pct, formatDate } from "./data.js?v=9";
-import { verdictIcon } from "./charts.js?v=9";
+import { MOMENTS, esc, pct, formatDate } from "./data.js?v=10";
+import { verdictIcon } from "./charts.js?v=10";
 
 const CUSTOMERS = [
   { who: "Indian streaming platforms and TV channels", decides: "Which titles to license, when to commit, and whether to dub.",
@@ -12,13 +12,6 @@ const CUSTOMERS = [
     buys: "A per-film brief before booking screens." },
   { who: "Dubbing studios", decides: "Which titles and Indian languages to pitch dubs for.",
     buys: "Dub demand and the language-hub map for each title." },
-];
-
-// Prices are starting hypotheses to test with buyers, not quotes.
-const TIERS = [
-  { name: "Title brief", price: "₹25–50k per title", body: "The one-page brief for a single title: verdict, 80% range, launch plan, closest past titles, dub demand and where in India." },
-  { name: "Season subscription", price: "₹5–20 lakh a year", body: "Every new season's titles at Cold, T−28 and T+7, refreshed weekly, plus the Demand guide and the sealed track record." },
-  { name: "Partner", price: "Custom or revenue share", body: "Adds a platform's own pre-launch signals (watchlist saves, Notify me, “not for me”) as model inputs, the signal our Cold forecasts lack today." },
 ];
 
 const EDGE = [
@@ -96,28 +89,17 @@ function customers(data) {
       <div class="table-scroll" tabindex="0" role="region" aria-label="Customers, scrolls sideways on narrow screens"><table class="srccard">
         <thead><tr><th scope="col">Customer</th><th scope="col">The decision they make</th><th scope="col">What they buy</th></tr></thead>
         <tbody>${CUSTOMERS.map((c) => `<tr><th scope="row">${esc(c.who)}</th><td>${esc(c.decides)}</td><td>${esc(c.buys)}</td></tr>`).join("")}</tbody></table></div>
-      <h3>Pricing <small class="biz-small">starting hypotheses, to test with buyers</small></h3>
-      <div class="principles">${TIERS.map((t, i) => `<article class="principle reveal" style="--i:${i}"><span class="biz-price">${esc(t.price)}</span><h3>${esc(t.name)}</h3><p>${esc(t.body)}</p></article>`).join("")}</div>
     </div>`;
 }
 
 function scale(data) {
   const markets = Object.entries(data.markets || {});
-  const titles = data.sources?.released;
   const rows = markets.map(([code, m]) => `<tr><th scope="row">${esc(m.name)}<small>${esc(code)}</small></th>
       <td>Netflix ${esc(m.name)} Top 10</td><td>${esc(m.wiki.join(", "))}<small>${esc(m.note)}</small></td>
       <td>${m.comments ? "Yes" : "Not yet"}</td><td>${code === "IN" ? "<b>Running</b>" : "Ready to collect"}</td></tr>`).join("");
   return `<div class="scorecard-wrap reveal">
-      <h2>How it scales</h2>
-      <ul class="notused">
-        <li><b>A new market is a setting</b><span>Each data folder is collected for one country. Adding one is a line in <code>collectors/markets.py</code>
-          (its Netflix chart and Wikipedia languages), then the same four collectors and the same model. Netflix publishes weekly charts for about 90 countries.</span></li>
-        <li><b>A new title costs almost nothing</b><span>Every source is public and free: AniList, Wikipedia, Netflix's Top 10 file and YouTube's free quota.
-          ${titles ? `The whole model reruns on ${Number(titles).toLocaleString("en-IN")} titles` : "The whole model reruns"} in about 30 seconds.</span></li>
-        <li><b>It runs without an analyst</b><span>Collecting is scripted and resumable, forecasts are dated and sealed, and the site is static,
-          so a season's update is a few commands and a push.</span></li>
-      </ul>
-      ${rows ? `<h3>Markets set up today</h3>
+      <h2>Expansion</h2>
+      ${rows ? `
       <div class="table-scroll" tabindex="0" role="region" aria-label="Markets, scrolls sideways on narrow screens"><table class="srccard">
         <thead><tr><th scope="col">Market</th><th scope="col">Viewing</th><th scope="col">Local Wikipedia</th><th scope="col">Trailer comments</th><th scope="col">Status</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
@@ -133,14 +115,6 @@ function edge() {
       <p class="lead-sm">Global demand-measurement firms such as Parrot Analytics already sell cross-country TV demand data to studios, so buyers pay for this kind of answer.
         Yosoku's place is narrower and cheaper:</p>
       <ul class="notused">${EDGE.map(([head, body]) => `<li><b>${esc(head)}</b><span>${esc(body)}</span></li>`).join("")}</ul>
-      <h3>What gets harder to copy every season</h3>
-      <p class="lead-sm">Each season adds sealed forecasts scored against what happened, and more labelled titles to learn from. A newcomer can copy the code, not the dated track record.</p>
-      <h3>What we still have to prove</h3>
-      <ul class="notused">
-        <li><b>A buyer who says yes</b><span>The prices above are hypotheses until a platform, licensor or distributor tests them.</span></li>
-        <li><b>The 2025 test</b><span>Scored once, at the very end, so it cannot be tuned. It will show whether the 2024 rates hold.</span></li>
-        <li><b>A second market</b><span>The collectors are ready for Indonesia, Thailand, Brazil and Mexico; none has been collected yet.</span></li>
-      </ul>
     </div>`;
 }
 
