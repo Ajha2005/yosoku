@@ -142,6 +142,7 @@ the script deliberately goes slowly, so please don't lower `--pause` much.
 
 ```
 collectors/   the scripts (common.py holds shared helpers)
+docs/         decisions.md: the six choices that shape the dataset; read it before changing a default
 data/         CSV outputs; data/raw/ is the cache and is git-ignored
 .env          your API key and contact (git-ignored; copy from .env.example)
 ```
