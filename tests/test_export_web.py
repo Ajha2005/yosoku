@@ -95,3 +95,14 @@ def test_guide_counts_agree_with_the_collected_files():
     assert {r["id"] for r in built["watched"]} <= {r["id"] for r in built["titles"]}   # every charted title is in the pool
     assert set(built["voice"]["hubs"]) == set(built["hubs"])
     json.dumps(built, allow_nan=False)   # no NaN: the browser's JSON.parse would reject it
+
+
+def test_asks_list_agrees_with_its_totals():
+    from yosoku import guide
+
+    built = guide.build(ROOT / "data")
+    asks = built["asks"]
+    assert asks["comments"] == sum(r["asks"] for r in asks["titles"]) and asks["watch"] == sum(r["watch"] for r in asks["titles"])
+    assert all(0 <= r["recent"] <= r["asks"] and (r["dub"] or r["watch"]) for r in asks["titles"])
+    assert asks["titles"] == sorted(asks["titles"], key=lambda r: (-r["asks"], -r["recent"], r["name"]))
+    assert {r["id"] for r in asks["titles"]} <= set(export_web.guide_ids(built))  # every listed title gets its poster

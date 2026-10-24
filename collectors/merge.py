@@ -16,7 +16,9 @@ comment_languages.csv exists (collectors/detect_languages.py), IndicLID helps fi
 
 All of those come from youtube_comment_daily.csv: comments counted per title, video and day, with
 no text. It is rebuilt from youtube_comments.csv whenever the comment text is here, and read as it
-is when it is not, so the text never has to be shared or kept for the pipeline to run.
+is when it is not, so the text never has to be shared or kept for the pipeline to run. Beside it,
+youtube_ask_daily.csv counts the comments asking for a dub (by language) or for where to watch, for
+the Demand guide; it is not a model input.
 
 A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
@@ -30,7 +32,7 @@ import argparse
 import pandas as pd
 
 from common import add_data_dir_argument, data_file, read_titles, use_data_dir
-from india_signals import COUNTS, HUBS, daily_counts
+from india_signals import COUNTS, HUBS, classify, daily_asks, daily_counts, indic_flags
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 # Reddit also gets "early", the days before the T-28 forecast moment (see docs/decisions.md).
@@ -40,6 +42,7 @@ NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
 NETFLIX_DAYS = 90
 OUT_CSV = "dataset.csv"
 COUNTS_CSV = "youtube_comment_daily.csv"
+ASKS_CSV = "youtube_ask_daily.csv"  # what Indian fans ask for, by day (the Demand guide; not a model input)
 
 
 def load(name):
@@ -90,11 +93,15 @@ def netflix(titles):
 
 
 def comment_counts():
-    """Daily comment counts (india_signals.daily_counts): rebuilt and saved from the comment text if it is here."""
+    """Daily comment counts (india_signals.daily_counts): rebuilt and saved from the comment text if it is here,
+    with the daily asks beside them (india_signals.daily_asks)."""
     if not data_file("youtube_comments.csv").exists():
         return load(COUNTS_CSV)
-    counts = daily_counts(load("youtube_comments.csv"), load("comment_languages.csv"))
+    comments = load("youtube_comments.csv")
+    found = classify(comments["text"], indic_flags(comments, load("comment_languages.csv")))
+    counts = daily_counts(comments, found=found)
     counts.to_csv(data_file(COUNTS_CSV), index=False, encoding="utf-8-sig")
+    daily_asks(comments, found=found).to_csv(data_file(ASKS_CSV), index=False, encoding="utf-8-sig")
     return counts
 
 

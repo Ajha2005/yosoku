@@ -97,6 +97,7 @@ def log(history_path, today_rows):
 
 def alerts(today_rows, predictions):
     """[{anilist_id, name, day, text}]: a forecast outside the range of the title's latest verdict, or across a line.
+    A sealed verdict keeps the range and lines it was sealed with: it is the one the title will be graded on.
 
     Only once buzz is in: before that, a difference from the cold verdict is two methods disagreeing, not news."""
     stages = {t["anilist_id"]: t for t in predictions["titles"] if t["group"] == "upcoming"}
@@ -107,6 +108,8 @@ def alerts(today_rows, predictions):
             continue
         stage = [m for m in feat.MOMENTS if m in title["forecasts"]][-1]
         f, lines, label = title["forecasts"][stage], predictions["thresholds"][stage], STAGE_LABELS[stage]
+        if "sealed" in f:  # a sealed verdict is judged on the lines it was sealed with
+            lines, label = {**lines, **{k: v for k, v in f["sealed"].items() if k.endswith("_line")}}, f"sealed {label}"
         said = []
         if not f["low"] <= row["index"] <= f["high"]:
             said.append(f"Forecast {row['index']:.0f}, {'above' if row['index'] > f['high'] else 'below'} the "

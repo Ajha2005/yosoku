@@ -178,7 +178,7 @@ def test_end_to_end(fake):
         assert info["used"] == (info["main"] if info["beats_baseline"] else info["best_baseline"])
         assert payload["thresholds"][moment]["method"] == info["used"]
         assert info["main"] == "Blend"  # at every stage, cold included
-        # Titles not released yet get the range from every known season, the 2024 misses included.
+        # Titles not released yet get the range from every known season, the 2024 misses included (evaluate.live_width).
         live = payload["thresholds"][moment]["range_half_width_live"]
         assert all(t["forecasts"][moment]["high"] - t["forecasts"][moment]["index"] <= live + 0.11
                    for t in upcoming if moment in t["forecasts"])
@@ -295,6 +295,78 @@ def test_dub_requests():
     assert (found["india"] | ~found["dub_ask"]).all()  # every dub request also counts as an Indian comment
 
 
+def test_watch_and_dub_language_asks():
+    from yosoku.data import classify
+    text = pd.Series(["Hindi dub kab aayega", "please dub in tamil", "india me kab aayega bhai", "when is season 2 coming",
+                      "Telugu dubbed version please", "india me kab aayega? Hindi dub here https://bit.ly/x"])
+    found = classify(text)
+    assert found["dub_hindi"].tolist() == [True, False, False, False, False, False]
+    assert found["dub_tamil"].tolist() == [False, True, False, False, False, False]
+    assert found["dub_telugu"].tolist() == [False, False, False, False, True, False]
+    assert found["watch_ask"].tolist() == [True, False, True, False, False, False]  # Indian comments only, and no links
+
+
+def test_daily_asks_keep_only_days_with_an_ask():
+    from india_signals import daily_asks
+    comments = pd.DataFrame({"anilist_id": [1, 1, 1, 2], "video_id": ["a", "a", "a", "b"],
+                             "published_at": ["2026-01-01T10:00:00Z", "2026-01-01T12:00:00Z", "2026-01-02T10:00:00Z",
+                                              "2026-01-01T10:00:00Z"],
+                             "text": ["Hindi dub kab aayega", "tamil dub pls", "great trailer", "india me kab aayega"]})
+    asks = daily_asks(comments)
+    assert asks[["anilist_id", "date"]].values.tolist() == [[1, "2026-01-01"], [2, "2026-01-01"]]  # no ask on 2 Jan
+    first = asks.iloc[0]
+    assert (first["ask"], first["dub_ask"], first["dub_hindi"], first["dub_tamil"], first["watch_ask"]) == (2, 2, 1, 1, 1)
+
+
+def test_live_range_comes_from_titles_with_a_youtube_part():
+    from yosoku.evaluate import MIN_MISSES, live_width
+    ids = pd.RangeIndex(100)
+    misses = pd.Series(np.r_[np.full(50, 20.0), np.full(50, 2.0)], index=ids)
+    youtube = pd.Series(ids >= 50, index=ids)  # the titles whose index includes YouTube missed by 2 points
+    assert live_width(misses, youtube) == pytest.approx(2)
+    assert live_width(misses, youtube & (ids < 50 + MIN_MISSES - 1)) == pytest.approx(20)  # too few of them: every miss counts
+
+
+def test_sealed_stage_shows_the_sealed_numbers():
+    from yosoku.decision import show_sealed
+    today = {"index": 55.3, "low": 33.4, "high": 77.2, "verdict": "Test-market", "drivers": [],
+             "lookalikes": [{"name": "A", "india_index": 50.0}], "reason_en": "", "reason_ja": ""}
+    record = {"forecasts": {"cold": today}}
+    show_sealed(record, {"date": "2026-10-24", "file": "f.json", "methods": {"cold": "Genre average"},
+                         "lines": {"cold": {"launch_line": 60, "hold_line": 40}},
+                         "forecasts": {"cold": {"index": 55.5, "low": 41.2, "high": 69.7, "verdict": "Test-market"},
+                                       "t-28": {"index": 60.0, "low": 50.0, "high": 70.0, "verdict": "Test-market"}}})
+    f = record["forecasts"]["cold"]
+    assert (f["index"], f["low"], f["high"]) == (55.5, 41.2, 69.7) and f["now"]["low"] == 33.4
+    assert f["sealed"] == {"date": "2026-10-24", "file": "f.json", "launch_line": 60, "hold_line": 40}
+    assert "41–70" in f["reason_en"] and "Genre average" in f["reason_en"] and "ジャンル平均" in f["reason_ja"]
+    assert set(record["forecasts"]) == {"cold"} and record["sealed"]["file"] == "f.json"  # a stage not reached stays unreached
+
+
+def test_precedents_say_what_they_share():
+    from yosoku.decision import common_ground
+    titles = pd.DataFrame({"prequel_anilist_id": [np.nan, 1, np.nan], "genre_list": [["Action", "Drama"], ["Action"], ["Drama"]],
+                           "tag_list": [["a", "b"], ["a"], ["c"]], "studio": ["MAPPA", "MAPPA", "Bones"],
+                           "source": ["MANGA", "MANGA", "ORIGINAL"], "format": ["TV", "TV", "MOVIE"],
+                           "demographic": ["Teens (boys)", "Teens (boys)", "Not tagged"]}, index=[1, 2, 3])
+    assert common_ground(titles, 2, 1) == {"franchise": True, "genres": ["Action"], "studio": "MAPPA", "source": "MANGA",
+                                           "format": "TV", "audience": "Teens (boys)", "tags": 1}
+    other = common_ground(titles, 2, 3)
+    assert other["franchise"] is False and other["genres"] == [] and other["studio"] is None and other["audience"] is None
+
+
+def test_alerts_judge_a_sealed_verdict_on_its_own_lines():
+    from yosoku.daily import alerts
+    predictions = {"thresholds": {"cold": {"launch_line": 60, "hold_line": 40}},
+                   "titles": [{"anilist_id": 1, "group": "upcoming", "forecasts": {"cold": {
+                       "index": 50, "low": 40, "high": 60, "verdict": "Test-market",
+                       "sealed": {"date": "2026-10-24", "file": "f.json", "launch_line": 70, "hold_line": 40}}}}]}
+    today = pd.DataFrame([{"anilist_id": 1, "name": "A", "day": 3, "index": 66.0, "low": 62.0, "high": 70.0}])
+    # 62 clears today's launch line (60) but not the sealed one (70): only the range alert.
+    assert [a["text"] for a in alerts(today, predictions)] == [
+        "Forecast 66, above the 40–60 range of its sealed Cold verdict (Test-market)."]
+
+
 def test_wikipedia_disambiguation_is_not_related(monkeypatch):
     """A disambiguation page links to the show's article, but is not about the show."""
     sys.path.insert(0, str(ROOT / "collectors"))
@@ -321,6 +393,8 @@ def test_seal(fake, tmp_path):
     run = lambda *extra: subprocess.run([sys.executable, "-m", "yosoku.seal", "--out-dir", str(out), "--today", "2026-10-24", *extra],
                                         cwd=ROOT, capture_output=True, text=True)  # noqa: E731
     assert run().returncode == 0
+    from yosoku.seal import sealed_forecasts  # what the site shows for each sealed title
+    assert set(sealed_forecasts(out)) == {t["anilist_id"] for t in payload["titles"] if t["group"] == "upcoming"}
     sealed = list((out / "predictions" / "sealed").glob("2026-10-24-*.json"))
     assert len(sealed) == 1
     assert json.loads(sealed[0].read_text(encoding="utf-8"))["titles"]
@@ -328,6 +402,7 @@ def test_seal(fake, tmp_path):
     assert run().returncode != 0  # the same day again: never rewritten
     sealed[0].write_bytes(sealed[0].read_bytes().replace(b'"index":', b'"index": '))
     assert run("--verify").returncode != 0
+    assert sealed_forecasts(out) == {}  # a file that no longer matches its fingerprint is never shown
 
 
 def test_daily_job(fake, tmp_path):

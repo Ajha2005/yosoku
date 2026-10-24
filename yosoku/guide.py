@@ -5,7 +5,10 @@
 
 Two real signals, both counted rather than modelled:
 - Netflix India's weekly Top 10 (which anime reached it, for how many weeks, at what rank);
-- India-flagged YouTube trailer comments (how many comments from India per title, and in which language hub).
+- India-flagged YouTube trailer comments (how many comments from India per title, and in which language hub),
+  and among them the asks: a dub in an Indian language, or when and where the title can be watched in India
+  (data/youtube_ask_daily.csv). Where a title can already be watched legally in India is not joined yet, so the
+  list says who is asking, not yet who is unserved.
 
 One row per title with its attributes, so the page can split the evidence by genre, intended audience, source,
 format, sequel and year, and so a visitor can describe their own title and see how similar ones fared.
@@ -32,6 +35,31 @@ def num(value, digits=None):
 
 def read_csv(path):
     return pd.read_csv(path, encoding="utf-8-sig") if path.exists() else None
+
+
+RECENT_DAYS = 365  # "asked in the last year": up to the newest comment collected
+
+
+def asks(data_dir, titles):
+    """What Indian fans ask for, title by title, most asked first; None before any are collected."""
+    daily, counts = read_csv(data_dir / "youtube_ask_daily.csv"), read_csv(data_dir / "youtube_comment_daily.csv")
+    if daily is None or counts is None or daily.empty:
+        return None
+    daily = daily[daily["anilist_id"].isin(titles.index)].assign(date=lambda d: pd.to_datetime(d["date"]))
+    as_of = pd.Timestamp(counts["date"].max())
+    recent = daily[daily["date"] > as_of - pd.Timedelta(days=RECENT_DAYS)].groupby("anilist_id")["ask"].sum()
+    total = daily.groupby("anilist_id").agg(**{c: (c, "sum") for c in ("ask", "dub_ask", "watch_ask", *(f"dub_{h}" for h in HUBS))},
+                                            last=("date", "max"))
+    india = counts.groupby("anilist_id")["india"].sum()
+    rows = [{"id": int(i), "name": titles.at[i, "name"], "year": num(titles.at[i, "year"]),
+             "jp": titles.at[i, "title_japanese"] if isinstance(titles.at[i, "title_japanese"], str) else "",
+             "asks": int(r["ask"]), "recent": int(recent.get(i, 0)), "watch": int(r["watch_ask"]),
+             "dub": {HUBS[h][0]: int(r[f"dub_{h}"]) for h in HUBS if r[f"dub_{h}"]},
+             "india": int(india.get(i, 0)), "last": r["last"].strftime("%Y-%m-%d")} for i, r in total.iterrows()]
+    return {"as_of": as_of.strftime("%Y-%m-%d"), "recent_days": RECENT_DAYS, "comments": int(total["ask"].sum()),
+            "dub_asks": int(total["dub_ask"].sum()), "watch": int(total["watch_ask"].sum()),
+            "dub": {HUBS[h][0]: int(total[f"dub_{h}"].sum()) for h in HUBS},
+            "titles": sorted(rows, key=lambda r: (-r["asks"], -r["recent"], r["name"]))}
 
 
 def build(data_dir):
@@ -87,6 +115,7 @@ def build(data_dir):
         "voice": {"titles": int(len(voice)), "comments": num(comments.sum()), "india": num(scored["yt_india_month1"].sum()),
                   "hubs": hub_comments, "wikipedia": wikipedia},
         "hubs": {name: description for name, description in HUBS.values()},
+        "asks": asks(data_dir, titles),
     }
 
 

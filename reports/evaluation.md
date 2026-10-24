@@ -15,8 +15,8 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 
 - Best baseline: Genre average. Blend beats it overall, on top-20% hits and for new shows: **no**.
 - Forecasts and verdicts use: **Genre average**. The model does not beat this rule, so the rule is shipped (gate G4 fallback).
-- 80% range (Genre average): ± 14.5 points; contains the truth for **67%** of 2024 titles (target 70–90%).
-- 80% range for titles not released yet: ± 16.4 points, from every rolling season including 2024.
+- 80% range (Genre average): ± 14.5 points; contains the truth for **67%** of 2024 titles (target 70–90%): 85% of the 33 whose index has no YouTube part, 37% of the 19 that have one.
+- 80% range for titles not released yet: ± 21.9 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
 
 ## Moment: t-28
 
@@ -32,8 +32,8 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 
 - Best baseline: Genre average. Blend beats it overall, on top-20% hits and for new shows: **yes**.
 - Forecasts and verdicts use: **Blend**.
-- 80% range (Blend): ± 12.5 points; contains the truth for **63%** of 2024 titles (target 70–90%).
-- 80% range for titles not released yet: ± 14.0 points, from every rolling season including 2024.
+- 80% range (Blend): ± 12.5 points; contains the truth for **63%** of 2024 titles (target 70–90%): 79% of the 33 whose index has no YouTube part, 37% of the 19 that have one.
+- 80% range for titles not released yet: ± 18.7 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
 
 ## Moment: t+7
 
@@ -49,8 +49,12 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 
 - Best baseline: India YouTube alone. Blend beats it overall, on top-20% hits and for new shows: **yes**.
 - Forecasts and verdicts use: **Blend**.
-- 80% range (Blend): ± 10.3 points; contains the truth for **67%** of 2024 titles (target 70–90%).
-- 80% range for titles not released yet: ± 11.0 points, from every rolling season including 2024.
+- 80% range (Blend): ± 10.3 points; contains the truth for **67%** of 2024 titles (target 70–90%): 79% of the 33 whose index has no YouTube part, 47% of the 19 that have one.
+- 80% range for titles not released yet: ± 12.7 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
+
+## Why the 2024 ranges miss
+
+YouTube comments were collected only for the 200 titles most popular on AniList today. A 2024 title has had less time to get there, so the 2024 titles whose index includes YouTube are mostly hits, and they beat their forecasts; the ranges hold for the others. Every upcoming title gets YouTube data from the daily job, so its range comes from the misses of the titles whose index includes YouTube, which makes it wider. Collecting YouTube for every title (label v2) removes the cause.
 
 ## Gate G4
 

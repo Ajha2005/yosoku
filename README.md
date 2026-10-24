@@ -20,8 +20,9 @@ As of 24 October 2026. The files in `reports/` are generated and are the source 
 - **Data:** 1,400 titles, the 50 most popular Japanese anime of every season from 2019 to 2025. The 200 most popular
   also have YouTube trailer comments (trailer search only, `--no-hindi`). The collected CSVs are committed in `data/`
   (the Reddit files are not), so the model and the site run without any API key (see "Run the model and the site").
-  The comments are also kept as per-day counts without text (`data/youtube_comment_daily.csv`), and the pipeline runs
-  from those alone: see "Responsible data use" for taking the text out of the public repo.
+  The comments are also kept as per-day counts without text (`data/youtube_comment_daily.csv`, and the comments asking
+  for a dub or for where to watch in `data/youtube_ask_daily.csv`), and the pipeline runs from those alone: see
+  "Responsible data use" for taking the text out of the public repo.
 - **No Google Trends this round**, so the India Demand Index is YouTube 50%, Streaming 33%, Wikipedia 17%.
   319 titles have at least two parts and get a label. The ranking pool is frozen (`labels/reference_v1.csv`), so
   collecting new titles never moves an existing label. `docs/decisions.md` has the change log.
@@ -239,7 +240,10 @@ split they share.
   at any day), and the daily job uses it for titles in play.
 - If the model does not beat the best simple rule at a moment, that rule makes the forecasts there and the report says so (gate G4 fallback).
 - The 80% ranges come from how far forecasts missed on the rolling seasons: for the 2024 backtest, only seasons
-  before 2024; for titles not released yet, every season, the 2024 misses included.
+  before 2024; for titles not released yet, every season, the 2024 misses included, and only the titles whose index
+  includes YouTube, as theirs will. In 2024 the ranges held for 79–85% of the other titles but 37–47% of those: YouTube
+  was collected for the 200 titles most popular today, so the 2024 ones are mostly hits. A stage already sealed shows
+  the sealed numbers on the site, with today's forecast beside them.
 - Each title also carries two described, not modelled, extras that change neither the forecast nor the verdict:
   **dub demand** (the share of Indian trailer comments on its closest past titles that ask for or about an
   Indian-language dub) and a **release-window what-if** (how labelled past titles did in the festive, board-exam, IPL
@@ -251,7 +255,8 @@ split they share.
 ## The website (static, for Vercel)
 
 `web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Forecasts, Track record, Method, Demand guide):
-poster wall, a verdict card for every title (with its dub demand and release-window what-if), an India language-hub map,
+poster wall, a verdict card for every title (with its dub demand and release-window what-if) that prints as a one-page
+brief in English or as a Japanese 稟議書 (the 稟 button: conclusion, grounds, precedents, risks, next decision dates), an India language-hub map,
 the backtest, the decision clock ("When will we know?" on Track record), each title's forecast path (day by day for the
 2024 titles, from the daily log for upcoming ones), the daily job's status and alerts on Forecasts → Upcoming, and the
 method, including how it keeps up as data arrives every day. Vercel can
@@ -267,7 +272,9 @@ git add web/data predictions && git commit -m "Update website data" && git push
 
 - The **Demand guide** tab ("what is India actually watching?") is built by `python -m yosoku.guide`, which `export_web` runs for you.
   It counts only two real signals: which anime reached Netflix India's weekly Top 10 (`data/netflix_matches.csv`) and the
-  India-flagged YouTube trailer comments in `data/dataset.csv`. It does not use the forecast model or the India Demand Index.
+  India-flagged YouTube trailer comments in `data/dataset.csv`, with the ones asking for a dub (by language) or for when
+  and where to watch listed title by title ("What India is asking for", `data/youtube_ask_daily.csv`). It does not use
+  the forecast model or the India Demand Index.
 - The site shows the real forecasts in `predictions/predictions.json`. If that file is missing, it falls back to
   `web/data/mock_predictions.json`, made from **fake** data, with a yellow "Preview data" banner.
   Mock titles get generated Japanese-print posters instead of covers, because their made-up ids collide with real AniList ids.

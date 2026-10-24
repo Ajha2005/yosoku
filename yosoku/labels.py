@@ -49,6 +49,18 @@ def raw_parts(titles):
     return parts
 
 
+def youtube_part(titles):
+    """Boolean Series: the title's index includes the YouTube part, because its trailer comments were collected.
+
+    The daily job collects them for every title in play, so an upcoming title's index will include it. For past
+    titles they were collected only for the 200 most popular on AniList today, and a recent title has had less
+    time to become popular: those of 2024 are mostly hits that beat their forecasts.
+    """
+    if "yt_india_month1" not in titles:
+        return pd.Series(False, index=titles.index)
+    return titles["yt_india_month1"].notna()
+
+
 def percentiles(parts, reference=None):
     """Each part as a 0-1 percentile rank after log1p, among the titles that have it.
 
