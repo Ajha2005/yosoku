@@ -171,7 +171,7 @@ def baselines(moment, features, titles, labels, train_ids, target_ids):
     window = {"t-28": "early", "t+7": "launch"}.get(moment)
     if window:
         for name, columns in (("Global buzz (en+ja Wikipedia)", [f"wiki_en_{window}", f"wiki_ja_{window}"]),
-                              ("India Wikipedia alone", [f"wiki_india_{window}"]),
+                              ("India Wikipedia alone", [f"wiki_local_{window}"]),
                               ("India YouTube alone", [f"yt_india_{window}"])):
             if set(columns) <= set(features.columns):
                 x = features[columns].sum(axis=1, min_count=len(columns))
