@@ -18,7 +18,7 @@ export const VERDICTS = {
 export const MOMENTS = {
   "cold": { label: "Cold", long: "Before any buzz", note: "Metadata only: genre, studio, source, synopsis." },
   "t-28": { label: "T−28", long: "Four weeks before launch", note: "Adds trailer comments and Wikipedia attention." },
-  "t+7": { label: "T+7", long: "After launch week", note: "Adds the first week of real reaction. Most accurate." },
+  "t+7": { label: "T+7", long: "After launch week", note: "Adds the first week of real reaction. A nowcast rather than a forecast: that week is part of the 28 days being measured." },
 };
 
 export const GROUPS = {

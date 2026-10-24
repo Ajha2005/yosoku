@@ -65,6 +65,19 @@ def agreement(parts):
     return pd.DataFrame(rows)
 
 
+def against_rest(parts, ranks):
+    """DataFrame per part: titles with data, and Spearman with the index of the other parts (so it is not compared with itself)."""
+    rows = []
+    for part in parts.columns:
+        others = ranks.drop(columns=part)
+        w = pd.Series({p: WEIGHTS[p] for p in others.columns})
+        rest = (others.fillna(0) * w).sum(axis=1) / (others.notna() * w).sum(axis=1)
+        both = pd.concat([ranks[part], rest.where(others.notna().any(axis=1))], axis=1).dropna()
+        rows.append({"part": part, "titles": int(parts[part].notna().sum()), "pairs": len(both),
+                     "spearman": spearmanr(both.iloc[:, 0], both.iloc[:, 1]).statistic if len(both) >= 3 else np.nan})
+    return pd.DataFrame(rows).set_index("part")
+
+
 def stability(ranks, base):
     rows = []
     for part in ranks.columns:
@@ -119,6 +132,10 @@ def report(labels, parts, ranks, data_dir):
     lines += ["", "## Agreement (Spearman between parts; expect all positive, most above 0.3)", "",
               "| Pair | Titles | Spearman |", "| --- | --- | --- |"]
     lines += [f"| {r.pair} | {r.titles} | {r.spearman:.2f} |" for r in agree.itertuples()]
+    rest = against_rest(parts, ranks)
+    lines += ["", "## Each part against the rest (Spearman with the index of the other parts)", "",
+              "| Part | Titles | Spearman |", "| --- | --- | --- |"]
+    lines += [f"| {part} | {int(r.pairs)} | {r.spearman:.2f} |" for part, r in rest.iterrows()]
     lines += ["", f"## Stability (Kendall's tau after moving one weight by {WEIGHT_SHIFT:.2f}; target {STABILITY_TARGET})", "",
               "| Weight | Kendall's tau |", "| --- | --- |"]
     lines += [f"| {r.weight} | {r.kendall_tau:.3f} |" for r in stable.itertuples()]
