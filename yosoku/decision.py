@@ -4,6 +4,8 @@ Verdict rule: Launch if the low end of the 80% range clears the launch line, Hol
 under the hold line, otherwise Test-market. The two lines start at 60 and 40 and are tuned on the
 2024 validation titles so that at least 70% of Launch titles end up in the top third of the index
 (and 70% of Hold titles in the bottom third). Release-window clashes are flagged, never scored.
+Two extras go to the dashboard, both described rather than modelled: how past titles did by release
+window (the what-if), and how often fans of the closest past titles asked for an Indian-language dub.
 At a moment where the model did not beat the best simple rule (gate G4), that rule makes the forecasts;
 the lookalikes and the regional view still come from the model.
 
@@ -56,6 +58,40 @@ def tune(point, actual, width):
                  if (picked := both[both["point"] + width < line]).shape[0] >= 3
                  and (picked["actual"] <= bottom).mean() >= PRECISION_TARGET), HOLD_LINE)
     return launch, min(hold, launch)
+
+
+RELEASE_WINDOWS = {  # what-if options: months in each window (March counts as exams)
+    "Festive season (Oct–Nov)": {10, 11},
+    "Board exams (Feb–Mar)": {2, 3},
+    "IPL cricket (Apr–May)": {4, 5},
+    "Other months": {1, 6, 7, 8, 9, 12},
+}
+MIN_EVIDENCE = 10  # past titles needed in a window before the what-if shows its average
+
+
+def release_window(start):
+    return next((name for name, months in RELEASE_WINDOWS.items() if pd.notna(start) and start.month in months), None)
+
+
+def window_evidence(titles, labels, ids):
+    """{window: {mean, n}}: how past titles that started in each window did. An association, not a cause."""
+    windows = titles.loc[ids, "start"].map(release_window)
+    grouped = labels.loc[ids].groupby(windows)
+    means, counts = grouped.mean(), grouped.size()
+    return {name: {"mean": round(float(means[name]), 1) if counts.get(name, 0) else None, "n": int(counts.get(name, 0))}
+            for name in RELEASE_WINDOWS}
+
+
+def dub_demand(titles, looks):
+    """(share, titles): similarity-weighted share of Indian comments asking for a dub, over the lookalikes that have any."""
+    if "yt_dub_share" not in titles:
+        return None, 0
+    pairs = [(titles.at[i, "yt_dub_share"], s) for i, s in looks
+             if i in titles.index and pd.notna(titles.at[i, "yt_dub_share"])]
+    if not pairs:
+        return None, 0
+    shares, weights = zip(*pairs)
+    return round(float(np.average(shares, weights=weights)), 3), len(pairs)
 
 
 def window_flags(start):
@@ -123,6 +159,7 @@ def entries(titles, labels, out, width, lines, rule=None):
                            for i, s in row["lookalikes"][:5]],
             "regions": {k: v for k, v in row["region"].items() if not k.startswith("_")},
             "region_titles": row["region"].get("_titles", 0),
+            "dub_demand": dict(zip(("share", "titles"), dub_demand(titles, row["lookalikes"]))),
         }
     return result
 
@@ -138,6 +175,7 @@ def title_info(titles, anilist_id, group, labels, today):
         "synopsis": str(row.get("synopsis", "") or "")[:600],
         "actual_index": None if actual is None or pd.isna(actual) else round(float(actual), 1),
         "release_window_flags": window_flags(row["start"]),
+        "release_window": release_window(row["start"]),
         "moments_available": available_moments(row["start"], today) if group == "upcoming" else feat.MOMENTS,
         "forecasts": {},
     }
@@ -214,6 +252,9 @@ def main():
     payload = {
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
+        "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
+        "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
+        if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),
     }
     (out_dir / "predictions").mkdir(parents=True, exist_ok=True)
