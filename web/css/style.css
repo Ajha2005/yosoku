@@ -827,6 +827,16 @@ svg.scatter { display: block; overflow: visible; }
 .notused li { display: grid; grid-template-columns: minmax(150px, 230px) 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 .notused b { color: var(--text); }
 @media (max-width: 560px) { .notused li { grid-template-columns: 1fr; gap: 4px; } }
+.steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; max-width: 820px; }
+.steps li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+.steps li:last-child { border-bottom: 0; }
+.steps .pn { font: 800 22px/1.2 var(--font-display); -webkit-text-stroke: 1px var(--shu); }
+.steps b { display: block; color: var(--text); }
+.check { display: inline-block; min-width: 38px; margin-right: 8px; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; text-align: center; }
+.check.yes { color: var(--launch); border: 1px solid currentColor; }
+.check.no { color: var(--hold); border: 1px solid currentColor; }
+.srccard a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.srccard.boxoffice { min-width: 0; }
 .flag.thin { margin: 0 0 14px; }
 
 /* ------------------------------------------------------------------ print: a one-page brief per title */
