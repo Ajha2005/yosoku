@@ -2,7 +2,7 @@
 
 import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
 import { posterHTML } from "./art.js?v=2";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap } from "./charts.js?v=2";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions } from "./charts.js?v=2";
 import { showTip, hideTip, showToast } from "./tip.js?v=2";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -182,34 +182,7 @@ export function createDetail(app, { requestClose }) {
     if (e.key === "ArrowRight") go(neighbours()[1]);
   });
 
-  // Hovering a language hub or a state lights up both the list and the map.
-  const regionsOf = (el) => el.closest(".regions");
-  const light = (el, hub) => {
-    const box = regionsOf(el);
-    if (box) box.querySelectorAll(".st.hub, .hub-row").forEach((x) => x.classList.toggle("dim", Boolean(hub) && x.dataset.hub !== hub));
-  };
-  body.addEventListener("pointerover", (e) => {
-    const target = e.target.closest(".st.hub, .hub-row");
-    if (!target) return;
-    const hub = target.dataset.hub;
-    light(target, hub);
-    const share = Number(target.closest(".regions").querySelector(`.hub-row[data-hub="${hub}"] .hub-val`).textContent.replace("%", ""));
-    if (target.classList.contains("st")) showTip(`<b>${esc(target.dataset.state)}</b><br>${esc(hub)} hub · ${share}% of Indian-language engagement`, e.clientX, e.clientY);
-  });
-  body.addEventListener("pointermove", (e) => {
-    const target = e.target.closest(".st.hub");
-    if (target && !document.getElementById("tip").hidden) {
-      const hub = target.dataset.hub;
-      const share = target.closest(".regions").querySelector(`.hub-row[data-hub="${hub}"] .hub-val`).textContent;
-      showTip(`<b>${esc(target.dataset.state)}</b><br>${esc(hub)} hub · ${esc(share)} of Indian-language engagement`, e.clientX, e.clientY);
-    }
-  });
-  body.addEventListener("pointerout", (e) => {
-    const target = e.target.closest(".st.hub, .hub-row");
-    if (target) { light(target, null); hideTip(); }
-  });
-  body.addEventListener("focusin", (e) => { const row = e.target.closest(".hub-row"); if (row) light(row, row.dataset.hub); });
-  body.addEventListener("focusout", (e) => { const row = e.target.closest(".hub-row"); if (row) light(row, null); });
+  bindRegions(body);
 
   return {
     show, close,

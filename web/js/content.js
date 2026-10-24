@@ -23,3 +23,21 @@ export const SOURCES = [
   { name: "AniList metadata", tells: "Genres, tags, source, studio, audience and sequel links.",
     bias: "Today's popularity and score include the outcome, so they are never model inputs.", reliability: "Reliable; audience tags are the only age proxy in public data." },
 ];
+
+// The Demand guide's honest limits, and what would fix them.
+export const LIMITS = [
+  { title: "Small numbers.", body: "Only a handful of anime have reached India's weekly chart, so a gap between two bars can be one or two titles. Read the patterns as leads, not proof." },
+  { title: "One chart.", body: "Netflix India is the only service whose weekly chart we can read. Crunchyroll, Prime Video, JioHotstar and TV channels publish nothing we can use, so what finds its audience there is invisible here." },
+  { title: "Kids and family anime.", body: "Long-running kids' anime reaches India largely through TV channels, so family titles are under-counted. This shows what works on a streaming chart, not all of India." },
+  { title: "Who is watching.", body: "Netflix publishes no viewer ages or cities. “Made for” is the audience a title is aimed at, and regions come only from the language of trailer comments." },
+  { title: "Which titles.", body: "We follow the 50 most popular anime of each season from 2019 to 2025. Niche titles are not in the data." },
+  { title: "Attention, not money.", body: "Reaching the chart means people watched. It does not say what a title earned." },
+];
+
+export const NEXT = [
+  "Charts or partner data from other platforms, to see beyond Netflix.",
+  "TV ratings for kids' and family anime, to cover the audience Netflix misses.",
+  "Which titles have Hindi, Tamil or Telugu dubs, and when they arrived.",
+  "A viewer survey for ages and cities, which no platform publishes.",
+  "More comments, in more Indian languages, to firm up the regional picture.",
+];

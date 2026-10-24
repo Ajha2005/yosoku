@@ -1,12 +1,12 @@
-"""Prepare the static dashboard (web/) for deployment: copy the forecasts and fetch the anime cover art.
+"""Prepare the static dashboard (web/) for deployment: copy the forecasts, build the demand guide, fetch the cover art.
 
-    python -m yosoku.export_web                 # predictions/predictions.json (or the mock) + covers from AniList
-    python -m yosoku.export_web --no-covers     # forecasts only, e.g. when offline
+    python -m yosoku.export_web                 # predictions/predictions.json (or the mock) + guide + covers from AniList
+    python -m yosoku.export_web --no-covers     # no AniList lookup, e.g. when offline
 
-Writes web/data/predictions.json and web/data/covers.json. Commit both; Vercel serves them as-is.
+Writes web/data/predictions.json, guide.json and covers.json. Commit them; Vercel serves them as-is.
 
 Covers are links to AniList's image servers, not copies of the images. Mock forecasts use made-up ids that
-collide with real AniList ids, so covers are never fetched for them.
+collide with real AniList ids, so covers are never fetched for them (the guide uses real titles, so it gets its own).
 """
 
 import argparse
@@ -18,6 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "collectors"))
 from common import request_json  # noqa: E402  (retrying HTTP helper shared with the collectors)
+from yosoku import guide as demand_guide  # noqa: E402
 
 ANILIST_URL = "https://graphql.anilist.co"
 BATCH = 50
@@ -38,6 +39,11 @@ def referenced_ids(predictions):
         for forecast in title["forecasts"].values():
             ids.update(look["anilist_id"] for look in forecast["lookalikes"])
     return sorted(ids)
+
+
+def guide_ids(guide):
+    """Titles the demand guide shows posters for: every anime that reached India's Top 10."""
+    return sorted(row["id"] for row in guide["watched"])
 
 
 def cover_entry(media):
@@ -77,6 +83,7 @@ def main():
     parser.add_argument("--predictions", default="predictions/predictions.json",
                         help="forecasts written by `python -m yosoku.run`; the mock is used if this is missing")
     parser.add_argument("--out-dir", default="web/data", help="where the site reads its data (default: web/data)")
+    parser.add_argument("--data-dir", default="data", help="collected data for the demand guide (default: data)")
     parser.add_argument("--no-covers", action="store_true", help="skip the AniList lookup and keep covers.json as it is")
     args = parser.parse_args()
 
@@ -88,14 +95,16 @@ def main():
     out = ROOT / args.out_dir
     write_json(out / "predictions.json", predictions)
 
-    covers_file = out / "covers.json"
-    if predictions.get("mock"):
-        write_json(covers_file, {})
-        print("mock forecasts: no covers fetched (their ids belong to other, real anime)")
-    elif not args.no_covers:
-        ids = referenced_ids(predictions)
-        print(f"fetching covers for {len(ids)} titles from AniList")
-        write_json(covers_file, fetch_covers(ids))
+    guide = demand_guide.build(ROOT / args.data_dir)
+    write_json(out / "guide.json", guide)
+
+    ids = set(guide_ids(guide))
+    if not predictions.get("mock"):
+        ids |= set(referenced_ids(predictions))
+    if not args.no_covers:
+        note = " (the guide's only: mock ids collide with real ones)" if predictions.get("mock") else ""
+        print(f"fetching covers for {len(ids)} titles from AniList{note}")
+        write_json(out / "covers.json", fetch_covers(sorted(ids)))
     print("Done. Preview: python -m http.server -d web 8000   then open http://localhost:8000")
 
 
