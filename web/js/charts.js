@@ -54,7 +54,7 @@ export function miniBar(forecast) {
 // The timeline runs from day -56 to the end of launch week, counted from the Japanese premiere (day 0).
 const DAY_FROM = -56, DAY_TO = 7;
 const dayPos = (day) => ((day - DAY_FROM) / (DAY_TO - DAY_FROM)) * 100;
-const dayText = (day) => (day < 0 ? `−${-day}` : day > 0 ? `+${day}` : "0");
+export const dayText = (day) => (day < 0 ? `−${-day}` : day > 0 ? `+${day}` : "0");
 
 /** Where each stage's buzz window sits around the Japanese premiere. keys: the stages to draw; active: the one to highlight. */
 export function stageTimeline(keys, active) {
@@ -202,4 +202,104 @@ export function modelBars(info) {
       <span class="mb-extra">${Number.isFinite(t.top20[n]) ? pct(t.top20[n]) : "n/a"}</span>
     </li>`).join("");
   return `<div class="mb-head" aria-hidden="true"><span>Method</span><span>Average miss, in index points (shorter is better)</span><span></span><span class="mb-extra">Top-20% hits</span></div><ul class="mbs">${rows}</ul>`;
+}
+
+// ---------------------------------------------------------------- the decision clock
+
+const fx2 = (v) => (Number.isFinite(v) ? v.toFixed(2) : "–");
+const clockWhen = (d) => (d.day === "cold" ? "Cold, before any buzz"
+  : `Made on day ${dayText(d.day)}${d.stage ? ` (${MOMENTS[d.stage].label})` : ""}`);
+
+/** x for a clock day: Cold has its own slot on the left, then days to scale, so three days look like three days. */
+function clockX(days, left, right) {
+  const timed = days.filter((d) => d !== "cold"), lo = Math.min(...timed), hi = Math.max(...timed), slot = 56;
+  return (d) => (d === "cold" ? left + 16 : left + slot + ((d - lo) / (hi - lo)) * (right - left - slot));
+}
+
+/** The nowcast zone from the premiere on, the premiere line, the verdict stages on top and day labels that never
+ *  collide: Cold, the premiere and the stages are placed first, then whichever other days still fit. */
+function clockFrame(days, X, top, bottom, right) {
+  const first = (d) => d.day === "cold" || d.day === 0 || Boolean(d.stage);
+  const placed = [];
+  for (const d of [...days.filter(first), ...days.filter((d) => !first(d))]) {
+    if (placed.every((p) => Math.abs(X(p.day) - X(d.day)) >= 26)) placed.push(d);
+  }
+  const ticks = placed.map((d) =>
+    `<text class="tick" x="${X(d.day)}" y="${bottom + 18}" text-anchor="middle">${d.day === "cold" ? "Cold" : dayText(d.day)}</text>`).join("");
+  const stages = days.filter((d) => d.stage && d.stage !== "cold").map((d) =>
+    `<text class="ck-stage" x="${X(d.day)}" y="${top - 10}" text-anchor="middle">${MOMENTS[d.stage].label}</text>`).join("");
+  return `<rect class="ck-now" x="${X(0)}" y="${top}" width="${right - X(0)}" height="${bottom - top}"/>
+    <line class="ck-prem" x1="${X(0)}" x2="${X(0)}" y1="${top}" y2="${bottom}"/>
+    <text class="ck-now-t" x="${X(0) + 6}" y="${top + 14}">Nowcast</text>${ticks}${stages}`;
+}
+
+const path = (rows, X, Y, key) => rows.filter((d) => Number.isFinite(d[key])).map((d, i) => `${i ? "L" : "M"}${X(d.day)},${Y(d[key])}`).join("");
+
+function bindPointTips(host, tips) {
+  host.querySelectorAll("[data-tip-i]").forEach((pt) => {
+    const show = (x, y) => showTip(tips[pt.dataset.tipI], x, y);
+    pt.addEventListener("pointerover", (e) => show(e.clientX, e.clientY));
+    pt.addEventListener("pointermove", (e) => show(e.clientX, e.clientY));
+    pt.addEventListener("pointerout", hideTip);
+    pt.addEventListener("focus", () => { const r = pt.getBoundingClientRect(); show(r.left + r.width / 2, r.top); });
+    pt.addEventListener("blur", hideTip);
+  });
+}
+
+/** How well a forecast made on each day ranks the titles: on 2024, with its 95% interval, and averaged over the
+ *  rolling seasons. `days` is predictions.json "clock" (yosoku/clock.py). Sized to its container. */
+export function clockChart(host, days) {
+  const width = Math.max(host.clientWidth, 300);
+  const height = clamp(Math.round(width * 0.5), 260, 360);
+  const m = { l: 54, r: 14, t: 32, b: 46 };
+  const X = clockX(days.map((d) => d.day), m.l, width - m.r);
+  const Y = (v) => m.t + ((1 - clamp(v, -0.3, 1)) / 1.3) * (height - m.t - m.b);
+  const timed = days.filter((d) => d.day !== "cold"), cold = days.find((d) => d.day === "cold");
+  const banded = timed.filter((d) => Number.isFinite(d.low) && Number.isFinite(d.high));
+  const band = banded.length > 1
+    ? `<path class="ck-band" d="${path(banded, X, Y, "high")}${[...banded].reverse().map((d) => `L${X(d.day)},${Y(d.low)}`).join("")}Z"/>` : "";
+  const coldBar = cold && Number.isFinite(cold.low) && Number.isFinite(cold.high)
+    ? `<line class="ck-err" x1="${X("cold")}" x2="${X("cold")}" y1="${Y(cold.high)}" y2="${Y(cold.low)}"/>` : "";
+  const grid = [0, 0.25, 0.5, 0.75, 1].map((v) => `<line class="grid${v ? "" : " ck-zero"}" x1="${m.l}" x2="${width - m.r}" y1="${Y(v)}" y2="${Y(v)}"/>` +
+    `<text class="tick" x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${v ? v.toFixed(2) : "0"}</text>`).join("");
+  const tips = days.map((d) => `<b>${esc(clockWhen(d))}</b><br>2024 titles: ${fx2(d.spearman)} (95% interval ${fx2(d.low)} to ${fx2(d.high)})` +
+    `<br>${esc(d.seasons)} rolling seasons: ${fx2(d.rolling)}<br>80% range ± ${Number.isFinite(d.width) ? round(d.width) : "–"} points` +
+    (d.nowcast ? "<br><i>Nowcast: inside the 28 days measured</i>" : ""));
+  const dots = days.map((d, i) => (Number.isFinite(d.rolling) ? `<circle class="ck-roll" cx="${X(d.day)}" cy="${Y(d.rolling)}" r="3"/>` : "") +
+    (Number.isFinite(d.spearman) ? `<circle class="ck-pt" cx="${X(d.day)}" cy="${Y(d.spearman)}" r="5" tabindex="0" data-tip-i="${i}"
+      aria-label="${esc(clockWhen(d))}: rank correlation ${fx2(d.spearman)} on 2024, ${fx2(d.rolling)} over the rolling seasons"/>` : "")).join("");
+  host.innerHTML = `<svg class="scatter clock" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="group"
+      aria-label="Rank correlation of forecasts with the actual India Demand Index, by the day the forecast is made">
+    ${clockFrame(days, X, m.t, height - m.b, width - m.r)}${grid}${band}${coldBar}
+    <path class="ck-rline" d="${path(timed, X, Y, "rolling")}"/><path class="ck-line" d="${path(timed, X, Y, "spearman")}"/>${dots}
+    <text class="axis-title" x="${(m.l + width - m.r) / 2}" y="${height - 6}" text-anchor="middle">Day the forecast is made (0 = Japanese premiere)</text>
+    <text class="axis-title" transform="translate(12 ${(m.t + height - m.b) / 2}) rotate(-90)" text-anchor="middle">Rank correlation with what happened</text></svg>`;
+  bindPointTips(host, tips);
+}
+
+/** One title's forecast on each clock day with its 80% range, against what happened (if known). `values` lines up with `days`. */
+export function trajectoryChart(host, days, values, actual) {
+  const width = Math.max(host.clientWidth, 280);
+  const height = clamp(Math.round(width * 0.42), 200, 260);
+  const m = { l: 34, r: 14, t: 28, b: 40 };
+  const X = clockX(days.map((d) => d.day), m.l, width - m.r);
+  const Y = (v) => m.t + ((100 - clamp(v, 0, 100)) / 100) * (height - m.t - m.b);
+  const rows = days.map((d, i) => ({ ...d, value: values[i], lo: values[i] - (d.width ?? 0), hi: values[i] + (d.width ?? 0) }))
+    .filter((r) => Number.isFinite(r.value));
+  const timed = rows.filter((r) => r.day !== "cold"), cold = rows.find((r) => r.day === "cold");
+  const band = timed.length > 1 ? `<path class="tj-band" d="${path(timed, X, Y, "hi")}${[...timed].reverse().map((r) => `L${X(r.day)},${Y(r.lo)}`).join("")}Z"/>` : "";
+  const coldBar = cold ? `<line class="tj-err" x1="${X("cold")}" x2="${X("cold")}" y1="${Y(cold.hi)}" y2="${Y(cold.lo)}"/>` : "";
+  const grid = [0, 50, 100].map((v) => `<line class="grid" x1="${m.l}" x2="${width - m.r}" y1="${Y(v)}" y2="${Y(v)}"/>` +
+    `<text class="tick" x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`).join("");
+  const truth = actual == null ? "" : `<line class="tj-actual" x1="${m.l}" x2="${width - m.r}" y1="${Y(actual)}" y2="${Y(actual)}"/>
+    <text class="tj-actual-t" x="${m.l + 4}" y="${Y(actual) + (actual > 80 ? 14 : -6)}">Actual ${round(actual)}</text>`;
+  const tips = rows.map((r) => `<b>${esc(clockWhen(r))}</b><br>Forecast ${round(r.value)}, 80% range ${round(clamp(r.lo, 0, 100))}–${round(clamp(r.hi, 0, 100))}` +
+    (actual == null ? "" : `<br>Actual ${round(actual)}`));
+  const dots = rows.map((r, i) => `<circle class="tj-pt" cx="${X(r.day)}" cy="${Y(r.value)}" r="4.5" tabindex="0" data-tip-i="${i}"
+      aria-label="${esc(clockWhen(r))}: forecast ${round(r.value)}"/>`).join("");
+  host.innerHTML = `<svg class="scatter clock traj" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="group"
+      aria-label="This title's India Demand Index forecast by the day it is made${actual == null ? "" : `, against the actual ${round(actual)}`}">
+    ${clockFrame(days, X, m.t, height - m.b, width - m.r)}${grid}${band}${coldBar}${truth}
+    <path class="tj-line" d="${path(timed, X, Y, "value")}"/>${dots}</svg>`;
+  bindPointTips(host, tips);
 }

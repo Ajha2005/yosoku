@@ -21,18 +21,19 @@ from yosoku.data import add_folder_arguments, folder, load_daily, load_reddit, l
 from yosoku.models import baselines, conformal_width, forecast
 from yosoku.split import guard_test, rolling_folds, split_of
 
-MAIN = {"cold": "Lookalike", "t-28": "Blend", "t+7": "Blend"}
+MAIN = {"cold": "Blend", "t-28": "Blend", "t+7": "Blend"}
 MIN_TRAIN, MIN_TARGET = 20, 5
 TOP_SHARE = 0.20
 
 
-def prepare(data_dir, out_dir, version="v1"):
+def prepare(data_dir, out_dir, version="v1", moments=feat.MOMENTS):
+    """(titles, labels, {moment: features}); a moment is a stage name or a cutoff day (features.stage)."""
     titles = load_titles(data_dir)
     labels = read(out_dir / "labels" / f"label_{version}.csv").set_index("anilist_id")["idi"].dropna()
     wiki, comments = load_daily(data_dir, titles)
     reddit = load_reddit(data_dir)
     genres = sorted({g for gs in titles["genre_list"] for g in gs})
-    features = {m: feat.build(titles, wiki, comments, m, genres, reddit) for m in feat.MOMENTS}
+    features = {m: feat.build(titles, wiki, comments, m, genres, reddit) for m in moments}
     return titles, labels, features
 
 
@@ -41,8 +42,7 @@ def predict_all(moment, features, titles, labels, train_ids, target_ids):
     main = forecast(moment, features, titles, labels, train_ids, target_ids)
     methods = pd.DataFrame(baselines(moment, features, titles, labels, train_ids, target_ids))
     methods["Lookalike"] = main["lookalike"]
-    if moment != "cold":
-        methods["Blend"] = main["forecast"]
+    methods["Blend"] = main["forecast"]
     return methods.astype(float), main
 
 
@@ -128,6 +128,9 @@ def evaluate(titles, labels, features):
         if np.isnan(width):  # too few rolling seasons: fall back to validation errors, and say so
             width = conformal_width((methods[used] - actual).to_numpy())
         inside = ((methods[used] - actual).abs() <= width).mean()
+        # Titles not released yet also get the 2024 misses in their range: every season whose outcome is known now.
+        live = conformal_width((roll[used] - labels.reindex(roll.index)).to_numpy()) if len(roll) else np.nan
+        live = width if np.isnan(live) else live
 
         lines += [f"## Moment: {moment}", "",
                   "| Method | Spearman (95% interval) | Top-20% hit | MAE | New shows | Sequels | Rolling seasons |",
@@ -142,8 +145,9 @@ def evaluate(titles, labels, features):
                   f"- Forecasts and verdicts use: **{used}**."
                   + ("" if used == main else " The model does not beat this rule, so the rule is shipped (gate G4 fallback)."),
                   f"- 80% range ({used}): ± {fmt(width, 1)} points; contains the truth for **{inside:.0%}** of 2024 titles "
-                  "(target 70–90%).", ""]
-        results["moments"][moment] = {"main": main, "used": used, "width": width, "coverage": float(inside),
+                  "(target 70–90%).",
+                  f"- 80% range for titles not released yet: ± {fmt(live, 1)} points, from every rolling season including 2024.", ""]
+        results["moments"][moment] = {"main": main, "used": used, "width": width, "width_live": live, "coverage": float(inside),
                                       "beats_baseline": bool(beats), "best_baseline": best,
                                       "table": json.loads(table.to_json())}
     passed = all(m["beats_baseline"] for m in results["moments"].values())
