@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, str(ROOT / "collectors"))
 from india_signals import classify, indic_flags  # noqa: E402  (shared with collectors/merge.py)
+from markets import COMMENT_MARKETS, MARKETS  # noqa: E402  (the countries a data folder can be collected for)
 
 # Language hubs for the regional view: the keys match india_signals.HUBS and yt_share_<hub>.
 HUBS = {

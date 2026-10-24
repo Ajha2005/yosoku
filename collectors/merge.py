@@ -18,6 +18,9 @@ A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
 Netflix published India charts. Keep the two apart in the India Demand Index.
 
+A folder for another market (collectors/markets.py) gets that country's Netflix chart and
+Wikipedia languages instead of India's; trailer comments and Trends are India only.
+
     python collectors/merge.py
 """
 
@@ -25,13 +28,13 @@ import argparse
 
 import pandas as pd
 
-from common import add_data_dir_argument, data_file, read_titles, use_data_dir
+from common import add_data_dir_argument, current_market, data_file, read_titles, use_data_dir
 from india_signals import HUBS, classify, indic_flags
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 # Reddit also gets "early", the days before the T-28 forecast moment (see docs/decisions.md).
 REDDIT_WINDOWS = {"early": (-90, -29), **WINDOWS}
-WIKI_LANGS = ["en", "ja", "hi", "ta", "te"]
+GLOBAL_WIKI_LANGS = ["en", "ja"]  # then the market's languages (India: hi, ta, te; see markets.py)
 NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
 NETFLIX_DAYS = 90
 OUT_CSV = "dataset.csv"
@@ -60,7 +63,7 @@ def wikipedia(titles):
         return None
     articles = articles.set_index("anilist_id").reindex(titles.index)
     out = pd.DataFrame(index=titles.index)
-    for lang in WIKI_LANGS:
+    for lang in GLOBAL_WIKI_LANGS + current_market()["wiki"]:
         # Days with no views are absent from the API's answer, but an article with no rows at all in the
         # 240-day window did not exist yet (often a "season 1" page written later), so its views are unknown.
         has_rows = titles.index.isin(daily.loc[daily["lang"] == lang, "anilist_id"])
@@ -169,7 +172,8 @@ def reddit(titles):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_dir_argument(parser)
-    use_data_dir(parser.parse_args().data_dir)
+    args = parser.parse_args()
+    use_data_dir(args.data_dir, args.market)
 
     read_titles()  # exits with a hint if titles.csv is missing
     titles = pd.read_csv(data_file("titles.csv"), encoding="utf-8-sig").set_index("anilist_id")

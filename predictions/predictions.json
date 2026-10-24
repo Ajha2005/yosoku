@@ -51,6 +51,50 @@
   }
  },
  "min_evidence": 10,
+ "markets": {
+  "IN": {
+   "name": "India",
+   "wiki": [
+    "hi",
+    "ta",
+    "te"
+   ],
+   "note": "Hindi, Tamil and Telugu are read almost only in India",
+   "comments": true
+  },
+  "ID": {
+   "name": "Indonesia",
+   "wiki": [
+    "id"
+   ],
+   "note": "Indonesian is read almost only in Indonesia",
+   "comments": false
+  },
+  "TH": {
+   "name": "Thailand",
+   "wiki": [
+    "th"
+   ],
+   "note": "Thai is read almost only in Thailand",
+   "comments": false
+  },
+  "BR": {
+   "name": "Brazil",
+   "wiki": [
+    "pt"
+   ],
+   "note": "Portuguese also counts Portugal and Lusophone Africa",
+   "comments": false
+  },
+  "MX": {
+   "name": "Mexico",
+   "wiki": [
+    "es"
+   ],
+   "note": "Spanish counts all of Latin America and Spain: weakly local",
+   "comments": false
+  }
+ },
  "sources": {
   "released": 1400,
   "labelled": 319,

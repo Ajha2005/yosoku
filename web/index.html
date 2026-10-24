@@ -13,11 +13,11 @@
   <meta property="og:image" content="img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <script src="js/theme.js?v=6"></script>
+  <script src="js/theme.js?v=7"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -37,6 +37,7 @@
       <a role="tab" id="tab-home" href="#/" data-page="home" aria-controls="page-home" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-7.5Z"/></svg><span>Overview</span></a>
       <a role="tab" id="tab-forecasts" href="#/forecasts" data-page="forecasts" aria-controls="page-forecasts" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Forecasts</span></a>
       <a role="tab" id="tab-record" href="#/record" data-page="record" aria-controls="page-record" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Track record</span></a>
+      <a role="tab" id="tab-business" href="#/business" data-page="business" aria-controls="page-business" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 13h17"/></svg><span>Business</span></a>
       <a role="tab" id="tab-method" href="#/method" data-page="method" aria-controls="page-method" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8v.01"/></svg><span>Method</span></a>
       <a role="tab" id="tab-guide" href="#/guide" data-page="guide" aria-controls="page-guide" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg><span><span class="tab-long">Demand guide</span><span class="tab-short">Guide</span></span></a>
     </nav>
@@ -64,6 +65,7 @@
         <div class="hero-cta">
           <a class="btn btn-primary" href="#/forecasts">Explore the forecasts <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="#/record">See the track record</a>
+          <a class="btn btn-ghost" href="#/business">The business case</a>
           <a class="btn btn-ghost" href="#/guide">What India watches</a>
         </div>
         <dl class="hero-stats" id="hero-stats"></dl>
@@ -103,11 +105,25 @@
     </section>
     </div>
 
+    <div class="page" id="page-business" data-page="business" role="tabpanel" aria-labelledby="tab-business" hidden>
+    <header class="masthead">
+      <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">商機</span></div>
+      <div class="mast-inner">
+        <p class="eyebrow"><span class="no">04</span>Business</p>
+        <h1 id="business-title">Who pays, and how it grows</h1>
+        <p class="lead">What following our calls would have been worth, who buys them, and how the same method travels to other markets.</p>
+      </div>
+    </header>
+    <section class="section" id="business" aria-labelledby="business-title">
+      <div id="business-body" class="method"></div>
+    </section>
+    </div>
+
     <div class="page" id="page-method" data-page="method" role="tabpanel" aria-labelledby="tab-method" hidden>
     <header class="masthead">
       <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">方法</span></div>
       <div class="mast-inner">
-        <p class="eyebrow"><span class="no">04</span>Method &amp; data</p>
+        <p class="eyebrow"><span class="no">05</span>Method &amp; data</p>
         <h1 id="method-title">How the India Demand Index is built</h1>
         <p class="lead">Public data only, measured over the first 28 days after the Japanese premiere. It measures attention in India, not revenue.</p>
       </div>
@@ -120,7 +136,7 @@
     <header class="masthead">
       <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">需要</span></div>
       <div class="mast-inner">
-        <p class="eyebrow"><span class="no">05</span>Demand guide</p>
+        <p class="eyebrow"><span class="no">06</span>Demand guide</p>
         <h1 id="guide-title">What is India actually watching?</h1>
         <p class="lead">For anyone deciding where demand lies, including those whose own title is unlikely to work. Built only from what India has watched and said: Netflix India's weekly Top 10 and the trailer comments we counted.</p>
       </div>
@@ -159,6 +175,6 @@
   <div class="tip" id="tip" role="tooltip" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Yosoku needs JavaScript to show the forecasts.</p></noscript>
-  <script type="module" src="js/main.js?v=6"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

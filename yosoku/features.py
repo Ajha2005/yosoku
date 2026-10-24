@@ -23,7 +23,7 @@ WINDOWS = {
     "t+7": {"early": (-56, -29), "pre": (-28, -1), "launch": (0, 6)},
 }
 WINDOW_NAMES = {"early": "days -56 to -29", "pre": "last 28 days", "launch": "launch week"}
-WIKI_GROUPS = {"en": ["en"], "ja": ["ja"], "india": ["hi", "ta", "te"]}
+GLOBAL_WIKI = {"en": ["en"], "ja": ["ja"]}  # every other Wikipedia language in the data is the market's own: "local"
 FORMATS = ["TV", "TV_SHORT", "ONA", "MOVIE"]
 SOURCES = ["MANGA", "LIGHT_NOVEL", "ORIGINAL", "VIDEO_GAME", "WEB_NOVEL", "NOVEL"]
 
@@ -31,7 +31,7 @@ SOURCES = ["MANGA", "LIGHT_NOVEL", "ORIGINAL", "VIDEO_GAME", "WEB_NOVEL", "NOVEL
 # separate coefficients can't offset each other on screen.
 SIGNALS = {
     "wiki_en": "Global buzz", "wiki_ja": "Global buzz", "yt_comments": "Global buzz", "reddit_posts": "Global buzz",
-    "wiki_india": "India buzz", "has_india_article": "India buzz", "yt_india": "India buzz",
+    "wiki_local": "India buzz", "has_local_article": "India buzz", "yt_india": "India buzz",
     "has_youtube": "India buzz",
     "is_sequel": "Franchise history", "prequel_label": "Franchise history", "has_prequel_label": "Franchise history",
     "lookalike": "Similar past titles",
@@ -45,7 +45,7 @@ SIGNAL_NOTES = {
 
 
 def signal(feature):
-    """The business signal a feature belongs to, e.g. wiki_india_early -> India buzz, genre_Action -> Genre: Action."""
+    """The business signal a feature belongs to, e.g. wiki_local_early -> India buzz, genre_Action -> Genre: Action."""
     base, _, window = feature.rpartition("_")
     if window in WINDOW_NAMES:
         feature = base
@@ -53,6 +53,12 @@ def signal(feature):
         if feature.startswith(prefix):
             return f"{kind}: {feature[len(prefix):].replace('_', ' ').title()}"
     return SIGNALS.get(feature, feature)
+
+
+def wiki_groups(wiki):
+    """{group: languages}: English, Japanese and the market's own languages (India: hi, ta, te), read from the data."""
+    local = sorted(set(wiki["lang"]) - {lang for langs in GLOBAL_WIKI.values() for lang in langs})
+    return {**GLOBAL_WIKI, "local": local}
 
 
 def window_total(rows, value, lo, hi, cutoff, ids):
@@ -84,10 +90,10 @@ def activity(titles, wiki, comments, moment, reddit=None):
     posts = None if reddit is None else reddit.assign(one=1)
     for window, (lo, hi) in WINDOWS[moment].items():
         if wiki is not None:
-            for group, langs in WIKI_GROUPS.items():
+            for group, langs in wiki_groups(wiki).items():
                 rows = wiki[wiki["lang"].isin(langs)]
                 views = np.log1p(window_total(rows, "views", lo, hi, cutoff, titles.index).fillna(0))
-                if group != "india":  # India has has_india_article instead: few titles have such an article
+                if group != "local":  # the local languages have has_local_article instead: few titles have such an article
                     # No rows by the cutoff: the matched article did not exist yet, so the views are unknown.
                     views = views.where(titles.index.isin(rows.loc[rows["days_from_start"] <= cutoff, "anilist_id"]))
                 out[f"wiki_{group}_{window}"] = views
@@ -102,8 +108,8 @@ def activity(titles, wiki, comments, moment, reddit=None):
             count = window_total(posts, "one", lo, hi, cutoff, titles.index)
             out[f"reddit_posts_{window}"] = np.log1p(count.fillna(0)).where(searched_reddit(titles, posts))
     if WINDOWS[moment] and wiki is not None:
-        langs = set(wiki.loc[wiki["lang"].isin(WIKI_GROUPS["india"]), "anilist_id"])
-        out["has_india_article"] = titles.index.isin(langs).astype(int)
+        langs = set(wiki.loc[wiki["lang"].isin(wiki_groups(wiki)["local"]), "anilist_id"])
+        out["has_local_article"] = titles.index.isin(langs).astype(int)
     if WINDOWS[moment] and comments is not None:
         out["has_youtube"] = searched(titles, comments).astype(int)
     return out

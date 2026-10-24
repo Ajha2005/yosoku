@@ -27,7 +27,7 @@ from datetime import date, timedelta
 import requests
 
 from common import (RAW_DIR, add_data_dir_argument, cached, data_file, load_json, parse_date, read_titles, request_json,
-                    save_json, use_data_dir, write_csv)
+                    india_only, save_json, use_data_dir, write_csv)
 
 API_URL = "https://www.googleapis.com/youtube/v3/"
 CACHE = RAW_DIR / "youtube"
@@ -187,7 +187,8 @@ def main():
     parser.add_argument("--no-hindi", dest="hindi", action="store_false", help="skip the Hindi-dub search (halves the cost)")
     add_data_dir_argument(parser)
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
+    india_only("Trailer comments")
 
     key = os.getenv("YOUTUBE_API_KEY")
     if not key:

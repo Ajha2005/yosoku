@@ -25,7 +25,7 @@ MOMENTS = ["t-28", "t+7"]
 GROUPS = {
     "YouTube trailer comments": lambda c: c.startswith("yt_") or c == "has_youtube",
     "Wikipedia, English and Japanese": lambda c: c.startswith(("wiki_en_", "wiki_ja_")),
-    "Wikipedia, Indian languages": lambda c: c.startswith("wiki_india_") or c == "has_india_article",
+    "Wikipedia, Indian languages": lambda c: c.startswith("wiki_local_") or c == "has_local_article",
     "Reddit posts": lambda c: c.startswith("reddit_"),
     "Similar past titles (lookalike)": lambda c: c == "lookalike",
     "Prequel's India index": lambda c: c in ("prequel_label", "has_prequel_label"),

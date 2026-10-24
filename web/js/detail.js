@@ -1,10 +1,10 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=6";
-import { posterHTML } from "./art.js?v=6";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=6";
-import { showTip, hideTip, showToast } from "./tip.js?v=6";
-import { RULE_NOTES } from "./content.js?v=6";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=7";
+import { posterHTML } from "./art.js?v=7";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=7";
+import { showTip, hideTip, showToast } from "./tip.js?v=7";
+import { RULE_NOTES } from "./content.js?v=7";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
