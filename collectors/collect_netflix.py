@@ -8,6 +8,9 @@ Check the matches by eye: names are matched loosely, and live-action remakes
 (One Piece, Yu Yu Hakusho) share their anime's name. Titles that started before
 June 2021 have no chart data at all.
 
+To drop a wrong match, list it in data/netflix_match_exclusions.csv (columns: anilist_id,show_title,reason)
+and rerun. Every match of that title to that Netflix show is removed; copy both from netflix_matches.csv.
+
 If the download is blocked, open https://top10.netflix.com, download
 "all-weeks-countries.tsv" from its downloads section, save it as
 data/raw/netflix/all-weeks-countries.tsv and rerun.
@@ -22,13 +25,14 @@ import sys
 
 import requests
 
-from common import (RAW_DIR, add_data_dir_argument, data_file, normalize, parse_date, read_titles, session,
-                    use_data_dir, write_csv)
+from common import (RAW_DIR, add_data_dir_argument, data_file, normalize, parse_date, read_csv, read_titles,
+                    session, use_data_dir, write_csv)
 
 NETFLIX_URL = "https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv"
 TSV_PATH = RAW_DIR / "netflix" / "all-weeks-countries.tsv"
 INDIA_CSV = "netflix_india_top10.csv"
 MATCHES_CSV = "netflix_matches.csv"
+EXCLUSIONS_CSV = "netflix_match_exclusions.csv"  # optional, written by hand: anilist_id,show_title,reason
 
 INDIA_FIELDS = ["week", "category", "weekly_rank", "show_title", "season_title", "cumulative_weeks_in_top_10"]
 MATCH_FIELDS = ["anilist_id", "title_english", "title_romaji", "days_from_start", *INDIA_FIELDS]
@@ -95,6 +99,20 @@ def match(india_rows, titles):
     return matches
 
 
+def drop_excluded(matches):
+    """Remove the matches of every (anilist_id, show_title) pair listed in the exclusions file, if there is one."""
+    path = data_file(EXCLUSIONS_CSV)
+    if not path.exists():
+        return matches
+    excluded = {(row["anilist_id"], normalize(row["show_title"])) for row in read_csv(path)}
+    pair = lambda m: (m["anilist_id"], normalize(m["show_title"]))
+    kept = [m for m in matches if pair(m) not in excluded]
+    print(f"Dropped {len(matches) - len(kept)} rows listed in {path}")
+    for anilist_id, show in sorted(excluded - {pair(m) for m in matches}):
+        print(f"  no match for {anilist_id} / {show}; check that line of the exclusions file")
+    return kept
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--refresh", action="store_true", help="download the file again even if it is already saved")
@@ -109,7 +127,7 @@ def main():
     write_csv(data_file(INDIA_CSV), india_rows, INDIA_FIELDS)
     print(f"Saved {len(india_rows)} India Top 10 rows to {data_file(INDIA_CSV)}")
 
-    matches = match(india_rows, read_titles())
+    matches = drop_excluded(match(india_rows, read_titles()))
     write_csv(data_file(MATCHES_CSV), matches, MATCH_FIELDS)
     print(f"Matched {len(matches)} rows to {len({m['anilist_id'] for m in matches})} titles; saved {data_file(MATCHES_CSV)}")
 
