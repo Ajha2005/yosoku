@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=2";
-import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=2";
-import { createDetail, countUp } from "./detail.js?v=2";
-import { renderGuide } from "./guide.js?v=2";
-import { showTip, hideTip } from "./tip.js?v=2";
-import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=2";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=3";
+import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=3";
+import { createDetail, countUp } from "./detail.js?v=3";
+import { renderGuide } from "./guide.js?v=3";
+import { showTip, hideTip } from "./tip.js?v=3";
+import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=3";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -145,8 +145,8 @@ function renderHero() {
     { n: Object.keys(MOMENTS).length, suffix: "", label: "stages of the release cycle" },
   ];
   if (evaluation) {
-    const { info } = evaluation, label = MOMENTS[evaluation.key].label;
-    if (Number.isFinite(info.table.mae[info.main])) stats.push({ n: info.table.mae[info.main], suffix: "", label: `average miss, in index points, on the 2024 titles (${label})`, decimals: 1 });
+    const { info } = evaluation, label = MOMENTS[evaluation.key].label, used = info.used ?? info.main;
+    if (Number.isFinite(info.table.mae[used])) stats.push({ n: info.table.mae[used], suffix: "", label: `average miss, in index points, on the 2024 titles (${label})`, decimals: 1 });
     if (Number.isFinite(info.coverage)) stats.push({ n: Math.round(info.coverage * 100), suffix: "%", label: "of 2024 titles landed inside the 80% range" });
   }
   $("#hero-stats").innerHTML = stats.map((s) => `<div><dt>${s.label}</dt><dd data-to="${s.n}" data-dec="${s.decimals || 0}" data-suffix="${s.suffix}">${s.decimals ? s.n.toFixed(s.decimals) : s.n}${s.suffix}</dd></div>`).join("");
@@ -309,17 +309,17 @@ function renderRecord() {
     return `<div class="tile tile-${VERDICTS[verdict].cls}"><span class="tile-label">${verdictIcon(verdict)}${verdict}</span><b>${round(mid)}</b><span class="tile-note">median actual index · ${part.length} title${part.length > 1 ? "s" : ""}</span></div>`;
   }).join("");
 
-  const t = info?.table;
+  const t = info?.table, used = info?.used ?? info?.main;
   const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
   const score = info ? `
     <div class="scorecard">
-      <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[info.main], 1)}</b><span class="tile-note">index points</span></div>
+      <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[used], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
-      <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[info.main]) ? pct(t.top20[info.main]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
+      <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[used]) ? pct(t.top20[used]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
     </div>
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
       <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
-      <span>Checked on the 2024 titles, which the model never saw in training.</span></p>` : "";
+      <span>Checked on the 2024 titles, which the model never saw in training.${used !== info.main ? ` So at this stage "${esc(used)}" makes the forecasts and verdicts; the closest past titles still come from our model.` : ""}</span></p>` : "";
 
   host.innerHTML = `
     <div class="record-top">

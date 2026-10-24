@@ -12,7 +12,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, str(ROOT / "collectors"))
-from india_signals import classify  # noqa: E402  (shared with collectors/merge.py)
+from india_signals import classify, indic_flags  # noqa: E402  (shared with collectors/merge.py)
 
 # Language hubs for the regional view: the keys match india_signals.HUBS and yt_share_<hub>.
 HUBS = {
@@ -72,7 +72,8 @@ def load_daily(data_dir, titles):
     if comments is not None:
         published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
         comments["days_from_start"] = (published - comments["anilist_id"].map(titles["start"])).dt.days
-        comments["india"] = classify(comments["text"])["india"].astype(int)
+        languages = read(data_dir / "comment_languages.csv", required=False)  # IndicLID, optional
+        comments["india"] = classify(comments["text"], indic_flags(comments, languages))["india"].astype(int)
     return wiki, comments
 
 

@@ -1,9 +1,9 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=2";
-import { posterHTML } from "./art.js?v=2";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions } from "./charts.js?v=2";
-import { showTip, hideTip, showToast } from "./tip.js?v=2";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
+import { posterHTML } from "./art.js?v=3";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions } from "./charts.js?v=3";
+import { showTip, hideTip, showToast } from "./tip.js?v=3";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CALENDAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 3v4M16 3v4"/></svg>';
@@ -17,6 +17,32 @@ export function countUp(el, to, ms = 900) {
     if (t < 1) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
+}
+
+/** How past titles did in each release window, with this title's window marked. Describes, does not predict. */
+function windowSection(t, evidence, minN) {
+  if (!evidence) return "";
+  const shown = Object.entries(evidence).filter(([, w]) => w.n >= minN && w.mean != null);
+  if (shown.length < 2) return "";
+  const own = evidence[t.release_window];
+  const base = own && own.n >= minN ? own.mean : null;
+  const spread = Math.max(...shown.map(([, w]) => w.mean)) - Math.min(...shown.map(([, w]) => w.mean));
+  const rows = Object.entries(evidence).map(([name, w]) => {
+    const ok = w.n >= minN && w.mean != null, mine = name === t.release_window;
+    const diff = ok && base != null && !mine ? w.mean - base : null;
+    return `<li class="win${mine ? " is-mine" : ""}">
+      <span class="win-name">${esc(name)}${mine ? "<em>this title</em>" : ""}</span>
+      <span class="win-track" aria-hidden="true">${ok ? `<i style="width:${w.mean}%"></i>` : ""}</span>
+      <span class="win-val">${ok ? round(w.mean) : "–"}</span>
+      <span class="win-extra">${ok ? (diff == null ? `${w.n} titles` : `${diff >= 0 ? "+" : "−"}${Math.abs(diff).toFixed(1)}`) : `only ${w.n}`}</span>
+    </li>`;
+  }).join("");
+  const verdict = spread < 5
+    ? "Past titles did about equally well in every window, so moving the release date is unlikely to change much on its own."
+    : "Past titles did noticeably better in some windows; weigh this against what else differed between them.";
+  return `<ul class="wins">${rows}</ul>
+    <p class="callout">${verdict}</p>
+    <p class="note">Average India Demand Index of the labelled past titles that started in each window, and the difference from this title's window. Windows with fewer than ${esc(minN)} titles are not shown. An association, not a cause: few anime start in Feb–Mar because Japanese seasons start in January and April.</p>`;
 }
 
 export function createDetail(app, { requestClose }) {
@@ -72,7 +98,17 @@ export function createDetail(app, { requestClose }) {
       ? `${regionMap(f.regions, app.data.hubs)}<p class="note">Estimated from trailer comments that point to a language (its script, its name, or Hinglish for Hindi) on the ${esc(f.region_titles)} closest past titles that had any. English-speaking fans are spread across India and are not counted here; Hindi includes Marathi.</p>`
       : `<p class="callout">None of the closest past titles had trailer comments pointing to an Indian language, so there is no regional estimate.</p>`;
 
-    body.innerHTML = `<article class="detail v-${v.cls}" style="--k:${/^#[0-9a-f]{3,8}$/i.test(cover?.k) ? cover.k : "var(--accent-2)"}">
+    const dub = f.dub_demand || {};
+    const typical = app.data.dub_typical;
+    const dubSection = dub.share == null
+      ? `<p class="callout">None of the closest past titles had trailer comments from India, so there is no dub estimate.</p>`
+      : `<div class="dub"><span class="dub-n">${pct(dub.share)}</span>
+          <span>of Indian trailer comments on the ${esc(dub.titles)} closest past title${dub.titles > 1 ? "s" : ""} asked for or about a Hindi, Tamil or other Indian-language dub${
+            Number.isFinite(typical) ? `, against ${pct(typical)} for a typical past title` : ""}.</span></div>
+        <p class="note">Read from comments like "hindi dub kab aayega" or "please dub in tamil"; channel posts with links are left out. A high share suggests a dub would widen the audience beyond subtitle viewers.</p>`;
+    const whatIf = windowSection(t, app.data.window_evidence, app.data.min_evidence);
+
+    body.innerHTML = `<article class="detail v-${v.cls}" style="--k:${/^#[0-9a-f]{3,8}$/i.test(cover?.k) ? cover.k : "var(--k-default)"}">
       <header class="d-hero${banner ? " has-banner" : ""}">
         ${banner ? `<div class="d-backdrop" style="background-image:url('${banner}')"></div>` : ""}
         <div class="d-hero-inner">
@@ -114,6 +150,8 @@ export function createDetail(app, { requestClose }) {
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>
       </section>
       <section class="d-section"><h3>Where in India <small>language hubs</small></h3>${regionsSection}</section>
+      <section class="d-section"><h3>Dub demand <small>from fans of similar titles</small></h3>${dubSection}</section>
+      ${whatIf ? `<section class="d-section"><h3>Release window what-if <small>how past titles did</small></h3>${whatIf}</section>` : ""}
       ${t.synopsis ? `<details class="d-syn"><summary>Synopsis</summary><p>${esc(t.synopsis)}</p></details>` : ""}
     </article>`;
 

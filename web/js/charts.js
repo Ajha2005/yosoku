@@ -1,8 +1,8 @@
 // Charts, hand-built from HTML and SVG so they stay light, crisp and themeable. Each returns markup (or fills a node).
 
-import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=2";
-import { INDIA } from "./india-map.js?v=2";
-import { showTip, hideTip } from "./tip.js?v=2";
+import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=3";
+import { INDIA } from "./india-map.js?v=3";
+import { showTip, hideTip } from "./tip.js?v=3";
 
 const vclass = (verdict) => VERDICTS[verdict]?.cls ?? "test";
 
@@ -165,8 +165,10 @@ export function modelBars(info) {
   const has = (n) => Number.isFinite(t.mae[n]);
   const names = Object.keys(t.mae).sort((a, b) => (has(b) - has(a)) || (t.mae[a] - t.mae[b]));
   const max = Math.max(...names.filter(has).map((n) => t.mae[n]), 1);
-  const rows = names.map((n) => `<li class="mb${n === info.main ? " is-main" : ""}">
-      <span class="mb-name">${esc(n)}${n === info.main ? "<em>our model</em>" : ""}</span>
+  const used = info.used ?? info.main;
+  const tag = (n) => [n === info.main && "our model", n === used && used !== info.main && "used for verdicts"].filter(Boolean).map((x) => `<em>${x}</em>`).join("");
+  const rows = names.map((n) => `<li class="mb${n === used ? " is-main" : ""}">
+      <span class="mb-name">${esc(n)}${tag(n)}</span>
       <span class="mb-track" aria-hidden="true">${has(n) ? `<i style="width:${(t.mae[n] / max) * 100}%"></i>` : ""}</span>
       <span class="mb-val">${has(n) ? t.mae[n].toFixed(1) : "n/a"}</span>
       <span class="mb-extra">${Number.isFinite(t.top20[n]) ? pct(t.top20[n]) : "n/a"}</span>

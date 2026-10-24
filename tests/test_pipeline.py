@@ -61,6 +61,18 @@ def test_reddit_features(fake):
     assert early.isna().any() and early.notna().any()  # titles that were not searched are blank, not zero
 
 
+def test_article_written_after_cutoff_is_blank(fake):
+    """An article with no views by the cutoff did not exist yet: its views are unknown, also when it appears later."""
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    late = wiki["anilist_id"].iloc[0]
+    wiki = wiki[~((wiki["anilist_id"] == late) & (wiki["lang"] == "en") & (wiki["days_from_start"] <= -29))]
+    features = feat.build(titles, wiki, comments, "t-28", genres)
+    assert np.isnan(features.loc[late, "wiki_en_early"])
+    assert features["wiki_en_early"].notna().sum() > len(titles) / 2
+
+
 def test_window_past_cutoff_is_refused():
     rows = pd.DataFrame({"anilist_id": [1], "days_from_start": [0], "views": [5]})
     with pytest.raises(ValueError):
@@ -97,6 +109,33 @@ def test_end_to_end(fake):
             assert forecast["verdict"] in {"Launch", "Test-market", "Hold"}
     upcoming = [t for t in payload["titles"] if t["group"] == "upcoming"]
     assert all(set(t["forecasts"]) == {"cold"} for t in upcoming)  # Winter 2027 is months away
+    for moment, info in payload["evaluation"]["moments"].items():  # gate G4 fallback
+        assert info["used"] == (info["main"] if info["beats_baseline"] else info["best_baseline"])
+        assert payload["thresholds"][moment]["method"] == info["used"]
+    assert set(payload["window_evidence"]) == {"Festive season (Oct–Nov)", "Board exams (Feb–Mar)",
+                                               "IPL cricket (Apr–May)", "Other months"}
+    assert sum(w["n"] for w in payload["window_evidence"].values()) > 0
+    for title in payload["titles"]:
+        assert title["release_window"] in payload["window_evidence"]
+        for forecast in title["forecasts"].values():
+            dub = forecast["dub_demand"]
+            assert (dub["share"] is None) == (dub["titles"] == 0)
+
+
+def test_simple_rule_makes_the_forecast(fake):
+    """When a simple rule is used, its forecasts replace the model's; the lookalikes stay."""
+    from yosoku.decision import predict
+    from yosoku.models import baselines
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    features = feat.build(titles, wiki, comments, "t-28", genres)
+    labels = pd.Series(np.linspace(0, 100, len(titles)), index=titles.index)
+    train, target = titles.index[:-10], titles.index[-10:]
+    out = predict("t-28", "Genre average", features, titles, labels, train, target)
+    rule = baselines("t-28", features, titles, labels, train, target)["Genre average"]
+    pd.testing.assert_series_equal(out["forecast"], rule.reindex(target), check_names=False)
+    assert all(d == [] for d in out["drivers"]) and out["lookalikes"].notna().all()
 
 
 def test_india_comments():
@@ -114,8 +153,50 @@ def test_india_comments():
     assert found["tamil"].tolist() == [False, False, True, False, False, False]
 
 
+def test_indiclid_only_counts_with_hindi_words():
+    from yosoku.data import classify, indic_flags
+    comments = pd.DataFrame({"comment_id": ["a", "b", "c", "d"], "text": [
+        "Kab release hogi ye movie",       # Hinglish the word rules miss
+        "Qué llegue enero yaaa",           # Spanish that IndicLID calls Malayalam
+        "Download kha se hogi",            # Hinglish, but IndicLID was unsure
+        "Kab release hogi ye movie",       # same words, IndicLID says English
+    ]})
+    languages = pd.DataFrame({"comment_id": ["a", "b", "c", "d"],
+                              "language": ["hin_Latn", "mal_Latn", "asm_Latn", "eng_Latn"],
+                              "probability": [0.95, 0.97, 0.3, 0.9]})
+    assert classify(comments["text"])["india"].tolist() == [False] * 4
+    found = classify(comments["text"], indic_flags(comments, languages))
+    assert found["india"].tolist() == [True, False, False, False]
+    assert found["hindi"].tolist() == [True, False, False, False]
+    assert indic_flags(comments, None) is None
+
+
 def test_youtube_part_is_india_comments():
     titles = pd.DataFrame({"yt_india_month1": [0.0, 3.0, np.nan], "netflix_top10_weeks_90d": [1, 2, 3],
                            "wiki_en_month1": [1, 2, 3]})
     parts = raw_parts(titles)
     assert parts["youtube"].tolist()[:2] == [0.0, 3.0] and np.isnan(parts["youtube"].iloc[2])
+
+
+def test_wikipedia_launch_article():
+    """An English article written after launch is swapped for the related page readers used then."""
+    sys.path.insert(0, str(ROOT / "collectors"))
+    from collect_wikipedia import launch_article, launch_names
+    assert launch_names("Frieren (TV series)") == ["Frieren", "List of Frieren episodes"]
+    assert launch_names("Demon Slayer: Kimetsu no Yaiba – The Movie: Mugen Train")[0] == "Demon Slayer: Kimetsu no Yaiba"
+    views = {"Demon Slayer: Kimetsu no Yaiba": 50_000, "List of Demon Slayer: Kimetsu no Yaiba episodes": 9_000,
+             "Lazarus": 80_000, "List of Lazarus episodes": 500}
+    fetch = lambda name: [{"views": views[name]}] if name in views else []  # noqa: E731
+    links = {"Demon Slayer: Kimetsu no Yaiba", "List of Demon Slayer: Kimetsu no Yaiba episodes", "List of Lazarus episodes"}
+    related = lambda page, article: page in links  # noqa: E731
+    assert launch_article("Demon Slayer: Kimetsu no Yaiba season 1", fetch, related)[0] == "Demon Slayer: Kimetsu no Yaiba"
+    assert launch_article("Lazarus (Japanese TV series)", fetch, related) is None  # the Bible's Lazarus does not link to it; the list has too few views
+
+
+def test_dub_requests():
+    from yosoku.data import classify
+    text = pd.Series(["Hindi dub kab aayega", "please dub in tamil", "Tamil dubbed", "love from India",
+                      "Now in Hindi Dub on Crunchyroll! https://bit.ly/x", "dubbed version when"])
+    found = classify(text)
+    assert found["dub_ask"].tolist() == [True, True, True, False, False, False]  # links are channels announcing, not fans asking
+    assert (found["india"] | ~found["dub_ask"]).all()  # every dub request also counts as an Indian comment
