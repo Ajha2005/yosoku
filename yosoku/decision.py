@@ -24,7 +24,7 @@ import pandas as pd
 from yosoku import features as feat
 from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles
 from yosoku.evaluate import prepare
-from yosoku.labels import against_rest, build as build_labels
+from yosoku.labels import against_rest, build as build_labels, checks as label_checks
 from yosoku.models import baselines, forecast
 from yosoku.split import guard_test, split_of
 
@@ -204,7 +204,7 @@ def main():
     train_all = split.index[split.isin(["train", "validate"])].intersection(labels.index)
     test = split.index[split == "test"].intersection(labels.index)
 
-    _, parts, ranks = build_labels(titles)
+    label_table, parts, ranks = build_labels(titles)
     sources = {"released": len(parts), "labelled": int(labels.notna().sum()),
                "parts": {part: {"titles": int(r.titles), "pairs": int(r.pairs),
                                 "agreement": None if pd.isna(r.spearman) else round(float(r.spearman), 2)}
@@ -261,7 +261,7 @@ def main():
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
-        "sources": sources,
+        "sources": sources, "label_checks": label_checks(label_table, parts, ranks, data_dir),
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),
