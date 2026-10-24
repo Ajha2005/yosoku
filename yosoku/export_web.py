@@ -95,6 +95,14 @@ def main():
     out = ROOT / args.out_dir
     write_json(out / "predictions.json", predictions)
 
+    # Sealed forecasts (python -m yosoku.seal) are copied byte for byte, so their fingerprints still match on the site.
+    sealed = ROOT / "predictions" / "sealed"
+    if sealed.is_dir():
+        (out / "sealed").mkdir(parents=True, exist_ok=True)
+        for path in sealed.iterdir():
+            if path.suffix in (".json", ".md"):
+                (out / "sealed" / path.name).write_bytes(path.read_bytes())
+
     guide = demand_guide.build(ROOT / args.data_dir)
     write_json(out / "guide.json", guide)
 

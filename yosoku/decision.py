@@ -198,6 +198,8 @@ def main():
     if not evaluation_file.exists():
         raise SystemExit(f"{evaluation_file} not found. Run `python -m yosoku.evaluate` first.")
     evaluation = json.loads(evaluation_file.read_text(encoding="utf-8"))
+    ablation_file = out_dir / "reports" / "ablation.json"
+    ablation = json.loads(ablation_file.read_text(encoding="utf-8")) if ablation_file.exists() else None
     split = split_of(titles)
     train = split.index[split == "train"].intersection(labels.index)
     validate = split.index[split == "validate"].intersection(labels.index)
@@ -261,7 +263,7 @@ def main():
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
-        "sources": sources, "label_checks": label_checks(label_table, parts, ranks, data_dir),
+        "sources": sources, "ablation": ablation, "label_checks": label_checks(label_table, parts, ranks, data_dir),
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),

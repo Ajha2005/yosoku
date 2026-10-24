@@ -95,7 +95,7 @@ def test_test_titles_need_final(fake):
 
 def test_end_to_end(fake):
     out = fake / "out"
-    for module, extra in (("yosoku.labels", []), ("yosoku.evaluate", []),
+    for module, extra in (("yosoku.labels", []), ("yosoku.evaluate", []), ("yosoku.ablation", []),
                           ("yosoku.decision", ["--upcoming-dir", str(fake / "upcoming"), "--mock", "--today", "2026-10-24"])):
         subprocess.run([sys.executable, "-m", module, "--data-dir", str(fake), "--out-dir", str(out), *extra],
                        cwd=ROOT, check=True)
@@ -115,6 +115,9 @@ def test_end_to_end(fake):
     assert set(payload["window_evidence"]) == {"Festive season (Oct–Nov)", "Board exams (Feb–Mar)",
                                                "IPL cricket (Apr–May)", "Other months"}
     assert sum(w["n"] for w in payload["window_evidence"].values()) > 0
+    for moment, result in payload["ablation"].items():  # what each signal is worth
+        assert "All inputs" in result["variants"] and len(result["variants"]) > 2
+        assert result["variants"]["All inputs"]["loss"] == 0
     sources = payload["sources"]  # the Method page's scorecard
     assert set(sources["parts"]) <= {"youtube", "streaming", "wikipedia"} and sources["released"] > 0
     for part in sources["parts"].values():
@@ -226,3 +229,23 @@ def test_wikipedia_disambiguation_is_not_related(monkeypatch):
     assert not collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
     monkeypatch.setattr(collect_wikipedia, "request_json", page({}))
     assert collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
+
+
+def test_seal(fake, tmp_path):
+    """A seal records a fingerprint, can be verified, is never rewritten, and catches a changed file."""
+    import shutil
+    out = tmp_path / "out"
+    shutil.copytree(fake / "out", out)  # test_end_to_end wrote predictions.json there, upcoming titles included
+    predictions = out / "predictions" / "predictions.json"
+    payload = json.loads(predictions.read_text(encoding="utf-8"))
+    predictions.write_text(json.dumps({**payload, "mock": False}), encoding="utf-8")  # the seal refuses mock data
+    run = lambda *extra: subprocess.run([sys.executable, "-m", "yosoku.seal", "--out-dir", str(out), "--today", "2026-10-24", *extra],
+                                        cwd=ROOT, capture_output=True, text=True)  # noqa: E731
+    assert run().returncode == 0
+    sealed = list((out / "predictions" / "sealed").glob("2026-10-24-*.json"))
+    assert len(sealed) == 1
+    assert json.loads(sealed[0].read_text(encoding="utf-8"))["titles"]
+    assert run("--verify").returncode == 0
+    assert run().returncode != 0  # the same day again: never rewritten
+    sealed[0].write_bytes(sealed[0].read_bytes().replace(b'"index":', b'"index": '))
+    assert run("--verify").returncode != 0
