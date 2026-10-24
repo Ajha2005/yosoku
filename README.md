@@ -13,6 +13,7 @@ for the India Demand Index described in the idea deck.
 | 2 | `collect_wikipedia.py` | Wikidata + Wikipedia pageviews API | ~15–30 min | `wiki_articles.csv`, `wikipedia_daily.csv` |
 | 3 | `collect_netflix.py` | Netflix Top 10 download | ~1 min | `netflix_india_top10.csv`, `netflix_matches.csv` |
 | 4 | `collect_youtube.py` | YouTube Data API (needs a key) | a few days (daily quota) | `youtube_videos.csv`, `youtube_comments.csv` |
+| 4b | `detect_languages.py` (optional) | IndicLID language ID on the trailer comments (needs `pip install fasttext`) | ~1 min, plus a 230 MB model download | `comment_languages.csv` |
 | 5 | `collect_trends.py` | Google Trends via `pytrends-modern` | overnight or longer | `trends_terms.csv`, `trends_india_daily.csv`, `trends_india_states.csv`, `trends_countries.csv` |
 | 5b | `collect_reddit.py` (optional) | Reddit posts, read from the Arctic Shift archive | ~15–20 min for 200 titles | `reddit_posts.csv`, `reddit_titles.csv` |
 | 6 | `merge.py` | the files above | seconds | `dataset.csv` (one row per title) |
@@ -56,6 +57,7 @@ python collectors/collect_titles.py
 python collectors/collect_wikipedia.py
 python collectors/collect_netflix.py
 python collectors/collect_youtube.py
+python collectors/detect_languages.py  # optional, after YouTube
 python collectors/collect_trends.py
 python collectors/collect_reddit.py    # optional
 python collectors/merge.py
@@ -200,8 +202,17 @@ Automatic matching makes mistakes. Before modelling, look through:
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
 - **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
   Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 100 comments match, and fewer
-  than 1 in 2,000 use an Indian script. It misses some Indian English; a language-ID model such as AI4Bharat's
-  IndicLID is the next step.
+  than 1 in 2,000 use an Indian script. When `comment_languages.csv` exists, AI4Bharat's IndicLID also counts short
+  Hinglish the word rules miss ("Kab release hogi ye movie"): 550 Hinglish comments instead of 373, and nearly all
+  of the extra ones checked by hand were real Hinglish.
+  IndicLID only knows Indian languages and English, so on its own it calls Spanish, Indonesian and emoji Indian,
+  and it often names the wrong Indian language. A comment therefore also needs two Hindi words, and its exact
+  language is not used. `comment_languages.csv` is committed, so only one person needs fastText and the model.
+- **A missing measurement is blank, not 0.** 223 matched English Wikipedia articles have no pageviews around
+  launch, because they were written later (often "<show> season 1" pages), and comments were not collected for
+  94 of the 200 YouTube titles. `merge.py` and the models treat both as unknown. Fixing the article names in
+  `wiki_articles.csv` (to the article that existed at launch) and finishing the YouTube comments would label
+  about 100 more titles.
 
 ## Responsible data use
 
