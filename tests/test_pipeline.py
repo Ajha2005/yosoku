@@ -367,8 +367,8 @@ def test_alerts_judge_a_sealed_verdict_on_its_own_lines():
         "Forecast 66, above the 40–60 range of its sealed Cold verdict (Test-market)."]
 
 
-def test_markets_follow_similar_earlier_titles():
-    from yosoku import markets
+def test_travel_follows_similar_earlier_titles():
+    from yosoku import travel
     n = 24  # 12 action titles that charted in the Philippines, 12 romance titles that charted in Brazil
     genres = [["Action"]] * 12 + [["Romance"]] * 12 + [["Action"], ["Action"]]
     titles = pd.DataFrame({"genre_list": genres, "tag_list": [[]] * (n + 2), "source": "MANGA", "format": "TV",
@@ -377,9 +377,9 @@ def test_markets_follow_similar_earlier_titles():
     reach = {i: {"PH"} if i <= 12 else {"BR"} for i in range(1, n + 1)}
     reach[n + 2] = {"US"}  # a later title is never a neighbour
     names = {"PH": "Philippines", "BR": "Brazil", "IN": "India", "US": "United States"}
-    found = markets.travel(titles, reach, names, [n + 1])[n + 1]
+    found = travel.travel(titles, reach, names, [n + 1])[n + 1]
     shares = {c["iso2"]: c["share"] for c in found["countries"]}
-    assert found["of"] == markets.NEIGHBOURS and shares["PH"] == 1.0 and "BR" not in shares and "US" not in shares
+    assert found["of"] == travel.NEIGHBOURS and shares["PH"] == 1.0 and "BR" not in shares and "US" not in shares
     assert shares["IN"] == 0.0  # India is always listed, here with no similar title charting there
 
 

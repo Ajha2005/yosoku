@@ -21,7 +21,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from yosoku import markets
+from yosoku import travel
 from yosoku.data import HUBS, load_titles
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -64,9 +64,9 @@ def asks(data_dir, titles):
 
 
 def world(data_dir, titles):
-    """Where anime reaches Netflix's Top 10 beyond India (yosoku/markets.py); None before the countries are collected."""
-    reach, names = markets.charted(data_dir)
-    return markets.summary(titles, reach, names) if reach else None
+    """Where anime reaches Netflix's Top 10 beyond India (yosoku/travel.py); None before the countries are collected."""
+    reach, names = travel.charted(data_dir)
+    return travel.summary(titles, reach, names) if reach else None
 
 
 def build(data_dir):
@@ -123,7 +123,7 @@ def build(data_dir):
                   "hubs": hub_comments, "wikipedia": wikipedia},
         "hubs": {name: description for name, description in HUBS.values()},
         "asks": asks(data_dir, titles),
-        "markets": world(data_dir, titles),
+        "travel": world(data_dir, titles),
     }
 
 

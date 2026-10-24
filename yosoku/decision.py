@@ -13,7 +13,7 @@ from the titles whose index includes YouTube, as theirs will (evaluate.live_widt
 With reports/clock.json (python -m yosoku.clock), each 2024 title also gets its forecast day by day.
 A stage already sealed (python -m yosoku.seal) shows the sealed numbers, which anyone can check against the file,
 with today's forecast for it kept beside them as "now". Each title also gets where else it could travel: the
-countries whose Netflix Top 10 its closest past titles reached (yosoku/markets.py), and a past title where it did.
+countries whose Netflix Top 10 its closest past titles reached (yosoku/travel.py), and a past title where it did.
 
     python -m yosoku.decision             # 2024 backtest plus upcoming titles in data/upcoming/
     python -m yosoku.decision --final     # also the 2025 test titles (after evaluate --final)
@@ -28,7 +28,7 @@ import numpy as np
 import pandas as pd
 
 from yosoku import features as feat
-from yosoku import markets
+from yosoku import travel
 from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
 from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
@@ -344,10 +344,10 @@ def main():
                            "day": r["day"] if r["day"] == "cold" else int(r["day"])}
                           for r in rows.drop_duplicates("day", keep="last")[columns].to_dict("records")]
                 records[anilist_id]["history"] = sorted(points, key=lambda r: -1e9 if r["day"] == "cold" else r["day"])
-    reach, names = markets.charted(data_dir)
-    if reach:  # where else each title could travel, and where each past one charted (yosoku/markets.py)
-        for anilist_id, found in markets.travel(titles, reach, names, list(records)).items():
-            records[anilist_id]["markets"] = found
+    reach, names = travel.charted(data_dir)
+    if reach:  # where else each title could travel, and where each past one charted (yosoku/travel.py)
+        for anilist_id, found in travel.travel(titles, reach, names, list(records)).items():
+            records[anilist_id]["travel"] = found
         for anilist_id, record in records.items():
             if anilist_id in reach:
                 record["charted"] = sorted(names.get(c, c) for c in reach[anilist_id])
@@ -361,7 +361,7 @@ def main():
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
         "sources": sources, "ablation": ablation, "clock": clock["days"] if clock else None,
         "label_checks": label_checks(label_table, parts, ranks, data_dir),
-        "markets": {k: v for k, v in markets.summary(titles, reach, names).items() if k != "by_country"} if reach else None,
+        "travel": {k: v for k, v in travel.summary(titles, reach, names).items() if k != "by_country"} if reach else None,
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),

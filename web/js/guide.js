@@ -156,7 +156,7 @@ export function renderGuide(app, host) {
   })() : "";
 
   // ------------------------------------------------------------ 5. beyond India
-  const W = G.markets;
+  const W = G.travel;
   const world = W?.by_country?.length ? (() => {
     const top = W.by_country.slice(0, WORLD_SHOWN), most = top[0].titles;
     const india = W.by_country.find((c) => c.iso2 === "IN");
