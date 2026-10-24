@@ -7,7 +7,7 @@ import pytest
 from yosoku import export_web
 from yosoku.data import ROOT
 
-MOCK = ROOT / "app" / "mock_predictions.json"
+MOCK = ROOT / "web" / "data" / "mock_predictions.json"
 
 
 def media(cover="https://img.example/c.jpg", color="#e4ae50", banner=None):

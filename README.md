@@ -108,12 +108,13 @@ laptop: it rebuilds the CSV files from the cache and only spends a few units on 
 
 ## From data to forecasts
 
-After the collectors, run the model pipeline and the dashboard (same folder, virtual environment active):
+After the collectors, run the model pipeline, then build the website data (same folder, virtual environment active):
 
 ```
 python collectors/merge.py
 python -m yosoku.run               # label, evaluation and verdicts
-streamlit run app/dashboard.py     # opens the dashboard in your browser
+python -m yosoku.export_web        # copies the forecasts to web/data/ and fetches cover art
+python -m http.server -d web 8000  # the dashboard, at http://localhost:8000
 ```
 
 | Step | Module | Writes |
@@ -122,7 +123,7 @@ streamlit run app/dashboard.py     # opens the dashboard in your browser
 | Evaluate | `yosoku/evaluate.py` | `reports/evaluation.md` (models against baselines on 2024, gate G4) |
 | Decide | `yosoku/decision.py` | `predictions/predictions.json`, `reports/decision.md` (verdicts, gate G5) |
 
-- Until `predictions/predictions.json` exists, the dashboard shows `app/mock_predictions.json`, made from **fake** data, with a banner.
+- Until `predictions/predictions.json` exists, the dashboard shows `web/data/mock_predictions.json`, made from **fake** data, with a banner.
 - Unreleased titles: collect them into their own folder, e.g.
   `python collectors/collect_titles.py --start-year 2027 --end-year 2027 --seasons WINTER --data-dir data/upcoming`,
   then rerun `python -m yosoku.run`. They get a cold forecast now, and T−28 / T+7 forecasts once those dates pass
@@ -133,7 +134,7 @@ streamlit run app/dashboard.py     # opens the dashboard in your browser
 
 ## The website (static, for Vercel)
 
-`web/` is the same dashboard as `app/dashboard.py`, rebuilt as a plain static site (no server, no build step):
+`web/` is the dashboard, a plain static site (no server, no build step):
 poster wall, a verdict card for every title, an India language-hub map, the backtest and the method. Vercel can
 host it because it is only HTML, CSS, JavaScript and two JSON files.
 
@@ -218,8 +219,7 @@ score, comment count and flair are kept, never usernames or post text.
 ```
 collectors/   the data collectors (common.py holds shared helpers)
 yosoku/       label, features, models, evaluation and verdicts
-app/          the Streamlit dashboard, and its mock data
-web/          the same dashboard as a static site for Vercel (see "The website"); web/data/ is written by yosoku.export_web
+web/          the dashboard: a static site for Vercel (see "The website"); web/data/ is written by yosoku.export_web, and holds the mock forecasts
 tools/        one-off generators (the India map outlines)
 tests/        pipeline tests on fake data (tests/fake_data.py)
 docs/         decisions.md: the six choices that shape the dataset; read it before changing a default
