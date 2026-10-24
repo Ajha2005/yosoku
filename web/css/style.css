@@ -241,7 +241,7 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
 }
 .chip .vicon { width: 15px; height: 15px; }
 .chip .count { font-size: 12px; font-weight: 500; }
-.chip:hover:not(:disabled) { color: var(--text); border-color: var(--text); }
+.chip:hover:not(:disabled):not([aria-pressed="true"]) { color: var(--text); border-color: var(--text); }
 .chip:disabled { opacity: 0.35; cursor: not-allowed; }
 .chip[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
 .chip-launch { --c: var(--launch); } .chip-test { --c: var(--test); } .chip-hold { --c: var(--hold); }
@@ -579,7 +579,10 @@ svg.scatter { display: block; overflow: visible; }
 .weekly .wk:hover, .weekly .wk:focus-visible { fill: var(--text); outline: none; }
 
 .g-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 20px; margin-top: 22px; }
-.g-insight { margin: 20px 0 6px; font-size: 15.5px; line-height: 1.6; color: var(--muted); max-width: 760px; }
+.g-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 16px; }
+.g-filter[hidden] { display: none; }
+.g-filter-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.g-insight { margin: 18px 0 6px; font-size: 15.5px; line-height: 1.6; color: var(--muted); max-width: 760px; }
 .g-insight b { color: var(--text); }
 .gbars { margin-top: 8px; }
 .gb { display: grid; grid-template-columns: minmax(120px, 230px) 1fr minmax(120px, 190px); align-items: center; gap: 16px; padding: 12px 4px; border-bottom: 1px solid var(--line); border-radius: 6px; transition: background 0.2s; }
