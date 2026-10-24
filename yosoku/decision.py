@@ -29,7 +29,7 @@ import pandas as pd
 
 from yosoku import features as feat
 from yosoku import travel
-from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
+from yosoku.data import COMMENT_MARKETS, HUBS, MARKETS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
 from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
 from yosoku.models import baselines, chance, forecast
@@ -359,6 +359,7 @@ def main():
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
+        "markets": {code: {**market, "comments": code in COMMENT_MARKETS} for code, market in MARKETS.items()},
         "sources": sources, "ablation": ablation, "clock": clock["days"] if clock else None,
         "label_checks": label_checks(label_table, parts, ranks, data_dir),
         "travel": {k: v for k, v in travel.summary(titles, reach, names).items() if k != "by_country"} if reach else None,

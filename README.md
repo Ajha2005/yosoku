@@ -222,6 +222,25 @@ python -m yosoku.daily --no-collect   # the same from the files already collecte
   `30 6 * * * cd ~/yosoku && .venv/bin/python -m yosoku.daily`, then commit `data/upcoming`, `predictions/history.csv`,
   `reports/alerts.md` and `web/data`. Rerun `python -m yosoku.run` weekly, or when titles get labels.
 
+### Other markets (countries)
+
+India is the default market. A data folder can be collected for another country instead: its Netflix
+Top 10 chart and its own Wikipedia languages replace India's (English and Japanese stay as global buzz).
+The markets are listed in `collectors/markets.py` (India, Indonesia, Thailand, Brazil, Mexico); adding one is a line there.
+
+```
+python collectors/collect_titles.py --data-dir data/markets/id --market ID
+python collectors/collect_wikipedia.py --data-dir data/markets/id
+python collectors/collect_netflix.py --data-dir data/markets/id
+python collectors/merge.py --data-dir data/markets/id
+python -m yosoku.labels --data-dir data/markets/id --out-dir out/id
+```
+
+The folder remembers its market (`market.txt`), so only the first step needs `--market`, and a folder never mixes two.
+Trailer comments, language detection and Trends are India only (the word list that finds Indian commenters has no
+equivalent elsewhere yet), so another market's index has two parts, Netflix and Wikipedia. Report and site wording
+still says India: the site is the India product. No other market has been collected yet.
+
 ### Sharing the YouTube work between three keys
 
 Each person runs a different slice of the top 200:
@@ -291,7 +310,7 @@ split they share.
 ## The website (static, for Vercel)
 
 `web/` is the dashboard, a plain static site (no server, no build step). Vercel can host it because it is only
-HTML, CSS, JavaScript and a few JSON files. Five tabs:
+HTML, CSS, JavaScript and a few JSON files. Six tabs:
 
 - **Overview:** the poster wall and the headline numbers.
 - **Forecasts:** a verdict card for every title. Its sheet has the forecast and range (for a sealed title, the sealed
@@ -302,8 +321,10 @@ HTML, CSS, JavaScript and a few JSON files. Five tabs:
   Forecasts → Upcoming carries the seal and the daily job's status and alerts.
 - **Track record:** the 2024 backtest against simple rules, how often the ranges held and why, and the decision clock
   ("When will we know?").
-- **Method:** how a forecast becomes a verdict, the index checks, the source scorecard, what each signal is worth, and
-  how the project keeps up as data arrives every day.
+- **Business:** what following the calls would have been worth on 2024, who pays and for which decision, the
+  markets set up beyond India (`collectors/markets.py`) and the roadmap, and why us.
+- **Method:** how a forecast becomes a verdict, the index checks, how the project keeps up as data arrives every
+  day, what each signal is worth, and where the data comes from and where it can mislead.
 - **Demand guide:** what India has watched (Netflix India's Top 10), what kind of title gets there, where in India,
   what India is asking for, beyond India (where anime reaches Netflix's Top 10 in 88 countries), and a check-your-title tool.
 

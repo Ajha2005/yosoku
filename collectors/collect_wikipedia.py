@@ -1,5 +1,7 @@
 """Step 2: daily Wikipedia pageviews around each title's launch, in English, Japanese, Hindi, Tamil and Telugu.
 
+Hindi, Tamil and Telugu are India's languages; a folder for another market reads its own instead (markets.py).
+
 First it finds each title's article in each language, through Wikidata's links
 from MyAnimeList IDs, falling back to an English Wikipedia search, and saves the
 list to data/wiki_articles.csv. Check that file: rows marked "search" were
@@ -28,10 +30,10 @@ from urllib.parse import quote, unquote
 
 import requests
 
-from common import (RAW_DIR, add_data_dir_argument, cached, data_file, parse_date, read_csv, read_titles, request_json,
-                    use_data_dir, write_csv)
+from common import (RAW_DIR, add_data_dir_argument, cached, current_market, data_file, parse_date, read_csv, read_titles,
+                    request_json, use_data_dir, write_csv)
 
-LANGS = ["en", "ja", "hi", "ta", "te"]
+GLOBAL_LANGS = ["en", "ja"]  # global buzz, read in every market
 DAYS_BEFORE = 120
 DAYS_AFTER = 120
 FIRST_DAY = date(2015, 7, 1)  # the pageviews API has no earlier data
@@ -39,7 +41,7 @@ FIRST_DAY = date(2015, 7, 1)  # the pageviews API has no earlier data
 MIN_FALLBACK_VIEWS = 1000  # over the whole window; less is a redirect or an unrelated stub
 ARTICLES_CSV = "wiki_articles.csv"
 FIXES_CSV = "wiki_articles_fixes.csv"
-FIX_FIELDS = ["anilist_id", "title", "old_en", "action", "new_en", "hi", "ta", "te"]
+FIX_FIELDS = ["anilist_id", "title", "old_en", "action", "new_en"]  # then the market's languages
 DAILY_CSV = "wikipedia_daily.csv"
 CACHE = RAW_DIR / "wikipedia"
 
@@ -55,25 +57,31 @@ SPARQL = """
 SELECT ?mal ?lang ?article WHERE {
   VALUES ?mal { %s }
   ?item wdt:P4086 ?mal .
-  VALUES (?lang ?site) {
-    ("en" <https://en.wikipedia.org/>) ("ja" <https://ja.wikipedia.org/>)
-    ("hi" <https://hi.wikipedia.org/>) ("ta" <https://ta.wikipedia.org/>) ("te" <https://te.wikipedia.org/>)
-  }
+  VALUES (?lang ?site) { %s }
   ?article schema:about ?item ; schema:isPartOf ?site .
 }
 """
 
-ARTICLE_FIELDS = ["anilist_id", "title", *LANGS, "match_method"]
 DAILY_FIELDS = ["anilist_id", "lang", "article", "date", "days_from_start", "views"]
+
+
+def langs():
+    """English and Japanese, then the current market's languages (India: hi, ta, te)."""
+    return GLOBAL_LANGS + current_market()["wiki"]
+
+
+def article_fields():
+    return ["anilist_id", "title", *langs(), "match_method"]
 
 
 def wikidata_articles(mal_ids):
     """{mal_id: {lang: article title}} for the MyAnimeList IDs Wikidata knows."""
     found = {}
     mal_ids = [m for m in mal_ids if m.isdigit()]
+    sites = " ".join(f'("{lang}" <https://{lang}.wikipedia.org/>)' for lang in langs())
     for start in range(0, len(mal_ids), 100):
         values = " ".join(f'"{m}"' for m in mal_ids[start:start + 100])
-        data = request_json("GET", SPARQL_URL, params={"query": SPARQL % values, "format": "json"})
+        data = request_json("GET", SPARQL_URL, params={"query": SPARQL % (values, sites), "format": "json"})
         for binding in data["results"]["bindings"]:
             article = unquote(binding["article"]["value"].split("/wiki/", 1)[1]).replace("_", " ")
             found.setdefault(binding["mal"]["value"], {}).setdefault(binding["lang"]["value"], article)
@@ -97,7 +105,7 @@ def langlinks(article):
     params = {"action": "query", "prop": "langlinks", "titles": article, "lllimit": "max",
               "redirects": 1, "format": "json", "formatversion": 2}
     pages = request_json("GET", EN_API_URL, params=params)["query"]["pages"]
-    return {link["lang"]: link["title"] for link in pages[0].get("langlinks", []) if link["lang"] in LANGS}
+    return {link["lang"]: link["title"] for link in pages[0].get("langlinks", []) if link["lang"] in langs()}
 
 
 def links_to(page, article):
@@ -130,12 +138,12 @@ def find_articles(titles):
             known[title["anilist_id"]] = {
                 "anilist_id": title["anilist_id"],
                 "title": title["title_english"] or title["title_romaji"],
-                **{lang: articles.get(lang, "") for lang in LANGS},
+                **{lang: articles.get(lang, "") for lang in langs()},
                 "match_method": method,
             }
             if i % 50 == 0:
                 print(f"  {i}/{len(new)}")
-        write_csv(path, list(known.values()), ARTICLE_FIELDS)
+        write_csv(path, list(known.values()), article_fields())
         print(f"Saved {path}; check the rows marked 'search'")
     return known
 
@@ -181,7 +189,8 @@ def launch_article(article, fetch, related):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_dir_argument(parser)
-    use_data_dir(parser.parse_args().data_dir)
+    args = parser.parse_args()
+    use_data_dir(args.data_dir, args.market)
 
     titles = read_titles()
     articles = find_articles(titles)
@@ -197,7 +206,7 @@ def main():
         if first > last:
             continue
         window_complete = last == start_date + timedelta(days=DAYS_AFTER)
-        for lang in LANGS:
+        for lang in langs():
             row = articles[title["anilist_id"]]
             article = row[lang]
             if not article:
@@ -215,7 +224,7 @@ def main():
                 if found:
                     fixes.append({"anilist_id": title["anilist_id"], "title": row["title"], "old_en": article,
                                   "action": "fallback", "new_en": found[0],
-                                  **{k: row[k] for k in ("hi", "ta", "te")}})
+                                  **{k: row[k] for k in current_market()["wiki"]}})
                     article, items = found
                     row.update(en=article, match_method="fallback")
             for item in items:
@@ -232,9 +241,9 @@ def main():
             print(f"Pageviews: {i}/{len(titles)} titles")
 
     if fixes:
-        write_csv(data_file(ARTICLES_CSV), list(articles.values()), ARTICLE_FIELDS)
+        write_csv(data_file(ARTICLES_CSV), list(articles.values()), article_fields())
         old = read_csv(data_file(FIXES_CSV)) if data_file(FIXES_CSV).exists() else []
-        write_csv(data_file(FIXES_CSV), old + fixes, FIX_FIELDS)
+        write_csv(data_file(FIXES_CSV), old + fixes, FIX_FIELDS + current_market()["wiki"])
         print(f"Swapped {len(fixes)} English articles that did not exist at launch; see {FIXES_CSV} (action 'fallback')")
     write_csv(data_file(DAILY_CSV), rows, DAILY_FIELDS)
     print(f"Saved {len(rows)} daily rows to {data_file(DAILY_CSV)}")

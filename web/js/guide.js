@@ -2,10 +2,10 @@
 // and the India-flagged trailer comments. Built for anyone deciding where demand lies, including those whose own title
 // is unlikely to work: they can describe it and see how similar anime fared and what has worked nearby.
 
-import { esc, pct, round, clamp, titleCase, formatDate } from "./data.js?v=8";
-import { posterHTML } from "./art.js?v=8";
-import { regionMap, bindRegions } from "./charts.js?v=8";
-import { showTip, hideTip } from "./tip.js?v=8";
+import { esc, pct, round, clamp, titleCase, formatDate } from "./data.js?v=11";
+import { posterHTML } from "./art.js?v=11";
+import { regionMap, bindRegions } from "./charts.js?v=11";
+import { showTip, hideTip } from "./tip.js?v=11";
 
 const MIN_TITLES = 8;       // a rate over fewer titles than this says nothing
 const MIN_COMMENTS = 1000;  // likewise for the share of comments that came from India

@@ -37,8 +37,8 @@ from datetime import date, timedelta
 
 import requests
 
-from common import (RAW_DIR, add_data_dir_argument, cached, data_file, is_active, load_json, parse_date, read_csv,
-                    read_titles, request_json, save_json, use_data_dir, write_csv)
+from common import (RAW_DIR, add_data_dir_argument, cached, data_file, india_only, is_active, load_json, parse_date,
+                    read_csv, read_titles, request_json, save_json, use_data_dir, write_csv)
 
 API_URL = "https://www.googleapis.com/youtube/v3/"
 CACHE = RAW_DIR / "youtube"
@@ -260,7 +260,8 @@ def main():
     parser.add_argument("--today", default=date.today().isoformat(), help="the collection date (for tests)")
     add_data_dir_argument(parser)
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
+    india_only("Trailer comments")
     today = date.fromisoformat(args.today)
 
     key = os.getenv("YOUTUBE_API_KEY")
