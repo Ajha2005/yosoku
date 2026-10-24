@@ -131,6 +131,37 @@ streamlit run app/dashboard.py     # opens the dashboard in your browser
 - Tests, including the check that no input uses data from after its forecast moment: `python -m pytest tests`.
 - See `docs/decisions.md` for what was fixed in advance and what changed (no Google Trends this round).
 
+## The website (static, for Vercel)
+
+`web/` is the same dashboard as `app/dashboard.py`, rebuilt as a plain static site (no server, no build step):
+poster wall, a verdict card for every title, an India language-hub map, the backtest and the method. Vercel can
+host it because it is only HTML, CSS, JavaScript and two JSON files.
+
+**Update it after every pipeline run:**
+
+```
+python -m yosoku.run                # writes predictions/predictions.json
+python -m yosoku.export_web         # copies it to web/data/ and fetches cover art from AniList
+git add web/data predictions && git commit -m "Update website data" && git push
+```
+
+- Without `predictions/predictions.json` the site shows the mock forecasts with a yellow "Preview data" banner.
+  Mock titles get generated Japanese-print posters instead of covers, because their made-up ids collide with real AniList ids.
+- `--no-covers` skips the AniList lookup (offline). Covers are links to AniList's image servers, not copies,
+  and a cover that fails to load falls back to the generated poster.
+- Look at it locally: `python -m http.server -d web 8000`, then open <http://localhost:8000>.
+
+**Deploy on Vercel (about 2 minutes):**
+
+1. Push this repo to GitHub, then go to [vercel.com/new](https://vercel.com/new) and import it.
+2. Set **Root Directory** to `web`. Leave the framework as **Other** and the build and output settings empty.
+3. Click **Deploy**. Every push to the branch redeploys. Or from a terminal: `cd web && npx vercel --prod`.
+4. Optional: for link previews on social media, change `og:image` in `web/index.html` to the full address of
+   `img/og.png` on your domain (crawlers need an absolute URL).
+
+`web/vercel.json` adds a strict content-security policy. If you add a script or image from another site, allow it there.
+`tools/build_india_map.py` rebuilt `web/js/india-map.js` from district boundaries; you never need to rerun it.
+
 ## Check these by hand
 
 Automatic matching makes mistakes. Before modelling, look through:
@@ -188,6 +219,8 @@ score, comment count and flair are kept, never usernames or post text.
 collectors/   the data collectors (common.py holds shared helpers)
 yosoku/       label, features, models, evaluation and verdicts
 app/          the Streamlit dashboard, and its mock data
+web/          the same dashboard as a static site for Vercel (see "The website"); web/data/ is written by yosoku.export_web
+tools/        one-off generators (the India map outlines)
 tests/        pipeline tests on fake data (tests/fake_data.py)
 docs/         decisions.md: the six choices that shape the dataset; read it before changing a default
 data/         CSV outputs; data/raw/ is the cache and is git-ignored
