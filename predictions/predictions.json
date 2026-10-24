@@ -51,6 +51,27 @@
   }
  },
  "min_evidence": 10,
+ "sources": {
+  "released": 1400,
+  "labelled": 234,
+  "parts": {
+   "youtube": {
+    "titles": 108,
+    "pairs": 91,
+    "agreement": -0.02
+   },
+   "streaming": {
+    "titles": 208,
+    "pairs": 183,
+    "agreement": 0.07
+   },
+   "wikipedia": {
+    "titles": 1141,
+    "pairs": 228,
+    "agreement": -0.09
+   }
+  }
+ },
  "dub_typical": 0.305,
  "evaluation": {
   "moments": {
@@ -401,6 +422,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -460,6 +482,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -532,6 +555,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -618,6 +642,7 @@
       "Malayalam": 0.062
      },
      "region_titles": 4,
+     "region_comments": 10,
      "dub_demand": {
       "share": 0.241,
       "titles": 4
@@ -677,6 +702,7 @@
       "Malayalam": 0.062
      },
      "region_titles": 4,
+     "region_comments": 10,
      "dub_demand": {
       "share": 0.241,
       "titles": 4
@@ -749,6 +775,7 @@
       "Malayalam": 0.062
      },
      "region_titles": 4,
+     "region_comments": 10,
      "dub_demand": {
       "share": 0.241,
       "titles": 4
@@ -836,6 +863,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 18,
      "dub_demand": {
       "share": 0.276,
       "titles": 3
@@ -895,6 +923,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 18,
      "dub_demand": {
       "share": 0.276,
       "titles": 3
@@ -967,6 +996,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 18,
      "dub_demand": {
       "share": 0.276,
       "titles": 3
@@ -1053,6 +1083,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 5,
+     "region_comments": 17,
      "dub_demand": {
       "share": 0.176,
       "titles": 5
@@ -1112,6 +1143,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 5,
+     "region_comments": 17,
      "dub_demand": {
       "share": 0.176,
       "titles": 5
@@ -1184,6 +1216,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 5,
+     "region_comments": 17,
      "dub_demand": {
       "share": 0.176,
       "titles": 5
@@ -1270,6 +1303,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.287,
       "titles": 3
@@ -1329,6 +1363,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.287,
       "titles": 3
@@ -1401,6 +1436,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.287,
       "titles": 3
@@ -1488,6 +1524,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.25,
       "titles": 1
@@ -1547,6 +1584,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.25,
       "titles": 1
@@ -1619,6 +1657,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.25,
       "titles": 1
@@ -1708,6 +1747,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -1767,6 +1807,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -1839,6 +1880,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -1925,6 +1967,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.423,
       "titles": 2
@@ -1984,6 +2027,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.423,
       "titles": 2
@@ -2056,6 +2100,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.423,
       "titles": 2
@@ -2143,6 +2188,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -2202,6 +2248,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -2274,6 +2321,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -2361,6 +2409,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -2420,6 +2469,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -2492,6 +2542,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -2572,6 +2623,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": null,
       "titles": 0
@@ -2624,6 +2676,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": null,
       "titles": 0
@@ -2689,6 +2742,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": null,
       "titles": 0
@@ -2777,6 +2831,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.128,
       "titles": 2
@@ -2836,6 +2891,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.128,
       "titles": 2
@@ -2908,6 +2964,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.128,
       "titles": 2
@@ -2993,6 +3050,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.244,
       "titles": 4
@@ -3052,6 +3110,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.244,
       "titles": 4
@@ -3124,6 +3183,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.244,
       "titles": 4
@@ -3212,6 +3272,7 @@
       "Malayalam": 0.367
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.097,
       "titles": 5
@@ -3271,6 +3332,7 @@
       "Malayalam": 0.367
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.097,
       "titles": 5
@@ -3343,6 +3405,7 @@
       "Malayalam": 0.367
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.097,
       "titles": 5
@@ -3434,6 +3497,7 @@
       "Malayalam": 0.565
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.062,
       "titles": 3
@@ -3493,6 +3557,7 @@
       "Malayalam": 0.565
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.062,
       "titles": 3
@@ -3565,6 +3630,7 @@
       "Malayalam": 0.565
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.062,
       "titles": 3
@@ -3655,6 +3721,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -3714,6 +3781,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -3786,6 +3854,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 7,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -3875,6 +3944,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 14,
      "dub_demand": {
       "share": 0.222,
       "titles": 2
@@ -3934,6 +4004,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 14,
      "dub_demand": {
       "share": 0.222,
       "titles": 2
@@ -4006,6 +4077,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 14,
      "dub_demand": {
       "share": 0.222,
       "titles": 2
@@ -4096,6 +4168,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -4155,6 +4228,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -4227,6 +4301,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -4315,6 +4390,7 @@
       "Malayalam": 0.654
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -4374,6 +4450,7 @@
       "Malayalam": 0.654
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -4446,6 +4523,7 @@
       "Malayalam": 0.654
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -4537,6 +4615,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -4596,6 +4675,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -4668,6 +4748,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -4757,6 +4838,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.468,
       "titles": 2
@@ -4816,6 +4898,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.468,
       "titles": 2
@@ -4888,6 +4971,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.468,
       "titles": 2
@@ -4971,6 +5055,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5023,6 +5108,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5088,6 +5174,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5177,6 +5264,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5236,6 +5324,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5308,6 +5397,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -5397,6 +5487,7 @@
       "Malayalam": 0.25
      },
      "region_titles": 1,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.2,
       "titles": 1
@@ -5456,6 +5547,7 @@
       "Malayalam": 0.25
      },
      "region_titles": 1,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.2,
       "titles": 1
@@ -5528,6 +5620,7 @@
       "Malayalam": 0.25
      },
      "region_titles": 1,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.2,
       "titles": 1
@@ -5616,6 +5709,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -5675,6 +5769,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -5747,6 +5842,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 2,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -5835,6 +5931,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 236,
      "dub_demand": {
       "share": 0.247,
       "titles": 2
@@ -5894,6 +5991,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 236,
      "dub_demand": {
       "share": 0.247,
       "titles": 2
@@ -5966,6 +6064,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 236,
      "dub_demand": {
       "share": 0.247,
       "titles": 2
@@ -6049,6 +6148,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6101,6 +6201,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6166,6 +6267,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6253,6 +6355,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.342,
       "titles": 3
@@ -6312,6 +6415,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.342,
       "titles": 3
@@ -6384,6 +6488,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.342,
       "titles": 3
@@ -6472,6 +6577,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 60,
      "dub_demand": {
       "share": 0.1,
       "titles": 4
@@ -6531,6 +6637,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 60,
      "dub_demand": {
       "share": 0.1,
       "titles": 4
@@ -6603,6 +6710,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 60,
      "dub_demand": {
       "share": 0.1,
       "titles": 4
@@ -6691,6 +6799,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6750,6 +6859,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6822,6 +6932,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6910,6 +7021,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -6969,6 +7081,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -7041,6 +7154,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -7128,6 +7242,7 @@
       "Malayalam": 0.305
      },
      "region_titles": 4,
+     "region_comments": 58,
      "dub_demand": {
       "share": 0.135,
       "titles": 4
@@ -7187,6 +7302,7 @@
       "Malayalam": 0.305
      },
      "region_titles": 4,
+     "region_comments": 58,
      "dub_demand": {
       "share": 0.135,
       "titles": 4
@@ -7259,6 +7375,7 @@
       "Malayalam": 0.305
      },
      "region_titles": 4,
+     "region_comments": 58,
      "dub_demand": {
       "share": 0.135,
       "titles": 4
@@ -7347,6 +7464,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -7406,6 +7524,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -7478,6 +7597,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 3,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -7565,6 +7685,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.269,
       "titles": 4
@@ -7624,6 +7745,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.269,
       "titles": 4
@@ -7696,6 +7818,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 6,
      "dub_demand": {
       "share": 0.269,
       "titles": 4
@@ -7784,6 +7907,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.068,
       "titles": 3
@@ -7843,6 +7967,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.068,
       "titles": 3
@@ -7915,6 +8040,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.068,
       "titles": 3
@@ -8004,6 +8130,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.243,
       "titles": 3
@@ -8063,6 +8190,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.243,
       "titles": 3
@@ -8135,6 +8263,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.243,
       "titles": 3
@@ -8227,6 +8356,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.213,
       "titles": 4
@@ -8286,6 +8416,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.213,
       "titles": 4
@@ -8358,6 +8489,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.213,
       "titles": 4
@@ -8451,6 +8583,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -8510,6 +8643,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -8582,6 +8716,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 8,
      "dub_demand": {
       "share": 0.0,
       "titles": 4
@@ -8671,6 +8806,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.325,
       "titles": 3
@@ -8730,6 +8866,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.325,
       "titles": 3
@@ -8802,6 +8939,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 15,
      "dub_demand": {
       "share": 0.325,
       "titles": 3
@@ -8889,6 +9027,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -8948,6 +9087,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -9020,6 +9160,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -9111,6 +9252,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.226,
       "titles": 4
@@ -9170,6 +9312,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.226,
       "titles": 4
@@ -9242,6 +9385,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 4,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.226,
       "titles": 4
@@ -9331,6 +9475,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 53,
      "dub_demand": {
       "share": 0.225,
       "titles": 2
@@ -9390,6 +9535,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 53,
      "dub_demand": {
       "share": 0.225,
       "titles": 2
@@ -9462,6 +9608,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 53,
      "dub_demand": {
       "share": 0.225,
       "titles": 2
@@ -9549,6 +9696,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -9608,6 +9756,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -9680,6 +9829,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -9767,6 +9917,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -9826,6 +9977,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -9898,6 +10050,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 3,
+     "region_comments": 4,
      "dub_demand": {
       "share": 0.0,
       "titles": 3
@@ -9986,6 +10139,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 234,
      "dub_demand": {
       "share": 0.152,
       "titles": 2
@@ -10045,6 +10199,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 234,
      "dub_demand": {
       "share": 0.152,
       "titles": 2
@@ -10117,6 +10272,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 234,
      "dub_demand": {
       "share": 0.152,
       "titles": 2
@@ -10205,6 +10361,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -10264,6 +10421,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -10336,6 +10494,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 2,
+     "region_comments": 5,
      "dub_demand": {
       "share": 0.0,
       "titles": 2
@@ -10416,6 +10575,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -10468,6 +10628,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -10533,6 +10694,7 @@
      ],
      "regions": {},
      "region_titles": 0,
+     "region_comments": null,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -10622,6 +10784,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -10681,6 +10844,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1
@@ -10753,6 +10917,7 @@
       "Malayalam": 0.0
      },
      "region_titles": 1,
+     "region_comments": 1,
      "dub_demand": {
       "share": 0.0,
       "titles": 1

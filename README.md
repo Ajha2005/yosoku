@@ -69,6 +69,9 @@ python -m http.server -d web 8000       # the dashboard, at http://localhost:800
 python -m pytest tests                  # about 30 seconds
 ```
 
+GitHub Actions runs the tests on every push and pull request (`.github/workflows/tests.yml`).
+For a presentation, `docs/demo.md` is a 3-minute walk through the site, with answers to the questions judges are likely to ask.
+
 It rewrites `labels/`, `reports/` and `predictions/` with the same content as is committed. A few scipy "constant
 input" warnings during the evaluation are normal: some baselines predict the same value for every title.
 Leave out `--no-covers` to fetch cover art from AniList.
@@ -308,6 +311,7 @@ web/          the dashboard: a static site for Vercel (see "The website"); web/d
 tools/        one-off generators (the India map outlines)
 tests/        pipeline and website-export tests on fake data (tests/fake_data.py)
 docs/         decisions.md: the six choices that shape the dataset, and the change log; read it before changing a default
+              demo.md: the 3-minute demo path and prepared answers
 data/         CSV outputs; data/raw/ is the cache and is git-ignored; data/upcoming/ would hold unreleased titles
 .env          your API key and contact (git-ignored; copy from .env.example)
 ```
