@@ -1,12 +1,13 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=8";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=8";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=8";
-import { createDetail, countUp } from "./detail.js?v=8";
-import { renderGuide } from "./guide.js?v=8";
-import { showTip, hideTip } from "./tip.js?v=8";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=8";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=9";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=9";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=9";
+import { createDetail, countUp } from "./detail.js?v=9";
+import { renderGuide } from "./guide.js?v=9";
+import { renderBusiness } from "./business.js?v=9";
+import { showTip, hideTip } from "./tip.js?v=9";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=9";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -62,9 +63,9 @@ function initTheme() {
   sync();
 }
 
-const PAGES = { home: "Overview", guide: "Demand guide", forecasts: "Forecasts", record: "Track record", method: "Method" };
+const PAGES = { home: "Overview", guide: "Demand guide", forecasts: "Forecasts", record: "Track record", business: "Business", method: "Method" };
 const TITLE_HASH = /^#\/title\/(\d+)(?:\/([^/]+))?$/;
-const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|method)\/?$/) || [, "home"])[1];
+const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|business|method)\/?$/) || [, "home"])[1];
 
 function updateNav() {
   // Every page opens on an ink band, so the bar is transparent at the top and turns solid once you scroll.
@@ -665,6 +666,7 @@ async function boot() {
   renderSlate();
   renderRecord();
   initDotTips();
+  renderBusiness(app, $("#business-body"));
   renderMethod();
   renderGuide(app, $("#guide-body"));
   initTilt();

@@ -13,11 +13,14 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+import markets
+
 ROOT = Path(__file__).resolve().parent.parent
 # Cached API responses, so a rerun skips work already done. Shared by every data folder:
 # entries are keyed by title or article, so released and upcoming titles never collide.
 RAW_DIR = ROOT / "data" / "raw"
 _data_dir = ROOT / "data"
+_market = markets.profile(markets.DEFAULT)
 
 load_dotenv(ROOT / ".env")
 
@@ -75,11 +78,26 @@ def add_data_dir_argument(parser):
     parser.add_argument("--data-dir", default="data",
                         help="folder holding titles.csv and the outputs (default: data); "
                              "use e.g. data/upcoming for unreleased titles so they stay out of the training data")
+    parser.add_argument("--market", help="country the folder is collected for, e.g. ID; remembered by the folder "
+                                          "(default: the folder's saved market, else IN; see collectors/markets.py)")
 
 
-def use_data_dir(folder):
-    global _data_dir
+def use_data_dir(folder, market=None):
+    """Point every data_file() at `folder`, and settle its market (see markets.py)."""
+    global _data_dir, _market
     _data_dir = ROOT / folder
+    _market = markets.of_folder(_data_dir, market)
+
+
+def current_market():
+    """The market of the current data folder: {code, name, wiki, note}."""
+    return _market
+
+
+def india_only(step):
+    """Stop a step that only works for India (its word lists or search region are India's) in another market's folder."""
+    if _market["code"] not in markets.COMMENT_MARKETS:
+        sys.exit(f"{step} works for India only so far; {_market['name']} gets its index from Wikipedia and Netflix.")
 
 
 def data_file(name):

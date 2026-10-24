@@ -24,7 +24,7 @@ import zipfile
 
 import pandas as pd
 
-from common import RAW_DIR, add_data_dir_argument, data_file, session, use_data_dir
+from common import RAW_DIR, add_data_dir_argument, data_file, india_only, session, use_data_dir
 
 MODEL_URL = "https://github.com/AI4Bharat/IndicLID/releases/download/v1.0/indiclid-ftr.zip"
 MODEL_PATH = RAW_DIR / "indiclid" / "indiclid-ftr" / "model_baseline_roman.bin"
@@ -50,7 +50,9 @@ def download_model():
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_dir_argument(parser)
-    use_data_dir(parser.parse_args().data_dir)
+    args = parser.parse_args()
+    use_data_dir(args.data_dir, args.market)
+    india_only("Language detection on trailer comments")
     try:
         import fasttext
     except ImportError:
