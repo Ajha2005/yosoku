@@ -48,5 +48,5 @@ export const NOT_USED = [
   { name: "X / Twitter", why: "No usable free public API for historical posts." },
   { name: "AniList popularity and score", why: "Measured today, so they include how the show turned out: using them would be hindsight (leakage)." },
   { name: "Merchandise and ticket sales", why: "No public source by title and country." },
-  { name: "Reddit", why: "Collector built (Arctic Shift archive) and wired into the models, but global rather than India-specific, so not part of the index; optional." },
+  { name: "Reddit", why: "A collector is built (Arctic Shift archive), but no Reddit data is in the current forecasts. It is global rather than India-specific, so it would only ever be a model input, never part of the index." },
 ];
