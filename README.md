@@ -191,7 +191,9 @@ python -m yosoku.daily --no-collect   # the same from the files already collecte
 - Each title in play is forecast as of today with the decision clock's model; the forecast goes into
   `predictions/history.csv` (one row per title per day), and each upcoming title's sheet on the site draws it.
 - `reports/alerts.md` lists titles whose forecast has left the 80% range of their last verdict, or crossed a
-  verdict line, once buzz is in. Verdicts themselves still change only at the three stages.
+  verdict line, once buzz is in; `predictions/alerts.json` carries the same for the site, which shows the day's
+  status and alerts on Forecasts → Upcoming and a *Moved* badge on those titles. Verdicts themselves still change
+  only at the three stages.
 - Run it once a day on a machine whose disk persists: the comment refresh builds on the cache in `data/raw/`. With cron:
   `30 6 * * * cd ~/yosoku && .venv/bin/python -m yosoku.daily`, then commit `data/upcoming`, `predictions/history.csv`,
   `reports/alerts.md` and `web/data`. Rerun `python -m yosoku.run` weekly, or when titles get labels.
@@ -251,7 +253,8 @@ split they share.
 `web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Forecasts, Track record, Method, Demand guide):
 poster wall, a verdict card for every title (with its dub demand and release-window what-if), an India language-hub map,
 the backtest, the decision clock ("When will we know?" on Track record), each title's forecast path (day by day for the
-2024 titles, from the daily log for upcoming ones) and the method. Vercel can
+2024 titles, from the daily log for upcoming ones), the daily job's status and alerts on Forecasts → Upcoming, and the
+method, including how it keeps up as data arrives every day. Vercel can
 host it because it is only HTML, CSS, JavaScript and a few JSON files.
 
 **Update it after every pipeline run:**

@@ -11,8 +11,9 @@ the archive; refitting and the backtests (python -m yosoku.run) only need rerunn
   2. label     upcoming titles whose 28 days are over get their India Demand Index (yosoku.labels)
   3. forecast  every title in play, as of today: data up to yesterday, the decision clock's model and range
   4. log       predictions/history.csv, one row per title per day: the forecast as it stood that day
-  5. alert     reports/alerts.md: a forecast that left the 80% range of the title's last verdict, or crossed a line
-  6. publish   yosoku.decision and export_web, so the site shows the day's verdicts and each title's history
+  5. alert     reports/alerts.md, and predictions/alerts.json for the site: a forecast that left the 80% range of
+               the title's last verdict, or crossed a verdict line
+  6. publish   yosoku.decision and export_web, so the site shows the day's verdicts, alerts and each title's history
 
     python -m yosoku.daily                  # the whole job (network, and a YouTube key for step 1)
     python -m yosoku.daily --no-collect     # steps 2-6 from the files already collected
@@ -40,7 +41,8 @@ from common import is_active  # noqa: E402  (when a title's data stops changing,
 
 HISTORY = "predictions/history.csv"
 HISTORY_FIELDS = ["date", "anilist_id", "name", "day", "index", "low", "high"]
-STAGE_DAYS = {"t-28": -28, "t+7": 7}
+ALERTS = "predictions/alerts.json"  # the day's status and alerts, copied to the site by export_web
+STAGE_LABELS = {"cold": "Cold", "t-28": "T−28", "t+7": "T+7"}
 
 
 def clock_day(start, today):
@@ -94,7 +96,7 @@ def log(history_path, today_rows):
 
 
 def alerts(today_rows, predictions):
-    """Plain-language alerts: a forecast outside the range of the title's latest verdict, or across a verdict line.
+    """[{anilist_id, name, day, text}]: a forecast outside the range of the title's latest verdict, or across a line.
 
     Only once buzz is in: before that, a difference from the cold verdict is two methods disagreeing, not news."""
     stages = {t["anilist_id"]: t for t in predictions["titles"] if t["group"] == "upcoming"}
@@ -104,17 +106,18 @@ def alerts(today_rows, predictions):
         if row["day"] == "cold" or title is None or not title["forecasts"]:
             continue
         stage = [m for m in feat.MOMENTS if m in title["forecasts"]][-1]
-        f, lines = title["forecasts"][stage], predictions["thresholds"][stage]
-        head = f"**{row['name']}** (day {row['day']:+d})"
+        f, lines, label = title["forecasts"][stage], predictions["thresholds"][stage], STAGE_LABELS[stage]
+        said = []
         if not f["low"] <= row["index"] <= f["high"]:
-            found.append(f"{head}: forecast {row['index']:.0f}, {'above' if row['index'] > f['high'] else 'below'} the "
-                         f"{f['low']:.0f}–{f['high']:.0f} range of its {stage} verdict ({f['verdict']}).")
+            said.append(f"Forecast {row['index']:.0f}, {'above' if row['index'] > f['high'] else 'below'} the "
+                        f"{f['low']:.0f}–{f['high']:.0f} range of its {label} verdict ({f['verdict']}).")
         if row["low"] >= lines["launch_line"] and f["verdict"] != "Launch":
-            found.append(f"{head}: even the low end of today's range ({row['low']:.0f}) clears the launch line "
-                         f"({lines['launch_line']}); its {stage} verdict was {f['verdict']}.")
+            said.append(f"Even the low end of today's range ({row['low']:.0f}) clears the launch line "
+                        f"({lines['launch_line']}); its {label} verdict was {f['verdict']}.")
         elif row["high"] < lines["hold_line"] and f["verdict"] != "Hold":
-            found.append(f"{head}: even the high end of today's range ({row['high']:.0f}) is under the hold line "
-                         f"({lines['hold_line']}); its {stage} verdict was {f['verdict']}.")
+            said.append(f"Even the high end of today's range ({row['high']:.0f}) is under the hold line "
+                        f"({lines['hold_line']}); its {label} verdict was {f['verdict']}.")
+        found += [{"anilist_id": int(row["anilist_id"]), "name": row["name"], "day": row["day"], "text": text} for text in said]
     return found
 
 
@@ -123,7 +126,8 @@ def report(today, today_rows, found):
              f"{len(today_rows)} titles in play, forecast today with data up to yesterday "
              f"({(today_rows['day'] == 'cold').sum()} still before any buzz). "
              "Verdicts change only at the stages; these say where the evidence has moved since.", ""]
-    lines += [f"- {a}" for a in found] if found else ["No alerts: every title in play is inside the range of its last verdict."]
+    lines += [f"- **{a['name']}** (day {a['day']:+d}): {a['text']}" for a in found] if found else [
+        "No alerts: every title in play is inside the range of its last verdict."]
     return "\n".join(lines) + "\n"
 
 
@@ -194,6 +198,9 @@ def main():
     predictions = json.loads((out_dir / "predictions" / "predictions.json").read_text(encoding="utf-8"))
     found = alerts(today_rows, predictions)
     (out_dir / "reports" / "alerts.md").write_text(report(today, today_rows, found), encoding="utf-8")
+    status = {"date": today.date().isoformat(), "in_play": len(today_rows),
+              "before_buzz": int((today_rows["day"] == "cold").sum()), "alerts": found}
+    (out_dir / ALERTS).write_text(json.dumps(status, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(today_rows)} titles in play; {len(found)} alerts in reports/alerts.md; history in {HISTORY}")
     if not args.no_publish and out_dir == ROOT:
         run("yosoku.export_web", "--no-covers")

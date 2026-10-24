@@ -84,9 +84,9 @@ async function fetchJson(url, optional) {
 }
 
 export async function loadData() {
-  const [data, covers, guide, seal] = await Promise.all([
+  const [data, covers, guide, seal, daily] = await Promise.all([
     fetchJson("data/predictions.json"), fetchJson("data/covers.json", true), fetchJson("data/guide.json", true),
-    fetchJson("data/sealed/latest.json", true)]);
+    fetchJson("data/sealed/latest.json", true), fetchJson("data/alerts.json", true)]);
   const known = { ...(covers || {}) };
   if (data.mock) {
     // Mock ids are made up and collide with real AniList ids, so never show covers for them.
@@ -95,7 +95,7 @@ export async function loadData() {
       for (const f of Object.values(t.forecasts)) for (const l of f.lookalikes) delete known[l.anilist_id];
     }
   }
-  return { data, covers: known, guide, seal };
+  return { data, covers: known, guide, seal, daily: data.mock ? null : daily };
 }
 
 /** Forecast moments a title really has, in cycle order. */
