@@ -206,3 +206,18 @@ def test_dub_requests():
     found = classify(text)
     assert found["dub_ask"].tolist() == [True, True, True, False, False, False]  # links are channels announcing, not fans asking
     assert (found["india"] | ~found["dub_ask"]).all()  # every dub request also counts as an Indian comment
+
+
+def test_wikipedia_disambiguation_is_not_related(monkeypatch):
+    """A disambiguation page links to the show's article, but is not about the show."""
+    sys.path.insert(0, str(ROOT / "collectors"))
+    import collect_wikipedia
+
+    def page(pageprops):
+        return lambda *args, **kwargs: {"query": {"pages": [{"title": "Lazarus", "pageprops": pageprops,
+                                                             "links": [{"title": "Lazarus (Japanese TV series)"}]}]}}
+
+    monkeypatch.setattr(collect_wikipedia, "request_json", page({"disambiguation": ""}))
+    assert not collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
+    monkeypatch.setattr(collect_wikipedia, "request_json", page({}))
+    assert collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
