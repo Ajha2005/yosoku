@@ -18,3 +18,15 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python -m pytest tests -q
+
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      # The site has no build step, so a syntax slip (say, in a merge) would only show up as a blank page.
+      - run: for f in web/js/*.js; do node --check --experimental-default-type=module "$f" || exit 1; done
+      - run: node -e "for (const f of require('fs').readdirSync('web/data').filter((n) => n.endsWith('.json'))) JSON.parse(require('fs').readFileSync('web/data/' + f, 'utf8'))"

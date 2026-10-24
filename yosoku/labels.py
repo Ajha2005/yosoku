@@ -104,6 +104,32 @@ def money_check(idi, data_dir, seed=0):
             "low": np.nanpercentile(boot, 2.5), "high": np.nanpercentile(boot, 97.5)}
 
 
+def box_office(idi, data_dir):
+    """[{film, India box office, its index}], biggest first, for the Method page; [] without data/india_box_office.csv."""
+    films = read(data_dir / "india_box_office.csv", required=False)
+    if films is None or "india_gross_inr" not in films:
+        return []
+    rows = []
+    for row in films.sort_values("india_gross_inr", ascending=False).itertuples():
+        value = idi.get(row.anilist_id)
+        rows.append({"anilist_id": int(row.anilist_id), "name": row.title, "india_gross_inr": int(row.india_gross_inr),
+                     "basis": row.basis, "source": row.source,
+                     "india_index": None if value is None or pd.isna(value) else round(float(value), 1)})
+    return rows
+
+
+def checks(labels, parts, ranks, data_dir):
+    """Gate G2 in plain terms for the dashboard: do the parts agree, does the ranking hold, and the box-office films."""
+    agree = agreement(parts)
+    stable = stability(ranks, labels["idi"])
+    positive = bool((agree["spearman"] > 0).all()) if len(agree) else False
+    weakest = stable.loc[stable["kendall_tau"].idxmin()] if len(stable) else None
+    steady = bool(weakest is not None and weakest["kendall_tau"] >= STABILITY_TARGET)
+    return {"parts_agree": positive, "ranking_holds": steady, "passed": positive and steady,
+            "weight_shift": WEIGHT_SHIFT, "weakest_shift": None if weakest is None else weakest["weight"].split()[0],
+            "box_office": box_office(labels["idi"], data_dir)}
+
+
 def build(titles):
     """(labels DataFrame, raw parts, percentile ranks) for released titles."""
     released = titles[titles["start"].notna() & (titles["start"] + pd.Timedelta(days=27) < pd.Timestamp.today())]
