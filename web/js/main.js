@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=5";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=5";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=5";
-import { createDetail, countUp } from "./detail.js?v=5";
-import { renderGuide } from "./guide.js?v=5";
-import { showTip, hideTip } from "./tip.js?v=5";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED } from "./content.js?v=5";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=6";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=6";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=6";
+import { createDetail, countUp } from "./detail.js?v=6";
+import { renderGuide } from "./guide.js?v=6";
+import { showTip, hideTip } from "./tip.js?v=6";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES } from "./content.js?v=6";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -440,6 +440,52 @@ function signalWorth() {
     </div>`;
 }
 
+function forecastSteps() {
+  const stages = Object.keys(MOMENTS).filter((m) => app.data.thresholds[m]);
+  const rows = stages.map((m) => {
+    const th = app.data.thresholds[m], rule = RULE_NOTES[th.method];
+    const by = rule ? `<b>Simple rule: ${esc(th.method)}</b><small>${esc(rule)}; our model did not beat it on 2024</small>`
+      : `<b>Our model (${esc(th.method === "Blend" ? "Blend" : "closest past titles")})</b><small>beat every simple rule on 2024</small>`;
+    return `<tr><th scope="row">${MOMENTS[m].label}<small>${esc(MOMENTS[m].long)}</small></th><td>${by}</td><td>± ${fixed(th.range_half_width, 0)} points</td><td>${esc(th.launch_line)} / ${esc(th.hold_line)}</td></tr>`;
+  }).join("");
+  return `<div class="scorecard-wrap reveal">
+      <h2>From signals to a verdict</h2>
+      <ol class="steps">${FORECAST_STEPS.map((s, i) => `<li><span class="pn">${String(i + 1).padStart(2, "0")}</span><span><b>${esc(s.title)}</b>${esc(s.body)}</span></li>`).join("")}</ol>
+      <h3>What makes the forecasts at each stage</h3>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Forecast method per stage, scrolls sideways on narrow screens"><table class="srccard">
+        <thead><tr><th scope="col">Stage</th><th scope="col">Forecast made by</th><th scope="col">80% range</th><th scope="col">Launch / Hold line</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+    </div>`;
+}
+
+const crore = (inr) => `₹${(inr / 1e7).toLocaleString("en-IN", { maximumFractionDigits: inr < 1e8 ? 2 : 0 })} crore`;
+
+function indexChecks() {
+  const c = app.data.label_checks;
+  if (!c) return "";
+  const shift = Math.round(c.weight_shift * 100);
+  const part = { youtube: "YouTube", streaming: "Netflix", wikipedia: "Wikipedia" }[c.weakest_shift] || c.weakest_shift;
+  const mark = (ok) => `<span class="check ${ok ? "yes" : "no"}">${ok ? "Yes" : "No"}</span>`;
+  const films = c.box_office.map((f) => `<tr><th scope="row">${esc(f.name)}<small><a href="${esc(safeUrl(f.source))}" rel="noopener" target="_blank">${esc(f.basis)}</a></small></th>
+      <td>${crore(f.india_gross_inr)}</td><td>${f.india_index == null ? "no index" : round(f.india_index)}</td></tr>`).join("");
+  return `<div class="scorecard-wrap reveal">
+      <h2>Checking the index itself</h2>
+      <p class="lead-sm">Every forecast is only as good as the India Demand Index it aims at, so the index is checked before any model is built.
+        ${c.passed ? "It passes these checks." : "It does not pass all of them yet, and we say so."}</p>
+      <ul class="notused checks">
+        <li><b>The three signals point the same way</b><span>${mark(c.parts_agree)} Titles that do well on one signal tend to do well on the others.</span></li>
+        <li><b>The ranking holds when a weight moves</b><span>${mark(c.ranking_holds)} ${c.ranking_holds
+          ? `Moving any weight by ${shift} points barely changes the order.`
+          : `Moving ${esc(part)}'s weight by ${shift} points reshuffles the order more than we would like.`}</span></li>
+      </ul>
+      ${films ? `<h3>Against real money: India box office</h3>
+      <p class="lead-sm">The index measures attention, not revenue, so we compare it with the anime films that have a reliable India box office figure. Only the order matters: net against gross and unfinished runs do not change it. With ${c.box_office.length} films this is a sanity check, not proof: read the order for yourself.</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="India box office against the India Demand Index, scrolls sideways on narrow screens"><table class="srccard boxoffice">
+        <thead><tr><th scope="col">Film</th><th scope="col">India box office</th><th scope="col">India Demand Index</th></tr></thead>
+        <tbody>${films}</tbody></table></div>` : ""}
+    </div>`;
+}
+
 function renderMethod() {
   $("#method-body").innerHTML = `
     <div class="composition reveal">
@@ -454,6 +500,8 @@ function renderMethod() {
       ${stageTimeline(Object.keys(MOMENTS))}
       <ul class="st-notes">${Object.values(MOMENTS).map((m) => `<li><b>${m.label}</b> ${esc(m.detail)}</li>`).join("")}</ul>
     </div>
+    ${forecastSteps()}
+    ${indexChecks()}
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
     ${scorecard()}
     ${signalWorth()}
