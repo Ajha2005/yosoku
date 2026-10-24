@@ -10,25 +10,27 @@ Labelled titles: 157 train (2019–2023), 48 validation (2024). 2025 test titles
 | --- | --- | --- | --- | --- | --- | --- |
 | Genre average | 0.00 (-0.26 to 0.26) | 0.20 | 11.9 | -0.08 | 0.12 | 0.02 over 15 |
 | Sequel carry-over | 0.09 (-0.20 to 0.36) | 0.20 | 11.8 | -0.08 | 0.15 | 0.10 over 15 |
-| Lookalike **(main)** | 0.09 (-0.20 to 0.37) | 0.30 | 11.7 | 0.26 | 0.09 | 0.08 over 15 |
+| Lookalike **(main)** **(used)** | 0.09 (-0.20 to 0.37) | 0.30 | 11.7 | 0.26 | 0.09 | 0.08 over 15 |
 
-- 80% range: ± 14.1 points; contains the truth for **62%** of 2024 titles (target 70–90%).
 - Best baseline: Sequel carry-over. Lookalike beats it overall, on top-20% hits and for new shows: **yes**.
+- Forecasts and verdicts use: **Lookalike**.
+- 80% range (Lookalike): ± 14.1 points; contains the truth for **62%** of 2024 titles (target 70–90%).
 
 ## Moment: t-28
 
 | Method | Spearman (95% interval) | Top-20% hit | MAE | New shows | Sequels | Rolling seasons |
 | --- | --- | --- | --- | --- | --- | --- |
 | Genre average | 0.00 (-0.26 to 0.26) | 0.20 | 11.9 | -0.08 | 0.12 | 0.02 over 15 |
-| Sequel carry-over | 0.09 (-0.20 to 0.36) | 0.20 | 11.8 | -0.08 | 0.15 | 0.10 over 15 |
+| Sequel carry-over **(used)** | 0.09 (-0.20 to 0.36) | 0.20 | 11.8 | -0.08 | 0.15 | 0.10 over 15 |
 | Global buzz (en+ja Wikipedia) | 0.03 (-0.21 to 0.26) | 0.20 | 11.9 | 0.06 | 0.12 | 0.15 over 15 |
 | India Wikipedia alone | – (– to –) | 0.20 | 11.7 | – | – | 0.19 over 15 |
 | India YouTube alone | -0.02 (-0.35 to 0.29) | 0.20 | 11.6 | -0.05 | 0.08 | 0.10 over 15 |
 | Lookalike | 0.09 (-0.20 to 0.37) | 0.30 | 11.7 | 0.26 | 0.09 | 0.08 over 15 |
 | Blend **(main)** | 0.07 (-0.21 to 0.36) | 0.10 | 11.5 | 0.31 | -0.07 | 0.23 over 15 |
 
-- 80% range: ± 12.5 points; contains the truth for **69%** of 2024 titles (target 70–90%).
 - Best baseline: Sequel carry-over. Blend beats it overall, on top-20% hits and for new shows: **no**.
+- Forecasts and verdicts use: **Sequel carry-over**. The model does not beat this rule, so the rule is shipped (gate G4 fallback).
+- 80% range (Sequel carry-over): ± 14.6 points; contains the truth for **75%** of 2024 titles (target 70–90%).
 
 ## Moment: t+7
 
@@ -40,11 +42,12 @@ Labelled titles: 157 train (2019–2023), 48 validation (2024). 2025 test titles
 | India Wikipedia alone | – (– to –) | 0.20 | 11.8 | – | – | 0.19 over 15 |
 | India YouTube alone | 0.34 (0.07 to 0.59) | 0.50 | 10.5 | 0.19 | 0.45 | 0.45 over 15 |
 | Lookalike | 0.09 (-0.20 to 0.37) | 0.30 | 11.7 | 0.26 | 0.09 | 0.08 over 15 |
-| Blend **(main)** | 0.42 (0.13 to 0.65) | 0.20 | 9.4 | 0.38 | 0.55 | 0.57 over 15 |
+| Blend **(main)** **(used)** | 0.42 (0.13 to 0.65) | 0.20 | 9.4 | 0.38 | 0.55 | 0.57 over 15 |
 
-- 80% range: ± 10.7 points; contains the truth for **73%** of 2024 titles (target 70–90%).
 - Best baseline: Global buzz (en+ja Wikipedia). Blend beats it overall, on top-20% hits and for new shows: **yes**.
+- Forecasts and verdicts use: **Blend**.
+- 80% range (Blend): ± 10.7 points; contains the truth for **73%** of 2024 titles (target 70–90%).
 
 ## Gate G4
 
-Main model beats the best baseline at every moment: **FAIL**. If it fails, ship the best baseline plus the lookalike evidence, and report it.
+Main model beats the best baseline at every moment: **FAIL**. Where it does not, the best baseline makes the forecasts and the model's lookalikes are kept as evidence (marked **(used)** above).
