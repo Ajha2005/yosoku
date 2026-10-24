@@ -176,6 +176,10 @@ After `merge.py`, `python -m yosoku.run` runs the first three steps below in ord
 - Forecast moments: **cold** (metadata only, any time before launch), **T−28** and **T+7**, each using only data
   from before its cutoff. The split is by Japanese start date: train 2019–2023, validate 2024, test 2025.
 - If the model does not beat the best simple rule at a moment, that rule makes the forecasts there and the report says so (gate G4 fallback).
+- Each title also carries two described, not modelled, extras that change neither the forecast nor the verdict:
+  **dub demand** (the share of Indian trailer comments on its closest past titles that ask for or about an
+  Indian-language dub) and a **release-window what-if** (how labelled past titles did in the festive, board-exam, IPL
+  and other windows; a window is shown only with 10 or more titles). `docs/decisions.md` has the reasoning.
 - The 2025 test titles are scored once, at the very end: `python -m yosoku.run --final`.
 - Tests, including the check that no input uses data from after its forecast moment: `python -m pytest tests`.
 - See `docs/decisions.md` for what was fixed in advance and what changed since (the change log at the bottom).
@@ -183,7 +187,8 @@ After `merge.py`, `python -m yosoku.run` runs the first three steps below in ord
 ## The website (static, for Vercel)
 
 `web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Forecasts, Track record, Method, Demand guide):
-poster wall, a verdict card for every title, an India language-hub map, the backtest and the method. Vercel can
+poster wall, a verdict card for every title (with its dub demand and release-window what-if), an India language-hub map,
+the backtest and the method. Vercel can
 host it because it is only HTML, CSS, JavaScript and a few JSON files.
 
 **Update it after every pipeline run:**
@@ -268,6 +273,8 @@ Automatic matching makes mistakes. Before modelling, look through:
   IndicLID only knows Indian languages and English, so on its own it calls Spanish, Indonesian and emoji Indian,
   and it often names the wrong Indian language. A comment therefore also needs two Hindi words, and its exact
   language is not used. `comment_languages.csv` is committed, so only one person needs fastText and the model.
+  `yt_dub_share` is the share of a title's India comments that ask for or about an Indian-language dub
+  ("hindi dub kab aayega", "please dub in tamil"; comments with a link are left out, they are mostly channels announcing a dub).
 - **A missing measurement is blank, not 0.** 223 matched English Wikipedia articles have no pageviews around
   launch, because they were written later (often "<show> season 1" pages), and comments were not collected for
   92 of the 200 YouTube titles. `merge.py` and the models treat both as unknown, not as zero attention, and a title
