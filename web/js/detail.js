@@ -110,7 +110,7 @@ export function createDetail(app, { requestClose }) {
         <p class="note">Read from comments like "hindi dub kab aayega" or "please dub in tamil"; channel posts with links are left out. A high share suggests a dub would widen the audience beyond subtitle viewers.</p>`;
     const whatIf = windowSection(t, app.data.window_evidence, app.data.min_evidence);
 
-    body.innerHTML = `<article class="detail v-${v.cls}" style="--k:${/^#[0-9a-f]{3,8}$/i.test(cover?.k) ? cover.k : "var(--accent-2)"}">
+    body.innerHTML = `<article class="detail v-${v.cls}" style="--k:${/^#[0-9a-f]{3,8}$/i.test(cover?.k) ? cover.k : "var(--k-default)"}">
       <header class="d-hero${banner ? " has-banner" : ""}">
         ${banner ? `<div class="d-backdrop" style="background-image:url('${banner}')"></div>` : ""}
         <div class="d-hero-inner">
