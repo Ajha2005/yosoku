@@ -154,8 +154,10 @@ Automatic matching makes mistakes. Before modelling, look through:
   Compare with the video's total in the `comments` column.
 - **Trends values are relative** (0–100 within each request). `trends_month1_vs_anchor` puts titles on one scale by
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
-- **Indian-script detection** (`yt_share_devanagari` etc.) misses Hinglish typed in Latin letters.
-  A language-ID model such as AI4Bharat's IndicLID is the next step for that.
+- **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
+  Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 100 comments match, and fewer
+  than 1 in 2,000 use an Indian script. It misses some Indian English; a language-ID model such as AI4Bharat's
+  IndicLID is the next step.
 
 ## Responsible data use
 

@@ -4,23 +4,19 @@ Every command reads the collectors' files from a data folder (default data/) and
 outputs under an output folder (default: the repo root, so labels/, reports/ and predictions/).
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# Same Unicode ranges as collectors/merge.py; each script stands for one language hub in India.
-INDIC_SCRIPTS = {
-    "devanagari": "ऀ-ॿ",
-    "bengali": "ঀ-৿",
-    "tamil": "஀-௿",
-    "telugu": "ఀ-౿",
-    "kannada": "ಀ-೿",
-    "malayalam": "ഀ-ൿ",
-}
+sys.path.insert(0, str(ROOT / "collectors"))
+from india_signals import classify  # noqa: E402  (shared with collectors/merge.py)
+
+# Language hubs for the regional view: the keys match india_signals.HUBS and yt_share_<hub>.
 HUBS = {
-    "devanagari": ("Hindi", "Hindi belt: UP, Bihar, MP, Rajasthan, Delhi, Haryana and neighbours (also Marathi)"),
+    "hindi": ("Hindi", "Hindi belt: UP, Bihar, MP, Rajasthan, Delhi, Haryana and neighbours (also Marathi)"),
     "bengali": ("Bengali", "West Bengal, Tripura"),
     "tamil": ("Tamil", "Tamil Nadu"),
     "telugu": ("Telugu", "Andhra Pradesh, Telangana"),
@@ -76,8 +72,5 @@ def load_daily(data_dir, titles):
     if comments is not None:
         published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
         comments["days_from_start"] = (published - comments["anilist_id"].map(titles["start"])).dt.days
-        text = comments["text"].fillna("").astype(str)
-        for script, letters in INDIC_SCRIPTS.items():
-            comments[script] = text.str.contains(f"[{letters}]", regex=True).astype(int)
-        comments["indic"] = comments[list(INDIC_SCRIPTS)].max(axis=1)
+        comments["india"] = classify(comments["text"])["india"].astype(int)
     return wiki, comments

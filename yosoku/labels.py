@@ -4,7 +4,8 @@ Three parts, all measured over days 0-27 after the Japanese start date. Google T
 collected this round (see docs/decisions.md), so its 40% is left out and the weights below are
 rescaled exactly as for any other missing part:
 
-  YouTube in Indian languages  30%  yt_comments_month1 x share of comments in Indian scripts
+  YouTube from India           30%  yt_india_month1: trailer comments by people in India
+                                    (Indian scripts, Hinglish or naming India; collectors/india_signals.py)
   Streaming                    20%  netflix_top10_weeks_90d
   Wikipedia                    10%  wiki_hi/ta/te/en_month1, summed
 
@@ -21,7 +22,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import kendalltau, spearmanr
 
-from yosoku.data import INDIC_SCRIPTS, add_folder_arguments, folder, load_titles, read
+from yosoku.data import add_folder_arguments, folder, load_titles, read
 
 WEIGHTS = {"youtube": 0.30, "streaming": 0.20, "wikipedia": 0.10}
 MIN_PARTS = 2
@@ -32,12 +33,8 @@ STABILITY_TARGET = 0.9
 def raw_parts(titles):
     """DataFrame of each part's raw value; NaN means no data, never zero."""
     parts = pd.DataFrame(index=titles.index)
-    if "yt_comments_month1" in titles:
-        shares = [titles[f"yt_share_{script}"] for script in INDIC_SCRIPTS if f"yt_share_{script}" in titles]
-        indic_share = pd.concat(shares, axis=1).sum(axis=1, min_count=1).clip(upper=1)
-        comments = titles["yt_comments_month1"]
-        # A searched title with no comments has no share, but its Indian-language count is still 0.
-        parts["youtube"] = (comments * indic_share).where(comments > 0, comments)
+    if "yt_india_month1" in titles:
+        parts["youtube"] = titles["yt_india_month1"]
     if "netflix_top10_weeks_90d" in titles:
         parts["streaming"] = titles["netflix_top10_weeks_90d"]
     wiki = [f"wiki_{lang}_month1" for lang in ("hi", "ta", "te", "en") if f"wiki_{lang}_month1" in titles]
