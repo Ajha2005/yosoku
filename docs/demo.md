@@ -10,7 +10,7 @@ current ones.
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
 | 1:40 | Track record | Forecast against reality for 2024. At T−28 a simple rule (sequel carry-over) makes the forecasts, because our model did not beat it; the page says so. |
-| 2:20 | Method | Source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (Trends, X, AniList popularity as leakage). |
+| 2:20 | Method | Source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). |
 | 2:45 | Forecasts, *Upcoming* | Dated forecasts for unreleased titles: "check us when they air." (Only once `data/upcoming/` is collected.) |
 
 ## Questions to prepare for
@@ -25,5 +25,5 @@ current ones.
 - **How big are the samples?** 234 labelled titles of 1,400; 48 in the 2024 test. Titles were chosen by popularity, so
   hits are over-represented, and every result is measured on that set.
 - **Why not more modelling?** The lookalike and blend models barely beat simple rules; the limit is data, not the
-  model. More India-specific data (Trends by state, streaming beyond Netflix) would help most.
+  model. More India-specific data (streaming beyond Netflix) would help most.
 - **Why no X/Twitter or merchandise?** No usable public source by title and country.
