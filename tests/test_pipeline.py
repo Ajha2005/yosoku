@@ -183,3 +183,18 @@ def test_wikipedia_launch_article():
     related = lambda page, article: page in links  # noqa: E731
     assert launch_article("Demon Slayer: Kimetsu no Yaiba season 1", fetch, related)[0] == "Demon Slayer: Kimetsu no Yaiba"
     assert launch_article("Lazarus (Japanese TV series)", fetch, related) is None  # the Bible's Lazarus does not link to it; the list has too few views
+
+
+def test_wikipedia_disambiguation_is_not_related(monkeypatch):
+    """A disambiguation page links to the show's article, but is not about the show."""
+    sys.path.insert(0, str(ROOT / "collectors"))
+    import collect_wikipedia
+
+    def page(pageprops):
+        return lambda *args, **kwargs: {"query": {"pages": [{"title": "Lazarus", "pageprops": pageprops,
+                                                             "links": [{"title": "Lazarus (Japanese TV series)"}]}]}}
+
+    monkeypatch.setattr(collect_wikipedia, "request_json", page({"disambiguation": ""}))
+    assert not collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
+    monkeypatch.setattr(collect_wikipedia, "request_json", page({}))
+    assert collect_wikipedia.links_to("Lazarus", "Lazarus (Japanese TV series)")
