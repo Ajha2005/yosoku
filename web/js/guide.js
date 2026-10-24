@@ -215,6 +215,7 @@ export function renderGuide(app, host) {
     const poolSize = state.signal === "netflix" ? pool.length : pool.reduce((sum, t) => sum + t.comments, 0);
     const tooThin = state.audience !== "all" && poolSize < (state.signal === "netflix" ? MIN_TITLES : MIN_COMMENTS);
 
+    const lead = shown.find((g) => (state.signal === "netflix" ? g.hit : g.india) > 0);
     tips.length = 0;
     bars.innerHTML = shown.map((g, i) => {
       const value = state.signal === "netflix"
@@ -223,7 +224,7 @@ export function renderGuide(app, host) {
       tips[i] = state.signal === "netflix"
         ? (g.hit ? `<b>${esc(dim.name(g.key))}</b><br>${[...g.titles].sort((a, b) => b.weeks - a.weeks).slice(0, 6).map((t) => `${esc(t.name)} · ${t.weeks} wk`).join("<br>")}` : `<b>${esc(dim.name(g.key))}</b><br>None of its ${g.n} titles has reached the chart`)
         : `<b>${esc(dim.name(g.key))}</b><br>${g.india} India comments in ${plural(g.n, "title")}`;
-      return `<li class="gb${state.signal === "netflix" && !g.hit ? " none" : ""}" data-i="${i}" tabindex="0">
+      return `<li class="gb${state.signal === "netflix" && !g.hit ? " none" : ""}${g === lead && !dim.chronological ? " lead" : ""}" data-i="${i}" tabindex="0">
         <span class="gb-name">${esc(dim.name(g.key))}</span>
         <span class="gb-track" aria-hidden="true"><i style="width:${(rate(g) / max) * 100}%;--i:${i}"></i></span>
         <span class="gb-val">${value}</span></li>`;
@@ -235,7 +236,6 @@ export function renderGuide(app, host) {
 
     // One sentence that says what the bars say.
     const insight = host.querySelector("#g-insight");
-    const lead = shown.find((g) => (state.signal === "netflix" ? g.hit : g.india) > 0);
     const never = state.signal === "netflix" ? shown.filter((g) => !g.hit) : [];
     const scope = who ? `Among titles made for <b>${esc(who)}</b>: ` : "";
     if (!shown.length) insight.textContent = "";
