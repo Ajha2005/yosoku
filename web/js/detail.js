@@ -1,9 +1,9 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=4";
-import { posterHTML } from "./art.js?v=4";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=4";
-import { showTip, hideTip, showToast } from "./tip.js?v=4";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=5";
+import { posterHTML } from "./art.js?v=5";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=5";
+import { showTip, hideTip, showToast } from "./tip.js?v=5";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -44,6 +44,61 @@ function windowSection(t, evidence, minN) {
   return `<ul class="wins">${rows}</ul>
     <p class="callout">${verdict}</p>
     <p class="note">Average India Demand Index of the labelled past titles that started in each window, and the difference from this title's window. Windows with fewer than ${esc(minN)} titles are not shown. An association, not a cause: few anime start in Feb–Mar because Japanese seasons start in January and April.</p>`;
+}
+
+/** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
+ *  Built only from evidence already on the sheet, so every step can be traced to a section below. */
+function launchPlan(t, f, moment, data) {
+  const later = data.thresholds["t+7"];
+  const steps = [];
+  const decide = {
+    Launch: ["Commit to India", "License, market and schedule a full release now: the whole 80% range clears the launch line."],
+    "Test-market": moment === "t+7"
+      ? ["Stay in limited release", "A week in, it has shown neither enough to commit nor little enough to drop."]
+      : ["License for a limited release", "Subtitled streaming with little marketing spend: enough to learn, cheap to stop."],
+    Hold: moment === "t+7"
+      ? ["Drop or delay the India push", "Launch-week attention from India stayed low."]
+      : ["Don't commit yet", "The whole range sits under the hold line. Revisit only if launch-week buzz appears."],
+  }[f.verdict];
+  steps.push(decide);
+  if (moment !== "t+7" && later) {
+    const rule = later.launch_line === later.hold_line
+      ? `Launch if the low end of the range reaches ${later.launch_line}, Hold if the high end stays under it`
+      : `Launch if the low end reaches ${later.launch_line}, Hold if the high end stays under ${later.hold_line}`;
+    const ev = data.evaluation?.moments || {}, r = (k) => ev[k]?.table.spearman[ev[k].used ?? ev[k].main];
+    const now = r(moment), then = r("t+7");
+    const why = Number.isFinite(now) && Number.isFinite(then) && then > now
+      ? ` On 2024 titles, forecasts at this stage ranked titles at ${now.toFixed(2)}; a week after launch, at ${then.toFixed(2)}.` : "";
+    steps.push(["Decide again at T+7", `One week after the Japanese premiere, with launch-week signals in. ${rule}.${why}`]);
+  }
+  const dub = f.dub_demand || {}, typical = data.dub_typical;
+  const hubs = Object.entries(f.regions || {}).filter(([, s]) => s >= 0.1).sort((a, b) => b[1] - a[1]).map(([h]) => h);
+  const thin = f.region_comments != null && f.region_comments < THIN_REGION;
+  const order = hubs.length ? `${hubs[0]} first${hubs[1] ? `, then ${hubs.slice(1, 3).join(" and ")}` : ""}${thin ? " (thin evidence: confirm at T+7)" : ""}` : "";
+  if (dub.share != null && Number.isFinite(typical)) {
+    const ratio = dub.share / typical;
+    steps.push(ratio >= 1.2
+      ? ["Plan a dub early", `Fans of similar titles asked for a dub ${pct(dub.share)} of the time, against ${pct(typical)} for a typical title.${order ? ` Language order from the hub map: ${order}.` : ""}`]
+      : ratio <= 0.8
+        ? ["Subtitles first", `Dub requests are below typical (${pct(dub.share)} against ${pct(typical)}). Add a dub only if ${moment === "t+7" ? "early viewing" : "T+7"} shows demand${order ? `; ${order}` : ""}.`]
+        : ["Dub when the release widens", `Dub interest is typical (${pct(dub.share)} against ${pct(typical)}).${order ? ` Language order from the hub map: ${order}.` : ""}`]);
+  } else if (order) {
+    steps.push(["Dub languages", `No dub-request evidence, but the hub map points to ${order}.`]);
+  }
+  const ev = data.window_evidence, minN = data.min_evidence;
+  if (ev) {
+    const shown = Object.entries(ev).filter(([, w]) => w.n >= minN && w.mean != null);
+    const own = ev[t.release_window];
+    const best = shown.sort((a, b) => b[1].mean - a[1].mean)[0], worst = shown[shown.length - 1];
+    const even = !best || best[1].mean - worst[1].mean < 5;
+    if (!t.release_window) steps.push(["Release date", even
+      ? "Not announced yet. Past titles did about equally well in every window, so there is no window to avoid."
+      : `Not announced yet. Past titles did best in ${best[0]} (average ${round(best[1].mean)}). An association, not a promise.`]);
+    else if (best && own && own.n >= minN && best[1].mean - own.mean >= 5 && best[0] !== t.release_window)
+      steps.push(["Consider another window", `Past titles in ${best[0]} averaged ${round(best[1].mean)}, against ${round(own.mean)} in this title's window. An association, not a promise.`]);
+    else steps.push(["Keep the date", "Past titles did about equally well in every release window."]);
+  }
+  return `<ol class="plan">${steps.map(([head, body], i) => `<li><span class="plan-n">${i + 1}</span><div><b>${esc(head)}</b><p>${esc(body)}</p></div></li>`).join("")}</ol>`;
 }
 
 export function createDetail(app, { requestClose }) {
@@ -146,8 +201,9 @@ export function createDetail(app, { requestClose }) {
         ${result}
       </section>
 
+      <section class="d-section d-plan"><h3>Launch plan <small>what to do with this forecast</small></h3>${launchPlan(t, f, moment, app.data)}</section>
       <section class="d-section"><h3>What moves this forecast</h3>${whySection}</section>
-      <section class="d-section"><h3>What this forecast could see <small>${esc(MOMENTS[moment].label)}</small></h3>
+      <section class="d-section d-stage"><h3>What this forecast could see <small>${esc(MOMENTS[moment].label)}</small></h3>
         ${stageTimeline([moment], moment)}
         <p class="note">${esc(MOMENTS[moment].detail)}</p>
       </section>
@@ -156,8 +212,8 @@ export function createDetail(app, { requestClose }) {
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>
       </section>
       <section class="d-section"><h3>Where in India <small>language hubs</small></h3>${regionsSection}</section>
-      <section class="d-section"><h3>Dub demand <small>from fans of similar titles</small></h3>${dubSection}</section>
-      ${whatIf ? `<section class="d-section"><h3>Release window what-if <small>how past titles did</small></h3>${whatIf}</section>` : ""}
+      <section class="d-section d-dub"><h3>Dub demand <small>from fans of similar titles</small></h3>${dubSection}</section>
+      ${whatIf ? `<section class="d-section d-whatif"><h3>Release window what-if <small>how past titles did</small></h3>${whatIf}</section>` : ""}
       ${t.synopsis ? `<details class="d-syn"><summary>Synopsis</summary><p>${esc(t.synopsis)}</p></details>` : ""}
     </article>`;
 
