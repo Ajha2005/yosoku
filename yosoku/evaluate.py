@@ -17,7 +17,7 @@ import pandas as pd
 from scipy.stats import spearmanr
 
 from yosoku import features as feat
-from yosoku.data import add_folder_arguments, folder, load_daily, load_titles, read
+from yosoku.data import add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.models import baselines, conformal_width, forecast
 from yosoku.split import guard_test, rolling_folds, split_of
 
@@ -30,8 +30,9 @@ def prepare(data_dir, out_dir, version="v1"):
     titles = load_titles(data_dir)
     labels = read(out_dir / "labels" / f"label_{version}.csv").set_index("anilist_id")["idi"].dropna()
     wiki, comments = load_daily(data_dir, titles)
+    reddit = load_reddit(data_dir)
     genres = sorted({g for gs in titles["genre_list"] for g in gs})
-    features = {m: feat.build(titles, wiki, comments, m, genres) for m in feat.MOMENTS}
+    features = {m: feat.build(titles, wiki, comments, m, genres, reddit) for m in feat.MOMENTS}
     return titles, labels, features
 
 

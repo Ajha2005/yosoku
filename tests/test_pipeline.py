@@ -10,7 +10,7 @@ import pandas as pd
 import pytest
 
 from yosoku import features as feat
-from yosoku.data import ROOT, load_daily, load_titles
+from yosoku.data import ROOT, load_daily, load_reddit, load_titles
 from yosoku.labels import index, percentiles, raw_parts
 from yosoku.split import guard_test
 
@@ -30,18 +30,35 @@ def test_leakage(fake):
     """Inputs at a moment must not change when data after its cutoff day changes."""
     titles = load_titles(fake)
     wiki, comments = load_daily(fake, titles)
+    reddit = load_reddit(fake)
     genres = sorted({g for gs in titles["genre_list"] for g in gs})
     for moment, cutoff in feat.CUTOFF.items():
-        before = feat.build(titles, wiki, comments, moment, genres)
+        before = feat.build(titles, wiki, comments, moment, genres, reddit)
         if cutoff is None:
-            later_wiki, later_comments = wiki.iloc[0:0], comments.iloc[0:0]  # cold: no activity at all
+            later_wiki, later_comments, later_reddit = wiki.iloc[0:0], comments.iloc[0:0], reddit.iloc[0:0]  # cold: no activity at all
         else:
             later_wiki = wiki.assign(views=np.where(wiki["days_from_start"] > cutoff, 10**7, wiki["views"]))
             later_comments = pd.concat([comments, comments.assign(days_from_start=cutoff + 1, text="नमस्ते")])
-        after = feat.build(titles, later_wiki, later_comments, moment, genres)
+            later_reddit = pd.concat([reddit, reddit.assign(days_from_start=cutoff + 1)])
+        after = feat.build(titles, later_wiki, later_comments, moment, genres, later_reddit)
         if cutoff is None:
             assert list(before.columns) == list(after.columns)
         pd.testing.assert_frame_equal(before, after)
+
+
+def test_reddit_features(fake):
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    reddit = load_reddit(fake)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    columns = {m: set(feat.build(titles, wiki, comments, m, genres, reddit).columns) for m in feat.MOMENTS}
+    without = set(feat.build(titles, wiki, comments, "t+7", genres).columns)
+    assert not any(c.startswith("reddit_") for c in columns["cold"])
+    assert {c for c in columns["t-28"] if c.startswith("reddit_")} == {"reddit_posts_early"}
+    assert {c for c in columns["t+7"] if c.startswith("reddit_")} == {"reddit_posts_early", "reddit_posts_pre", "reddit_posts_launch"}
+    assert not any(c.startswith("reddit_") for c in without)  # no Reddit data, no Reddit inputs
+    early = feat.build(titles, wiki, comments, "t-28", genres, reddit)["reddit_posts_early"]
+    assert early.isna().any() and early.notna().any()  # titles that were not searched are blank, not zero
 
 
 def test_window_past_cutoff_is_refused():

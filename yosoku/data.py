@@ -74,3 +74,8 @@ def load_daily(data_dir, titles):
         comments["days_from_start"] = (published - comments["anilist_id"].map(titles["start"])).dt.days
         comments["india"] = classify(comments["text"])["india"].astype(int)
     return wiki, comments
+
+
+def load_reddit(data_dir):
+    """reddit_posts.csv (one row per post, with days_from_start), or None if Reddit was not collected."""
+    return read(data_dir / "reddit_posts.csv", required=False)
