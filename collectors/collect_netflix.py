@@ -4,7 +4,7 @@ Downloads Netflix's public Top 10 history (weekly, per country, from June 2021)
 and keeps India's rows in data/netflix_india_top10.csv. Then matches them to
 titles.csv by name into data/netflix_matches.csv.
 
-Every other country's charts go to data/netflix_countries.csv, for the next-market finder (yosoku/markets.py):
+Every other country's charts go to data/netflix_countries.csv, for the next-market finder (yosoku/travel.py):
 the weeks a title spent in each country's Top 10 within 180 days of its Japanese start. Matching there is
 stricter, because a name shared with a film or a live-action remake is likelier somewhere among 90-odd countries:
 a film row matches only an anime film, by its exact name, and a TV row only a series.

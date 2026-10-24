@@ -147,8 +147,8 @@ export function ringiHTML(t, moment, data, seal) {
   if (hubs.length) {
     grounds.push(`言語ハブ：${hubs.map(([h, s]) => `${HUB[h] || h} ${pct(s)}`).join("、")}（言語を示すコメント${f.region_comments ?? "–"}件に基づく推定）。`);
   }
-  if (t.markets?.countries?.length) {
-    const m = t.markets, ja = regionJa();
+  if (t.travel?.countries?.length) {
+    const m = t.travel, ja = regionJa();
     const list = m.countries.filter((c) => c.iso2 !== "IN").slice(0, 4).map((c) => `${ja(c)}${c.titles}本`).join("、");
     const india = m.countries.find((c) => c.iso2 === "IN");
     grounds.push(`他の市場：Netflixのいずれかの国でTop 10に入った類似作品${m.of}本のうち、${list}がその国でもTop 10入りしました（放送開始から6か月以内${india ? `。インドは${india.titles}本` : ""}）。`);

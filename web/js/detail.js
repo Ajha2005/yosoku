@@ -89,9 +89,9 @@ function moneySection(f, money) {
 }
 
 /** Where else a title could travel: the countries whose Netflix Top 10 its closest past titles reached
- *  (yosoku/markets.py), and, for a past title, where it did. India is always listed. */
-function marketsSection(t, info) {
-  const m = t.markets;
+ *  (yosoku/travel.py), and, for a past title, where it did. India is always listed. */
+function travelSection(t, info) {
+  const m = t.travel;
   if (!m && !t.charted?.length) return "";
   const own = t.charted?.length ? `<p class="callout">It reached Netflix's Top 10 in ${t.charted.length} ${t.charted.length === 1 ? "country" : "countries"}
       within six months of its Japanese start: ${esc(t.charted.join(", "))}.</p>` : "";
@@ -105,7 +105,7 @@ function marketsSection(t, info) {
       be on Netflix to chart.${info?.auc ? ` Checked on past titles, these shares rank the titles that charted in a country above
       the rest at ${info.auc.toFixed(2)} on average over ${esc(info.countries_checked)} countries (0.5 is chance; titles of the same
       genre: ${info.genre_auc.toFixed(2)}).` : ""}</p>` : "";
-  return `<section class="d-section d-markets"><h3>Where else it could travel <small>Netflix's Top 10 in other countries</small></h3>${own}${list}</section>`;
+  return `<section class="d-section d-travel"><h3>Where else it could travel <small>Netflix's Top 10 in other countries</small></h3>${own}${list}</section>`;
 }
 
 /** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
@@ -329,7 +329,7 @@ export function createDetail(app, { requestClose }) {
         ${lookalikes(f.lookalikes, (l) => posterHTML({ anilist_id: l.anilist_id, title_japanese: "" }, app.covers[l.anilist_id]))}
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>
       </section>
-      ${marketsSection(t, app.data.markets)}
+      ${travelSection(t, app.data.travel)}
       <section class="d-section"><h3>Where in India <small>language hubs</small></h3>${regionsSection}</section>
       <section class="d-section d-dub"><h3>Dub demand <small>from fans of similar titles</small></h3>${dubSection}</section>
       ${whatIf ? `<section class="d-section d-whatif"><h3>Release window what-if <small>how past titles did</small></h3>${whatIf}</section>` : ""}

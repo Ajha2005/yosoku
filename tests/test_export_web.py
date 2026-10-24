@@ -111,7 +111,7 @@ def test_asks_list_agrees_with_its_totals():
 def test_beyond_india_agrees_with_the_country_charts():
     from yosoku import guide
 
-    world = guide.build(ROOT / "data")["markets"]
+    world = guide.build(ROOT / "data")["travel"]
     counts = [c["titles"] for c in world["by_country"]]
     assert counts == sorted(counts, reverse=True) and counts[0] <= world["titles"] and len(counts) == world["countries"]
     india = next(c for c in world["by_country"] if c["iso2"] == "IN")

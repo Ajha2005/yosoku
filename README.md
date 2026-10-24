@@ -251,7 +251,7 @@ split they share.
 | Decide | `yosoku/decision.py` | `predictions/predictions.json`, `reports/decision.md` (verdicts: gate G5) |
 | Daily | `yosoku/daily.py` | `predictions/history.csv`, `reports/alerts.md` (titles in play, every day; not part of `run`) |
 | Seal | `yosoku/seal.py` | `predictions/sealed/` (forecasts frozen before titles air, and their fingerprints; not part of `run`) |
-| Markets | `yosoku/markets.py` | where else a title could travel, for `decision` and `guide` (from `data/netflix_countries.csv`) |
+| Travel | `yosoku/travel.py` | where else a title could travel, for `decision` and `guide` (from `data/netflix_countries.csv`) |
 | Money | `yosoku/money.py` | `data/partner/money.json`, never committed (only with a partner's `data/partner/revenue.csv`; not part of `run`) |
 | Guide | `yosoku/guide.py` | `web/data/guide.json` (run by `export_web`) |
 | Export | `yosoku/export_web.py` | copies the forecasts to `web/data/` and fetches cover art; `--with-money` adds the yen ranges |
@@ -278,7 +278,7 @@ split they share.
   logistic curve on the forecast, fitted on the rolling seasons, shown only where it beats the base rate by 0.10
   (Brier skill). At T+7 it does (0.19), and 94% of its calls of 70% or more came true; before the premiere it does not.
 - **Where else it could travel:** every forecast lists the countries whose Netflix Top 10 its 10 most similar earlier
-  titles reached within six months, beyond Japan, beside how often anime in general did (`yosoku/markets.py`, from
+  titles reached within six months, beyond Japan, beside how often anime in general did (`yosoku/travel.py`, from
   `data/netflix_countries.csv`, which `collect_netflix.py` writes with stricter matching than India's).
 - **In yen, with a partner's figures:** `python -m yosoku.money` fits what 30 or more past titles earned in India
   (`data/partner/revenue.csv`, never committed) to their index and gives every forecast a range in yen. The site
@@ -446,7 +446,7 @@ revenue and forbids mass collection; YouTube's API policies limit how long API d
 
 ```
 collectors/   the data collectors (common.py holds shared helpers, india_signals.py the word list for India comments)
-yosoku/       the model pipeline: labels, features, models, split, evaluate, ablation, clock, decision, daily, seal, markets, money,
+yosoku/       the model pipeline: labels, features, models, split, evaluate, ablation, clock, decision, daily, seal, travel, money,
               plus guide and export_web for the site
 labels/       label_v1.csv: the India Demand Index of every labelled title (written by yosoku.labels); reference_v1.csv: the frozen ranking pool
 predictions/  predictions.json: forecasts and verdicts (written by yosoku.decision); history.csv: the daily forecast log (yosoku.daily);
