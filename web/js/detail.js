@@ -2,7 +2,7 @@
 
 import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
 import { posterHTML } from "./art.js?v=3";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions } from "./charts.js?v=3";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=3";
 import { showTip, hideTip, showToast } from "./tip.js?v=3";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -145,6 +145,10 @@ export function createDetail(app, { requestClose }) {
       </section>
 
       <section class="d-section"><h3>What moves this forecast</h3>${whySection}</section>
+      <section class="d-section"><h3>What this forecast could see <small>${esc(MOMENTS[moment].label)}</small></h3>
+        ${stageTimeline([moment], moment)}
+        <p class="note">${esc(MOMENTS[moment].detail)}</p>
+      </section>
       <section class="d-section"><h3>Closest past titles <small>and how they did in India</small></h3>
         ${lookalikes(f.lookalikes, (l) => posterHTML({ anilist_id: l.anilist_id, title_japanese: "" }, app.covers[l.anilist_id]))}
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>

@@ -1,6 +1,6 @@
 // Charts, hand-built from HTML and SVG so they stay light, crisp and themeable. Each returns markup (or fills a node).
 
-import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=3";
+import { VERDICTS, MOMENTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=3";
 import { INDIA } from "./india-map.js?v=3";
 import { showTip, hideTip } from "./tip.js?v=3";
 
@@ -51,6 +51,34 @@ export function miniBar(forecast) {
     <b class="mini-dot" style="left:${clamp(index, 0, 100)}%"></b></span>`;
 }
 
+// The timeline runs from day -56 to the end of launch week, counted from the Japanese premiere (day 0).
+const DAY_FROM = -56, DAY_TO = 7;
+const dayPos = (day) => ((day - DAY_FROM) / (DAY_TO - DAY_FROM)) * 100;
+const dayText = (day) => (day < 0 ? `−${-day}` : day > 0 ? `+${day}` : "0");
+
+/** Where each stage's buzz window sits around the Japanese premiere. keys: the stages to draw; active: the one to highlight. */
+export function stageTimeline(keys, active) {
+  const ticks = [-56, -28, 0, 7].map((day, i, all) =>
+    `<span class="st-tick${i === 0 ? " st-first" : i === all.length - 1 ? " st-last" : ""}" style="left:${dayPos(day)}%">${dayText(day)}</span>`).join("");
+  const rows = keys.map((key) => {
+    const m = MOMENTS[key], [from, to] = m.days ?? [];
+    const label = m.days ? `${m.label} uses days ${dayText(from)} to ${dayText(to)} and is made on day ${dayText(m.made)}, counted from the Japanese premiere.`
+      : `${m.label} uses no buzz data.`;
+    return `<li class="st-row${key === active ? " is-active" : ""}">
+      <div class="st-name"><b>${m.label}</b><span>${esc(m.long)}</span></div>
+      <div class="st-track" role="img" aria-label="${esc(label)}">
+        <i class="st-day0" style="left:${dayPos(0)}%"></i>
+        ${m.days ? `<i class="st-fill" style="left:${dayPos(from)}%;width:${dayPos(to + 1) - dayPos(from)}%"></i><b class="st-made" style="left:${dayPos(m.made)}%"></b>`
+          : `<span class="st-none">No buzz data</span>`}
+      </div></li>`;
+  }).join("");
+  return `<div class="stages">
+    <div class="st-axis" aria-hidden="true"><div class="st-axis-in"><span class="st-prem" style="left:${dayPos(0)}%">Japan premiere</span>${ticks}</div></div>
+    <ol class="st-rows">${rows}</ol>
+    <p class="st-key" aria-hidden="true"><span><i class="st-k-fill"></i>Buzz the forecast can see</span><span><i class="st-k-made"></i>Day it is made</span><span><i class="st-k-day0"></i>Premiere, day 0</span></p>
+  </div>`;
+}
+
 /** Diverging bars: how many points each factor adds to or takes from the index. */
 export function drivers(list) {
   const max = Math.max(...list.map((d) => Math.abs(d.points)), 1);
@@ -74,7 +102,7 @@ export function lookalikes(list, poster) {
       <p class="look-meta">${esc(l.year)} · ${pct(l.similarity)} alike</p>
       <span class="look-sim" aria-hidden="true"><i style="width:${clamp(l.similarity * 100, 0, 100)}%"></i></span>
     </li>`);
-  return `<ul class="looks">${cards.join("")}</ul>`;
+  return `<ul class="looks" tabindex="0" aria-label="Closest past titles">${cards.join("")}</ul>`;
 }
 
 /** India's states shaded by each language hub's share of Indian-language engagement. */

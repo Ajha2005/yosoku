@@ -174,7 +174,10 @@ After `merge.py`, `python -m yosoku.run` runs the first three steps below in ord
 | Export | `yosoku/export_web.py` | copies the forecasts to `web/data/` and fetches cover art |
 
 - Forecast moments: **cold** (metadata only, any time before launch), **T−28** and **T+7**, each using only data
-  from before its cutoff. The split is by Japanese start date: train 2019–2023, validate 2024, test 2025.
+  from before its cutoff. Days are counted from the Japanese premiere (day 0): T−28 is made 28 days before it and sees
+  days −56 to −29 (a fixed window, not the gap between the trailer and the premiere); T+7 is made 7 days after it and
+  adds days −28 to −1 and launch week, days 0 to 6. The Method tab and each forecast sheet draw this timeline.
+  The split is by Japanese start date: train 2019–2023, validate 2024, test 2025.
 - If the model does not beat the best simple rule at a moment, that rule makes the forecasts there and the report says so (gate G4 fallback).
 - Each title also carries two described, not modelled, extras that change neither the forecast nor the verdict:
   **dub demand** (the share of Indian trailer comments on its closest past titles that ask for or about an

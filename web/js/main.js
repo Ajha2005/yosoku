@@ -2,7 +2,7 @@
 
 import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
 import { posterHTML, artSVG, startPetals } from "./art.js?v=3";
-import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=3";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=3";
 import { createDetail, countUp } from "./detail.js?v=3";
 import { renderGuide } from "./guide.js?v=3";
 import { showTip, hideTip } from "./tip.js?v=3";
@@ -380,6 +380,12 @@ function renderMethod() {
       <div class="comp-bar" role="img" aria-label="${INDEX_PARTS.map((p) => `${p.name} ${p.weight}%`).join(", ")}">${INDEX_PARTS.map((p) =>
         `<span class="comp comp-${p.key}" style="flex:${p.weight}"><b>${p.weight}%</b></span>`).join("")}</div>
       <ul class="comp-legend">${INDEX_PARTS.map((p) => `<li><i class="swatch comp-${p.key}"></i><span><b>${esc(p.name)}</b>${esc(p.detail)}</span></li>`).join("")}</ul>
+    </div>
+    <div class="stages-block reveal">
+      <h2>What each forecast stage can see</h2>
+      <p class="lead-sm">Days are counted from the Japanese premiere, day 0. A stage only uses data dated before the day it is made.</p>
+      ${stageTimeline(Object.keys(MOMENTS))}
+      <ul class="st-notes">${Object.values(MOMENTS).map((m) => `<li><b>${m.label}</b> ${esc(m.detail)}</li>`).join("")}</ul>
     </div>
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
     <h2 class="sources-title reveal">Where the data comes from, and where it can mislead</h2>
