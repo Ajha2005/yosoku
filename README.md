@@ -145,6 +145,19 @@ python -m yosoku.run                   # picks up data/upcoming/ and adds the ti
 ```
 
 (Add `collect_trends.py --data-dir data/upcoming` before `merge.py` if Trends is back in use.)
+
+**Seal the forecasts** so anyone can check later that they were made before launch:
+
+```
+python -m yosoku.seal            # writes predictions/sealed/<date>-<season>.json and its SHA-256 in LEDGER.md
+python -m yosoku.export_web      # copies the seal to the site (Forecasts → Upcoming shows it)
+git add predictions/sealed web/data && git commit -m "Seal forecasts" && git push
+python -m yosoku.seal --verify   # any time: every sealed file still matches its fingerprint
+python -m yosoku.seal --score    # after the titles air and are labelled: how the sealed forecasts did
+```
+
+A seal is never rewritten; sealing again on another day adds a new file. The 50 Winter 2027 forecasts were sealed
+on 24 October 2026.
 An upcoming title gets a cold forecast right away, and T−28 / T+7 forecasts once those dates pass and its
 Wikipedia and YouTube data are collected. Their windows are still running, so these titles are fetched fresh on
 every run; rerun them before the demo for the latest buzz. The cache in `data/raw/` is shared between folders,
@@ -307,15 +320,15 @@ The optional language step runs AI4Bharat's [IndicLID](https://github.com/AI4Bha
 
 ```
 collectors/   the data collectors (common.py holds shared helpers, india_signals.py the word list for India comments)
-yosoku/       the model pipeline: labels, features, models, split, evaluate, decision, plus guide and export_web for the site
+yosoku/       the model pipeline: labels, features, models, split, evaluate, ablation, decision, seal, plus guide and export_web for the site
 labels/       label_v1.csv: the India Demand Index of every labelled title (written by yosoku.labels)
-predictions/  predictions.json: forecasts and verdicts (written by yosoku.decision)
-reports/      generated reports: label.md, evaluation.md / .json, decision.md, and final.md after --final; fix the code, not the report
+predictions/  predictions.json: forecasts and verdicts (written by yosoku.decision); sealed/: sealed forecasts and their fingerprints
+reports/      generated reports: label.md, evaluation.md / .json, ablation.md / .json, decision.md, and final.md after --final; fix the code, not the report
 web/          the dashboard: a static site for Vercel (see "The website"); web/data/ is written by yosoku.export_web, and holds the mock forecasts
 tools/        one-off generators (the India map outlines)
 tests/        pipeline and website-export tests on fake data (tests/fake_data.py)
 docs/         decisions.md: the six choices that shape the dataset, and the change log; read it before changing a default
               demo.md: the 3-minute demo path and prepared answers
-data/         CSV outputs; data/raw/ is the cache and is git-ignored; data/upcoming/ would hold unreleased titles
+data/         CSV outputs; data/raw/ is the cache and is git-ignored; data/upcoming/ holds unreleased titles
 .env          your API key and contact (git-ignored; copy from .env.example)
 ```

@@ -72,6 +72,144 @@
    }
   }
  },
+ "ablation": {
+  "t-28": {
+   "titles": 52,
+   "variants": {
+    "All inputs": {
+     "spearman": 0.26513841759684087,
+     "low": -0.024173999062251064,
+     "high": 0.5203711451614995,
+     "rolling": 0.3407825095441195,
+     "seasons": 20,
+     "loss": 0.0,
+     "rolling_loss": 0.0
+    },
+    "YouTube trailer comments": {
+     "spearman": 0.2087041899260916,
+     "low": -0.0817771782585607,
+     "high": 0.4851359509384942,
+     "rolling": 0.3280178077856096,
+     "seasons": 20,
+     "loss": 0.056434227670749265,
+     "rolling_loss": 0.012764701758509855
+    },
+    "Wikipedia, English and Japanese": {
+     "spearman": 0.06317901433639099,
+     "low": -0.23906241067748793,
+     "high": 0.353347674873531,
+     "rolling": 0.2428930924596559,
+     "seasons": 20,
+     "loss": 0.20195940326044987,
+     "rolling_loss": 0.09788941708446358
+    },
+    "Wikipedia, Indian languages": {
+     "spearman": 0.21941900924935792,
+     "low": -0.08641325216682286,
+     "high": 0.48837794296235176,
+     "rolling": 0.33200510789520077,
+     "seasons": 20,
+     "loss": 0.04571940834748295,
+     "rolling_loss": 0.008777401648918715
+    },
+    "Similar past titles (lookalike)": {
+     "spearman": 0.2505389426623505,
+     "low": -0.04595804040361477,
+     "high": 0.506589940259694,
+     "rolling": 0.3282460173984941,
+     "seasons": 20,
+     "loss": 0.014599474934490375,
+     "rolling_loss": 0.012536492145625355
+    },
+    "Prequel's India index": {
+     "spearman": 0.29399585928021943,
+     "low": -0.001041857096275016,
+     "high": 0.5342226451303214,
+     "rolling": 0.36353455754771546,
+     "seasons": 20,
+     "loss": -0.02885744168337856,
+     "rolling_loss": -0.02275204800359598
+    },
+    "Genre, format, source, audience": {
+     "spearman": 0.14313461829048582,
+     "low": -0.1503962245737707,
+     "high": 0.4341176953621054,
+     "rolling": 0.3152710138159055,
+     "seasons": 20,
+     "loss": 0.12200379930635505,
+     "rolling_loss": 0.025511495728213984
+    }
+   }
+  },
+  "t+7": {
+   "titles": 52,
+   "variants": {
+    "All inputs": {
+     "spearman": 0.6896330923002679,
+     "low": 0.4995129932294776,
+     "high": 0.8369823215897222,
+     "rolling": 0.6299040214171793,
+     "seasons": 20,
+     "loss": 0.0,
+     "rolling_loss": 0.0
+    },
+    "YouTube trailer comments": {
+     "spearman": 0.32993959581484184,
+     "low": 0.0489075987573192,
+     "high": 0.588126744253584,
+     "rolling": 0.4385604024458514,
+     "seasons": 20,
+     "loss": 0.3596934964854261,
+     "rolling_loss": 0.19134361897132784
+    },
+    "Wikipedia, English and Japanese": {
+     "spearman": 0.4568098867660271,
+     "low": 0.1885868904908109,
+     "high": 0.6904286398821711,
+     "rolling": 0.40376222075138485,
+     "seasons": 20,
+     "loss": 0.23282320553424085,
+     "rolling_loss": 0.22614180066579442
+    },
+    "Wikipedia, Indian languages": {
+     "spearman": 0.6884378136506605,
+     "low": 0.49245807985205814,
+     "high": 0.8381096723192101,
+     "rolling": 0.6269190987031544,
+     "seasons": 20,
+     "loss": 0.0011952786496074452,
+     "rolling_loss": 0.0029849227140248402
+    },
+    "Similar past titles (lookalike)": {
+     "spearman": 0.6839555187146328,
+     "low": 0.4869481326723609,
+     "high": 0.8342167670203873,
+     "rolling": 0.6400170031207183,
+     "seasons": 20,
+     "loss": 0.005677573585635143,
+     "rolling_loss": -0.010112981703539026
+    },
+    "Prequel's India index": {
+     "spearman": 0.711617681748404,
+     "low": 0.5249314452270776,
+     "high": 0.8473396437490832,
+     "rolling": 0.6638425996088534,
+     "seasons": 20,
+     "loss": -0.021984589448136083,
+     "rolling_loss": -0.03393857819167412
+    },
+    "Genre, format, source, audience": {
+     "spearman": 0.764466073470331,
+     "low": 0.6041713548437587,
+     "high": 0.8865540184208519,
+     "rolling": 0.661745212991343,
+     "seasons": 20,
+     "loss": -0.0748329811700631,
+     "rolling_loss": -0.03184119157416376
+    }
+   }
+  }
+ },
  "dub_typical": 0.26,
  "evaluation": {
   "moments": {
