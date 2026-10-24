@@ -131,7 +131,7 @@ def main():
     parser.add_argument("--pause", type=float, default=1.0,
                         help="seconds to wait between requests (default 1; please don't lower it much)")
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
     subreddits = [s.strip() for s in args.subreddits.split(",") if s.strip()]
 
     titles = read_titles(args.limit or None)

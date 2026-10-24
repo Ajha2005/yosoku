@@ -29,7 +29,7 @@ from pytrends_modern import TrendReq
 from pytrends_modern.exceptions import TooManyRequestsError
 
 from common import (RAW_DIR, add_data_dir_argument, cached, data_file, load_json, parse_date, read_csv, read_titles,
-                    save_json, search_names, use_data_dir, write_csv)
+                    india_only, save_json, search_names, use_data_dir, write_csv)
 
 DAYS_BEFORE = 90
 DAYS_AFTER = 120  # windows under 270 days come back as daily values
@@ -153,7 +153,8 @@ def main():
     parser.add_argument("--pause", type=float, default=15, help="seconds to wait before each request")
     add_data_dir_argument(parser)
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
+    india_only("Google Trends collection")
 
     titles = read_titles(args.limit)
     overrides_path = data_file(OVERRIDES_CSV)

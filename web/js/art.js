@@ -12,7 +12,7 @@ const PALETTES = [
   { sky: ["#4d0f20", "#ee6a4a"], sun: "#ffe8b0", far: "#8c1f35", near: "#3f0c1c", water: "#2a0612", line: "#ff9d7f", ink: "#1a0409" },
 ];
 
-import { esc, safeUrl } from "./data.js?v=6";
+import { esc, safeUrl } from "./data.js?v=7";
 
 const W = 200, H = 300;
 let uid = 0;

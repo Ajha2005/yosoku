@@ -126,7 +126,7 @@ def main():
                         help="only these seasons of each year: WINTER SPRING SUMMER FALL (default: all four)")
     add_data_dir_argument(parser)
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
 
     rows = []
     for year in range(args.start_year, args.end_year + 1):

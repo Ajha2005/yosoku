@@ -163,6 +163,25 @@ Wikipedia and YouTube data are collected. Their windows are still running, so th
 every run; rerun them before the demo for the latest buzz. The cache in `data/raw/` is shared between folders,
 which is safe because it is keyed by title. Netflix is skipped here: an unreleased title cannot be in a chart yet.
 
+### Other markets (countries)
+
+India is the default market. A data folder can be collected for another country instead: its Netflix
+Top 10 chart and its own Wikipedia languages replace India's (English and Japanese stay as global buzz).
+The markets are listed in `collectors/markets.py` (India, Indonesia, Thailand, Brazil, Mexico); adding one is a line there.
+
+```
+python collectors/collect_titles.py --data-dir data/markets/id --market ID
+python collectors/collect_wikipedia.py --data-dir data/markets/id
+python collectors/collect_netflix.py --data-dir data/markets/id
+python collectors/merge.py --data-dir data/markets/id
+python -m yosoku.labels --data-dir data/markets/id --out-dir out/id
+```
+
+The folder remembers its market (`market.txt`), so only the first step needs `--market`, and a folder never mixes two.
+Trailer comments, language detection and Trends are India only (the word list that finds Indian commenters has no
+equivalent elsewhere yet), so another market's index has two parts, Netflix and Wikipedia. Report and site wording
+still says India: the site is the India product. No other market has been collected yet.
+
 ### Sharing the YouTube work between three keys
 
 Each person runs a different slice of the top 200:
@@ -206,7 +225,7 @@ After `merge.py`, `python -m yosoku.run` runs the first three steps below in ord
 
 ## The website (static, for Vercel)
 
-`web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Forecasts, Track record, Method, Demand guide):
+`web/` is the dashboard, a plain static site (no server, no build step) with six tabs (Overview, Forecasts, Track record, Business, Method, Demand guide):
 poster wall, a verdict card for every title (with its dub demand and release-window what-if), an India language-hub map,
 the backtest and the method. Vercel can
 host it because it is only HTML, CSS, JavaScript and a few JSON files.
