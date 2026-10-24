@@ -8,6 +8,9 @@ Japanese start date:
   week1   start day and the 6 days after
   month1  start day and the 27 days after (the deck's "week 4" horizon)
 
+yt_india_* counts comments written by people in India (Indian scripts, Hinglish typed in Latin
+letters, or naming India); yt_share_<hub> is the share pointing to each language hub.
+
 A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
 Netflix published India charts. Keep the two apart in the India Demand Index.
@@ -20,20 +23,12 @@ import argparse
 import pandas as pd
 
 from common import add_data_dir_argument, data_file, read_titles, use_data_dir
+from india_signals import HUBS, classify
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 WIKI_LANGS = ["en", "ja", "hi", "ta", "te"]
 NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
 NETFLIX_DAYS = 90
-# Comments typed in these scripts; Hinglish typed in Latin letters is not caught (see README).
-INDIC_SCRIPTS = {
-    "devanagari": "ऀ-ॿ",
-    "bengali": "ঀ-৿",
-    "tamil": "஀-௿",
-    "telugu": "ఀ-౿",
-    "kannada": "ಀ-೿",
-    "malayalam": "ഀ-ൿ",
-}
 OUT_CSV = "dataset.csv"
 
 
@@ -100,12 +95,17 @@ def youtube(titles):
     published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
     comments["days_from_start"] = (published - comments["anilist_id"].map(start)).dt.days
     comments["one"] = 1
+    found = classify(comments["text"])
+    comments["india"] = found["india"].astype(int)
     for window, count in window_totals(comments, "one", "sum", titles.index).items():
         out[f"yt_comments_{window}"] = count.fillna(0).where(searched)
-    text = comments["text"].fillna("").astype(str)
-    for script, letters in INDIC_SCRIPTS.items():
-        comments[script] = text.str.contains(f"[{letters}]", regex=True)
-        out[f"yt_share_{script}"] = comments.groupby("anilist_id")[script].mean().reindex(titles.index)
+    # Comments by people in India: Indian scripts, Hinglish or naming India (see india_signals.py).
+    for window, count in window_totals(comments, "india", "sum", titles.index).items():
+        out[f"yt_india_{window}"] = count.fillna(0).where(searched)
+    by_title = found.groupby(comments["anilist_id"])
+    out["yt_share_india"] = by_title["india"].mean().reindex(titles.index)
+    for hub in HUBS:
+        out[f"yt_share_{hub}"] = by_title[hub].mean().reindex(titles.index)
     return out
 
 
