@@ -102,27 +102,42 @@ function launchPlan(t, f, moment, data) {
   return `<ol class="plan">${steps.map(([head, body], i) => `<li><span class="plan-n">${i + 1}</span><div><b>${esc(head)}</b><p>${esc(body)}</p></div></li>`).join("")}</ol>`;
 }
 
-/** How a 2024 title's forecast moved over the decision clock, or, for an upcoming title, when it next moves. */
+/** The points for a title's forecast chart: a 2024 title's forecast on every clock day, or the forecasts the daily
+ *  job (yosoku/daily.py) has logged so far for an upcoming one. */
+function pathRows(t, clock) {
+  if (t.trajectory) return clock.map((d, i) => ({ day: d.day, value: t.trajectory[i], lo: t.trajectory[i] - d.width, hi: t.trajectory[i] + d.width }));
+  return (t.history || []).map((h) => ({ day: h.day, value: h.index, lo: h.low, hi: h.high, date: h.date }));
+}
+
+/** How a 2024 title's forecast moved over the decision clock; for an upcoming title, how it is moving and when the
+ *  next verdict comes. */
 function movedSection(t, data) {
-  const clock = data.clock;
-  if (t.trajectory && clock) {
-    const at = (key) => t.trajectory[clock.findIndex((d) => (key === "cold" ? d.day === "cold" : d.stage === key))];
-    const said = Object.entries(MOMENTS).map(([key, m]) => [m.label, at(key)]).filter(([, v]) => Number.isFinite(v))
-      .map(([label, v]) => `${round(v)} at ${label}`).join(", ");
-    const rules = Object.entries(data.thresholds).filter(([, th]) => th.method !== "Blend").map(([key]) => MOMENTS[key].label);
-    return `<section class="d-section d-moved"><h3>How the forecast moved <small>day by day, as the buzz came in</small></h3>
+  const clock = data.clock, rows = clock ? pathRows(t, clock) : [];
+  const rules = Object.entries(data.thresholds).filter(([, th]) => th.method !== "Blend").map(([key]) => MOMENTS[key].label);
+  const ruleNote = rules.length ? ` At ${esc(rules.join(" and "))} a simple rule makes the verdict instead, so the number above can differ.` : "";
+  let chart = "";
+  if (t.trajectory && rows.length) {
+    const said = Object.entries(MOMENTS).map(([key, m]) => [m.label, rows.find((r) => (key === "cold" ? r.day === "cold" : clock.find((d) => d.day === r.day)?.stage === key))])
+      .filter(([, r]) => r && Number.isFinite(r.value)).map(([label, r]) => `${round(r.value)} at ${label}`).join(", ");
+    chart = `<section class="d-section d-moved"><h3>How the forecast moved <small>day by day, as the buzz came in</small></h3>
       <div class="traj-host" id="traj"></div>
       <p class="note">Our model's forecast for this title on each day of the decision clock: ${esc(said)}${t.actual_index != null ? `; it ended at ${round(t.actual_index)}` : ""}.
-        Shaded: that day's 80% range. From the premiere on it is a nowcast.${rules.length ? ` At ${esc(rules.join(" and "))} a simple rule makes the verdict instead, so the number above can differ.` : ""}</p></section>`;
+        Shaded: that day's 80% range. From the premiere on it is a nowcast.${ruleNote}</p></section>`;
+  } else if (rows.length) {
+    const first = rows[0], last = rows[rows.length - 1];
+    chart = `<section class="d-section d-moved"><h3>How the forecast is moving <small>made again each day</small></h3>
+      <div class="traj-host" id="traj"></div>
+      <p class="note">Our model's forecast for this title as the daily job has made it: ${round(first.value)} on ${esc(formatDate(first.date))}${rows.length > 1
+        ? `, ${round(last.value)} on ${esc(formatDate(last.date))}` : ""}. Shaded: the 80% range on each day. It fills in as the premiere nears.${ruleNote}</p></section>`;
   }
-  if (t.group !== "upcoming") return "";
+  if (t.group !== "upcoming") return chart;
   const next = [["t-28", -28], ["t+7", 7]].filter(([key]) => !momentsOf(t).includes(key));
-  if (!next.length) return "";
+  if (!next.length) return chart;
   const on = (days) => formatDate(new Date(Date.parse(`${t.start_date}T00:00:00Z`) + days * 864e5).toISOString().slice(0, 10));
-  return `<section class="d-section"><h3>Next updates <small>the forecast moves as buzz comes in</small></h3>
+  return `${chart}<section class="d-section"><h3>Next verdicts <small>made at the stages, with the buzz in by then</small></h3>
     <p class="callout">${t.start_date
-      ? `This forecast is made again with buzz data at ${next.map(([key, days]) => `<b>${MOMENTS[key].label}</b> on ${esc(on(days))}`).join(" and ")}.`
-      : `The start date is not announced yet. Once it is, the forecast is made again 28 days before the premiere and 7 days after it.`}</p></section>`;
+      ? `This title is judged again at ${next.map(([key, days]) => `<b>${MOMENTS[key].label}</b> on ${esc(on(days))}`).join(" and ")}.`
+      : `The start date is not announced yet. Once it is, the title is judged again 28 days before the premiere and 7 days after it.`}</p></section>`;
 }
 
 let trajObserver;
@@ -252,7 +267,8 @@ export function createDetail(app, { requestClose }) {
     trajObserver?.disconnect();
     const traj = body.querySelector("#traj");
     if (traj) {
-      trajObserver = new ResizeObserver(() => trajectoryChart(traj, app.data.clock, t.trajectory, t.actual_index));
+      const rows = pathRows(t, app.data.clock);
+      trajObserver = new ResizeObserver(() => trajectoryChart(traj, app.data.clock, rows, t.actual_index));
       trajObserver.observe(traj);
     }
   }
