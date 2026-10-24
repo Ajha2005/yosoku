@@ -24,7 +24,7 @@ export const SOURCES = [
     bias: "Today's popularity and score include the outcome, so they are never model inputs.", reliability: "Reliable; audience tags are the only age proxy in public data." },
 ];
 
-// The source scorecard on the Method page. Coverage and agreement come from the data (predictions.json "sources");
+// The source scorecard on the Method page. Coverage comes from the data (predictions.json "sources");
 // the columns here are judgements, written once. `part` links a row to its numbers.
 export const SCORECARD = [
   { part: "youtube", name: "YouTube trailer comments from India", role: "Index 50% · model input",
@@ -41,7 +41,7 @@ export const SCORECARD = [
     bias: "Popularity and score are today's values, so they are never inputs" },
   { name: "India box office", role: "Check only", coverage: "6 films",
     india: "High", lead: "None: only after release",
-    bias: "Six films: rank correlation 0.60, but its 95% range is −0.50 to 1.00" },
+    bias: "Only six films, too few to check the index against" },
 ];
 
 export const NOT_USED = [
@@ -51,9 +51,3 @@ export const NOT_USED = [
   { name: "Merchandise and ticket sales", why: "No public source by title and country." },
   { name: "Reddit", why: "Collector built (Arctic Shift archive) and wired into the models, but global rather than India-specific, so not part of the index; optional." },
 ];
-
-// The headline: what the backtest says about when to decide.
-export const WAITING = {
-  title: "Don't commit on a cold forecast",
-  lead: "Test-market first, then decide one week after launch.",
-};
