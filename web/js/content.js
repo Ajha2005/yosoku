@@ -1,4 +1,4 @@
-// Static copy for the Method section. Keep in step with the "Method & data" tab of app/dashboard.py.
+// Static copy for the Method section: how the India Demand Index is built and where its data comes from.
 
 export const INDEX_PARTS = [
   { key: "yt", weight: 50, name: "YouTube comments from India", detail: "Trailer comments in Indian scripts, Hinglish or naming India." },

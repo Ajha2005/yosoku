@@ -82,7 +82,7 @@ def main():
 
     source = ROOT / args.predictions
     if not source.exists():
-        source = ROOT / "app" / "mock_predictions.json"
+        source = ROOT / "web" / "data" / "mock_predictions.json"
         print(f"{args.predictions} not found; using the mock forecasts ({shown(source)})")
     predictions = json.loads(source.read_text(encoding="utf-8"))
     out = ROOT / args.out_dir

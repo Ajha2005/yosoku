@@ -3,7 +3,7 @@
     python collectors/merge.py
     python -m yosoku.run                  # labels/, reports/, predictions/predictions.json
     python -m yosoku.run --final          # once, at the end: also scores the 2025 test titles
-    streamlit run app/dashboard.py
+    python -m yosoku.export_web           # then see web/ (the dashboard)
 """
 
 import argparse
