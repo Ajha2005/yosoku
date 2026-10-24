@@ -75,3 +75,6 @@ change log at the bottom, say why, and rerun everything that depends on it.
 | Date | Decision | Change | Why |
 | --- | --- | --- | --- |
 | 2026-10-24 | All | Adopted the defaults above | Phase 0 |
+| 2026-10-24 | 2, 5 | No Google Trends this round. The Search part is left out, so the index uses YouTube 50%, Streaming 33%, Wikipedia 17% (the same rescaling as for any missing part). Decision 5 is not in use. | One day left; Trends takes nights to collect |
+| 2026-10-24 | 1 | YouTube collected with `--no-hindi` (trailer search only) | Fits 200 titles into one day of quota on three keys; Indian-script comments still come from the trailers |
+| 2026-10-24 | 2 | Regional view comes from the scripts of trailer comments (Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam hubs), not from Trends states | Trends state data is not collected; English-speaking fans are not placed on any hub, and the dashboard says so |
