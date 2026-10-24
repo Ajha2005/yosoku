@@ -13,30 +13,31 @@
   <meta property="og:image" content="img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <script src="js/theme.js"></script>
+  <script src="js/theme.js?v=2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="rough" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/></filter>
   </svg>
-  <a class="skip" href="#slate">Skip to the forecasts</a>
+  <a class="skip" href="#main">Skip to the content</a>
   <aside id="mock-banner" class="mock-banner" aria-label="Preview data notice" hidden>
     <b>Preview data.</b> These forecasts are made from fake numbers. Run the pipeline and <code>python -m yosoku.export_web</code> to see real ones.
   </aside>
 
   <header class="nav" id="nav">
-    <a class="brand" href="#top">
+    <a class="brand" href="#/">
       <span class="brand-mark" aria-hidden="true">予</span>
       <span class="brand-name">Yosoku<small>予測</small></span>
     </a>
-    <nav class="nav-links" aria-label="Sections">
-      <a href="#slate" data-section="slate">Forecasts</a>
-      <a href="#record" data-section="record">Track record</a>
-      <a href="#method" data-section="method">Method</a>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Pages">
+      <a role="tab" id="tab-home" href="#/" data-page="home" aria-controls="page-home" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-7.5Z"/></svg><span>Overview</span></a>
+      <a role="tab" id="tab-forecasts" href="#/forecasts" data-page="forecasts" aria-controls="page-forecasts" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Forecasts</span></a>
+      <a role="tab" id="tab-record" href="#/record" data-page="record" aria-controls="page-record" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Track record</span></a>
+      <a role="tab" id="tab-method" href="#/method" data-page="method" aria-controls="page-method" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8v.01"/></svg><span>Method</span></a>
     </nav>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">
       <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
@@ -44,7 +45,8 @@
     </button>
   </header>
 
-  <main id="top">
+  <main id="main">
+    <div class="page page-home" id="page-home" data-page="home" role="tabpanel" aria-labelledby="tab-home">
     <section class="hero" id="hero" aria-labelledby="hero-title">
       <svg class="hero-sun" viewBox="0 0 400 400" aria-hidden="true">
         <defs><radialGradient id="sun-gradient" cx="38%" cy="34%" r="75%"><stop offset="0" stop-color="#ff7a5c"/><stop offset=".55" stop-color="#e5412d"/><stop offset="1" stop-color="#a81f2a"/></radialGradient></defs>
@@ -58,18 +60,20 @@
         <h1 id="hero-title">Will it land<br>in <em>India?</em></h1>
         <p class="hero-lead">Yosoku predicts how Japanese anime will perform in India <strong>before</strong> the launch decision is made, with a verdict for every title and the evidence behind it.</p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href="#slate">Explore the forecasts <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-ghost" href="#record">See the track record</a>
+          <a class="btn btn-primary" href="#/forecasts">Explore the forecasts <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#/record">See the track record</a>
         </div>
         <dl class="hero-stats" id="hero-stats"></dl>
       </div>
       <svg class="hero-edge" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V70c60-30 120-30 180 0s120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0V120Z"/></svg>
     </section>
+    </div>
 
+    <div class="page" id="page-forecasts" data-page="forecasts" role="tabpanel" aria-labelledby="tab-forecasts" hidden>
     <section class="section" id="slate" aria-labelledby="slate-title">
       <header class="section-head reveal">
         <p class="eyebrow">The slate</p>
-        <h2 id="slate-title">Every title, one verdict</h2>
+        <h1 id="slate-title">Every title, one verdict</h1>
         <p class="lead">Pick a stage of the release cycle, then open any title to see why the model thinks what it thinks.</p>
       </header>
       <div class="controls reveal" id="controls"></div>
@@ -78,24 +82,29 @@
       <div class="more" id="more" hidden><button class="btn btn-outline" type="button"></button></div>
       <p class="empty" id="empty" hidden>No titles match. Try another verdict, stage or search.</p>
     </section>
+    </div>
 
+    <div class="page" id="page-record" data-page="record" role="tabpanel" aria-labelledby="tab-record" hidden>
     <section class="section section-alt" id="record" aria-labelledby="record-title">
       <header class="section-head reveal">
         <p class="eyebrow">Track record</p>
-        <h2 id="record-title">Would we have called it?</h2>
+        <h1 id="record-title">Would we have called it?</h1>
         <p class="lead">Every forecast against what actually happened. The 2024 titles were never seen in training.</p>
       </header>
       <div id="record-body" class="record reveal"></div>
     </section>
+    </div>
 
+    <div class="page" id="page-method" data-page="method" role="tabpanel" aria-labelledby="tab-method" hidden>
     <section class="section" id="method" aria-labelledby="method-title">
       <header class="section-head reveal">
         <p class="eyebrow">Method &amp; data</p>
-        <h2 id="method-title">How the India Demand Index is built</h2>
+        <h1 id="method-title">How the India Demand Index is built</h1>
         <p class="lead">Public data only, measured over the first 28 days after the Japanese premiere. It measures attention in India, not revenue.</p>
       </header>
       <div id="method-body" class="method"></div>
     </section>
+    </div>
   </main>
 
   <footer class="footer">
@@ -124,6 +133,6 @@
   <div class="tip" id="tip" role="tooltip" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Yosoku needs JavaScript to show the forecasts.</p></noscript>
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>

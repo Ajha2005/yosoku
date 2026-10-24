@@ -10,6 +10,7 @@ export const PRINCIPLES = [
   { n: "01", title: "Percentiles, not raw counts", body: "Each signal becomes a percentile among past titles. A missing signal is left out, never counted as zero, and the weights are rescaled. A title needs two signals to get an index." },
   { n: "02", title: "No hindsight", body: "Forecasts only use data available at the forecast moment. An automatic test fails the build if any input comes from later." },
   { n: "03", title: "Tested on the future", body: "Models train on 2019–2023, are checked on 2024, and are tested once on 2025. Each is compared with simple rules (genre average, sequel carry-over, global buzz)." },
+  { n: "04", title: "Attention, not revenue", body: "The index measures how much India talks about, searches for and watches a title in its first 28 days. It does not measure sales." },
 ];
 
 export const SOURCES = [
