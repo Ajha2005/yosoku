@@ -1,14 +1,16 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=7";
-import { posterHTML } from "./art.js?v=7";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=7";
-import { showTip, hideTip, showToast } from "./tip.js?v=7";
-import { RULE_NOTES } from "./content.js?v=7";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=9";
+import { posterHTML } from "./art.js?v=9";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=9";
+import { showTip, hideTip, showToast } from "./tip.js?v=9";
+import { RULE_NOTES } from "./content.js?v=9";
+import { ringiHTML } from "./ringi.js?v=9";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CALENDAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 3v4M16 3v4"/></svg>';
+const LOCK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h12v9H6v-9ZM8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>';
 
 export function countUp(el, to, ms = 900) {
   if (reduced) { el.textContent = to; return; }
@@ -47,8 +49,20 @@ function windowSection(t, evidence, minN) {
     <p class="note">Average India Demand Index of the labelled past titles that started in each window, and the difference from this title's window. Windows with fewer than ${esc(minN)} titles are not shown. An association, not a cause: few anime start in Feb–Mar because Japanese seasons start in January and April.</p>`;
 }
 
+/** A sealed stage shows the numbers in the sealed file, which the title will be graded on; say so, and what the
+ *  current model says today if that differs. */
+function sealedNote(f) {
+  if (!f.sealed) return "";
+  const now = f.now;
+  const moved = now && ["index", "low", "high", "verdict"].some((k) => now[k] !== f[k]);
+  const wider = moved && now.high - now.low > f.high - f.low + 1;
+  return `<p class="flag sealed">${LOCK}<span><b>Sealed ${esc(formatDate(f.sealed.date))}.</b> These are the numbers in the sealed file; this title will be graded on them.${moved
+    ? ` Today the current model says ${round(now.index)} (80% range ${round(now.low)}–${round(now.high)}), ${esc(now.verdict)}.${wider
+      ? " Its range is wider: ranges for titles not released yet now come from the misses of past titles whose index includes YouTube, as this title's will." : ""}` : ""}</span></p>`;
+}
+
 /** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
- *  Built only from evidence already on the sheet, so every step can be traced to a section below. */
+ *  Built from evidence on the sheet and the decision clock (Track record), so every step can be traced. */
 function launchPlan(t, f, moment, data) {
   const later = data.thresholds["t+7"];
   const steps = [];
@@ -56,7 +70,7 @@ function launchPlan(t, f, moment, data) {
     Launch: ["Commit to India", "License, market and schedule a full release now: the whole 80% range clears the launch line."],
     "Test-market": moment === "t+7"
       ? ["Stay in limited release", "A week in, it has shown neither enough to commit nor little enough to drop."]
-      : ["License for a limited release", "Subtitled streaming with little marketing spend: enough to learn, cheap to stop."],
+      : ["License for a limited release", "Subtitled streaming with little marketing spend, and a small minimum guarantee with a top-up tied to the T+7 verdict: enough to learn, cheap to stop."],
     Hold: moment === "t+7"
       ? ["Drop or delay the India push", "Launch-week attention from India stayed low."]
       : ["Don't commit yet", "The whole range sits under the hold line. Revisit only if launch-week buzz appears."],
@@ -68,8 +82,13 @@ function launchPlan(t, f, moment, data) {
       : `Launch if the low end reaches ${later.launch_line}, Hold if the high end stays under ${later.hold_line}`;
     const ev = data.evaluation?.moments || {}, r = (k) => ev[k]?.table.spearman[ev[k].used ?? ev[k].main];
     const now = r(moment), then = r("t+7");
-    const why = Number.isFinite(now) && Number.isFinite(then) && then > now
-      ? ` On 2024 titles, forecasts at this stage ranked titles at ${now.toFixed(2)}; a week after launch, at ${then.toFixed(2)}.` : "";
+    // The decision clock says how fast the evidence arrives: little before the premiere, most in its first days.
+    const clock = data.clock || [], at = (day) => clock.find((d) => d.day === day)?.rolling;
+    const [before, day3, day7] = [at(-7), at(3), at(7)];
+    const why = [before, day3, day7].every(Number.isFinite)
+      ? ` Over ${clock[0].seasons} seasons of backtests, forecasts ranked titles at ${before.toFixed(2)} a week before the premiere, ${day3.toFixed(2)} three days after it and ${day7.toFixed(2)} at T+7: line up the dub and marketing from day 3, commit at T+7.`
+      : Number.isFinite(now) && Number.isFinite(then) && then > now
+        ? ` On 2024 titles, forecasts at this stage ranked titles at ${now.toFixed(2)}; a week after launch, at ${then.toFixed(2)}.` : "";
     steps.push(["Decide again at T+7", `One week after the Japanese premiere, with launch-week signals in. ${rule}.${why}`]);
   }
   const dub = f.dub_demand || {}, typical = data.dub_typical;
@@ -102,6 +121,48 @@ function launchPlan(t, f, moment, data) {
   return `<ol class="plan">${steps.map(([head, body], i) => `<li><span class="plan-n">${i + 1}</span><div><b>${esc(head)}</b><p>${esc(body)}</p></div></li>`).join("")}</ol>`;
 }
 
+/** The points for a title's forecast chart: a 2024 title's forecast on every clock day, or the forecasts the daily
+ *  job (yosoku/daily.py) has logged so far for an upcoming one. */
+function pathRows(t, clock) {
+  if (t.trajectory) return clock.map((d, i) => ({ day: d.day, value: t.trajectory[i], lo: t.trajectory[i] - d.width, hi: t.trajectory[i] + d.width }));
+  return (t.history || []).map((h) => ({ day: h.day, value: h.index, lo: h.low, hi: h.high, date: h.date }));
+}
+
+/** How a 2024 title's forecast moved over the decision clock; for an upcoming title, how it is moving (with the daily
+ *  job's alert, if it moved out of its verdict's range) and when the next verdict comes. */
+function movedSection(t, data, daily) {
+  const clock = data.clock, rows = clock ? pathRows(t, clock) : [];
+  const rules = Object.entries(data.thresholds).filter(([, th]) => th.method !== "Blend").map(([key]) => MOMENTS[key].label);
+  const ruleNote = rules.length ? ` At ${esc(rules.join(" and "))} a simple rule makes the verdict instead, so the number above can differ.` : "";
+  let chart = "";
+  if (t.trajectory && rows.length) {
+    const said = Object.entries(MOMENTS).map(([key, m]) => [m.label, rows.find((r) => (key === "cold" ? r.day === "cold" : clock.find((d) => d.day === r.day)?.stage === key))])
+      .filter(([, r]) => r && Number.isFinite(r.value)).map(([label, r]) => `${round(r.value)} at ${label}`).join(", ");
+    chart = `<section class="d-section d-moved"><h3>How the forecast moved <small>day by day, as the buzz came in</small></h3>
+      <div class="traj-host" id="traj"></div>
+      <p class="note">Our model's forecast for this title on each day of the decision clock: ${esc(said)}${t.actual_index != null ? `; it ended at ${round(t.actual_index)}` : ""}.
+        Shaded: that day's 80% range. From the premiere on it is a nowcast.${ruleNote}</p></section>`;
+  } else if (rows.length) {
+    const first = rows[0], last = rows[rows.length - 1];
+    const alerts = (daily?.alerts || []).filter((a) => a.anilist_id === t.anilist_id).map((a) => esc(a.text)).join(" ");
+    chart = `<section class="d-section d-moved"><h3>How the forecast is moving <small>made again each day</small></h3>
+      ${alerts ? `<p class="flag moved"><span><b>Moved since its last verdict</b> (${esc(formatDate(daily.date))}). ${alerts}</span></p>` : ""}
+      <div class="traj-host" id="traj"></div>
+      <p class="note">Our model's forecast for this title as the daily job has made it: ${round(first.value)} on ${esc(formatDate(first.date))}${rows.length > 1
+        ? `, ${round(last.value)} on ${esc(formatDate(last.date))}` : ""}. Shaded: the 80% range on each day. It fills in as the premiere nears.${ruleNote}</p></section>`;
+  }
+  if (t.group !== "upcoming") return chart;
+  const next = [["t-28", -28], ["t+7", 7]].filter(([key]) => !momentsOf(t).includes(key));
+  if (!next.length) return chart;
+  const on = (days) => formatDate(new Date(Date.parse(`${t.start_date}T00:00:00Z`) + days * 864e5).toISOString().slice(0, 10));
+  return `${chart}<section class="d-section"><h3>Next verdicts <small>made at the stages, with the buzz in by then</small></h3>
+    <p class="callout">${t.start_date
+      ? `This title is judged again at ${next.map(([key, days]) => `<b>${MOMENTS[key].label}</b> on ${esc(on(days))}`).join(" and ")}.`
+      : `The start date is not announced yet. Once it is, the title is judged again 28 days before the premiere and 7 days after it.`}</p></section>`;
+}
+
+let trajObserver;
+
 export function createDetail(app, { requestClose }) {
   const dlg = document.getElementById("sheet");
   const body = document.getElementById("sheet-body");
@@ -128,7 +189,8 @@ export function createDetail(app, { requestClose }) {
     const t = byId(current.id);
     const moment = current.moment;
     const f = t.forecasts[moment];
-    const lines = app.data.thresholds[moment];
+    // A sealed stage is drawn on the lines it was sealed with, as the downloadable file has it.
+    const lines = f.sealed ? { ...app.data.thresholds[moment], launch_line: f.sealed.launch_line, hold_line: f.sealed.hold_line } : app.data.thresholds[moment];
     const v = VERDICTS[f.verdict];
     const cover = app.covers[t.anilist_id];
     const banner = safeUrl(cover?.b);   // a still frame from the anime itself
@@ -153,9 +215,7 @@ export function createDetail(app, { requestClose }) {
       ? `${drivers(f.drivers)}<p class="note">Exact contributions from the linear model: blue raises the index, red lowers it.</p>`
       : rule
         ? `<p class="callout">At this stage a simple rule makes the forecast: <b>${esc(lines.method)}</b>, ${esc(rule)}. It beat our model on the 2024 titles, so we use it. The closest past titles below still come from our model.</p>`
-        : moment === "cold"
-          ? `<p class="callout">At the cold stage there is no buzz yet, so the forecast is the India index of the most similar past titles below.</p>`
-          : `<p class="callout">No single signal moved this forecast by half a point or more against an average title.</p>`;
+        : `<p class="callout">No single signal moved this forecast by half a point or more against an average title.</p>`;
     const regionsSection = f.regions && Object.keys(f.regions).length
       ? `${f.region_comments != null && f.region_comments < THIN_REGION ? `<p class="flag thin"><span><b>Thin evidence.</b> This map rests on only ${esc(f.region_comments)} comment${f.region_comments === 1 ? "" : "s"}; read it as a hint, not a measurement.</span></p>` : ""}
         ${regionMap(f.regions, app.data.hubs)}<p class="note">Estimated from ${f.region_comments != null ? `<b>${esc(f.region_comments)}</b> ` : ""}trailer comments that point to a language (its script, its name, or Hinglish for Hindi) on the ${esc(f.region_titles)} closest past titles that had any. English-speaking fans are spread across India and are not counted here; Hindi includes Marathi.</p>`
@@ -200,6 +260,7 @@ export function createDetail(app, { requestClose }) {
         </div>
         ${gauge(f, lines, actual)}
         <p class="note rule">${esc(ruleText(lines))}</p>
+        ${sealedNote(f)}
         <div class="reason">
           <p>${esc(f.reason_en)}</p>
           <p lang="ja" class="ja">${esc(f.reason_ja)}</p>
@@ -213,6 +274,7 @@ export function createDetail(app, { requestClose }) {
         ${stageTimeline([moment], moment)}
         <p class="note">${esc(MOMENTS[moment].detail)}</p>
       </section>
+      ${movedSection(t, app.data, app.daily)}
       <section class="d-section"><h3>Closest past titles <small>and how they did in India</small></h3>
         ${lookalikes(f.lookalikes, (l) => posterHTML({ anilist_id: l.anilist_id, title_japanese: "" }, app.covers[l.anilist_id]))}
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>
@@ -225,20 +287,38 @@ export function createDetail(app, { requestClose }) {
 
     const big = body.querySelector("[data-count]");
     if (big) countUp(big, Number(big.dataset.count));
+    trajObserver?.disconnect();
+    const traj = body.querySelector("#traj");
+    if (traj) {
+      const rows = pathRows(t, app.data.clock);
+      trajObserver = new ResizeObserver(() => trajectoryChart(traj, app.data.clock, rows, t.actual_index));
+      trajObserver.observe(traj);
+    }
   }
 
-  /** A one-page brief for executives: this title's sheet, on its own, in the light theme. */
-  function printBrief() {
+  /** Print `content` on its own, in the light theme. */
+  function printPage(content, kind = "") {
     const html = document.documentElement, theme = html.dataset.theme;
     const root = document.createElement("div");
     root.id = "print-root";
-    root.innerHTML = `<p class="print-head"><b>Yosoku 予測</b> · India launch brief · ${esc(MOMENTS[current.moment].label)} forecast · ${esc(location.href)}</p>${body.innerHTML}`;
+    root.className = kind;
+    root.innerHTML = content;
     document.body.append(root);
     html.dataset.theme = "light";
     html.classList.add("printing");
     const done = () => { root.remove(); html.classList.remove("printing"); html.dataset.theme = theme; };
     addEventListener("afterprint", done, { once: true });
     print();
+  }
+
+  /** A one-page brief for executives: this title's sheet, on its own. */
+  function printBrief() {
+    printPage(`<p class="print-head"><b>Yosoku 予測</b> · India launch brief · ${esc(MOMENTS[current.moment].label)} forecast · ${esc(location.href)}</p>${body.innerHTML}`);
+  }
+
+  /** The same decision as a Japanese ringi-sho, the form a Japanese company approves it on (web/js/ringi.js). */
+  function printRingi() {
+    printPage(ringiHTML(byId(current.id), current.moment, app.data, app.seal), "ringi");
   }
 
   function show(id, moment) {
@@ -293,6 +373,7 @@ export function createDetail(app, { requestClose }) {
     catch { showToast("Copy the address bar to share this forecast"); }
   });
   document.getElementById("sheet-print").addEventListener("click", printBrief);
+  document.getElementById("sheet-ringi").addEventListener("click", printRingi);
   scroller.addEventListener("scroll", hideTip, { passive: true });
   dlg.addEventListener("cancel", (e) => { e.preventDefault(); requestClose(); });          // Esc
   dlg.addEventListener("click", (e) => { if (e.target === dlg) requestClose(); });          // click on the dimmed backdrop

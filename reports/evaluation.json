@@ -1,70 +1,94 @@
 {
  "moments": {
   "cold": {
-   "main": "Lookalike",
+   "main": "Blend",
    "used": "Genre average",
-   "width": 14.236115587163221,
+   "width": 14.541808666421097,
+   "width_live": 21.9410536178994,
    "coverage": 0.6730769230769231,
+   "coverage_by_part": {
+    "youtube": 0.3684210526315789,
+    "youtube_titles": 19,
+    "other": 0.8484848484848485,
+    "other_titles": 33
+   },
    "beats_baseline": false,
    "best_baseline": "Genre average",
    "table": {
     "titles": {
      "Genre average": 52,
      "Sequel carry-over": 52,
-     "Lookalike": 52
+     "Lookalike": 52,
+     "Blend": 52
     },
     "spearman": {
-     "Genre average": 0.1151747173,
-     "Sequel carry-over": 0.0600401073,
-     "Lookalike": -0.0062752129
+     "Genre average": 0.1193771628,
+     "Sequel carry-over": 0.0652761632,
+     "Lookalike": -0.0059763932,
+     "Blend": 0.0453779002
     },
     "top20": {
      "Genre average": 0.3,
      "Sequel carry-over": 0.2,
-     "Lookalike": 0.4
+     "Lookalike": 0.4,
+     "Blend": 0.2
     },
     "mae": {
-     "Genre average": 12.7961377883,
-     "Sequel carry-over": 12.7672830738,
-     "Lookalike": 13.3831607492
+     "Genre average": 12.8498395218,
+     "Sequel carry-over": 12.8229486434,
+     "Lookalike": 13.3815268314,
+     "Blend": 12.8444197767
     },
     "low": {
-     "Genre average": -0.1335634543,
-     "Sequel carry-over": -0.2076578263,
-     "Lookalike": -0.3020329431
+     "Genre average": -0.1259904908,
+     "Sequel carry-over": -0.2011840134,
+     "Lookalike": -0.3183821693,
+     "Blend": -0.256249037
     },
     "high": {
      "Genre average": 0.3668579992,
-     "Sequel carry-over": 0.3290589823,
-     "Lookalike": 0.2836357825
+     "Sequel carry-over": 0.3368988162,
+     "Lookalike": 0.2934800344,
+     "Blend": 0.316374568
     },
     "new_spearman": {
      "Genre average": 0.0990078624,
      "Sequel carry-over": 0.0990078624,
-     "Lookalike": 0.0943548387
+     "Lookalike": 0.0846774194,
+     "Blend": 0.1052419355
     },
     "sequel_spearman": {
      "Genre average": 0.1585309136,
-     "Sequel carry-over": 0.0474796974,
-     "Lookalike": 0.01234167
+     "Sequel carry-over": 0.0396748156,
+     "Lookalike": 0.0188372858,
+     "Blend": 0.0558622959
     },
     "rolling_spearman": {
-     "Genre average": 0.0818683475,
-     "Sequel carry-over": 0.2048255202,
-     "Lookalike": 0.0167354988
+     "Genre average": 0.0863070397,
+     "Sequel carry-over": 0.196932569,
+     "Lookalike": 0.0089798282,
+     "Blend": 0.1800162222
     },
     "rolling_seasons": {
      "Genre average": 20,
      "Sequel carry-over": 20,
-     "Lookalike": 20
+     "Lookalike": 20,
+     "Blend": 20
     }
    }
   },
   "t-28": {
    "main": "Blend",
    "used": "Blend",
-   "width": 11.774019387568185,
-   "coverage": 0.5961538461538461,
+   "width": 12.48046498007341,
+   "width_live": 18.746105587126593,
+   "coverage": 0.6346153846153846,
+   "coverage_by_part": {
+    "youtube": 0.3684210526315789,
+    "youtube_titles": 19,
+    "other": 0.7878787878787878,
+    "other_titles": 33
+   },
    "beats_baseline": true,
    "best_baseline": "Genre average",
    "table": {
@@ -78,13 +102,13 @@
      "Blend": 52
     },
     "spearman": {
-     "Genre average": 0.1151747173,
-     "Sequel carry-over": 0.0600401073,
-     "Global buzz (en+ja Wikipedia)": 0.0937483437,
+     "Genre average": 0.1193771628,
+     "Sequel carry-over": 0.0652761632,
+     "Global buzz (en+ja Wikipedia)": 0.0892841369,
      "India Wikipedia alone": null,
-     "India YouTube alone": -0.1338858043,
-     "Lookalike": -0.0062752129,
-     "Blend": 0.2651384176
+     "India YouTube alone": -0.1314129795,
+     "Lookalike": -0.0059763932,
+     "Blend": 0.2305607138
     },
     "top20": {
      "Genre average": 0.3,
@@ -96,31 +120,31 @@
      "Blend": 0.4
     },
     "mae": {
-     "Genre average": 12.7961377883,
-     "Sequel carry-over": 12.7672830738,
-     "Global buzz (en+ja Wikipedia)": 12.9640132206,
-     "India Wikipedia alone": 12.7974110739,
-     "India YouTube alone": 11.8129450305,
-     "Lookalike": 13.3831607492,
-     "Blend": 11.8617601093
+     "Genre average": 12.8498395218,
+     "Sequel carry-over": 12.8229486434,
+     "Global buzz (en+ja Wikipedia)": 13.007268049,
+     "India Wikipedia alone": 12.8331047742,
+     "India YouTube alone": 11.8087190037,
+     "Lookalike": 13.3815268314,
+     "Blend": 12.0354628822
     },
     "low": {
-     "Genre average": -0.1335634543,
-     "Sequel carry-over": -0.2076578263,
-     "Global buzz (en+ja Wikipedia)": -0.1504625836,
+     "Genre average": -0.1259904908,
+     "Sequel carry-over": -0.2011840134,
+     "Global buzz (en+ja Wikipedia)": -0.1555444955,
      "India Wikipedia alone": null,
-     "India YouTube alone": -0.4591835425,
-     "Lookalike": -0.3020329431,
-     "Blend": -0.0241739991
+     "India YouTube alone": -0.4569088245,
+     "Lookalike": -0.3183821693,
+     "Blend": -0.0795668493
     },
     "high": {
      "Genre average": 0.3668579992,
-     "Sequel carry-over": 0.3290589823,
-     "Global buzz (en+ja Wikipedia)": 0.3236433593,
+     "Sequel carry-over": 0.3368988162,
+     "Global buzz (en+ja Wikipedia)": 0.3199759631,
      "India Wikipedia alone": null,
-     "India YouTube alone": 0.2252919979,
-     "Lookalike": 0.2836357825,
-     "Blend": 0.5203711452
+     "India YouTube alone": 0.2258498525,
+     "Lookalike": 0.2934800344,
+     "Blend": 0.4896961409
     },
     "new_spearman": {
      "Genre average": 0.0990078624,
@@ -128,26 +152,26 @@
      "Global buzz (en+ja Wikipedia)": 0.2102198421,
      "India Wikipedia alone": null,
      "India YouTube alone": -0.2780932552,
-     "Lookalike": 0.0943548387,
-     "Blend": 0.3076612903
+     "Lookalike": 0.0846774194,
+     "Blend": 0.1447580645
     },
     "sequel_spearman": {
      "Genre average": 0.1585309136,
-     "Sequel carry-over": 0.0474796974,
+     "Sequel carry-over": 0.0396748156,
      "Global buzz (en+ja Wikipedia)": 0.0783671752,
      "India Wikipedia alone": null,
      "India YouTube alone": 0.1276224729,
-     "Lookalike": 0.01234167,
-     "Blend": 0.2962000806
+     "Lookalike": 0.0188372858,
+     "Blend": 0.3306268443
     },
     "rolling_spearman": {
-     "Genre average": 0.0818683475,
-     "Sequel carry-over": 0.2048255202,
-     "Global buzz (en+ja Wikipedia)": 0.1153210321,
+     "Genre average": 0.0863070397,
+     "Sequel carry-over": 0.196932569,
+     "Global buzz (en+ja Wikipedia)": 0.1179034873,
      "India Wikipedia alone": 0.1969143868,
-     "India YouTube alone": 0.1465644358,
-     "Lookalike": 0.0167354988,
-     "Blend": 0.3407825095
+     "India YouTube alone": 0.1474131811,
+     "Lookalike": 0.0089798282,
+     "Blend": 0.3176945333
     },
     "rolling_seasons": {
      "Genre average": 20,
@@ -163,8 +187,15 @@
   "t+7": {
    "main": "Blend",
    "used": "Blend",
-   "width": 9.256676408863138,
+   "width": 10.347721339708588,
+   "width_live": 12.71834180795863,
    "coverage": 0.6730769230769231,
+   "coverage_by_part": {
+    "youtube": 0.47368421052631576,
+    "youtube_titles": 19,
+    "other": 0.7878787878787878,
+    "other_titles": 33
+   },
    "beats_baseline": true,
    "best_baseline": "India YouTube alone",
    "table": {
@@ -178,13 +209,13 @@
      "Blend": 52
     },
     "spearman": {
-     "Genre average": 0.1151747173,
-     "Sequel carry-over": 0.0600401073,
-     "Global buzz (en+ja Wikipedia)": 0.3804097679,
+     "Genre average": 0.1193771628,
+     "Sequel carry-over": 0.0652761632,
+     "Global buzz (en+ja Wikipedia)": 0.3769440144,
      "India Wikipedia alone": null,
-     "India YouTube alone": 0.5220673627,
-     "Lookalike": -0.0062752129,
-     "Blend": 0.6896330923
+     "India YouTube alone": 0.5241020359,
+     "Lookalike": -0.0059763932,
+     "Blend": 0.6592388638
     },
     "top20": {
      "Genre average": 0.3,
@@ -193,34 +224,34 @@
      "India Wikipedia alone": 0.2,
      "India YouTube alone": 0.7,
      "Lookalike": 0.4,
-     "Blend": 0.8
+     "Blend": 0.7
     },
     "mae": {
-     "Genre average": 12.7961377883,
-     "Sequel carry-over": 12.7672830738,
-     "Global buzz (en+ja Wikipedia)": 11.6995133478,
-     "India Wikipedia alone": 12.8040391897,
-     "India YouTube alone": 9.520532156,
-     "Lookalike": 13.3831607492,
-     "Blend": 8.2859206127
+     "Genre average": 12.8498395218,
+     "Sequel carry-over": 12.8229486434,
+     "Global buzz (en+ja Wikipedia)": 11.7356351785,
+     "India Wikipedia alone": 12.8398247803,
+     "India YouTube alone": 9.540162011,
+     "Lookalike": 13.3815268314,
+     "Blend": 8.3595127607
     },
     "low": {
-     "Genre average": -0.1335634543,
-     "Sequel carry-over": -0.2076578263,
-     "Global buzz (en+ja Wikipedia)": 0.1059003882,
+     "Genre average": -0.1259904908,
+     "Sequel carry-over": -0.2011840134,
+     "Global buzz (en+ja Wikipedia)": 0.0977397219,
      "India Wikipedia alone": null,
      "India YouTube alone": 0.2619640597,
-     "Lookalike": -0.3020329431,
-     "Blend": 0.4995129932
+     "Lookalike": -0.3183821693,
+     "Blend": 0.4682394594
     },
     "high": {
      "Genre average": 0.3668579992,
-     "Sequel carry-over": 0.3290589823,
-     "Global buzz (en+ja Wikipedia)": 0.5856213176,
+     "Sequel carry-over": 0.3368988162,
+     "Global buzz (en+ja Wikipedia)": 0.5830231001,
      "India Wikipedia alone": null,
-     "India YouTube alone": 0.7153550784,
-     "Lookalike": 0.2836357825,
-     "Blend": 0.8369823216
+     "India YouTube alone": 0.7176060714,
+     "Lookalike": 0.2934800344,
+     "Blend": 0.8045236097
     },
     "new_spearman": {
      "Genre average": 0.0990078624,
@@ -228,26 +259,26 @@
      "Global buzz (en+ja Wikipedia)": 0.3178573288,
      "India Wikipedia alone": null,
      "India YouTube alone": 0.4704845988,
-     "Lookalike": 0.0943548387,
-     "Blend": 0.6459677419
+     "Lookalike": 0.0846774194,
+     "Blend": 0.4995967742
     },
     "sequel_spearman": {
      "Genre average": 0.1585309136,
-     "Sequel carry-over": 0.0474796974,
+     "Sequel carry-over": 0.0396748156,
      "Global buzz (en+ja Wikipedia)": 0.390461013,
      "India Wikipedia alone": null,
      "India YouTube alone": 0.5709023583,
-     "Lookalike": 0.01234167,
-     "Blend": 0.6820396592
+     "Lookalike": 0.0188372858,
+     "Blend": 0.716466423
     },
     "rolling_spearman": {
-     "Genre average": 0.0818683475,
-     "Sequel carry-over": 0.2048255202,
-     "Global buzz (en+ja Wikipedia)": 0.3580983495,
+     "Genre average": 0.0863070397,
+     "Sequel carry-over": 0.196932569,
+     "Global buzz (en+ja Wikipedia)": 0.3526588918,
      "India Wikipedia alone": 0.2277608289,
-     "India YouTube alone": 0.4928473082,
-     "Lookalike": 0.0167354988,
-     "Blend": 0.6299040214
+     "India YouTube alone": 0.4915720613,
+     "Lookalike": 0.0089798282,
+     "Blend": 0.6083596228
     },
     "rolling_seasons": {
      "Genre average": 20,

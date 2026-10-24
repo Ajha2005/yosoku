@@ -1,13 +1,13 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=7";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=7";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=7";
-import { createDetail, countUp } from "./detail.js?v=7";
-import { renderGuide } from "./guide.js?v=7";
-import { renderBusiness } from "./business.js?v=7";
-import { showTip, hideTip } from "./tip.js?v=7";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES } from "./content.js?v=7";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=9";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=9";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=9";
+import { createDetail, countUp } from "./detail.js?v=9";
+import { renderGuide } from "./guide.js?v=9";
+import { renderBusiness } from "./business.js?v=9";
+import { showTip, hideTip } from "./tip.js?v=9";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=9";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -219,11 +219,14 @@ function renderControls() {
   });
 }
 
-function cardHTML(t, i) {
+const movedIds = () => new Set((app.daily?.alerts || []).map((a) => a.anilist_id));
+
+function cardHTML(t, i, moved = new Set()) {
   const f = forecastOf(t, state.moment), v = VERDICTS[f.verdict];
   return `<a class="card v-${v.cls}" href="#/title/${t.anilist_id}/${encodeURIComponent(state.moment)}" data-id="${t.anilist_id}" style="--i:${Math.min(i, 18)}">
     ${posterHTML(t, coverOf(t.anilist_id))}
     <span class="vtag">${verdictIcon(f.verdict)}${esc(f.verdict)}</span>
+    ${moved.has(t.anilist_id) ? `<span class="moved-tag" title="The daily forecast has left the range of its last verdict">Moved</span>` : ""}
     <span class="card-info">
       <span class="card-title">${esc(t.name)}</span>
       <span class="card-sub">${esc(t.season)} · ${esc(t.format)}</span>
@@ -253,11 +256,15 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
 
   const m = MOMENTS[state.moment];
   $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>${
-    state.group === "upcoming" ? sealLine() : ""}`;
+    state.group === "upcoming" ? dailyLine() + sealLine() : ""}`;
 
-  const list = visibleTitles();
+  const alerts = state.group === "upcoming" ? alertItems() : "";
+  $("#alerts").innerHTML = alerts;
+  $("#alerts").hidden = !alerts;
+
+  const list = visibleTitles(), moved = state.group === "upcoming" ? movedIds() : new Set();
   $("#grid").classList.toggle("still", keepFocus);
-  $("#grid").innerHTML = list.slice(0, state.shown).map(cardHTML).join("");
+  $("#grid").innerHTML = list.slice(0, state.shown).map((t, i) => cardHTML(t, i, moved)).join("");
   const left = list.length - state.shown;
   $("#more").hidden = left <= 0;
   if (left > 0) $("#more button").textContent = `Show ${Math.min(PAGE, left)} more · ${left} left`;
@@ -287,7 +294,22 @@ function initTilt() {
 
 // ---------------------------------------------------------------- track record
 
-let scatterObserver;
+let scatterObserver, clockObserver;
+
+/** The decision clock in plain words, read from the rolling seasons (many more titles than 2024 alone). */
+function clockLead(days) {
+  const timed = days.filter((d) => d.day !== "cold" && Number.isFinite(d.rolling));
+  const pre = timed.filter((d) => d.day < 0), cold = days.find((d) => d.day === "cold"), t7 = days.find((d) => d.stage === "t+7");
+  if (pre.length < 2 || timed.length === pre.length) return "";
+  const first = pre[0], last = pre[pre.length - 1];
+  const step = timed.slice(1).map((d, i) => ({ from: timed[i], to: d, gain: d.rolling - timed[i].rolling })).sort((a, b) => b.gain - a.gain)[0];
+  const day = (d) => (d.day === 0 ? "premiere day" : `day ${dayText(d.day)}`);
+  return `Over ${esc(first.seasons)} seasons of backtests, a forecast made ${-first.day} days before the Japanese premiere ranks titles at
+    <b>${fixed(first.rolling, 2)}</b> and one made ${-last.day} days before at <b>${fixed(last.rolling, 2)}</b>${cold ? ` (cold, with no buzz: ${fixed(cold.rolling, 2)})` : ""}:
+    ${last.rolling - first.rolling < 0.1 ? "before launch, waiting barely helps." : "the forecast sharpens as launch nears."}
+    The biggest step comes between ${day(step.from)} and ${day(step.to)}, from ${fixed(step.from.rolling, 2)} to <b>${fixed(step.to.rolling, 2)}</b>.
+    ${cold && t7 && Number.isFinite(cold.width) && Number.isFinite(t7.width) ? `The 80% range narrows from ±&nbsp;${round(cold.width)} points at Cold to ±&nbsp;${round(t7.width)} at T+7.` : ""}`;
+}
 
 function renderRecord() {
   const host = $("#record-body");
@@ -311,14 +333,22 @@ function renderRecord() {
     return `<div class="tile tile-${VERDICTS[verdict].cls}"><span class="tile-label">${verdictIcon(verdict)}${verdict}</span><b>${round(mid)}</b><span class="tile-note">median actual index · ${part.length} title${part.length > 1 ? "s" : ""}</span></div>`;
   }).join("");
 
-  const t = info?.table, used = info?.used ?? info?.main;
+  const t = info?.table, used = info?.used ?? info?.main, clock = app.data.clock;
   const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
+  // Where the range missed: the 2024 titles whose index includes YouTube were picked by how popular they are today.
+  const split = info?.coverage_by_part;
+  const rangeNote = split?.youtube_titles && split?.other_titles ? `<p class="note range-note">The range held for
+      <b>${pct(split.other)}</b> of the ${esc(split.other_titles)} titles whose index has no YouTube part and <b>${pct(split.youtube)}</b> of the
+      ${esc(split.youtube_titles)} that have one. YouTube comments were collected only for the titles most popular on AniList today, so the 2024 ones
+      are mostly hits, and they beat their forecasts. Every upcoming title gets YouTube data, so its range is set from those titles' misses:
+      ± ${fixed(lines.range_half_width_live, 0)} points at ${esc(MOMENTS[moment].label)}.</p>` : "";
   const score = info ? `
     <div class="scorecard">
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[used], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
       <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[used]) ? pct(t.top20[used]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
     </div>
+    ${rangeNote}
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
       <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
       <span>Checked on the 2024 titles, which the model never saw in training.${used !== info.main ? ` So at this stage "${esc(used)}" makes the forecasts and verdicts; the closest past titles still come from our model.` : ""}</span></p>` : "";
@@ -336,12 +366,22 @@ function renderRecord() {
       <div class="record-side">${score}<div class="tiles">${medians}</div></div>
     </div>
     ${info ? `<div class="panel models"><h2>Our model against simple rules</h2>${modelBars(info)}
-      <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}`;
+      <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}
+    ${clock ? `<div class="panel clock-panel"><h2>When will we know?</h2>
+      <p class="lead-sm">${clockLead(clock)}</p>
+      <div id="clock" class="scatter-host"></div>
+      <p class="st-key ck-key" aria-hidden="true"><span><i class="ck-k-line"></i>2024 titles, 95% interval shaded</span><span><i class="ck-k-roll"></i>Average of the rolling seasons</span><span><i class="ck-k-now"></i>Nowcast: inputs inside the 28 days measured</span></p>
+      <p class="note">The same model refitted for each day with only the data dated before it, so you can see how much a forecast made that day can be trusted: a licence is signed months before the premiere, a dub is ordered weeks after it. Hover a point for its numbers. Verdicts are still made only at the three stages.</p></div>` : ""}`;
 
   const draw = () => scatter($("#scatter"), rows, lines, MOMENTS[moment].label, state.hidden, (id) => { location.hash = `#/title/${id}/${encodeURIComponent(moment)}`; });
   scatterObserver?.disconnect();
   scatterObserver = new ResizeObserver(() => draw());
   scatterObserver.observe($("#scatter"));
+  clockObserver?.disconnect();
+  if (clock) {
+    clockObserver = new ResizeObserver(() => clockChart($("#clock"), clock));
+    clockObserver.observe($("#clock"));
+  }
 
   $("#rec-moment").addEventListener("click", (e) => {
     const b = e.target.closest("[data-moment]");
@@ -388,7 +428,38 @@ function sealLine() {
     Check it with <code>sha256sum</code>; when they air, we will be scored against it.</span>`;
 }
 
+/** The daily job's last run (yosoku/daily.py): when, how many titles it forecast, and how many moved. */
+function dailyLine() {
+  const d = app.daily;
+  if (!d?.date) return "";
+  const waiting = d.before_buzz ? `, ${esc(d.before_buzz)} of them still before any buzz` : "";
+  const moved = new Set(d.alerts.map((a) => a.anilist_id)).size;
+  return `<span class="seal-line daily-line"><b>Forecast again every day, last on ${esc(formatDate(d.date))}.</b>
+    ${esc(d.in_play)} titles in play${waiting}. ${moved
+      ? `${moved} ${moved > 1 ? "have" : "has"} moved out of the range of ${moved > 1 ? "their" : "its"} last verdict, listed below.`
+      : "None has moved out of the range of its last verdict."}</span>`;
+}
+
+/** The daily job's alerts, one line each, linking to the title's sheet. */
+function alertItems() {
+  return (app.daily?.alerts || []).map((a) => `<li><a href="#/title/${encodeURIComponent(a.anilist_id)}">${esc(a.name)}</a>
+    <small>day ${esc(dayText(a.day))}</small> ${esc(a.text)}</li>`).join("");
+}
+
 // ---------------------------------------------------------------- method
+
+/** How the project keeps up as data arrives every day: what freezes when, and what keeps the record honest. */
+function staysCurrent() {
+  return `<div class="scorecard-wrap reveal">
+      <h2>Keeping up as data arrives every day</h2>
+      <p class="lead-sm">Most of the data never changes again. A title's buzz windows close a week after its Japanese premiere,
+        its India Demand Index after 28 days and its Netflix weeks after 90. So each day only the titles still in play are
+        collected and forecast again: the daily work grows with the season, not with the archive.</p>
+      <ol class="steps">${STAYS_CURRENT.map((s, i) => `<li><span class="pn">${String(i + 1).padStart(2, "0")}</span><span><b>${esc(s.title)}</b>${esc(s.body)}</span></li>`).join("")}</ol>
+      <h3>What keeps the record honest as it grows</h3>
+      <ul class="notused">${KEPT_HONEST.map((n) => `<li><b>${esc(n.name)}</b><span>${esc(n.why)}</span></li>`).join("")}</ul>
+    </div>`;
+}
 
 function scorecard() {
   const src = app.data.sources;
@@ -447,7 +518,7 @@ function forecastSteps() {
     const th = app.data.thresholds[m], rule = RULE_NOTES[th.method];
     const by = rule ? `<b>Simple rule: ${esc(th.method)}</b><small>${esc(rule)}; our model did not beat it on 2024</small>`
       : `<b>Our model (${esc(th.method === "Blend" ? "Blend" : "closest past titles")})</b><small>beat every simple rule on 2024</small>`;
-    return `<tr><th scope="row">${MOMENTS[m].label}<small>${esc(MOMENTS[m].long)}</small></th><td>${by}</td><td>± ${fixed(th.range_half_width, 0)} points</td><td>${esc(th.launch_line)} / ${esc(th.hold_line)}</td></tr>`;
+    return `<tr><th scope="row">${MOMENTS[m].label}<small>${esc(MOMENTS[m].long)}</small></th><td>${by}</td><td>± ${fixed(th.range_half_width, 0)} points<small>± ${fixed(th.range_half_width_live, 0)} for titles not released yet</small></td><td>${esc(th.launch_line)} / ${esc(th.hold_line)}</td></tr>`;
   }).join("");
   return `<div class="scorecard-wrap reveal">
       <h2>From signals to a verdict</h2>
@@ -503,6 +574,7 @@ function renderMethod() {
     </div>
     ${forecastSteps()}
     ${indexChecks()}
+    ${staysCurrent()}
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
     ${scorecard()}
     ${signalWorth()}
@@ -579,7 +651,9 @@ async function boot() {
   app.covers = loaded.covers;
   app.guide = loaded.guide;
   app.seal = loaded.seal;
+  app.daily = loaded.daily;
   if (app.data.mock) $("#mock-banner").hidden = false;
+  if (app.data.generated) $("#asof").textContent = `Forecasts as of ${formatDate(app.data.generated)}.`;
 
   detail = createDetail(app, { requestClose });
   const firstGroup = Object.keys(GROUPS).find((g) => groupTitles(g).length);

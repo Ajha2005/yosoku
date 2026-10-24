@@ -12,6 +12,9 @@ Unreleased titles for live forecasts go in their own folder, so they never mix
 into the training data; pass the same --data-dir to every later step:
 
     python collectors/collect_titles.py --data-dir data/upcoming --start-year 2027 --end-year 2027 --seasons WINTER
+
+Rerun it (yosoku/daily.py does, daily) to pick up announced start dates; with --keep, a title already in
+titles.csv that has slipped out of its season's top --per-season stays in, so its forecasts can still be scored.
 """
 
 import argparse
@@ -19,7 +22,7 @@ import html
 import re
 import time
 
-from common import add_data_dir_argument, data_file, request_json, use_data_dir, write_csv
+from common import add_data_dir_argument, data_file, read_csv, request_json, use_data_dir, write_csv
 
 ANILIST_URL = "https://graphql.anilist.co"
 SEASONS = ["WINTER", "SPRING", "SUMMER", "FALL"]
@@ -124,6 +127,8 @@ def main():
     parser.add_argument("--per-season", type=int, default=50, help="keep this many of each season's most popular titles")
     parser.add_argument("--seasons", nargs="+", choices=SEASONS, default=SEASONS, metavar="SEASON",
                         help="only these seasons of each year: WINTER SPRING SUMMER FALL (default: all four)")
+    parser.add_argument("--keep", action="store_true",
+                        help="also keep the titles already in titles.csv that are no longer in the top --per-season")
     add_data_dir_argument(parser)
     args = parser.parse_args()
     use_data_dir(args.data_dir, args.market)
@@ -135,6 +140,11 @@ def main():
             print(f"{season} {year}: {len(season_rows)} titles")
             rows += season_rows
 
+    if args.keep and data_file("titles.csv").exists():
+        found = {str(row["anilist_id"]) for row in rows}
+        kept = [row for row in read_csv(data_file("titles.csv")) if row["anilist_id"] not in found]
+        rows += kept
+        print(f"Kept {len(kept)} titles from the earlier list that are no longer in the top {args.per_season}")
     write_csv(data_file("titles.csv"), rows, FIELDS)
     print(f"Saved {len(rows)} titles to {data_file('titles.csv')}")
 

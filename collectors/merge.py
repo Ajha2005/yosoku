@@ -14,6 +14,12 @@ letters, or naming India); yt_share_<hub> is the share pointing to each language
 yt_dub_share the share of the Indian ones asking for or about an Indian-language dub. If
 comment_languages.csv exists (collectors/detect_languages.py), IndicLID helps find Hinglish.
 
+All of those come from youtube_comment_daily.csv: comments counted per title, video and day, with
+no text. It is rebuilt from youtube_comments.csv whenever the comment text is here, and read as it
+is when it is not, so the text never has to be shared or kept for the pipeline to run. Beside it,
+youtube_ask_daily.csv counts the comments asking for a dub (by language) or for where to watch, for
+the Demand guide; it is not a model input.
+
 A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
 Netflix published India charts. Keep the two apart in the India Demand Index.
@@ -29,7 +35,7 @@ import argparse
 import pandas as pd
 
 from common import add_data_dir_argument, current_market, data_file, read_titles, use_data_dir
-from india_signals import HUBS, classify, indic_flags
+from india_signals import COUNTS, HUBS, classify, daily_asks, daily_counts, indic_flags
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 # Reddit also gets "early", the days before the T-28 forecast moment (see docs/decisions.md).
@@ -38,6 +44,8 @@ GLOBAL_WIKI_LANGS = ["en", "ja"]  # then the market's languages (India: hi, ta, 
 NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
 NETFLIX_DAYS = 90
 OUT_CSV = "dataset.csv"
+COUNTS_CSV = "youtube_comment_daily.csv"
+ASKS_CSV = "youtube_ask_daily.csv"  # what Indian fans ask for, by day (the Demand guide; not a model input)
 
 
 def load(name):
@@ -87,6 +95,19 @@ def netflix(titles):
     })
 
 
+def comment_counts():
+    """Daily comment counts (india_signals.daily_counts): rebuilt and saved from the comment text if it is here,
+    with the daily asks beside them (india_signals.daily_asks)."""
+    if not data_file("youtube_comments.csv").exists():
+        return load(COUNTS_CSV)
+    comments = load("youtube_comments.csv")
+    found = classify(comments["text"], indic_flags(comments, load("comment_languages.csv")))
+    counts = daily_counts(comments, found=found)
+    counts.to_csv(data_file(COUNTS_CSV), index=False, encoding="utf-8-sig")
+    daily_asks(comments, found=found).to_csv(data_file(ASKS_CSV), index=False, encoding="utf-8-sig")
+    return counts
+
+
 def youtube(titles):
     videos = load("youtube_videos.csv")
     if videos is None:
@@ -98,32 +119,27 @@ def youtube(titles):
         first = top[top["query"].str.endswith(suffix)].drop_duplicates("anilist_id").set_index("anilist_id")
         out[f"yt_{kind}_views"] = first["views"].reindex(titles.index)
 
-    comments = load("youtube_comments.csv")
-    if comments is None:
+    counts = comment_counts()
+    if counts is None:
         return out
     # A title whose videos have comments but none in the file was not collected (quota ran out): unknown, not 0.
     has_comments = videos.groupby("anilist_id")["comments"].sum().reindex(titles.index).fillna(0) > 0
-    searched = searched & (titles.index.isin(comments["anilist_id"]) | ~has_comments.to_numpy())
+    searched = searched & (titles.index.isin(counts["anilist_id"]) | ~has_comments.to_numpy())
     start = pd.to_datetime(titles["start_date"])
-    published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
-    comments["days_from_start"] = (published - comments["anilist_id"].map(start)).dt.days
-    comments["one"] = 1
-    found = classify(comments["text"], indic_flags(comments, load("comment_languages.csv")))
-    comments["india"] = found["india"].astype(int)
-    for window, count in window_totals(comments, "one", "sum", titles.index).items():
+    counts["days_from_start"] = (pd.to_datetime(counts["date"]) - counts["anilist_id"].map(start)).dt.days
+    for window, count in window_totals(counts, "n", "sum", titles.index).items():
         out[f"yt_comments_{window}"] = count.fillna(0).where(searched)
     # Comments by people in India: Indian scripts, Hinglish or naming India (see india_signals.py).
-    for window, count in window_totals(comments, "india", "sum", titles.index).items():
+    for window, count in window_totals(counts, "india", "sum", titles.index).items():
         out[f"yt_india_{window}"] = count.fillna(0).where(searched)
-    by_title = found.groupby(comments["anilist_id"])
-    out["yt_share_india"] = by_title["india"].mean().reindex(titles.index)
+    by_title = counts.groupby("anilist_id")[COUNTS].sum()
+    out["yt_share_india"] = (by_title["india"] / by_title["n"]).reindex(titles.index)
     # Of the Indian comments, the share asking for or about a Hindi, Tamil or other Indian-language dub.
-    india_count = by_title["india"].sum()
-    out["yt_dub_share"] = (by_title["dub_ask"].sum() / india_count.where(india_count > 0)).reindex(titles.index)
+    out["yt_dub_share"] = (by_title["dub_ask"] / by_title["india"].where(by_title["india"] > 0)).reindex(titles.index)
     for hub in HUBS:
-        out[f"yt_share_{hub}"] = by_title[hub].mean().reindex(titles.index)
+        out[f"yt_share_{hub}"] = (by_title[hub] / by_title["n"]).reindex(titles.index)
     # How many comments the regional view rests on: those pointing to at least one language hub.
-    out["yt_hub_comments"] = found[list(HUBS)].any(axis=1).groupby(comments["anilist_id"]).sum().reindex(titles.index)
+    out["yt_hub_comments"] = by_title["any_hub"].reindex(titles.index)
     return out
 
 

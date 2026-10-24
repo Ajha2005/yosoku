@@ -2,13 +2,14 @@
 // and the India-flagged trailer comments. Built for anyone deciding where demand lies, including those whose own title
 // is unlikely to work: they can describe it and see how similar anime fared and what has worked nearby.
 
-import { esc, pct, round, clamp, titleCase, formatDate } from "./data.js?v=7";
-import { posterHTML } from "./art.js?v=7";
-import { regionMap, bindRegions } from "./charts.js?v=7";
-import { showTip, hideTip } from "./tip.js?v=7";
+import { esc, pct, round, clamp, titleCase, formatDate } from "./data.js?v=9";
+import { posterHTML } from "./art.js?v=9";
+import { regionMap, bindRegions } from "./charts.js?v=9";
+import { showTip, hideTip } from "./tip.js?v=9";
 
 const MIN_TITLES = 8;       // a rate over fewer titles than this says nothing
 const MIN_COMMENTS = 1000;  // likewise for the share of comments that came from India
+const ASKS_SHOWN = 12;      // titles in the "What India is asking for" list
 
 const FORMATS = { TV: "TV", TV_SHORT: "TV short", MOVIE: "Movie", ONA: "Web (ONA)", OVA: "OVA", SPECIAL: "Special" };
 const audienceName = (a) => (a === "Not tagged" ? "No audience tag" : a);
@@ -109,7 +110,50 @@ export function renderGuide(app, host) {
         Indian-language Wikipedia pages show the same thin picture: Hindi pages drew views for ${plural(wiki.Hindi.titles, "title")}, Tamil for ${wiki.Tamil.titles}, Telugu for ${wiki.Telugu.titles}.</p>
     </section>`;
 
-  // ------------------------------------------------------------ 4. check your title
+  // ------------------------------------------------------------ 4. what India is asking for
+  const A = G.asks;
+  const asking = A?.titles.length ? (() => {
+    const top = A.titles.slice(0, ASKS_SHOWN), most = top[0].asks;
+    const langs = Object.entries(A.dub).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+    const item = (r, i) => {
+      const what = [...Object.entries(r.dub).sort((a, b) => b[1] - a[1]).map(([lang, n]) => `${lang} dub ${n}`),
+        r.watch ? `when or where to watch ${r.watch}` : ""].filter(Boolean).join(" · ");
+      return `<li class="ask" style="--i:${i}">
+        <div class="ask-art">${poster(r)}</div>
+        <div class="ask-body">
+          <p class="ask-name">${esc(r.name)}<small>${esc(r.year)}</small></p>
+          ${r.jp ? `<p class="ask-jp" lang="ja">${esc(r.jp)}</p>` : ""}
+          <span class="ask-track" aria-hidden="true"><i style="width:${(100 * r.asks / most).toFixed(1)}%"></i></span>
+          <p class="ask-meta">${esc(what)}</p>
+          <p class="ask-meta">${r.recent ? `${esc(r.recent)} in the last year · ` : ""}last asked ${esc(formatDate(r.last))}${r.india
+            ? ` · ${esc(plural(r.india, "Indian comment"))} on its trailers` : ""}</p>
+        </div>
+        <span class="ask-n"><b>${esc(r.asks)}</b>${r.asks === 1 ? "ask" : "asks"}</span>
+      </li>`;
+    };
+    return `
+    <section class="g-block reveal" aria-labelledby="g-asks">
+      <h2 id="g-asks">What India is asking for</h2>
+      <p class="g-sub">Indian fans asking, in trailer comments, for a dub in their language or for when and where they can watch: who is asking, title by title.</p>
+      <div class="g-stats">
+        <div class="tile"><span class="tile-label">Comments asking</span><b>${A.comments.toLocaleString("en-GB")}</b>
+          <span class="tile-note">on ${A.titles.length} titles, up to ${esc(formatDate(A.as_of))}</span></div>
+        <div class="tile"><span class="tile-label">For an Indian-language dub</span><b>${A.dub_asks.toLocaleString("en-GB")}</b>
+          <span class="tile-note">${esc(langs.map(([lang, n]) => `${lang} ${n.toLocaleString("en-GB")}`).join(" · "))}</span></div>
+        <div class="tile"><span class="tile-label">When or where to watch</span><b>${A.watch.toLocaleString("en-GB")}</b>
+          <span class="tile-note">"india me kab aayega", "not available in india"</span></div>
+      </div>
+      <ol class="asks">${top.map(item).join("")}</ol>
+      ${A.titles.length > ASKS_SHOWN ? `<p class="note">${esc(plural(A.titles.length - ASKS_SHOWN, "more title"))} with fewer asks.</p>` : ""}
+      <p class="note">Counted on the trailers of the 200 titles we collected YouTube comments for, the most popular on AniList today. An ask
+        is counted for the title whose trailer it was posted on, and a few name another title; about 9 in 10 of the "when or where" comments
+        are asks, the rest mention a release in India. Not joined yet: where each title can already be watched in India, and in which
+        languages. Some have since been dubbed or released there. With that availability data, this becomes the list of titles India
+        asks for and cannot get.</p>
+    </section>`;
+  })() : "";
+
+  // ------------------------------------------------------------ 5. check your title
   const count = (key, valueOf) => {
     const tally = new Map();
     for (const t of onNetflix) for (const v of [].concat(valueOf(t))) tally.set(v, (tally.get(v) || 0) + 1);
@@ -134,7 +178,7 @@ export function renderGuide(app, host) {
       <div class="ck-out" id="g-check-out" aria-live="polite"></div>
     </section>`;
 
-  host.innerHTML = headline + hits + patterns + where + checker;
+  host.innerHTML = headline + hits + patterns + where + asking + checker;
 
   // ------------------------------------------------------------ the weekly strip
   const weekly = host.querySelector("#g-weekly");

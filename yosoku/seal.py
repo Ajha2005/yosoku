@@ -66,6 +66,25 @@ def ledger_rows(out_dir):
             for r in rows]
 
 
+def sealed_forecasts(out_dir):
+    """{anilist_id: {date, file, methods, lines, forecasts}}: each title's forecasts as last sealed.
+
+    Seals are read in ledger order, so a later seal of the same title wins; a file that no longer matches its
+    fingerprint is skipped (and reported), so the site never shows numbers anyone could tell apart from the seal."""
+    found = {}
+    for r in ledger_rows(out_dir):
+        path = out_dir / SEALED / r["file"]
+        if not path.exists() or sha256(path) != r["sha256"]:
+            print(f"Skipped {r['file']}: missing or not matching its fingerprint (python -m yosoku.seal --verify)")
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        lines = {m: {k: v[k] for k in ("launch_line", "hold_line")} for m, v in payload["thresholds"].items()}
+        for t in payload["titles"]:
+            found[t["anilist_id"]] = {"date": r["date"], "file": r["file"], "methods": payload["methods"], "lines": lines,
+                                      "forecasts": t["forecasts"]}
+    return found
+
+
 def seal(out_dir, today):
     predictions = json.loads((out_dir / "predictions" / "predictions.json").read_text(encoding="utf-8"))
     if predictions.get("mock"):

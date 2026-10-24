@@ -15,7 +15,10 @@ Most Indian fans comment in English or in Hinglish typed in Latin letters, not i
              and it mixes up which Indian language Hinglish is. Only its "Indian or not" is used.
 
 dub_ask marks comments asking for or about an Indian-language dub ("hindi dub kab aayega", "please dub in
-tamil"). Comments with a link are left out: those are mostly channels announcing a dub, not fans asking.
+tamil"), and dub_<hub> the language they name. watch_ask marks Indian comments asking when or where they can
+watch the title ("india me kab aayega", "where can I watch this in hindi", "not available in india"); about 9 in
+10 of them are, in a sample, the rest mention a release in India without asking. Comments with a link are left
+out of both: those are mostly channels announcing a dub, not fans asking.
 
 Hubs (for the regional view): a script, the language's name ("tamil dub pls") or, for Hindi,
 Hinglish. A comment can point to no hub (English mentioning India) or to more than one.
@@ -44,14 +47,26 @@ LID_WORDS = (r"hoga|hogi|honge|hoge|liya|kiya|diya|badiya|badhiya|kha|kahan|kaha
 LID_MIN_PROB = 0.5
 LID_MIN_WORDS = 3  # Latin words; shorter comments ("wow", "0:59") get confident but random labels
 LANGS = r"hindi|tamil|telugu|bengali|bangla|kannada|malayalam|marathi"
-DUB = (rf"\b(?:{LANGS})\s*(?:dub|dubbed|dubbing|version|audio|me|mein|mai)\b"
-       rf"|\bdub(?:bed|bing)?\s+(?:in|me|mein|mai)\s+(?:{LANGS})\b")
+
+
+def dub_pattern(names):
+    """A comment asking for or about a dub in one of these languages."""
+    return (rf"\b(?:{names})\s*(?:dub|dubbed|dubbing|version|audio|me|mein|mai)\b"
+            rf"|\bdub(?:bed|bing)?\s+(?:in|me|mein|mai)\s+(?:{names})\b")
+
+
+DUB = dub_pattern(LANGS)
+WATCH = (r"\b(?:kab|when)\b.{0,40}\b(?:india|release|released|aayega|ayega|aaega|aega|aayegi|ayegi|aaegi|aegi|available)\b"
+         r"|\b(?:where|kahan|kaha|kidhar)\b.{0,30}\b(?:watch|dekh\w*)\b"
+         r"|\bavailable in india\b|\bnot available\b|\bindia (?:me|mein|mai|m|main) (?:kab|nahi|nhi)\b"
+         r"|\brelease (?:in|kar|karo|krdo|kardo) india\b|\b(?:netflix|crunchyroll|prime|jiocinema|hotstar) (?:pe|par|pr|me|mein) kab\b")
 MENTION = (r"india|indian|indians|hindi|marathi|tamil|telugu|bengali|bangla|kannada|malayalam|desi|"
            r"mumbai|delhi|bangalore|bengaluru|kolkata|chennai|hyderabad|pune|ahmedabad|jaipur|lucknow")
 
 
 def classify(text, indic=None):
-    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, dub_ask and one column per hub.
+    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, dub_ask, watch_ask, one column per
+    hub and one dub_<hub> per hub.
 
     `indic` (optional, same index) is True where IndicLID read the comment as an Indian language; see indic_flags.
     """
@@ -71,11 +86,48 @@ def classify(text, indic=None):
         out["hinglish"] |= out["lid"]
     out["mention"] = lower.str.contains(rf"\b(?:{MENTION})\b", regex=True)
     out["india"] = out["script"] | out["hinglish"] | out["mention"]
-    out["dub_ask"] = lower.str.contains(DUB, regex=True) & ~lower.str.contains("http", regex=False)
+    link = lower.str.contains("http", regex=False)
+    out["dub_ask"] = lower.str.contains(DUB, regex=True) & ~link
+    out["watch_ask"] = lower.str.contains(WATCH, regex=True) & ~link & out["india"]
     for hub, (_, names) in HUBS.items():
         out[hub] = scripts[hub] | lower.str.contains(rf"\b(?:{names})\b", regex=True)
+        out[f"dub_{hub}"] = out["dub_ask"] & lower.str.contains(dub_pattern(names), regex=True)
     out["hindi"] |= out["hinglish"]
     return out
+
+
+COUNTS = ["n", "india", "dub_ask", "any_hub", *HUBS]  # the columns of youtube_comment_daily.csv besides its keys
+ASKS = ["ask", "dub_ask", "watch_ask", *(f"dub_{hub}" for hub in HUBS)]  # youtube_ask_daily.csv; ask: either kind
+
+
+def day_keys(comments):
+    day = pd.to_datetime(comments["published_at"], utc=True).dt.strftime("%Y-%m-%d")
+    return pd.DataFrame({"anilist_id": comments["anilist_id"], "video_id": comments["video_id"], "date": day})
+
+
+def daily_counts(comments, languages=None, found=None):
+    """Comments per title, video and day (UTC): how many, and how many are Indian, ask for a dub or point to each hub.
+
+    Everything merge.py and the models read from the comments, without their text, so this file can be shared
+    and kept instead of youtube_comments.csv. `languages` as for indic_flags; `found`, classify's output, if it
+    has been computed already.
+    """
+    found = classify(comments["text"], indic_flags(comments, languages)) if found is None else found
+    flags = found[["india", "dub_ask", *HUBS]].astype(int).assign(any_hub=found[list(HUBS)].any(axis=1).astype(int), n=1)
+    return pd.concat([day_keys(comments), flags], axis=1).groupby(["anilist_id", "video_id", "date"], as_index=False)[COUNTS].sum()
+
+
+def daily_asks(comments, languages=None, found=None):
+    """Comments asking for a title, per title, video and day: a dub (by language) or where and when to watch it.
+
+    Only the days with an ask. The model does not read these: they are the Demand guide's list of what India is
+    asking for (yosoku/guide.py). Arguments as for daily_counts.
+    """
+    found = classify(comments["text"], indic_flags(comments, languages)) if found is None else found
+    flags = found[ASKS[1:]].assign(ask=found["dub_ask"] | found["watch_ask"])[ASKS].astype(int)
+    asked = flags["ask"] > 0
+    rows = pd.concat([day_keys(comments), flags], axis=1)[asked.to_numpy()]
+    return rows.groupby(["anilist_id", "video_id", "date"], as_index=False)[ASKS].sum()
 
 
 def indic_flags(comments, languages):

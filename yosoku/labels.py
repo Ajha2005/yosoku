@@ -13,6 +13,12 @@ rescaled exactly as for any other missing part:
 Each part is log-transformed and turned into a percentile rank among the titles that have it.
 The index averages the parts a title has, rescaling the weights; fewer than two parts, no label.
 
+The ranking pool is frozen: the first run writes the titles released by then to labels/reference_v1.csv,
+and every later title is placed among them without joining them. Collecting more titles therefore never
+moves an existing label (with a pool of all titles, adding the 2025 titles alone moved the 2019-2024 labels
+by about a point on average, up to three), and an upcoming title in --upcoming-dir is labelled on the same
+scale once its 28 days are over, so its sealed forecast can be scored.
+
     python -m yosoku.labels                   # writes labels/label_v1.csv and reports/label.md
 """
 
@@ -45,9 +51,43 @@ def raw_parts(titles):
     return parts
 
 
-def percentiles(parts):
-    """Each part as a 0-1 percentile rank after log1p, among the titles that have it."""
-    return np.log1p(parts).rank(pct=True)
+def youtube_part(titles):
+    """Boolean Series: the title's index includes the YouTube part, because its trailer comments were collected.
+
+    The daily job collects them for every title in play, so an upcoming title's index will include it. For past
+    titles they were collected only for the 200 most popular on AniList today, and a recent title has had less
+    time to become popular: those of 2024 are mostly hits that beat their forecasts.
+    """
+    if "yt_india_month1" not in titles:
+        return pd.Series(False, index=titles.index)
+    return titles["yt_india_month1"].notna()
+
+
+def percentiles(parts, reference=None):
+    """Each part as a 0-1 percentile rank after log1p, among the titles that have it.
+
+    With `reference` (anilist_ids), only those titles make up the ranking: they are ranked among themselves,
+    and every other title gets the rank it would have if it alone joined them.
+    """
+    logs = np.log1p(parts)
+    if reference is None:
+        return logs.rank(pct=True)
+    inside = logs.index.isin(reference)
+    placed = {}
+    for part in logs.columns:
+        pool = np.sort(logs.loc[inside, part].dropna().to_numpy())
+        x = logs.loc[~inside, part].to_numpy()
+        below, upto = np.searchsorted(pool, x, "left"), np.searchsorted(pool, x, "right")
+        # Its average rank among the pool plus itself, ties shared as pandas ranks them.
+        placed[part] = np.where(np.isnan(x), np.nan, (below + (upto - below + 2) / 2) / (len(pool) + 1))
+    others = pd.DataFrame(placed, index=logs.index[~inside])
+    return pd.concat([logs[inside].rank(pct=True), others]).reindex(logs.index)
+
+
+def load_reference(out_dir, version="v1"):
+    """anilist_ids of the frozen ranking pool (labels/reference_<version>.csv), or None before the first run."""
+    frame = read(out_dir / "labels" / f"reference_{version}.csv", required=False)
+    return None if frame is None else frame["anilist_id"]
 
 
 def index(ranks, weights=WEIGHTS):
@@ -132,14 +172,22 @@ def checks(labels, parts, ranks, data_dir):
             "box_office": box_office(labels["idi"], data_dir)}
 
 
-def build(titles):
-    """(labels DataFrame, raw parts, percentile ranks) for released titles."""
+def build(titles, reference=None):
+    """(labels DataFrame, raw parts, percentile ranks) for released titles, ranked among `reference` if given."""
     released = titles[titles["start"].notna() & (titles["start"] + pd.Timedelta(days=27) < pd.Timestamp.today())]
     parts = raw_parts(released)
-    ranks = percentiles(parts)
+    ranks = percentiles(parts, reference)
     labels = pd.DataFrame({"idi": index(ranks), "parts": ranks.notna().sum(axis=1)})
     labels = labels.join(ranks.add_prefix("p_")).join(parts.add_prefix("raw_"))
     return labels, parts, ranks
+
+
+def placed(titles, others, reference):
+    """Labels of the released titles in `others` that are not in `titles` (upcoming titles that have aired),
+    on the scale of the reference titles."""
+    new = others[~others.index.isin(titles.index)]
+    labels, _, _ = build(pd.concat([titles, new]), reference)
+    return labels[labels.index.isin(new.index)]
 
 
 def report(labels, parts, ranks, data_dir):
@@ -183,17 +231,28 @@ def report(labels, parts, ranks, data_dir):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_folder_arguments(parser)
+    parser.add_argument("--upcoming-dir", default="data/upcoming",
+                        help="unreleased titles, labelled on the same scale once their 28 days are over (skipped if missing)")
     parser.add_argument("--version", default="v1")
     args = parser.parse_args()
     data_dir, out_dir = folder(args.data_dir), folder(args.out_dir)
 
-    labels, parts, ranks = build(load_titles(data_dir))
+    titles = load_titles(data_dir)
+    reference = load_reference(out_dir, args.version)
+    labels, parts, ranks = build(titles, reference)
     text, passed = report(labels, parts, ranks, data_dir)
     (out_dir / "labels").mkdir(parents=True, exist_ok=True)
     (out_dir / "reports").mkdir(parents=True, exist_ok=True)
-    labels.to_csv(out_dir / "labels" / f"label_{args.version}.csv", encoding="utf-8-sig")
+    if reference is None:  # the first run freezes the ranking pool: the titles released by now
+        reference = labels.index.to_series()
+        reference.to_frame().to_csv(out_dir / "labels" / f"reference_{args.version}.csv", index=False, encoding="utf-8-sig")
+        print(f"Froze the ranking pool: {len(reference)} titles in labels/reference_{args.version}.csv")
+    upcoming_dir = folder(args.upcoming_dir)
+    aired = placed(titles, load_titles(upcoming_dir), reference) if (upcoming_dir / "titles.csv").exists() else labels.iloc[0:0]
+    pd.concat([labels, aired]).to_csv(out_dir / "labels" / f"label_{args.version}.csv", encoding="utf-8-sig")
     (out_dir / "reports" / "label.md").write_text(text, encoding="utf-8")
-    print(f"Labelled {labels['idi'].notna().sum()} of {len(labels)} released titles; gate G2 {'PASS' if passed else 'FAIL'}")
+    print(f"Labelled {labels['idi'].notna().sum()} of {len(labels)} released titles; gate G2 {'PASS' if passed else 'FAIL'}"
+          + (f"; {aired['idi'].notna().sum()} upcoming titles labelled after airing" if len(aired) else ""))
     print(f"Wrote labels/label_{args.version}.csv and reports/label.md")
 
 
