@@ -61,6 +61,18 @@ def test_reddit_features(fake):
     assert early.isna().any() and early.notna().any()  # titles that were not searched are blank, not zero
 
 
+def test_article_written_after_cutoff_is_blank(fake):
+    """An article with no views by the cutoff did not exist yet: its views are unknown, also when it appears later."""
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    late = wiki["anilist_id"].iloc[0]
+    wiki = wiki[~((wiki["anilist_id"] == late) & (wiki["lang"] == "en") & (wiki["days_from_start"] <= -29))]
+    features = feat.build(titles, wiki, comments, "t-28", genres)
+    assert np.isnan(features.loc[late, "wiki_en_early"])
+    assert features["wiki_en_early"].notna().sum() > len(titles) / 2
+
+
 def test_window_past_cutoff_is_refused():
     rows = pd.DataFrame({"anilist_id": [1], "days_from_start": [0], "views": [5]})
     with pytest.raises(ValueError):
@@ -112,6 +124,24 @@ def test_india_comments():
     assert found["india"].tolist() == [True, True, True, True, False, False]
     assert found["hindi"].tolist() == [True, False, False, True, False, False]
     assert found["tamil"].tolist() == [False, False, True, False, False, False]
+
+
+def test_indiclid_only_counts_with_hindi_words():
+    from yosoku.data import classify, indic_flags
+    comments = pd.DataFrame({"comment_id": ["a", "b", "c", "d"], "text": [
+        "Kab release hogi ye movie",       # Hinglish the word rules miss
+        "Qué llegue enero yaaa",           # Spanish that IndicLID calls Malayalam
+        "Download kha se hogi",            # Hinglish, but IndicLID was unsure
+        "Kab release hogi ye movie",       # same words, IndicLID says English
+    ]})
+    languages = pd.DataFrame({"comment_id": ["a", "b", "c", "d"],
+                              "language": ["hin_Latn", "mal_Latn", "asm_Latn", "eng_Latn"],
+                              "probability": [0.95, 0.97, 0.3, 0.9]})
+    assert classify(comments["text"])["india"].tolist() == [False] * 4
+    found = classify(comments["text"], indic_flags(comments, languages))
+    assert found["india"].tolist() == [True, False, False, False]
+    assert found["hindi"].tolist() == [True, False, False, False]
+    assert indic_flags(comments, None) is None
 
 
 def test_youtube_part_is_india_comments():
