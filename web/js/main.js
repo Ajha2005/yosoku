@@ -2,7 +2,7 @@
 
 import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=6";
 import { posterHTML, artSVG, startPetals } from "./art.js?v=6";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=6";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=6";
 import { createDetail, countUp } from "./detail.js?v=6";
 import { renderGuide } from "./guide.js?v=6";
 import { showTip, hideTip } from "./tip.js?v=6";
@@ -286,7 +286,22 @@ function initTilt() {
 
 // ---------------------------------------------------------------- track record
 
-let scatterObserver;
+let scatterObserver, clockObserver;
+
+/** The decision clock in plain words, read from the rolling seasons (many more titles than 2024 alone). */
+function clockLead(days) {
+  const timed = days.filter((d) => d.day !== "cold" && Number.isFinite(d.rolling));
+  const pre = timed.filter((d) => d.day < 0), cold = days.find((d) => d.day === "cold"), t7 = days.find((d) => d.stage === "t+7");
+  if (pre.length < 2 || timed.length === pre.length) return "";
+  const first = pre[0], last = pre[pre.length - 1];
+  const step = timed.slice(1).map((d, i) => ({ from: timed[i], to: d, gain: d.rolling - timed[i].rolling })).sort((a, b) => b.gain - a.gain)[0];
+  const day = (d) => (d.day === 0 ? "premiere day" : `day ${dayText(d.day)}`);
+  return `Over ${esc(first.seasons)} seasons of backtests, a forecast made ${-first.day} days before the Japanese premiere ranks titles at
+    <b>${fixed(first.rolling, 2)}</b> and one made ${-last.day} days before at <b>${fixed(last.rolling, 2)}</b>${cold ? ` (cold, with no buzz: ${fixed(cold.rolling, 2)})` : ""}:
+    ${last.rolling - first.rolling < 0.1 ? "before launch, waiting barely helps." : "the forecast sharpens as launch nears."}
+    The biggest step comes between ${day(step.from)} and ${day(step.to)}, from ${fixed(step.from.rolling, 2)} to <b>${fixed(step.to.rolling, 2)}</b>.
+    ${cold && t7 && Number.isFinite(cold.width) && Number.isFinite(t7.width) ? `The 80% range narrows from ±&nbsp;${round(cold.width)} points at Cold to ±&nbsp;${round(t7.width)} at T+7.` : ""}`;
+}
 
 function renderRecord() {
   const host = $("#record-body");
@@ -310,7 +325,7 @@ function renderRecord() {
     return `<div class="tile tile-${VERDICTS[verdict].cls}"><span class="tile-label">${verdictIcon(verdict)}${verdict}</span><b>${round(mid)}</b><span class="tile-note">median actual index · ${part.length} title${part.length > 1 ? "s" : ""}</span></div>`;
   }).join("");
 
-  const t = info?.table, used = info?.used ?? info?.main;
+  const t = info?.table, used = info?.used ?? info?.main, clock = app.data.clock;
   const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
   const score = info ? `
     <div class="scorecard">
@@ -335,12 +350,22 @@ function renderRecord() {
       <div class="record-side">${score}<div class="tiles">${medians}</div></div>
     </div>
     ${info ? `<div class="panel models"><h2>Our model against simple rules</h2>${modelBars(info)}
-      <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}`;
+      <p class="note">Average miss is how far a forecast was from the real India Demand Index, averaged over the 2024 titles. Top-20% hits is the share of the true top fifth that the method also ranked in its top fifth.</p></div>` : ""}
+    ${clock ? `<div class="panel clock-panel"><h2>When will we know?</h2>
+      <p class="lead-sm">${clockLead(clock)}</p>
+      <div id="clock" class="scatter-host"></div>
+      <p class="st-key ck-key" aria-hidden="true"><span><i class="ck-k-line"></i>2024 titles, 95% interval shaded</span><span><i class="ck-k-roll"></i>Average of the rolling seasons</span><span><i class="ck-k-now"></i>Nowcast: inputs inside the 28 days measured</span></p>
+      <p class="note">The same model refitted for each day with only the data dated before it, so you can see how much a forecast made that day can be trusted: a licence is signed months before the premiere, a dub is ordered weeks after it. Hover a point for its numbers. Verdicts are still made only at the three stages.</p></div>` : ""}`;
 
   const draw = () => scatter($("#scatter"), rows, lines, MOMENTS[moment].label, state.hidden, (id) => { location.hash = `#/title/${id}/${encodeURIComponent(moment)}`; });
   scatterObserver?.disconnect();
   scatterObserver = new ResizeObserver(() => draw());
   scatterObserver.observe($("#scatter"));
+  clockObserver?.disconnect();
+  if (clock) {
+    clockObserver = new ResizeObserver(() => clockChart($("#clock"), clock));
+    clockObserver.observe($("#clock"));
+  }
 
   $("#rec-moment").addEventListener("click", (e) => {
     const b = e.target.closest("[data-moment]");

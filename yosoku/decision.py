@@ -7,7 +7,9 @@ under the hold line, otherwise Test-market. The two lines start at 60 and 40 and
 Two extras go to the dashboard, both described rather than modelled: how past titles did by release
 window (the what-if), and how often fans of the closest past titles asked for an Indian-language dub.
 At a moment where the model did not beat the best simple rule (gate G4), that rule makes the forecasts;
-the lookalikes and the regional view still come from the model.
+the lookalikes and the regional view still come from the model. The 2024 backtest keeps the 80% range set
+before 2024; titles not released yet take it from every season known by now, the 2024 misses included.
+With reports/clock.json (python -m yosoku.clock), each 2024 title also gets its forecast day by day.
 
     python -m yosoku.decision             # 2024 backtest plus upcoming titles in data/upcoming/
     python -m yosoku.decision --final     # also the 2025 test titles (after evaluate --final)
@@ -24,7 +26,7 @@ import pandas as pd
 from yosoku import features as feat
 from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles
 from yosoku.evaluate import prepare
-from yosoku.labels import against_rest, build as build_labels, checks as label_checks
+from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
 from yosoku.models import baselines, forecast
 from yosoku.split import guard_test, split_of
 
@@ -200,14 +202,16 @@ def main():
     evaluation = json.loads(evaluation_file.read_text(encoding="utf-8"))
     ablation_file = out_dir / "reports" / "ablation.json"
     ablation = json.loads(ablation_file.read_text(encoding="utf-8")) if ablation_file.exists() else None
+    clock_file = out_dir / "reports" / "clock.json"  # the decision clock (python -m yosoku.clock), optional
+    clock = json.loads(clock_file.read_text(encoding="utf-8")) if clock_file.exists() else None
     split = split_of(titles)
     train = split.index[split == "train"].intersection(labels.index)
     validate = split.index[split == "validate"].intersection(labels.index)
     train_all = split.index[split.isin(["train", "validate"])].intersection(labels.index)
     test = split.index[split == "test"].intersection(labels.index)
 
-    label_table, parts, ranks = build_labels(titles)
-    sources = {"released": len(parts), "labelled": int(labels.notna().sum()),
+    label_table, parts, ranks = build_labels(titles, load_reference(out_dir))
+    sources = {"released": len(parts), "labelled": int(labels.index.isin(titles.index).sum()),
                "parts": {part: {"titles": int(r.titles), "pairs": int(r.pairs),
                                 "agreement": None if pd.isna(r.spearman) else round(float(r.spearman), 2)}
                          for part, r in against_rest(parts, ranks).iterrows()}}
@@ -237,8 +241,10 @@ def main():
         rule = None if used in ("Lookalike", "Blend") else used
         val = predict(moment, used, features[moment], titles, labels, train, validate)
         lines = tune(val["forecast"], labels.loc[validate], width)
+        # Titles not released yet get the range from every season known by now, the 2024 misses included.
+        live = info.get("width_live", width)
         thresholds[moment] = {"launch_line": lines[0], "hold_line": lines[1], "range_half_width": round(width, 1),
-                              "range_coverage": info["coverage"], "method": used}
+                              "range_half_width_live": round(live, 1), "range_coverage": info["coverage"], "method": used}
         groups = [("validation", val)]
         if args.final:
             guard_test(test, titles, final=True)
@@ -246,7 +252,7 @@ def main():
         if upcoming is not None:
             groups.append(("upcoming", predict(moment, used, features[moment], titles, labels, train_all, upcoming.index)))
         for group, out in groups:
-            for anilist_id, entry in entries(titles, labels, out, width, lines, rule).items():
+            for anilist_id, entry in entries(titles, labels, out, width if group == "validation" else live, lines, rule).items():
                 record = records.setdefault(anilist_id, title_info(titles, anilist_id, group, labels, args.today))
                 if moment in record["moments_available"]:
                     record["forecasts"][moment] = entry
@@ -258,12 +264,17 @@ def main():
             + ", ".join(f"{v} {counts.get(v, 0)}" for v in ("Launch", "Test-market", "Hold")) + " |")
     report += ["", "Gate G5: median index of Launch > Test-market > Hold at each moment. "
                "Thresholds are tuned on these same titles, so this table is optimistic; the 2025 test is the honest check."]
+    if clock:  # how each 2024 title's forecast would have moved, one value per clock day
+        for anilist_id, path in clock["titles"].items():
+            if int(anilist_id) in records:
+                records[int(anilist_id)]["trajectory"] = path
 
     payload = {
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
-        "sources": sources, "ablation": ablation, "label_checks": label_checks(label_table, parts, ranks, data_dir),
+        "sources": sources, "ablation": ablation, "clock": clock["days"] if clock else None,
+        "label_checks": label_checks(label_table, parts, ranks, data_dir),
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),

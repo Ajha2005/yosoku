@@ -74,6 +74,7 @@ def load_daily(data_dir, titles):
         comments["days_from_start"] = (published - comments["anilist_id"].map(titles["start"])).dt.days
         languages = read(data_dir / "comment_languages.csv", required=False)  # IndicLID, optional
         comments["india"] = classify(comments["text"], indic_flags(comments, languages))["india"].astype(int)
+        comments["n"] = 1  # comments per row
     return wiki, comments
 
 

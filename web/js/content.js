@@ -47,6 +47,7 @@ export const SCORECARD = [
 export const NOT_USED = [
   { name: "X / Twitter", why: "No usable free public API for historical posts." },
   { name: "AniList popularity and score", why: "Measured today, so they include how the show turned out: using them would be hindsight (leakage)." },
+  { name: "Whether a title was searched on YouTube", why: "Only the 200 most popular titles were, ranked by today's popularity, so the flag itself is hindsight. Their comment counts are used; the flag is not." },
   { name: "Merchandise and ticket sales", why: "No public source by title and country." },
   { name: "Reddit", why: "A collector is built (Arctic Shift archive), but no Reddit data is in the current forecasts. It is global rather than India-specific, so it would only ever be a model input, never part of the index." },
 ];
@@ -54,7 +55,7 @@ export const NOT_USED = [
 // How a forecast becomes a verdict, for the Method page. The per-stage table under it is read from the data.
 export const FORECAST_STEPS = [
   { title: "Closest past titles", body: "Find the 10 past titles most like this one by genres, tags, source, format, studio, audience and synopsis words, and average their India Demand Index, closest counting most." },
-  { title: "Blend", body: "From T−28 on, a linear model weighs that average with the stage's buzz (Wikipedia views, trailer comments) and how the prequel did in India. Each forecast lists what moved it, in index points." },
+  { title: "Blend", body: "A linear model weighs that average with genre, format, source and audience, the stage's buzz (none at Cold; Wikipedia views and trailer comments from T−28 on) and how the prequel did in India. Each forecast lists what moved it, in index points." },
   { title: "Beat a simple rule, or step aside", body: "Every stage is scored on the 2024 titles against simple rules anyone could apply. Where our model does not beat the best one, that rule makes the forecasts instead, and the forecast sheet says so." },
   { title: "An honest range", body: "The 80% range comes from how far forecasts missed on past seasons the model had not seen, so it is wide where the model is unsure." },
   { title: "Verdict from the range", body: "Launch only if even the low end of the range clears the launch line; Hold only if even the high end is under the hold line; anything else is Test-market. The lines are tuned on the 2024 titles." },

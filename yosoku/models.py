@@ -120,10 +120,17 @@ class Blend:
         return out
 
 
-def stacked_inputs(features, titles, labels, train_ids, target_ids):
-    """Add the lookalike forecast and prequel index to the features. Training rows get leave-one-out lookalikes."""
+def lookalikes(titles, labels, train_ids, target_ids):
+    """(train, target) lookalike predictions from a Lookalike fitted on train_ids; training rows are leave-one-out."""
     look = Lookalike().fit(titles, labels.loc[train_ids])
-    train_look, target_look = look.predict(titles.loc[train_ids]), look.predict(titles.loc[target_ids])
+    return look.predict(titles.loc[train_ids]), look.predict(titles.loc[target_ids])
+
+
+def stacked_inputs(features, titles, labels, train_ids, target_ids, looks=None):
+    """Add the lookalike forecast and prequel index to the features. Training rows get leave-one-out lookalikes.
+
+    `looks` is lookalikes() for the same ids, to reuse when the same titles are forecast at many moments."""
+    train_look, target_look = looks if looks is not None else lookalikes(titles, labels, train_ids, target_ids)
     prequel = prequel_label(titles, labels)
     mean = labels.loc[train_ids].mean()
 
@@ -139,14 +146,13 @@ def stacked_inputs(features, titles, labels, train_ids, target_ids):
     return add(train_ids, train_look), add(target_ids, target_look), target_look
 
 
-def forecast(moment, features, titles, labels, train_ids, target_ids):
-    """Point forecasts for target_ids from a model trained on train_ids, with lookalikes, drivers and region."""
-    X_train, X_target, look = stacked_inputs(features, titles, labels, train_ids, target_ids)
+def forecast(moment, features, titles, labels, train_ids, target_ids, looks=None):
+    """Point forecasts for target_ids from a model trained on train_ids, with lookalikes, drivers and region.
+
+    The Blend at every moment; at cold its inputs are the metadata, the lookalike forecast and the prequel's index."""
+    X_train, X_target, look = stacked_inputs(features, titles, labels, train_ids, target_ids, looks)
     out = look.copy()
     out["lookalike"] = look["forecast"]
-    if moment == "cold":
-        out["drivers"] = [[] for _ in range(len(out))]
-        return out
     blend = Blend().fit(X_train, labels.loc[train_ids])
     out["forecast"] = blend.predict(X_target)
     drivers = blend.drivers(X_target)

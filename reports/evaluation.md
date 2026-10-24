@@ -10,11 +10,13 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 | --- | --- | --- | --- | --- | --- | --- |
 | Genre average **(used)** | 0.12 (-0.13 to 0.37) | 0.30 | 12.8 | 0.10 | 0.16 | 0.08 over 20 |
 | Sequel carry-over | 0.06 (-0.21 to 0.33) | 0.20 | 12.8 | 0.10 | 0.05 | 0.20 over 20 |
-| Lookalike **(main)** | -0.01 (-0.30 to 0.28) | 0.40 | 13.4 | 0.09 | 0.01 | 0.02 over 20 |
+| Lookalike | -0.01 (-0.30 to 0.28) | 0.40 | 13.4 | 0.09 | 0.01 | 0.02 over 20 |
+| Blend **(main)** | 0.06 (-0.23 to 0.33) | 0.20 | 12.7 | 0.14 | 0.06 | 0.21 over 20 |
 
-- Best baseline: Genre average. Lookalike beats it overall, on top-20% hits and for new shows: **no**.
+- Best baseline: Genre average. Blend beats it overall, on top-20% hits and for new shows: **no**.
 - Forecasts and verdicts use: **Genre average**. The model does not beat this rule, so the rule is shipped (gate G4 fallback).
 - 80% range (Genre average): ± 14.2 points; contains the truth for **67%** of 2024 titles (target 70–90%).
+- 80% range for titles not released yet: ± 15.6 points, from every rolling season including 2024.
 
 ## Moment: t-28
 
@@ -26,11 +28,12 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 | India Wikipedia alone | – (– to –) | 0.20 | 12.8 | – | – | 0.20 over 20 |
 | India YouTube alone | -0.13 (-0.46 to 0.23) | 0.30 | 11.8 | -0.28 | 0.13 | 0.15 over 20 |
 | Lookalike | -0.01 (-0.30 to 0.28) | 0.40 | 13.4 | 0.09 | 0.01 | 0.02 over 20 |
-| Blend **(main)** **(used)** | 0.27 (-0.02 to 0.52) | 0.40 | 11.9 | 0.31 | 0.30 | 0.34 over 20 |
+| Blend **(main)** **(used)** | 0.25 (-0.07 to 0.51) | 0.40 | 12.0 | 0.21 | 0.34 | 0.33 over 20 |
 
 - Best baseline: Genre average. Blend beats it overall, on top-20% hits and for new shows: **yes**.
 - Forecasts and verdicts use: **Blend**.
-- 80% range (Blend): ± 11.8 points; contains the truth for **60%** of 2024 titles (target 70–90%).
+- 80% range (Blend): ± 12.0 points; contains the truth for **63%** of 2024 titles (target 70–90%).
+- 80% range for titles not released yet: ± 13.9 points, from every rolling season including 2024.
 
 ## Moment: t+7
 
@@ -42,11 +45,12 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 | India Wikipedia alone | – (– to –) | 0.20 | 12.8 | – | – | 0.23 over 20 |
 | India YouTube alone | 0.52 (0.26 to 0.72) | 0.70 | 9.5 | 0.47 | 0.57 | 0.49 over 20 |
 | Lookalike | -0.01 (-0.30 to 0.28) | 0.40 | 13.4 | 0.09 | 0.01 | 0.02 over 20 |
-| Blend **(main)** **(used)** | 0.69 (0.50 to 0.84) | 0.80 | 8.3 | 0.65 | 0.68 | 0.63 over 20 |
+| Blend **(main)** **(used)** | 0.66 (0.46 to 0.81) | 0.80 | 8.4 | 0.53 | 0.71 | 0.62 over 20 |
 
 - Best baseline: India YouTube alone. Blend beats it overall, on top-20% hits and for new shows: **yes**.
 - Forecasts and verdicts use: **Blend**.
-- 80% range (Blend): ± 9.3 points; contains the truth for **67%** of 2024 titles (target 70–90%).
+- 80% range (Blend): ± 10.0 points; contains the truth for **67%** of 2024 titles (target 70–90%).
+- 80% range for titles not released yet: ± 10.8 points, from every rolling season including 2024.
 
 ## Gate G4
 
