@@ -4,8 +4,9 @@
 # cached API responses (big, and rebuilt by rerunning the collectors)
 data/raw/
 
-# comment text gets large; share it outside git if needed
+# comment text and Reddit posts get large; share them outside git if needed
 youtube_comments.csv
+reddit_posts.csv
 
 # python
 __pycache__/

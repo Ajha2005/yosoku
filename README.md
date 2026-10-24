@@ -14,6 +14,7 @@ for the India Demand Index described in the idea deck.
 | 3 | `collect_netflix.py` | Netflix Top 10 download | ~1 min | `netflix_india_top10.csv`, `netflix_matches.csv` |
 | 4 | `collect_youtube.py` | YouTube Data API (needs a key) | a few days (daily quota) | `youtube_videos.csv`, `youtube_comments.csv` |
 | 5 | `collect_trends.py` | Google Trends via `pytrends-modern` | overnight or longer | `trends_terms.csv`, `trends_india_daily.csv`, `trends_india_states.csv`, `trends_countries.csv` |
+| 5b | `collect_reddit.py` (optional) | Reddit posts, read from the Arctic Shift archive | ~15–20 min for 200 titles | `reddit_posts.csv`, `reddit_titles.csv` |
 | 6 | `merge.py` | the files above | seconds | `dataset.csv` (one row per title) |
 
 ## Setup (once per laptop)
@@ -56,6 +57,7 @@ python collectors/collect_wikipedia.py
 python collectors/collect_netflix.py
 python collectors/collect_youtube.py
 python collectors/collect_trends.py
+python collectors/collect_reddit.py    # optional
 python collectors/merge.py
 ```
 
@@ -112,6 +114,8 @@ Automatic matching makes mistakes. Before modelling, look through:
 - **`netflix_matches.csv`**: names are matched loosely, and live-action remakes (One Piece, Yu Yu Hakusho) share their anime's name.
 - **`youtube_videos.csv`**: a search can return the wrong video. To fix one, edit the list of video IDs in
   `data/raw/youtube/search/<anilist_id>_trailer.json` (or `_hindi.json`) so the right video comes first, then rerun step 4.
+- **`reddit_posts.csv`**: posts are matched by name (`match_name`). Short or common names pull in unrelated posts,
+  and a sequel's name also matches posts about earlier seasons. Look through the busiest titles.
 - **`trends_terms.csv`**: the Trends topic used for each title. If one is wrong, find the right topic on
   [trends.google.com](https://trends.google.com/): its ID is in the page address after `q=`, e.g. `%2Fg%2F11abc123`
   means `/g/11abc123`. Add a line `anilist_id,term` with that ID (or a plain search phrase) to
@@ -127,6 +131,9 @@ Automatic matching makes mistakes. Before modelling, look through:
   dated comment counts (`yt_comments_pre`, `yt_comments_month1`).
 - **Comments are fetched newest first, up to 1,000 per video**, so a very popular trailer's launch-week comments may be missing.
   Compare with the video's total in the `comments` column.
+- **Reddit is global attention, not India.** It has no country signal, so `reddit_*` columns are hype inputs for the
+  models and are not part of the India Demand Index. Use `reddit_posts_early` (days −90 to −29) for the T−28 forecast;
+  scores and comment counts are as archived, after the post's date, so prefer post counts.
 - **Trends values are relative** (0–100 within each request). `trends_month1_vs_anchor` puts titles on one scale by
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
 - **Indian-script detection** (`yt_share_devanagari` etc.) misses Hinglish typed in Latin letters.
@@ -137,6 +144,11 @@ Automatic matching makes mistakes. Before modelling, look through:
 Public data only: official APIs where they exist (AniList, Wikimedia, YouTube) and Netflix's published file.
 No usernames are stored. Google Trends has no open API, so `pytrends-modern` reads the public website;
 the script deliberately goes slowly, so please don't lower `--pause` much.
+
+Reddit posts come from the public [Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift) archive, not from
+reddit.com, so nothing is scraped from Reddit's site. Arctic Shift is free and asks users to be considerate, so the
+script waits between requests; for large jobs it recommends the monthly dumps instead. Only a post's title, date,
+score, comment count and flair are kept, never usernames or post text.
 
 ## Layout
 
