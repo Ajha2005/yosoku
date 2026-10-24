@@ -1,10 +1,11 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
-import { posterHTML } from "./art.js?v=3";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=3";
-import { showTip, hideTip, showToast } from "./tip.js?v=3";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=4";
+import { posterHTML } from "./art.js?v=4";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline } from "./charts.js?v=4";
+import { showTip, hideTip, showToast } from "./tip.js?v=4";
 
+const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CALENDAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 3v4M16 3v4"/></svg>';
 
@@ -95,7 +96,8 @@ export function createDetail(app, { requestClose }) {
       ? `${drivers(f.drivers)}<p class="note">Exact contributions from the linear model: blue raises the index, red lowers it.</p>`
       : `<p class="callout">At the cold stage there is no buzz yet, so the forecast is the India index of the most similar past titles below.</p>`;
     const regionsSection = f.regions && Object.keys(f.regions).length
-      ? `${regionMap(f.regions, app.data.hubs)}<p class="note">Estimated from trailer comments that point to a language (its script, its name, or Hinglish for Hindi) on the ${esc(f.region_titles)} closest past titles that had any. English-speaking fans are spread across India and are not counted here; Hindi includes Marathi.</p>`
+      ? `${f.region_comments != null && f.region_comments < THIN_REGION ? `<p class="flag thin"><span><b>Thin evidence.</b> This map rests on only ${esc(f.region_comments)} comment${f.region_comments === 1 ? "" : "s"}; read it as a hint, not a measurement.</span></p>` : ""}
+        ${regionMap(f.regions, app.data.hubs)}<p class="note">Estimated from ${f.region_comments != null ? `<b>${esc(f.region_comments)}</b> ` : ""}trailer comments that point to a language (its script, its name, or Hinglish for Hindi) on the ${esc(f.region_titles)} closest past titles that had any. English-speaking fans are spread across India and are not counted here; Hindi includes Marathi.</p>`
       : `<p class="callout">None of the closest past titles had trailer comments pointing to an Indian language, so there is no regional estimate.</p>`;
 
     const dub = f.dub_demand || {};
@@ -163,6 +165,20 @@ export function createDetail(app, { requestClose }) {
     if (big) countUp(big, Number(big.dataset.count));
   }
 
+  /** A one-page brief for executives: this title's sheet, on its own, in the light theme. */
+  function printBrief() {
+    const html = document.documentElement, theme = html.dataset.theme;
+    const root = document.createElement("div");
+    root.id = "print-root";
+    root.innerHTML = `<p class="print-head"><b>Yosoku 予測</b> · India launch brief · ${esc(MOMENTS[current.moment].label)} forecast · ${esc(location.href)}</p>${body.innerHTML}`;
+    document.body.append(root);
+    html.dataset.theme = "light";
+    html.classList.add("printing");
+    const done = () => { root.remove(); html.classList.remove("printing"); html.dataset.theme = theme; };
+    addEventListener("afterprint", done, { once: true });
+    print();
+  }
+
   function show(id, moment) {
     const t = byId(id);
     if (!t) return false;
@@ -214,6 +230,7 @@ export function createDetail(app, { requestClose }) {
     try { await navigator.clipboard.writeText(location.href); showToast("Link copied"); }
     catch { showToast("Copy the address bar to share this forecast"); }
   });
+  document.getElementById("sheet-print").addEventListener("click", printBrief);
   scroller.addEventListener("scroll", hideTip, { passive: true });
   dlg.addEventListener("cancel", (e) => { e.preventDefault(); requestClose(); });          // Esc
   dlg.addEventListener("click", (e) => { if (e.target === dlg) requestClose(); });          // click on the dimmed backdrop
