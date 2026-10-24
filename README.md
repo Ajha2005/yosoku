@@ -110,6 +110,8 @@ Automatic matching makes mistakes. Before modelling, look through:
 
 - **`wiki_articles.csv`**: rows with `match_method` = `search` were guessed. Fix the article names by hand and rerun step 2.
 - **`netflix_matches.csv`**: names are matched loosely, and live-action remakes (One Piece, Yu Yu Hakusho) share their anime's name.
+  To drop a wrong match, add a line `anilist_id,show_title,reason` to `data/netflix_match_exclusions.csv`
+  (first line: `anilist_id,show_title,reason`) and rerun step 3, then step 6. The ones found so far are already listed there.
 - **`youtube_videos.csv`**: a search can return the wrong video. To fix one, edit the list of video IDs in
   `data/raw/youtube/search/<anilist_id>_trailer.json` (or `_hindi.json`) so the right video comes first, then rerun step 4.
 - **`trends_terms.csv`**: the Trends topic used for each title. If one is wrong, find the right topic on
