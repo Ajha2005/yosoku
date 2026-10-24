@@ -8,11 +8,16 @@ Most Indian fans comment in English or in Hinglish typed in Latin letters, not i
              plus two common ones. Common words alone ("hai", "ke") also occur in Japanese
              romaji and Italian, so they never count on their own.
   mention    it names India, an Indian language or a big Indian city
+  lid        optional: IndicLID (collectors/detect_languages.py) reads it as an Indian language typed in
+             Latin letters, and it has two Hindi words from any list here. This catches short Hinglish
+             like "Kab release hogi ye movie" that the word rules miss. IndicLID alone is not enough: it
+             only knows Indian languages and English, so it calls Spanish, Indonesian and emoji Indian too,
+             and it mixes up which Indian language Hinglish is. Only its "Indian or not" is used.
 
 Hubs (for the regional view): a script, the language's name ("tamil dub pls") or, for Hindi,
 Hinglish. A comment can point to no hub (English mentioning India) or to more than one.
-This is a word list, not a language model: it misses some Indian English and will catch a few
-non-Indian comments. Check samples before trusting a number.
+Mostly a word list: it misses some Indian English and will catch a few non-Indian comments.
+Check samples before trusting a number.
 """
 
 import pandas as pd
@@ -30,12 +35,20 @@ STRONG = (r"bhai|bhaiya|nahi|nahin|nhi|kya|kyu|kyun|kyon|yaar|yar|accha|acha|ach
           r"mujhe|hume|humko|bilkul|ekdum|zabardast|jabardast|karo|kardo|krdo|wala|wali|waala|walo|isko|usko|"
           r"iska|uska|apna|abhi|sabse|lekin|pehle|pehli")
 COMMON = r"hai|hain|toh|bhi|mein|mai|aur|tha|thi|ke|ki|ka|ko|ye|yeh|wo|woh|sab|ab"
+# Only counted together with IndicLID, never on their own.
+LID_WORDS = (r"hoga|hogi|honge|hoge|liya|kiya|diya|badiya|badhiya|kha|kahan|kaha|kis|kisko|kisne|lao|jyada|zyada|"
+             r"sundar|aaya|aya|gaya|raha|rahi|rahe|nai|tera|mera|tum|aap|hum|kar|karna|pura|pyar|maza|mazaa")
+LID_MIN_PROB = 0.5
+LID_MIN_WORDS = 3  # Latin words; shorter comments ("wow", "0:59") get confident but random labels
 MENTION = (r"india|indian|indians|hindi|marathi|tamil|telugu|bengali|bangla|kannada|malayalam|desi|"
            r"mumbai|delhi|bangalore|bengaluru|kolkata|chennai|hyderabad|pune|ahmedabad|jaipur|lucknow")
 
 
-def classify(text):
-    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, and one column per hub."""
+def classify(text, indic=None):
+    """DataFrame (same index as text) of booleans: script, hinglish, mention, india, and one column per hub.
+
+    `indic` (optional, same index) is True where IndicLID read the comment as an Indian language; see indic_flags.
+    """
     text = text.fillna("").astype(str)
     lower = text.str.lower()
     strong = lower.str.count(rf"\b(?:{STRONG})\b")
@@ -44,9 +57,28 @@ def classify(text):
     scripts = {hub: text.str.contains(f"[{letters}]", regex=True) for hub, (letters, _) in HUBS.items()}
     out["script"] = pd.concat(scripts, axis=1).any(axis=1)
     out["hinglish"] = (strong >= 2) | ((strong >= 1) & (common >= 2))
+    if indic is not None:
+        hindi_words = strong + common + lower.str.count(rf"\b(?:{LID_WORDS})\b")
+        latin_words = lower.str.count(r"[a-z]{2,}")
+        out["lid"] = indic.reindex(text.index, fill_value=False).astype(bool) & (hindi_words >= 2) & (
+            latin_words >= LID_MIN_WORDS)
+        out["hinglish"] |= out["lid"]
     out["mention"] = lower.str.contains(rf"\b(?:{MENTION})\b", regex=True)
     out["india"] = out["script"] | out["hinglish"] | out["mention"]
     for hub, (_, names) in HUBS.items():
         out[hub] = scripts[hub] | lower.str.contains(rf"\b(?:{names})\b", regex=True)
     out["hindi"] |= out["hinglish"]
     return out
+
+
+def indic_flags(comments, languages):
+    """Series (index of comments) that is True where IndicLID read the comment as an Indian language.
+
+    `languages` is comment_languages.csv (comment_id, language, probability) or None; None gives None,
+    so classify falls back to the word rules alone.
+    """
+    if languages is None:
+        return None
+    indian = languages[~languages["language"].isin(["eng_Latn", "other"])
+                       & (languages["probability"] >= LID_MIN_PROB)]
+    return comments["comment_id"].isin(indian["comment_id"])

@@ -11,6 +11,7 @@ under the hold line, otherwise Test-market. The two lines start at 60 and 40 and
 
 import argparse
 import json
+import math
 from datetime import date
 
 import numpy as np
@@ -69,16 +70,21 @@ def available_moments(start, today):
     return ["cold"] + [m for m in ("t-28", "t+7") if days > feat.CUTOFF[m]]
 
 
+def whole(x):
+    """x as the dashboard shows it: rounded to 0.1 as stored, then halves up (Math.round), not to even like :.0f."""
+    return "nan" if pd.isna(x) else str(math.floor(round(float(x), 1) + 0.5))
+
+
 def reasons(point, low, high, label, looks, drivers, names, labels):
-    shown = [f"{names.get(i, i)} ({labels.get(i, float('nan')):.0f})" for i, _ in looks[:3]]
-    en = f"{label}: India Demand Index forecast {point:.0f} (80% range {low:.0f}–{high:.0f})."
-    ja = f"判定：{VERDICT_JA[label]}。インド需要指数の予測 {point:.0f}（80%範囲 {low:.0f}–{high:.0f}）。"
+    shown = [f"{names.get(i, i)} ({whole(labels.get(i, float('nan')))})" for i, _ in looks[:3]]
+    en = f"{label}: India Demand Index forecast {whole(point)} (80% range {whole(low)}–{whole(high)})."
+    ja = f"判定：{VERDICT_JA[label]}。インド需要指数の予測 {whole(point)}（80%範囲 {whole(low)}–{whole(high)}）。"
     if shown:
         en += " Closest past titles: " + ", ".join(shown) + "."
         ja += "類似作品：" + "、".join(shown) + "。"
     if drivers:
         name, points = drivers[0]
-        en += f" Biggest driver: {name} ({points:+.0f} points)."
+        en += f" Biggest driver: {name} ({points:+.1f} points)."
     return en, ja
 
 
