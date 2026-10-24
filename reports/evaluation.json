@@ -2,6 +2,7 @@
  "moments": {
   "cold": {
    "main": "Lookalike",
+   "used": "Lookalike",
    "width": 14.101362541009104,
    "coverage": 0.625,
    "beats_baseline": true,
@@ -61,8 +62,9 @@
   },
   "t-28": {
    "main": "Blend",
-   "width": 12.466001672940164,
-   "coverage": 0.6875,
+   "used": "Sequel carry-over",
+   "width": 14.60433481294122,
+   "coverage": 0.75,
    "beats_baseline": false,
    "best_baseline": "Sequel carry-over",
    "table": {
@@ -160,6 +162,7 @@
   },
   "t+7": {
    "main": "Blend",
+   "used": "Blend",
    "width": 10.655922167273891,
    "coverage": 0.7291666666666666,
    "beats_baseline": true,

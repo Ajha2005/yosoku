@@ -109,6 +109,25 @@ def test_end_to_end(fake):
             assert forecast["verdict"] in {"Launch", "Test-market", "Hold"}
     upcoming = [t for t in payload["titles"] if t["group"] == "upcoming"]
     assert all(set(t["forecasts"]) == {"cold"} for t in upcoming)  # Winter 2027 is months away
+    for moment, info in payload["evaluation"]["moments"].items():  # gate G4 fallback
+        assert info["used"] == (info["main"] if info["beats_baseline"] else info["best_baseline"])
+        assert payload["thresholds"][moment]["method"] == info["used"]
+
+
+def test_simple_rule_makes_the_forecast(fake):
+    """When a simple rule is used, its forecasts replace the model's; the lookalikes stay."""
+    from yosoku.decision import predict
+    from yosoku.models import baselines
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    features = feat.build(titles, wiki, comments, "t-28", genres)
+    labels = pd.Series(np.linspace(0, 100, len(titles)), index=titles.index)
+    train, target = titles.index[:-10], titles.index[-10:]
+    out = predict("t-28", "Genre average", features, titles, labels, train, target)
+    rule = baselines("t-28", features, titles, labels, train, target)["Genre average"]
+    pd.testing.assert_series_equal(out["forecast"], rule.reindex(target), check_names=False)
+    assert all(d == [] for d in out["drivers"]) and out["lookalikes"].notna().all()
 
 
 def test_india_comments():

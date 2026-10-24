@@ -6,19 +6,22 @@
    "launch_line": 60,
    "hold_line": 40,
    "range_half_width": 14.1,
-   "range_coverage": 0.625
+   "range_coverage": 0.625,
+   "method": "Lookalike"
   },
   "t-28": {
    "launch_line": 60,
    "hold_line": 40,
-   "range_half_width": 12.5,
-   "range_coverage": 0.6875
+   "range_half_width": 14.6,
+   "range_coverage": 0.75,
+   "method": "Sequel carry-over"
   },
   "t+7": {
    "launch_line": 60,
    "hold_line": 60,
    "range_half_width": 10.7,
-   "range_coverage": 0.7291666666666666
+   "range_coverage": 0.7291666666666666,
+   "method": "Blend"
   }
  },
  "hubs": {
@@ -33,6 +36,7 @@
   "moments": {
    "cold": {
     "main": "Lookalike",
+    "used": "Lookalike",
     "width": 14.101362541009104,
     "coverage": 0.625,
     "beats_baseline": true,
@@ -92,8 +96,9 @@
    },
    "t-28": {
     "main": "Blend",
-    "width": 12.466001672940164,
-    "coverage": 0.6875,
+    "used": "Sequel carry-over",
+    "width": 14.60433481294122,
+    "coverage": 0.75,
     "beats_baseline": false,
     "best_baseline": "Sequel carry-over",
     "table": {
@@ -191,6 +196,7 @@
    },
    "t+7": {
     "main": "Blend",
+    "used": "Blend",
     "width": 10.655922167273891,
     "coverage": 0.7291666666666666,
     "beats_baseline": true,
@@ -376,26 +382,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 53.1,
+     "index": 55.2,
      "low": 40.6,
-     "high": 65.6,
+     "high": 69.8,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 41–66). Closest past titles: Made in Abyss: The Golden City of the Scorching Sun (51), Reincarnated as a Sword (57), So I'm a Spider, So What? (52). Biggest driver: India buzz (-1.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 41–66）。類似作品：Made in Abyss: The Golden City of the Scorching Sun (51)、Reincarnated as a Sword (57)、So I'm a Spider, So What? (52)。",
-     "drivers": [
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": -0.6
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 41–70). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Made in Abyss: The Golden City of the Scorching Sun (51), Reincarnated as a Sword (57), So I'm a Spider, So What? (52).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 41–70）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Made in Abyss: The Golden City of the Scorching Sun (51)、Reincarnated as a Sword (57)、So I'm a Spider, So What? (52)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 114745,
@@ -593,26 +586,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 43.9,
-     "low": 31.5,
-     "high": 56.4,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 44 (80% range 32–56). Closest past titles: BEASTARS (53), Rascal Does Not Dream of a Sister Venturing Out (43), Rascal Does Not Dream of a Dreaming Girl (32). Biggest driver: Genre: Psychological (-2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 44（80%範囲 32–56）。類似作品：BEASTARS (53)、Rascal Does Not Dream of a Sister Venturing Out (43)、Rascal Does Not Dream of a Dreaming Girl (32)。",
-     "drivers": [
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "Global buzz",
-       "points": -2.1
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BEASTARS (53), Rascal Does Not Dream of a Sister Venturing Out (43), Rascal Does Not Dream of a Dreaming Girl (32).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BEASTARS (53)、Rascal Does Not Dream of a Sister Venturing Out (43)、Rascal Does Not Dream of a Dreaming Girl (32)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 107660,
@@ -811,26 +791,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 51.0,
-     "low": 38.5,
-     "high": 63.4,
+     "index": 62.4,
+     "low": 47.8,
+     "high": 77.0,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 39–63). Closest past titles: MASHLE: MAGIC AND MUSCLES (62), Mob Psycho 100 III (50), Horimiya: The Missing Pieces (37). Biggest driver: Franchise history (-3.3 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 39–63）。類似作品：MASHLE: MAGIC AND MUSCLES (62)、Mob Psycho 100 III (50)、Horimiya: The Missing Pieces (37)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -3.3
-      },
-      {
-       "name": "Global buzz",
-       "points": 2.7
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 62 (80% range 48–77). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: MASHLE: MAGIC AND MUSCLES (62), Mob Psycho 100 III (50), Horimiya: The Missing Pieces (37).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 62（80%範囲 48–77）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：MASHLE: MAGIC AND MUSCLES (62)、Mob Psycho 100 III (50)、Horimiya: The Missing Pieces (37)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 151801,
@@ -1028,26 +995,13 @@
      "region_titles": 5
     },
     "t-28": {
-     "index": 58.9,
-     "low": 46.4,
-     "high": 71.3,
+     "index": 52.7,
+     "low": 38.1,
+     "high": 67.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 59 (80% range 46–71). Closest past titles: The Girl I Like Forgot Her Glasses (55), Josee, the Tiger and the Fish (32), My Love Story with Yamada-kun at Lv999 (37). Biggest driver: Audience: Teens (Girls) (+3.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 59（80%範囲 46–71）。類似作品：The Girl I Like Forgot Her Glasses (55)、Josee, the Tiger and the Fish (32)、My Love Story with Yamada-kun at Lv999 (37)。",
-     "drivers": [
-      {
-       "name": "Audience: Teens (Girls)",
-       "points": 3.2
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 38–67). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: The Girl I Like Forgot Her Glasses (55), Josee, the Tiger and the Fish (32), My Love Story with Yamada-kun at Lv999 (37).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 38–67）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：The Girl I Like Forgot Her Glasses (55)、Josee, the Tiger and the Fish (32)、My Love Story with Yamada-kun at Lv999 (37)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 160188,
@@ -1245,26 +1199,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 55.5,
-     "low": 43.0,
-     "high": 68.0,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 56 (80% range 43–68). Closest past titles: My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), Wise Man’s Grandchild (51). Biggest driver: Franchise history (+1.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 56（80%範囲 43–68）。類似作品：My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、Wise Man’s Grandchild (51)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": -0.6
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), Wise Man’s Grandchild (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、Wise Man’s Grandchild (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 129192,
@@ -1463,26 +1404,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 51.3,
-     "low": 38.8,
-     "high": 63.7,
+     "index": 46.1,
+     "low": 31.5,
+     "high": 60.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 39–64). Closest past titles: The Dangers in My Heart (46), A Couple of Cuckoos (58), Komi Can't Communicate Part 2 (51). Biggest driver: Franchise history (-4.1 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 39–64）。類似作品：The Dangers in My Heart (46)、A Couple of Cuckoos (58)、Komi Can't Communicate Part 2 (51)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -4.1
-      },
-      {
-       "name": "Global buzz",
-       "points": 1.8
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 46 (80% range 32–61). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: The Dangers in My Heart (46), A Couple of Cuckoos (58), Komi Can't Communicate Part 2 (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 46（80%範囲 32–61）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：The Dangers in My Heart (46)、A Couple of Cuckoos (58)、Komi Can't Communicate Part 2 (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 153152,
@@ -1684,25 +1612,12 @@
     },
     "t-28": {
      "index": 53.5,
-     "low": 41.0,
-     "high": 65.9,
+     "low": 38.9,
+     "high": 68.1,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 41–66). Closest past titles: THE FIRST SLAM DUNK (55), Mob Psycho 100 III (50), The Seven Deadly Sins: Cursed by Light (47). Biggest driver: Genre: Sports (+4.5 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 41–66）。類似作品：THE FIRST SLAM DUNK (55)、Mob Psycho 100 III (50)、The Seven Deadly Sins: Cursed by Light (47)。",
-     "drivers": [
-      {
-       "name": "Genre: Sports",
-       "points": 4.5
-      },
-      {
-       "name": "Format: Movie",
-       "points": -2.6
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: THE FIRST SLAM DUNK (55), Mob Psycho 100 III (50), The Seven Deadly Sins: Cursed by Light (47).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：THE FIRST SLAM DUNK (55)、Mob Psycho 100 III (50)、The Seven Deadly Sins: Cursed by Light (47)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 128207,
@@ -1900,26 +1815,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 57.2,
-     "low": 44.7,
-     "high": 69.6,
+     "index": 53.6,
+     "low": 39.0,
+     "high": 68.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 45–70). Closest past titles: Why Raeliana Ended Up at the Duke’s Mansion (55), My Happy Marriage (98), How a Realist Hero Rebuilt the Kingdom (51). Biggest driver: Audience: Teens (Girls) (+3.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 45–70）。類似作品：Why Raeliana Ended Up at the Duke’s Mansion (55)、My Happy Marriage (98)、How a Realist Hero Rebuilt the Kingdom (51)。",
-     "drivers": [
-      {
-       "name": "Audience: Teens (Girls)",
-       "points": 3.2
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Why Raeliana Ended Up at the Duke’s Mansion (55), My Happy Marriage (98), How a Realist Hero Rebuilt the Kingdom (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Why Raeliana Ended Up at the Duke’s Mansion (55)、My Happy Marriage (98)、How a Realist Hero Rebuilt the Kingdom (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 151847,
@@ -2118,26 +2020,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 56.9,
-     "low": 44.5,
-     "high": 69.4,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 45–69). Closest past titles: Reincarnated as a Sword (57), TSUKIMICHI -Moonlit Fantasy- (51), So I'm a Spider, So What? (52). Biggest driver: Format: Ona (+1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 45–69）。類似作品：Reincarnated as a Sword (57)、TSUKIMICHI -Moonlit Fantasy- (51)、So I'm a Spider, So What? (52)。",
-     "drivers": [
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.2
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Reincarnated as a Sword (57), TSUKIMICHI -Moonlit Fantasy- (51), So I'm a Spider, So What? (52).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Reincarnated as a Sword (57)、TSUKIMICHI -Moonlit Fantasy- (51)、So I'm a Spider, So What? (52)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 139587,
@@ -2336,26 +2225,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 53.3,
-     "low": 40.9,
-     "high": 65.8,
+     "index": 53.5,
+     "low": 38.9,
+     "high": 68.1,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 41–66). Closest past titles: Wise Man’s Grandchild (51), How a Realist Hero Rebuilt the Kingdom (51), The World's Finest Assassin Gets Reincarnated in Another World as an Aristocrat (52). Biggest driver: Global buzz (-1.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 41–66）。類似作品：Wise Man’s Grandchild (51)、How a Realist Hero Rebuilt the Kingdom (51)、The World's Finest Assassin Gets Reincarnated in Another World as an Aristocrat (52)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": -1.2
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Wise Man’s Grandchild (51), How a Realist Hero Rebuilt the Kingdom (51), The World's Finest Assassin Gets Reincarnated in Another World as an Aristocrat (52).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Wise Man’s Grandchild (51)、How a Realist Hero Rebuilt the Kingdom (51)、The World's Finest Assassin Gets Reincarnated in Another World as an Aristocrat (52)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 100112,
@@ -2547,26 +2423,13 @@
      "region_titles": 0
     },
     "t-28": {
-     "index": 57.4,
-     "low": 45.0,
-     "high": 69.9,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 45–70). Closest past titles: Rurouni Kenshin (2023) (60), BASTARD!! -Heavy Metal, Dark Fantasy- Hell’s Requiem Arc (51), Ōoku: The Inner Chambers (63). Biggest driver: Format: Ona (+1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 45–70）。類似作品：Rurouni Kenshin (2023) (60)、BASTARD!! -Heavy Metal, Dark Fantasy- Hell’s Requiem Arc (51)、Ōoku: The Inner Chambers (63)。",
-     "drivers": [
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Rurouni Kenshin (2023) (60), BASTARD!! -Heavy Metal, Dark Fantasy- Hell’s Requiem Arc (51), Ōoku: The Inner Chambers (63).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Rurouni Kenshin (2023) (60)、BASTARD!! -Heavy Metal, Dark Fantasy- Hell’s Requiem Arc (51)、Ōoku: The Inner Chambers (63)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 142877,
@@ -2752,26 +2615,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 50.3,
-     "low": 37.9,
-     "high": 62.8,
+     "index": 49.8,
+     "low": 35.2,
+     "high": 64.4,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 38–63). Closest past titles: Urusei Yatsura (2022) Seasons 1 & 2 (50), Tomo-chan Is a Girl! (51), JoJo's Bizarre Adventure: STONE OCEAN Part 2 (60). Biggest driver: Franchise history (-3.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 38–63）。類似作品：Urusei Yatsura (2022) Seasons 1 & 2 (50)、Tomo-chan Is a Girl! (51)、JoJo's Bizarre Adventure: STONE OCEAN Part 2 (60)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -3.9
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      },
-      {
-       "name": "Genre: Sci-Fi",
-       "points": -1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 35–64). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Urusei Yatsura (2022) Seasons 1 & 2 (50), Tomo-chan Is a Girl! (51), JoJo's Bizarre Adventure: STONE OCEAN Part 2 (60).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 35–64）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Urusei Yatsura (2022) Seasons 1 & 2 (50)、Tomo-chan Is a Girl! (51)、JoJo's Bizarre Adventure: STONE OCEAN Part 2 (60)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 143277,
@@ -2968,26 +2818,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 54.3,
-     "low": 41.8,
-     "high": 66.8,
+     "index": 53.6,
+     "low": 39.0,
+     "high": 68.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 42–67). Closest past titles: BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32), The Angel Next Door Spoils Me Rotten (49), Komi Can't Communicate Part 2 (51). Biggest driver: Global buzz (-1.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 42–67）。類似作品：BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32)、The Angel Next Door Spoils Me Rotten (49)、Komi Can't Communicate Part 2 (51)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": -1.4
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32), The Angel Next Door Spoils Me Rotten (49), Komi Can't Communicate Part 2 (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32)、The Angel Next Door Spoils Me Rotten (49)、Komi Can't Communicate Part 2 (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 106479,
@@ -3187,26 +3024,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 53.2,
-     "low": 40.7,
-     "high": 65.6,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 41–66). Closest past titles: BLEACH: Thousand-Year Blood War (52), Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66), Black Clover: Sword of the Wizard King (94). Biggest driver: Franchise history (-1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 41–66）。類似作品：BLEACH: Thousand-Year Blood War (52)、Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)、Black Clover: Sword of the Wizard King (94)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.1
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BLEACH: Thousand-Year Blood War (52), Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66), Black Clover: Sword of the Wizard King (94).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BLEACH: Thousand-Year Blood War (52)、Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)、Black Clover: Sword of the Wizard King (94)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 116674,
@@ -3409,26 +3233,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 51.5,
-     "low": 39.0,
-     "high": 64.0,
+     "index": 66.4,
+     "low": 51.8,
+     "high": 81.0,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 52 (80% range 39–64). Closest past titles: Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66), JUJUTSU KAISEN 0 (61), Black Clover: Sword of the Wizard King (94). Biggest driver: Franchise history (-3.1 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 52（80%範囲 39–64）。類似作品：Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)、JUJUTSU KAISEN 0 (61)、Black Clover: Sword of the Wizard King (94)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -3.1
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.7
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 66 (80% range 52–81). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66), JUJUTSU KAISEN 0 (61), Black Clover: Sword of the Wizard King (94).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 66（80%範囲 52–81）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)、JUJUTSU KAISEN 0 (61)、Black Clover: Sword of the Wizard King (94)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 145139,
@@ -3630,26 +3441,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 46.0,
-     "low": 33.6,
-     "high": 58.5,
+     "index": 42.7,
+     "low": 28.1,
+     "high": 57.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 46 (80% range 34–59). Closest past titles: Mushoku Tensei: Jobless Reincarnation Season 2 (43), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), In Another World With My Smartphone 2 (49). Biggest driver: Franchise history (-4.3 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 46（80%範囲 34–59）。類似作品：Mushoku Tensei: Jobless Reincarnation Season 2 (43)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、In Another World With My Smartphone 2 (49)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -4.3
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.8
-      },
-      {
-       "name": "Genre: Ecchi",
-       "points": -0.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 43 (80% range 28–57). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Mushoku Tensei: Jobless Reincarnation Season 2 (43), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), In Another World With My Smartphone 2 (49).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 43（80%範囲 28–57）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Mushoku Tensei: Jobless Reincarnation Season 2 (43)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、In Another World With My Smartphone 2 (49)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 146065,
@@ -3850,26 +3648,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 53.4,
-     "low": 40.9,
-     "high": 65.9,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 41–66). Closest past titles: JUJUTSU KAISEN Season 2 (67), Horimiya: The Missing Pieces (37), SPY x FAMILY Season 2 (77). Biggest driver: India buzz (-1.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 41–66）。類似作品：JUJUTSU KAISEN Season 2 (67)、Horimiya: The Missing Pieces (37)、SPY x FAMILY Season 2 (77)。",
-     "drivers": [
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Global buzz",
-       "points": 1.4
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: JUJUTSU KAISEN Season 2 (67), Horimiya: The Missing Pieces (37), SPY x FAMILY Season 2 (77).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：JUJUTSU KAISEN Season 2 (67)、Horimiya: The Missing Pieces (37)、SPY x FAMILY Season 2 (77)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 145064,
@@ -4071,26 +3856,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 50.0,
-     "low": 37.5,
-     "high": 62.5,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 38–63). Closest past titles: In Another World With My Smartphone 2 (49), My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58), How a Realist Hero Rebuilt the Kingdom (51). Biggest driver: India buzz (-1.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 38–63）。類似作品：In Another World With My Smartphone 2 (49)、My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)、How a Realist Hero Rebuilt the Kingdom (51)。",
-     "drivers": [
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": -0.6
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: In Another World With My Smartphone 2 (49), My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58), How a Realist Hero Rebuilt the Kingdom (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：In Another World With My Smartphone 2 (49)、My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)、How a Realist Hero Rebuilt the Kingdom (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 147571,
@@ -4290,26 +4062,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 52.2,
-     "low": 39.8,
-     "high": 64.7,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 52 (80% range 40–65). Closest past titles: BLEACH: Thousand-Year Blood War (52), My Hero Academia: Heroes Rising (31), Super Crooks (63). Biggest driver: Franchise history (-1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 52（80%範囲 40–65）。類似作品：BLEACH: Thousand-Year Blood War (52)、My Hero Academia: Heroes Rising (31)、Super Crooks (63)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.7
-      },
-      {
-       "name": "India buzz",
-       "points": 1.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BLEACH: Thousand-Year Blood War (52), My Hero Academia: Heroes Rising (31), Super Crooks (63).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BLEACH: Thousand-Year Blood War (52)、My Hero Academia: Heroes Rising (31)、Super Crooks (63)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 116674,
@@ -4512,26 +4271,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 49.5,
-     "low": 37.0,
-     "high": 61.9,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 37–62). Closest past titles: KONOSUBA -An Explosion on This Wonderful World! (57), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), The Eminence in Shadow Season 2 (52). Biggest driver: India buzz (-1.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 37–62）。類似作品：KONOSUBA -An Explosion on This Wonderful World! (57)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、The Eminence in Shadow Season 2 (52)。",
-     "drivers": [
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "Genre: Ecchi",
-       "points": -0.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: KONOSUBA -An Explosion on This Wonderful World! (57), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), The Eminence in Shadow Season 2 (52).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：KONOSUBA -An Explosion on This Wonderful World! (57)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、The Eminence in Shadow Season 2 (52)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 150075,
@@ -4732,26 +4478,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 56.6,
-     "low": 44.1,
-     "high": 69.1,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 44–69). Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), In Another World With My Smartphone 2 (49), Black Clover: Sword of the Wizard King (94). Biggest driver: Global buzz (+1.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 44–69）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、In Another World With My Smartphone 2 (49)、Black Clover: Sword of the Wizard King (94)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": 1.4
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), In Another World With My Smartphone 2 (49), Black Clover: Sword of the Wizard King (94).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、In Another World With My Smartphone 2 (49)、Black Clover: Sword of the Wizard King (94)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 153845,
@@ -4946,26 +4679,13 @@
      "region_titles": 0
     },
     "t-28": {
-     "index": 55.5,
-     "low": 43.1,
-     "high": 68.0,
+     "index": 55.2,
+     "low": 40.6,
+     "high": 69.8,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 56 (80% range 43–68). Closest past titles: How a Realist Hero Rebuilt the Kingdom (51), Wandering Witch: The Journey of Elaina (81), Record of Ragnarok II (64). Biggest driver: Global buzz (+1.1 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 56（80%範囲 43–68）。類似作品：How a Realist Hero Rebuilt the Kingdom (51)、Wandering Witch: The Journey of Elaina (81)、Record of Ragnarok II (64)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": 1.1
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 41–70). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: How a Realist Hero Rebuilt the Kingdom (51), Wandering Witch: The Journey of Elaina (81), Record of Ragnarok II (64).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 41–70）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：How a Realist Hero Rebuilt the Kingdom (51)、Wandering Witch: The Journey of Elaina (81)、Record of Ragnarok II (64)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 117612,
@@ -5152,26 +4872,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 55.8,
-     "low": 43.3,
-     "high": 68.2,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 56 (80% range 43–68). Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), The Seven Deadly Sins: Cursed by Light (47), By the Grace of the Gods 2 (48). Biggest driver: Franchise history (+1.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 56（80%範囲 43–68）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、The Seven Deadly Sins: Cursed by Light (47)、By the Grace of the Gods 2 (48)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": -0.6
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), The Seven Deadly Sins: Cursed by Light (47), By the Grace of the Gods 2 (48).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、The Seven Deadly Sins: Cursed by Light (47)、By the Grace of the Gods 2 (48)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 153845,
@@ -5372,26 +5079,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 51.8,
-     "low": 39.4,
-     "high": 64.3,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 52 (80% range 39–64). Closest past titles: given (48), BOCCHI THE ROCK! (43), Scott Pilgrim Takes Off (65). Biggest driver: Genre: Music (-2.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 52（80%範囲 39–64）。類似作品：given (48)、BOCCHI THE ROCK! (43)、Scott Pilgrim Takes Off (65)。",
-     "drivers": [
-      {
-       "name": "Genre: Music",
-       "points": -2.2
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.3
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: given (48), BOCCHI THE ROCK! (43), Scott Pilgrim Takes Off (65).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：given (48)、BOCCHI THE ROCK! (43)、Scott Pilgrim Takes Off (65)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 108430,
@@ -5591,26 +5285,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 58.7,
-     "low": 46.2,
-     "high": 71.2,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 59 (80% range 46–71). Closest past titles: My Love Story with Yamada-kun at Lv999 (37), Fruits Basket Season 2 (51), Fruits Basket The Final Season (51). Biggest driver: Audience: Teens (Girls) (+3.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 59（80%範囲 46–71）。類似作品：My Love Story with Yamada-kun at Lv999 (37)、Fruits Basket Season 2 (51)、Fruits Basket The Final Season (51)。",
-     "drivers": [
-      {
-       "name": "Audience: Teens (Girls)",
-       "points": 3.2
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: My Love Story with Yamada-kun at Lv999 (37), Fruits Basket Season 2 (51), Fruits Basket The Final Season (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：My Love Story with Yamada-kun at Lv999 (37)、Fruits Basket Season 2 (51)、Fruits Basket The Final Season (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 154965,
@@ -5810,26 +5491,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 54.5,
-     "low": 42.0,
-     "high": 66.9,
+     "index": 55.2,
+     "low": 40.6,
+     "high": 69.8,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 42–67). Closest past titles: Drifting Home (54), A Whisker Away (54), maboroshi (33). Biggest driver: Format: Movie (-2.6 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 42–67）。類似作品：Drifting Home (54)、A Whisker Away (54)、maboroshi (33)。",
-     "drivers": [
-      {
-       "name": "Format: Movie",
-       "points": -2.6
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      },
-      {
-       "name": "Global buzz",
-       "points": -1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 41–70). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Drifting Home (54), A Whisker Away (54), maboroshi (33).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 41–70）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Drifting Home (54)、A Whisker Away (54)、maboroshi (33)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 139643,
@@ -6024,26 +5692,13 @@
      "region_titles": 0
     },
     "t-28": {
-     "index": 52.7,
-     "low": 40.2,
-     "high": 65.1,
+     "index": 53.6,
+     "low": 39.0,
+     "high": 68.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 40–65). Closest past titles: Junji Ito Maniac: Japanese Tales of the Macabre (55), Wandering Witch: The Journey of Elaina (81), KONOSUBA -An Explosion on This Wonderful World! (57). Biggest driver: Genre: Psychological (-2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 40–65）。類似作品：Junji Ito Maniac: Japanese Tales of the Macabre (55)、Wandering Witch: The Journey of Elaina (81)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
-     "drivers": [
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Genre: Sci-Fi",
-       "points": -1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Junji Ito Maniac: Japanese Tales of the Macabre (55), Wandering Witch: The Journey of Elaina (81), KONOSUBA -An Explosion on This Wonderful World! (57).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Junji Ito Maniac: Japanese Tales of the Macabre (55)、Wandering Witch: The Journey of Elaina (81)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 150653,
@@ -6228,26 +5883,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 53.8,
-     "low": 41.3,
-     "high": 66.3,
+     "index": 53.5,
+     "low": 38.9,
+     "high": 68.1,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 41–66). Closest past titles: My Stepmom's Daughter is My Ex (61), Shikimori's Not Just a Cutie (53), My Senpai is Annoying (56). Biggest driver: Global buzz (+2.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 41–66）。類似作品：My Stepmom's Daughter is My Ex (61)、Shikimori's Not Just a Cutie (53)、My Senpai is Annoying (56)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": 2.8
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: My Stepmom's Daughter is My Ex (61), Shikimori's Not Just a Cutie (53), My Senpai is Annoying (56).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：My Stepmom's Daughter is My Ex (61)、Shikimori's Not Just a Cutie (53)、My Senpai is Annoying (56)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 136934,
@@ -6447,26 +6089,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 51.9,
-     "low": 39.5,
-     "high": 64.4,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 52 (80% range 40–64). Closest past titles: My Senpai is Annoying (56), Masamune-kun's Revenge R (55), Blue Period (74). Biggest driver: Global buzz (+2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 52（80%範囲 40–64）。類似作品：My Senpai is Annoying (56)、Masamune-kun's Revenge R (55)、Blue Period (74)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": 2.4
-      },
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: My Senpai is Annoying (56), Masamune-kun's Revenge R (55), Blue Period (74).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：My Senpai is Annoying (56)、Masamune-kun's Revenge R (55)、Blue Period (74)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 120646,
@@ -6666,26 +6295,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 51.3,
-     "low": 38.8,
-     "high": 63.7,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 39–64). Closest past titles: Welcome to Demon School! Iruma-kun (47), Black Clover: Sword of the Wizard King (94), KONOSUBA -An Explosion on This Wonderful World! (57). Biggest driver: India buzz (-1.9 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 39–64）。類似作品：Welcome to Demon School! Iruma-kun (47)、Black Clover: Sword of the Wizard King (94)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
-     "drivers": [
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "Global buzz",
-       "points": -0.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Welcome to Demon School! Iruma-kun (47), Black Clover: Sword of the Wizard King (94), KONOSUBA -An Explosion on This Wonderful World! (57).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Welcome to Demon School! Iruma-kun (47)、Black Clover: Sword of the Wizard King (94)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 107693,
@@ -6885,26 +6501,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 55.0,
-     "low": 42.5,
-     "high": 67.5,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 43–68). Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), So I'm a Spider, So What? (52), Arifureta: From Commonplace to World's Strongest (32). Biggest driver: Franchise history (+1.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 43–68）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、So I'm a Spider, So What? (52)、Arifureta: From Commonplace to World's Strongest (32)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": -0.6
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52), So I'm a Spider, So What? (52), Arifureta: From Commonplace to World's Strongest (32).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (52)、So I'm a Spider, So What? (52)、Arifureta: From Commonplace to World's Strongest (32)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 153845,
@@ -7103,26 +6706,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 57.1,
-     "low": 44.6,
-     "high": 69.5,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 45–70). Closest past titles: BLEACH: Thousand-Year Blood War (52), Rurouni Kenshin (2023) (60), Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66). Biggest driver: Genre: Supernatural (+1.5 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 45–70）。類似作品：BLEACH: Thousand-Year Blood War (52)、Rurouni Kenshin (2023) (60)、Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)。",
-     "drivers": [
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BLEACH: Thousand-Year Blood War (52), Rurouni Kenshin (2023) (60), Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BLEACH: Thousand-Year Blood War (52)、Rurouni Kenshin (2023) (60)、Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc (66)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 116674,
@@ -7322,26 +6912,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 53.8,
-     "low": 41.4,
-     "high": 66.3,
+     "index": 53.5,
+     "low": 38.9,
+     "high": 68.1,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 41–66). Closest past titles: My Dress-Up Darling (65), Masamune-kun's Revenge R (55), In Another World With My Smartphone 2 (49). Biggest driver: Franchise history (+1.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 41–66）。類似作品：My Dress-Up Darling (65)、Masamune-kun's Revenge R (55)、In Another World With My Smartphone 2 (49)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      },
-      {
-       "name": "Genre: Ecchi",
-       "points": -0.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: My Dress-Up Darling (65), Masamune-kun's Revenge R (55), In Another World With My Smartphone 2 (49).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：My Dress-Up Darling (65)、Masamune-kun's Revenge R (55)、In Another World With My Smartphone 2 (49)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 132405,
@@ -7540,26 +7117,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 49.8,
-     "low": 37.3,
-     "high": 62.3,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 37–62). Closest past titles: The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), Sword Art Online: Alicization - War of Underworld Part 2 (54). Biggest driver: Format: Movie (-2.6 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 37–62）。類似作品：The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、Sword Art Online: Alicization - War of Underworld Part 2 (54)。",
-     "drivers": [
-      {
-       "name": "Format: Movie",
-       "points": -2.6
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), Sword Art Online: Alicization - War of Underworld Part 2 (54).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、Sword Art Online: Alicization - War of Underworld Part 2 (54)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 141352,
@@ -7759,26 +7323,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 59.0,
-     "low": 46.5,
-     "high": 71.4,
+     "index": 53.5,
+     "low": 38.9,
+     "high": 68.1,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 59 (80% range 47–71). Closest past titles: Fruits Basket Season 2 (51), My Love Story with Yamada-kun at Lv999 (37), Fruits Basket The Final Season (51). Biggest driver: Audience: Teens (Girls) (+3.2 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 59（80%範囲 47–71）。類似作品：Fruits Basket Season 2 (51)、My Love Story with Yamada-kun at Lv999 (37)、Fruits Basket The Final Season (51)。",
-     "drivers": [
-      {
-       "name": "Audience: Teens (Girls)",
-       "points": 3.2
-      },
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Fruits Basket Season 2 (51), My Love Story with Yamada-kun at Lv999 (37), Fruits Basket The Final Season (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Fruits Basket Season 2 (51)、My Love Story with Yamada-kun at Lv999 (37)、Fruits Basket The Final Season (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 111762,
@@ -7979,26 +7530,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 52.1,
-     "low": 39.6,
-     "high": 64.6,
+     "index": 53.6,
+     "low": 39.0,
+     "high": 68.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 52 (80% range 40–65). Closest past titles: Rascal Does Not Dream of a Sister Venturing Out (43), Higurashi: When They Cry - SOTSU (55), Toilet-bound Hanako-kun (53). Biggest driver: Format: Movie (-2.6 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 52（80%範囲 40–65）。類似作品：Rascal Does Not Dream of a Sister Venturing Out (43)、Higurashi: When They Cry - SOTSU (55)、Toilet-bound Hanako-kun (53)。",
-     "drivers": [
-      {
-       "name": "Format: Movie",
-       "points": -2.6
-      },
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Rascal Does Not Dream of a Sister Venturing Out (43), Higurashi: When They Cry - SOTSU (55), Toilet-bound Hanako-kun (53).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Rascal Does Not Dream of a Sister Venturing Out (43)、Higurashi: When They Cry - SOTSU (55)、Toilet-bound Hanako-kun (53)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 154967,
@@ -8202,26 +7740,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 54.9,
-     "low": 42.4,
-     "high": 67.4,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 55 (80% range 42–67). Closest past titles: Toilet-bound Hanako-kun (53), JUJUTSU KAISEN Season 2 (67), Urusei Yatsura (2022) Seasons 1 & 2 (50). Biggest driver: Genre: Supernatural (+1.5 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 55（80%範囲 42–67）。類似作品：Toilet-bound Hanako-kun (53)、JUJUTSU KAISEN Season 2 (67)、Urusei Yatsura (2022) Seasons 1 & 2 (50)。",
-     "drivers": [
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      },
-      {
-       "name": "Genre: Sci-Fi",
-       "points": -1.0
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Toilet-bound Hanako-kun (53), JUJUTSU KAISEN Season 2 (67), Urusei Yatsura (2022) Seasons 1 & 2 (50).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Toilet-bound Hanako-kun (53)、JUJUTSU KAISEN Season 2 (67)、Urusei Yatsura (2022) Seasons 1 & 2 (50)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 108463,
@@ -8426,26 +7951,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 45.4,
-     "low": 32.9,
-     "high": 57.8,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 45 (80% range 33–58). Closest past titles: The Eminence in Shadow Season 2 (52), How a Realist Hero Rebuilt the Kingdom (51), Reincarnated as a Sword (57). Biggest driver: Genre: Psychological (-2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 45（80%範囲 33–58）。類似作品：The Eminence in Shadow Season 2 (52)、How a Realist Hero Rebuilt the Kingdom (51)、Reincarnated as a Sword (57)。",
-     "drivers": [
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: The Eminence in Shadow Season 2 (52), How a Realist Hero Rebuilt the Kingdom (51), Reincarnated as a Sword (57).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：The Eminence in Shadow Season 2 (52)、How a Realist Hero Rebuilt the Kingdom (51)、Reincarnated as a Sword (57)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 161964,
@@ -8646,26 +8158,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 59.9,
-     "low": 47.4,
-     "high": 72.4,
+     "index": 52.7,
+     "low": 38.1,
+     "high": 67.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 60 (80% range 47–72). Closest past titles: THE FIRST SLAM DUNK (55), Tomo-chan Is a Girl! (51), Shikimori's Not Just a Cutie (53). Biggest driver: Genre: Sports (+4.5 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 60（80%範囲 47–72）。類似作品：THE FIRST SLAM DUNK (55)、Tomo-chan Is a Girl! (51)、Shikimori's Not Just a Cutie (53)。",
-     "drivers": [
-      {
-       "name": "Genre: Sports",
-       "points": 4.5
-      },
-      {
-       "name": "India buzz",
-       "points": -1.9
-      },
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 38–67). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: THE FIRST SLAM DUNK (55), Tomo-chan Is a Girl! (51), Shikimori's Not Just a Cutie (53).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 38–67）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：THE FIRST SLAM DUNK (55)、Tomo-chan Is a Girl! (51)、Shikimori's Not Just a Cutie (53)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 128207,
@@ -8864,26 +8363,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 56.1,
-     "low": 43.6,
-     "high": 68.5,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 56 (80% range 44–69). Closest past titles: Thermae Romae Novae (34), Why Raeliana Ended Up at the Duke’s Mansion (55), 86 EIGHTY-SIX Part 2 (43). Biggest driver: Franchise history (+1.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 56（80%範囲 44–69）。類似作品：Thermae Romae Novae (34)、Why Raeliana Ended Up at the Duke’s Mansion (55)、86 EIGHTY-SIX Part 2 (43)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      },
-      {
-       "name": "Similar past titles",
-       "points": 0.7
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Thermae Romae Novae (34), Why Raeliana Ended Up at the Duke’s Mansion (55), 86 EIGHTY-SIX Part 2 (43).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Thermae Romae Novae (34)、Why Raeliana Ended Up at the Duke’s Mansion (55)、86 EIGHTY-SIX Part 2 (43)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 125447,
@@ -9086,26 +8572,13 @@
      "region_titles": 4
     },
     "t-28": {
-     "index": 51.0,
-     "low": 38.5,
-     "high": 63.5,
+     "index": 49.5,
+     "low": 34.9,
+     "high": 64.2,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 39–64). Closest past titles: Shangri-La Frontier (50), Sword Art Online: Alicization - War of Underworld (32), BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32). Biggest driver: Franchise history (-4.0 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 39–64）。類似作品：Shangri-La Frontier (50)、Sword Art Online: Alicization - War of Underworld (32)、BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -4.0
-      },
-      {
-       "name": "Global buzz",
-       "points": 1.2
-      },
-      {
-       "name": "Genre: Sci-Fi",
-       "points": -1.0
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 50 (80% range 35–64). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Shangri-La Frontier (50), Sword Art Online: Alicization - War of Underworld (32), BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 50（80%範囲 35–64）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Shangri-La Frontier (50)、Sword Art Online: Alicization - War of Underworld (32)、BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense. (32)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 151970,
@@ -9306,26 +8779,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 56.3,
-     "low": 43.9,
-     "high": 68.8,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 56 (80% range 44–69). Closest past titles: Junji Ito Maniac: Japanese Tales of the Macabre (55), Zom 100: Bucket List of the Dead (81), Mieruko-chan (51). Biggest driver: Genre: Psychological (-2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 56（80%範囲 44–69）。類似作品：Junji Ito Maniac: Japanese Tales of the Macabre (55)、Zom 100: Bucket List of the Dead (81)、Mieruko-chan (51)。",
-     "drivers": [
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "Global buzz",
-       "points": 2.1
-      },
-      {
-       "name": "Genre: Supernatural",
-       "points": 1.5
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: Junji Ito Maniac: Japanese Tales of the Macabre (55), Zom 100: Bucket List of the Dead (81), Mieruko-chan (51).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：Junji Ito Maniac: Japanese Tales of the Macabre (55)、Zom 100: Bucket List of the Dead (81)、Mieruko-chan (51)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 150653,
@@ -9524,26 +8984,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 53.8,
-     "low": 41.3,
-     "high": 66.2,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 41–66). Closest past titles: So I'm a Spider, So What? (52), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), KONOSUBA -An Explosion on This Wonderful World! (57). Biggest driver: Global buzz (-1.1 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 41–66）。類似作品：So I'm a Spider, So What? (52)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
-     "drivers": [
-      {
-       "name": "Global buzz",
-       "points": -1.1
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: So I'm a Spider, So What? (52), Cautious Hero: The Hero Is Overpowered but Overly Cautious (53), KONOSUBA -An Explosion on This Wonderful World! (57).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：So I'm a Spider, So What? (52)、Cautious Hero: The Hero Is Overpowered but Overly Cautious (53)、KONOSUBA -An Explosion on This Wonderful World! (57)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 103632,
@@ -9742,26 +9189,13 @@
      "region_titles": 3
     },
     "t-28": {
-     "index": 57.5,
-     "low": 45.1,
-     "high": 70.0,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 58 (80% range 45–70). Closest past titles: By the Grace of the Gods 2 (48), TSUKIMICHI -Moonlit Fantasy- (51), My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58). Biggest driver: Format: Ona (+1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 58（80%範囲 45–70）。類似作品：By the Grace of the Gods 2 (48)、TSUKIMICHI -Moonlit Fantasy- (51)、My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)。",
-     "drivers": [
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Franchise history",
-       "points": 1.0
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: By the Grace of the Gods 2 (48), TSUKIMICHI -Moonlit Fantasy- (51), My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：By the Grace of the Gods 2 (48)、TSUKIMICHI -Moonlit Fantasy- (51)、My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World! (58)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 135102,
@@ -9961,26 +9395,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 54.2,
-     "low": 41.7,
-     "high": 66.6,
+     "index": 54.1,
+     "low": 39.5,
+     "high": 68.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 42–67). Closest past titles: JUJUTSU KAISEN Season 2 (67), The Seven Deadly Sins: Four Knights of the Apocalypse (53), Black Clover: Sword of the Wizard King (94). Biggest driver: Franchise history (-1.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 42–67）。類似作品：JUJUTSU KAISEN Season 2 (67)、The Seven Deadly Sins: Four Knights of the Apocalypse (53)、Black Clover: Sword of the Wizard King (94)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      },
-      {
-       "name": "Global buzz",
-       "points": 1.6
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 54 (80% range 40–69). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: JUJUTSU KAISEN Season 2 (67), The Seven Deadly Sins: Four Knights of the Apocalypse (53), Black Clover: Sword of the Wizard King (94).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 54（80%範囲 40–69）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：JUJUTSU KAISEN Season 2 (67)、The Seven Deadly Sins: Four Knights of the Apocalypse (53)、Black Clover: Sword of the Wizard King (94)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 145064,
@@ -10180,26 +9601,13 @@
      "region_titles": 2
     },
     "t-28": {
-     "index": 53.4,
-     "low": 40.9,
-     "high": 65.9,
+     "index": 50.7,
+     "low": 36.1,
+     "high": 65.3,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 41–66). Closest past titles: BEASTARS (53), Call of the Night (63), Aggretsuko: Season 4 (57). Biggest driver: Genre: Psychological (-2.4 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 41–66）。類似作品：BEASTARS (53)、Call of the Night (63)、Aggretsuko: Season 4 (57)。",
-     "drivers": [
-      {
-       "name": "Genre: Psychological",
-       "points": -2.4
-      },
-      {
-       "name": "Format: Ona",
-       "points": 1.8
-      },
-      {
-       "name": "Franchise history",
-       "points": -1.8
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 51 (80% range 36–65). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: BEASTARS (53), Call of the Night (63), Aggretsuko: Season 4 (57).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 51（80%範囲 36–65）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：BEASTARS (53)、Call of the Night (63)、Aggretsuko: Season 4 (57)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 107660,
@@ -10391,26 +9799,13 @@
      "region_titles": 0
     },
     "t-28": {
-     "index": 56.6,
-     "low": 44.1,
-     "high": 69.0,
+     "index": 59.0,
+     "low": 44.4,
+     "high": 73.6,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 57 (80% range 44–69). Closest past titles: MF GHOST (59), KENGAN ASHURA Season 2 (89), Blue Giant (36). Biggest driver: Genre: Sports (+4.5 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 57（80%範囲 44–69）。類似作品：MF GHOST (59)、KENGAN ASHURA Season 2 (89)、Blue Giant (36)。",
-     "drivers": [
-      {
-       "name": "Genre: Sports",
-       "points": 4.5
-      },
-      {
-       "name": "Franchise history",
-       "points": -3.5
-      },
-      {
-       "name": "Global buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 59 (80% range 44–74). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: MF GHOST (59), KENGAN ASHURA Season 2 (89), Blue Giant (36).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 59（80%範囲 44–74）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：MF GHOST (59)、KENGAN ASHURA Season 2 (89)、Blue Giant (36)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 143327,
@@ -10597,26 +9992,13 @@
      "region_titles": 1
     },
     "t-28": {
-     "index": 52.9,
-     "low": 40.4,
-     "high": 65.3,
+     "index": 53.1,
+     "low": 38.5,
+     "high": 67.7,
      "verdict": "Test-market",
-     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 40–65). Closest past titles: The Seven Deadly Sins: Four Knights of the Apocalypse (53), The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48), Black Clover: Sword of the Wizard King (94). Biggest driver: Franchise history (-3.8 points).",
-     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 40–65）。類似作品：The Seven Deadly Sins: Four Knights of the Apocalypse (53)、The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48)、Black Clover: Sword of the Wizard King (94)。",
-     "drivers": [
-      {
-       "name": "Franchise history",
-       "points": -3.8
-      },
-      {
-       "name": "Global buzz",
-       "points": 1.6
-      },
-      {
-       "name": "India buzz",
-       "points": 0.9
-      }
-     ],
+     "reason_en": "Test-market: India Demand Index forecast 53 (80% range 39–68). Forecast by the simple rule \"Sequel carry-over\", which beat our model on the 2024 titles. Closest past titles: The Seven Deadly Sins: Four Knights of the Apocalypse (53), The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48), Black Clover: Sword of the Wizard King (94).",
+     "reason_ja": "判定：テスト販売。インド需要指数の予測 53（80%範囲 39–68）。予測方法：単純ルール「Sequel carry-over」（2024年の検証でモデルを上回ったため）。類似作品：The Seven Deadly Sins: Four Knights of the Apocalypse (53)、The Seven Deadly Sins: Grudge of Edinburgh Part 1 (48)、Black Clover: Sword of the Wizard King (94)。",
+     "drivers": [],
      "lookalikes": [
       {
        "anilist_id": 148862,
