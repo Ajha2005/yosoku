@@ -30,7 +30,7 @@ const SIGNALS = {
   voice: { label: "India's share of trailer comments" },
 };
 
-const state = { dimension: "genre", signal: "netflix", profile: { genre: "any", audience: "any", source: "any", format: "any", sequel: "any" } };
+const state = { dimension: "genre", signal: "netflix", audience: "all", profile: { genre: "any", audience: "any", source: "any", format: "any", sequel: "any" } };
 
 const plural = (n, one, many = `${one}s`) => `${n.toLocaleString("en-GB")} ${n === 1 ? one : many}`;
 
@@ -85,6 +85,10 @@ export function renderGuide(app, host) {
           `<button type="button" data-dim="${k}" aria-pressed="${k === state.dimension}">${d.label}</button>`).join("")}</div>
         <div class="seg" role="group" aria-label="Signal" id="g-signal">${Object.entries(SIGNALS).map(([k, s]) =>
           `<button type="button" data-signal="${k}" aria-pressed="${k === state.signal}">${s.label}</button>`).join("")}</div>
+      </div>
+      <div class="g-filter" id="g-aud-wrap">
+        <span class="g-filter-label" id="g-aud-label">Only titles made for</span>
+        <div class="chips" role="group" aria-labelledby="g-aud-label" id="g-aud"></div>
       </div>
       <p class="g-insight" id="g-insight" aria-live="polite"></p>
       <ul class="gbars" id="g-bars"></ul>
@@ -177,10 +181,31 @@ export function renderGuide(app, host) {
   // ------------------------------------------------------------ the split bars
   const bars = host.querySelector("#g-bars");
   const tips = [];
+  const audienceBox = host.querySelector("#g-aud");
+  function drawAudience(signalPool, visible) {
+    host.querySelector("#g-aud-wrap").hidden = !visible;
+    if (!visible) return;
+    const counts = new Map();
+    for (const t of signalPool) counts.set(t.audience, (counts.get(t.audience) || 0) + 1);
+    if (state.audience !== "all" && !counts.has(state.audience)) counts.set(state.audience, 0);   // keep the chosen chip, even if this signal has none
+    const order = [...counts].sort((a, b) => b[1] - a[1]);
+    audienceBox.innerHTML = [["all", "All audiences", signalPool.length], ...order.map(([a, n]) => [a, audienceName(a), n])].map(([key, label, n]) =>
+      `<button type="button" class="chip" data-aud="${esc(key)}" aria-pressed="${state.audience === key}">${esc(label)}<span class="count">${n}</span></button>`).join("");
+  }
+  audienceBox.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-aud]");
+    if (!b) return;
+    state.audience = b.dataset.aud;
+    drawBars();
+  });
   function drawBars() {
     const dim = DIMENSIONS[state.dimension];
     const groups = new Map();
-    const pool = state.signal === "netflix" ? onNetflix : G.titles.filter((t) => t.comments > 0);
+    const signalPool = state.signal === "netflix" ? onNetflix : G.titles.filter((t) => t.comments > 0);
+    const splitByAudience = state.dimension !== "audience";
+    if (!splitByAudience) state.audience = "all";
+    const pool = state.audience === "all" ? signalPool : signalPool.filter((t) => t.audience === state.audience);
+    drawAudience(signalPool, splitByAudience);
     for (const t of pool) {
       for (const k of dim.of(t)) {
         const g = groups.get(k) || { key: k, n: 0, hit: 0, comments: 0, india: 0, titles: [] };
@@ -196,6 +221,9 @@ export function renderGuide(app, host) {
     const shown = all.filter(enough).sort(dim.chronological ? (a, b) => a.key.localeCompare(b.key) : (a, b) => rate(b) - rate(a) || b.n - a.n);
     const small = all.filter((g) => !enough(g)).sort((a, b) => b.n - a.n);
     const max = Math.max(...shown.map(rate), 1e-9);
+    const who = state.audience === "all" ? "" : audienceName(state.audience);
+    const poolSize = state.signal === "netflix" ? pool.length : pool.reduce((sum, t) => sum + t.comments, 0);
+    const tooThin = state.audience !== "all" && poolSize < (state.signal === "netflix" ? MIN_TITLES : MIN_COMMENTS);
 
     tips.length = 0;
     bars.innerHTML = shown.map((g, i) => {
@@ -209,27 +237,33 @@ export function renderGuide(app, host) {
         <span class="gb-name">${esc(dim.name(g.key))}</span>
         <span class="gb-track" aria-hidden="true"><i style="width:${(rate(g) / max) * 100}%;--i:${i}"></i></span>
         <span class="gb-val">${value}</span></li>`;
-    }).join("") || '<li class="gb-empty">Not enough titles to show this split yet.</li>';
+    }).join("") || `<li class="gb-empty">${tooThin
+      ? (state.signal === "netflix" || poolSize
+        ? `Only ${state.signal === "netflix" ? plural(pool.length, "title") : `${poolSize.toLocaleString("en-GB")} comments`} made for ${esc(who)} in our data: too few to say what ${state.signal === "netflix" ? "they go for" : "they draw"}.`
+        : `No trailer comments on titles made for ${esc(who)} in our data.`)
+      : "Not enough titles to show this split yet."}</li>`;
 
     // One sentence that says what the bars say.
     const insight = host.querySelector("#g-insight");
     const lead = shown.find((g) => (state.signal === "netflix" ? g.hit : g.india) > 0);
     const never = state.signal === "netflix" ? shown.filter((g) => !g.hit) : [];
+    const scope = who ? `Among titles made for <b>${esc(who)}</b>: ` : "";
     if (!shown.length) insight.textContent = "";
     else if (dim.chronological && state.signal === "netflix") insight.innerHTML = `Reached the chart: ${shown.map((g) => `${esc(g.key)} ${g.hit} of ${g.n}`).join(" · ")}.`;
     else if (state.signal === "netflix") {
       const volume = [...shown].filter((g) => g.hit).sort((a, b) => b.hit - a.hit || a.n - b.n).slice(0, 2);
       insight.innerHTML = lead
-        ? `Highest share to reach the chart: <b>${esc(dim.name(lead.key))}</b> (${lead.hit} of ${lead.n}). Most titles on the chart: ${volume.map((g) => `<b>${esc(dim.name(g.key))}</b> (${g.hit})`).join(", ")}.${never.length ? ` Not yet: ${never.slice(0, 4).map((g) => `${esc(dim.name(g.key))} (0 of ${g.n})`).join(", ")}${never.length > 4 ? ` and ${never.length - 4} more` : ""}.` : ""}`
+        ? `${scope}Highest share to reach the chart: <b>${esc(dim.name(lead.key))}</b> (${lead.hit} of ${lead.n}). Most titles on the chart: ${volume.map((g) => `<b>${esc(dim.name(g.key))}</b> (${g.hit})`).join(", ")}.${never.length ? ` Not yet: ${never.slice(0, 4).map((g) => `${esc(dim.name(g.key))} (0 of ${g.n})`).join(", ")}${never.length > 4 ? ` and ${never.length - 4} more` : ""}.` : ""}`
         : "Nothing in this split has reached the chart yet.";
-    } else insight.innerHTML = lead ? `Most comments from India per 1,000: <b>${esc(dim.name(lead.key))}</b> (${(1000 * rate(lead)).toFixed(0)}).` : "";
+    } else insight.innerHTML = lead ? `${scope}Most comments from India per 1,000: <b>${esc(dim.name(lead.key))}</b> (${(1000 * rate(lead)).toFixed(0)}).` : "";
 
     const hidden = small.length ? `Too few ${state.signal === "netflix" ? "titles" : "comments"} to rank: ${small.slice(0, 8).map((g) => `${esc(dim.name(g.key))} (${state.signal === "netflix" ? g.n : g.comments.toLocaleString("en-GB")})`).join(", ")}${small.length > 8 ? ` and ${small.length - 8} more` : ""}. ` : "";
     const meaning = state.signal === "netflix"
-      ? `Bars show the share of the ${onNetflix.length} anime we track on Netflix that reached India's Top 10; titles count in every genre they have. `
+      ? `Bars show the share of ${who ? `the ${pool.length} ${esc(who)} anime` : `the ${onNetflix.length} anime`} we track on Netflix that reached India's Top 10; titles count in every genre they have. `
       : `Bars show comments flagged as from India (Indian scripts, Hinglish, or naming India) per 1,000 trailer comments, over ${G.voice.titles} titles. Trailers draw a global crowd, so this is a weak signal. `;
     const caution = state.dimension === "audience" ? "“Made for” is who the title is aimed at (AniList's audience tags), not the age of the people watching: Netflix does not publish viewer ages. " : "";
-    host.querySelector("#g-note").innerHTML = hidden + meaning + caution;
+    const thin = who && !tooThin && state.signal === "netflix" && pool.length < 30 ? `Only ${plural(pool.length, "title")} made for ${esc(who)}, so these bars are a hint, not a pattern. ` : "";
+    host.querySelector("#g-note").innerHTML = thin + hidden + meaning + caution;
   }
   drawBars();
 
