@@ -5,7 +5,8 @@ Demand Index on day +27 and its Netflix weeks on day +90 (collectors/common.py, 
 titles before that point are collected and forecast again. The daily work grows with the seasons in play, not with
 the archive; refitting and the backtests (python -m yosoku.run) only need rerunning when titles get their labels.
 
-  1. collect   the collectors for the upcoming folder; YouTube in --refresh mode (new comments only, view counts logged)
+  1. collect   the collectors for the upcoming folder: titles (--keep), Wikipedia, Netflix's weekly charts (fetched
+               again on Wednesdays), YouTube in --refresh mode (new comments only, view counts logged), merge
   2. label     upcoming titles whose 28 days are over get their India Demand Index (yosoku.labels)
   3. forecast  every title in play, as of today: data up to yesterday, the decision clock's model and range
   4. log       predictions/history.csv, one row per title per day: the forecast as it stood that day
@@ -130,7 +131,7 @@ def run(module, *args, check=True):
     return subprocess.run(command, cwd=ROOT, check=check).returncode
 
 
-def collect(upcoming_dir):
+def collect(upcoming_dir, today):
     """Step 1: the collectors for the titles still in play. A collector that fails is reported, not fatal."""
     titles = read(upcoming_dir / "titles.csv")
     years, seasons = titles["year"].astype(int), sorted(set(titles["season"]))
@@ -138,7 +139,9 @@ def collect(upcoming_dir):
     # --keep: a title that slips out of the top of its season stays tracked, so its sealed forecast can still be scored.
     steps = [("collectors/collect_titles.py", [*folder_args, "--keep", "--start-year", str(years.min()),
                                                "--end-year", str(years.max()), "--seasons", *seasons]),
-             ("collectors/collect_wikipedia.py", folder_args)]
+             ("collectors/collect_wikipedia.py", folder_args),
+             # Aired titles need their Netflix weeks for the label; Netflix publishes the week's lists on Tuesdays.
+             ("collectors/collect_netflix.py", [*folder_args, *(["--refresh"] if today.weekday() == 2 else [])])]
     if os.getenv("YOUTUBE_API_KEY"):
         steps.append(("collectors/collect_youtube.py", [*folder_args, "--refresh"]))
     else:
@@ -164,7 +167,7 @@ def main():
     folders = ["--data-dir", args.data_dir, "--out-dir", args.out_dir]
 
     if not args.no_collect:
-        collect(upcoming_dir)
+        collect(upcoming_dir, today)
     run("yosoku.labels", *folders, "--upcoming-dir", args.upcoming_dir)
     today_rows = nowcasts(data_dir, upcoming_dir, out_dir, today)
     log(out_dir / HISTORY, today_rows)
