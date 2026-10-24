@@ -106,12 +106,39 @@ Rerun the same command on the following days until it says it is done. Then copy
 `data/raw/youtube/` folders into one, and run `python collectors/collect_youtube.py` once more on that
 laptop: it rebuilds the CSV files from the cache and only spends a few units on view counts.
 
+## From data to forecasts
+
+After the collectors, run the model pipeline and the dashboard (same folder, virtual environment active):
+
+```
+python collectors/merge.py
+python -m yosoku.run               # label, evaluation and verdicts
+streamlit run app/dashboard.py     # opens the dashboard in your browser
+```
+
+| Step | Module | Writes |
+|---|---|---|
+| Label | `yosoku/labels.py` | `labels/label_v1.csv`, `reports/label.md` (agreement and stability checks, gate G2) |
+| Evaluate | `yosoku/evaluate.py` | `reports/evaluation.md` (models against baselines on 2024, gate G4) |
+| Decide | `yosoku/decision.py` | `predictions/predictions.json`, `reports/decision.md` (verdicts, gate G5) |
+
+- Until `predictions/predictions.json` exists, the dashboard shows `app/mock_predictions.json`, made from **fake** data, with a banner.
+- Unreleased titles: collect them into their own folder, e.g.
+  `python collectors/collect_titles.py --start-year 2027 --end-year 2027 --seasons WINTER --data-dir data/upcoming`,
+  then rerun `python -m yosoku.run`. They get a cold forecast now, and T−28 / T+7 forecasts once those dates pass
+  and their Wikipedia and YouTube data are collected.
+- The 2025 test titles are scored once, at the very end: `python -m yosoku.run --final`.
+- Tests, including the check that no input uses data from after its forecast moment: `python -m pytest tests`.
+- See `docs/decisions.md` for what was fixed in advance and what changed (no Google Trends this round).
+
 ## Check these by hand
 
 Automatic matching makes mistakes. Before modelling, look through:
 
 - **`wiki_articles.csv`**: rows with `match_method` = `search` were guessed. Fix the article names by hand and rerun step 2.
 - **`netflix_matches.csv`**: names are matched loosely, and live-action remakes (One Piece, Yu Yu Hakusho) share their anime's name.
+  To drop a wrong match, add a line `anilist_id,show_title,reason` to `data/netflix_match_exclusions.csv`
+  (first line: `anilist_id,show_title,reason`) and rerun step 3, then step 6. The ones found so far are already listed there.
 - **`youtube_videos.csv`**: a search can return the wrong video. To fix one, edit the list of video IDs in
   `data/raw/youtube/search/<anilist_id>_trailer.json` (or `_hindi.json`) so the right video comes first, then rerun step 4.
 - **`reddit_posts.csv`**: posts are matched by name (`match_name`). Short or common names pull in unrelated posts,
@@ -136,8 +163,10 @@ Automatic matching makes mistakes. Before modelling, look through:
   scores and comment counts are as archived, after the post's date, so prefer post counts.
 - **Trends values are relative** (0–100 within each request). `trends_month1_vs_anchor` puts titles on one scale by
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
-- **Indian-script detection** (`yt_share_devanagari` etc.) misses Hinglish typed in Latin letters.
-  A language-ID model such as AI4Bharat's IndicLID is the next step for that.
+- **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
+  Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 100 comments match, and fewer
+  than 1 in 2,000 use an Indian script. It misses some Indian English; a language-ID model such as AI4Bharat's
+  IndicLID is the next step.
 
 ## Responsible data use
 
@@ -153,7 +182,10 @@ score, comment count and flair are kept, never usernames or post text.
 ## Layout
 
 ```
-collectors/   the scripts (common.py holds shared helpers)
+collectors/   the data collectors (common.py holds shared helpers)
+yosoku/       label, features, models, evaluation and verdicts
+app/          the Streamlit dashboard, and its mock data
+tests/        pipeline tests on fake data (tests/fake_data.py)
 docs/         decisions.md: the six choices that shape the dataset; read it before changing a default
 data/         CSV outputs; data/raw/ is the cache and is git-ignored
 .env          your API key and contact (git-ignored; copy from .env.example)
