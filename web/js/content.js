@@ -45,7 +45,6 @@ export const SCORECARD = [
 ];
 
 export const NOT_USED = [
-  { name: "Google Trends", why: "Collecting the history takes nights at a polite request rate; there was not time. Its 40% index weight was rescaled over the other parts." },
   { name: "X / Twitter", why: "No usable free public API for historical posts." },
   { name: "AniList popularity and score", why: "Measured today, so they include how the show turned out: using them would be hindsight (leakage)." },
   { name: "Merchandise and ticket sales", why: "No public source by title and country." },
