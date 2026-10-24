@@ -171,7 +171,7 @@ def title_info(titles, anilist_id, group, labels, today):
     actual = labels.get(anilist_id)
     return {
         "anilist_id": int(anilist_id), "group": group, "name": row["name"],
-        "title_japanese": row.get("title_japanese", ""), "start_date": row["start_date"],
+        "title_japanese": row.get("title_japanese", ""), "start_date": None if pd.isna(row["start_date"]) else row["start_date"],  # unannounced: only the season is known
         "season": f"{str(row['season']).title()} {row['year']}", "format": row["format"], "source": row["source"],
         "genres": row["genre_list"], "audience": row["demographic"], "is_sequel": bool(row["is_sequel"]),
         "synopsis": str(row.get("synopsis", "") or "")[:600],
@@ -267,7 +267,7 @@ def main():
         "evaluation": evaluation, "titles": list(records.values()),
     }
     (out_dir / "predictions").mkdir(parents=True, exist_ok=True)
-    (out_dir / "predictions" / "predictions.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1, default=float),
+    (out_dir / "predictions" / "predictions.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1, default=float, allow_nan=False),
                                                                encoding="utf-8")
     (out_dir / "reports" / "decision.md").write_text("\n".join(report) + "\n", encoding="utf-8")
     counts = pd.Series([r["group"] for r in records.values()]).value_counts().to_dict()

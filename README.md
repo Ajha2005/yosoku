@@ -21,19 +21,20 @@ As of 24 October 2026. The files in `reports/` are generated and are the source 
   also have YouTube trailer comments (trailer search only, `--no-hindi`). The collected CSVs are committed in `data/`
   (the Reddit files are not), so the model and the site run without any API key (see "Run the model and the site").
 - **No Google Trends this round**, so the India Demand Index is YouTube 50%, Streaming 33%, Wikipedia 17%.
-  234 titles have at least two parts and get a label. `docs/decisions.md` has the change log.
-- **Label checks (gate G2): fail.** The Wikipedia part does not agree with the other two (rank correlation about 0),
-  and moving its weight by 0.10 changes the ranking more than the 0.9 target allows. The box-office check covers only 6 films.
-- **Forecast checks (gate G4): fail.** On the 2024 validation titles, only the T+7 Blend edges past a simple rule
-  (rank correlation 0.42, against 0.40 for global buzz alone; the intervals overlap almost entirely). Before launch,
-  nothing gets above 0.09 (interval −0.20 to 0.37), which cannot be told apart from chance. Where the model loses,
-  the best simple rule makes the forecasts instead: today that is Sequel carry-over at T−28.
-- **Verdicts:** the cold and T−28 ranges are too wide to separate titles, so all 48 validation titles land on
-  Test-market there. At T+7 the split is 1 Launch, 42 Test-market, 5 Hold.
-- **What the site shows:** the 2024 backtest, 48 titles forecast as if before launch. No upcoming titles have been
-  collected yet (`data/upcoming/` does not exist), and the 2025 test titles are unscored: that happens once, at the very end.
-- **Written but not run on the real data yet:** the Wikipedia swap for articles that were written after launch
-  (see "Check these by hand"). It needs internet access to Wikipedia; until it runs, 223 titles have no Wikipedia part.
+  319 titles have at least two parts and get a label. `docs/decisions.md` has the change log.
+- **Label checks (gate G2): fail, narrowly.** All three pairs of parts now agree positively (YouTube and Netflix 0.51,
+  the Wikipedia pairs about 0.14), but lowering the Wikipedia weight by 0.10 still moves the ranking (Kendall's tau 0.69,
+  target 0.9). The box-office check covers only 6 films (rank correlation 0.43, interval −0.60 to 1.00).
+- **Forecast checks (gate G4): fail at Cold only.** On the 52 labelled 2024 titles the Blend beats every simple rule at
+  T−28 (rank correlation 0.27) and T+7 (0.69, interval 0.50 to 0.84). Cold stays near chance (0.12), so the genre
+  average makes the cold forecasts. T+7 is a nowcast: its inputs sit inside the 28 days it measures.
+- **Verdicts:** the cold ranges are too wide to separate titles, so every title is Test-market there. At T+7 the
+  2024 split is 12 Launch, 39 Test-market, 1 Hold.
+- **What the site shows:** 50 upcoming Winter 2027 titles (cold forecasts, dated 24 October 2026; 39 have no announced
+  start date yet) and the 2024 backtest, 52 titles. The 2025 test titles are unscored: that happens once, at the very end.
+- **Wikipedia articles written after launch** were swapped for the page readers used then (`fallback` rows in
+  `data/wiki_articles_fixes.csv`), so the biggest shows now have a Wikipedia part.
+- **YouTube for upcoming titles** is not collected yet (the API key was rejected), so they have cold forecasts only.
 
 ## Setup (once per laptop)
 

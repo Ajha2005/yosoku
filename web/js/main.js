@@ -39,7 +39,7 @@ function visibleTitles() {
     index: (a, b) => idx(b) - idx(a),
     low: (a, b) => idx(a) - idx(b),
     name: (a, b) => a.name.localeCompare(b.name),
-    date: (a, b) => a.start_date.localeCompare(b.start_date),
+    date: (a, b) => (a.start_date ?? "9999").localeCompare(b.start_date ?? "9999"),   // unannounced dates last
   };
   return list.sort(sorts[state.sort]);
 }
