@@ -180,10 +180,10 @@ export function startPetals(canvas) {
 
   const start = () => { if (!running) { running = true; raf = requestAnimationFrame(frame); } };
   const stop = () => { running = false; cancelAnimationFrame(raf); };
-  resize();
-  addEventListener("resize", resize);
-  // Only animate while the hero is on screen.
+  // Resize with the canvas, which also covers the hero being shown again after another page; animate only while it is on screen.
+  const sizer = new ResizeObserver(resize);
+  sizer.observe(canvas);
   const watcher = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()));
   watcher.observe(canvas);
-  return () => { stop(); watcher.disconnect(); removeEventListener("resize", resize); };
+  return () => { stop(); watcher.disconnect(); sizer.disconnect(); };
 }
