@@ -3,14 +3,13 @@
 export const INDEX_PARTS = [
   { key: "yt", weight: 50, name: "YouTube comments from India", detail: "Trailer comments in Indian scripts, Hinglish or naming India." },
   { key: "nf", weight: 33, name: "Netflix India Top 10", detail: "Weeks a title spent in India's weekly chart." },
-  { key: "wp", weight: 17, name: "Wikipedia views", detail: "Daily views in English, Japanese, Hindi, Tamil and Telugu, bots excluded." },
+  { key: "wp", weight: 17, name: "Wikipedia views", detail: "Daily views of the English, Hindi, Tamil and Telugu articles, bots excluded." },
 ];
 
 export const PRINCIPLES = [
   { n: "01", title: "Percentiles, not raw counts", body: "Each signal becomes a percentile among past titles. A missing signal is left out, never counted as zero, and the weights are rescaled. A title needs two signals to get an index." },
   { n: "02", title: "No hindsight", body: "Forecasts only use data available at the forecast moment. An automatic test fails the build if any input comes from later." },
-  { n: "03", title: "Tested on the future", body: "Models train on 2019–2023, are checked on 2024, and are tested once on 2025. They must beat simple rules (genre average, sequel carry-over, global buzz) to be used." },
-  { n: "04", title: "Attention, not revenue", body: "The index measures how much India talks about, searches for and watches a title in its first 28 days. It does not measure sales." },
+  { n: "03", title: "Tested on the future", body: "Models train on 2019–2023, are checked on 2024, and are tested once on 2025. Each is compared with simple rules (genre average, sequel carry-over, global buzz)." },
 ];
 
 export const SOURCES = [
@@ -22,6 +21,4 @@ export const SOURCES = [
     bias: "English views are global, not India-only; Indian-language articles exist mostly for big titles.", reliability: "Very reliable counts; weak India specificity." },
   { name: "AniList metadata", tells: "Genres, tags, source, studio, audience and sequel links.",
     bias: "Today's popularity and score include the outcome, so they are never model inputs.", reliability: "Reliable; audience tags are the only age proxy in public data." },
-  { name: "Google Trends", tells: "Not used this round (time). It would add state-level search.",
-    bias: "The method takes it as a fourth part when it is collected.", reliability: "Not used yet." },
 ];

@@ -131,29 +131,17 @@ export function scatter(host, rows, lines, moment, hidden, onPick) {
   });
 }
 
-/** Models against simple baselines on the 2024 backtest: rank correlation with its 95% interval. A model with no score yet (null) is listed last as "n/a". */
+/** Our model against the simple rules on the 2024 backtest: how far each one's forecasts were from what happened (lower is better). */
 export function modelBars(info) {
   const t = info.table;
-  const has = (n) => Number.isFinite(t.spearman[n]);
-  const names = Object.keys(t.spearman).sort((a, b) => (has(b) - has(a)) || (t.spearman[b] - t.spearman[a]));
-  const lows = names.filter(has).map((n) => (Number.isFinite(t.low[n]) ? t.low[n] : t.spearman[n]));
-  const lo = Math.min(-0.2, ...lows);
-  const S = (v) => ((v - lo) / (1 - lo)) * 100;
-  const fixed = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
-  const rows = names.map((n) => {
-    const main = n === info.main, base = n === info.best_baseline;
-    const track = has(n)
-      ? `<u style="left:${S(0)}%"></u>` +
-        (Number.isFinite(t.low[n]) && Number.isFinite(t.high[n]) ? `<i style="left:${S(t.low[n])}%;width:${S(t.high[n]) - S(t.low[n])}%"></i>` : "") +
-        `<b style="left:${S(t.spearman[n])}%"></b>`
-      : "";
-    return `<li class="mb${main ? " is-main" : ""}${has(n) ? "" : " no-score"}">
-      <span class="mb-name">${esc(n)}${main ? "<em>our model</em>" : base ? "<em>best simple rule</em>" : !has(n) ? "<em>not enough data yet</em>" : ""}</span>
-      <span class="mb-track" aria-hidden="true">${track}</span>
-      <span class="mb-val">${fixed(t.spearman[n], 2)}</span>
+  const has = (n) => Number.isFinite(t.mae[n]);
+  const names = Object.keys(t.mae).sort((a, b) => (has(b) - has(a)) || (t.mae[a] - t.mae[b]));
+  const max = Math.max(...names.filter(has).map((n) => t.mae[n]), 1);
+  const rows = names.map((n) => `<li class="mb${n === info.main ? " is-main" : ""}">
+      <span class="mb-name">${esc(n)}${n === info.main ? "<em>our model</em>" : ""}</span>
+      <span class="mb-track" aria-hidden="true">${has(n) ? `<i style="width:${(t.mae[n] / max) * 100}%"></i>` : ""}</span>
+      <span class="mb-val">${has(n) ? t.mae[n].toFixed(1) : "n/a"}</span>
       <span class="mb-extra">${Number.isFinite(t.top20[n]) ? pct(t.top20[n]) : "n/a"}</span>
-      <span class="mb-extra">${fixed(t.mae[n], 1)}</span>
-    </li>`;
-  }).join("");
-  return `<div class="mb-head" aria-hidden="true"><span>Model</span><span>Rank correlation, with 95% range</span><span>ρ</span><span class="mb-extra">Top-20% hits</span><span class="mb-extra">Avg. miss (pts)</span></div><ul class="mbs">${rows}</ul>`;
+    </li>`).join("");
+  return `<div class="mb-head" aria-hidden="true"><span>Method</span><span>Average miss, in index points (shorter is better)</span><span></span><span class="mb-extra">Top-20% hits</span></div><ul class="mbs">${rows}</ul>`;
 }
