@@ -101,11 +101,14 @@ def langlinks(article):
 
 
 def links_to(page, article):
-    """True if English Wikipedia's `page` (not a redirect) links to `article` today."""
-    params = {"action": "query", "prop": "links", "titles": page, "pltitles": article,
-              "format": "json", "formatversion": 2}
+    """True if English Wikipedia's `page` (not a redirect) links to `article` today.
+
+    A disambiguation page ("Lazarus", "Look Back") links to every namesake, so it never counts.
+    """
+    params = {"action": "query", "prop": "links|pageprops", "ppprop": "disambiguation", "titles": page,
+              "pltitles": article, "format": "json", "formatversion": 2}
     pages = request_json("GET", EN_API_URL, params=params)["query"]["pages"]
-    return bool(pages and pages[0].get("links"))
+    return bool(pages and pages[0].get("links") and "disambiguation" not in pages[0].get("pageprops", {}))
 
 
 def find_articles(titles):

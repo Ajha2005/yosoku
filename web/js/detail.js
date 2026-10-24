@@ -120,7 +120,7 @@ export function createDetail(app, { requestClose }) {
             <h2 id="sheet-title">${esc(t.name)}</h2>
             ${t.title_japanese ? `<p class="d-jp" lang="ja">${esc(t.title_japanese)}</p>` : ""}
             <ul class="chips-static">${chips}</ul>
-            <p class="d-date">Starts in Japan <b>${esc(formatDate(t.start_date))}</b></p>
+            <p class="d-date">Starts in Japan <b>${t.start_date ? esc(formatDate(t.start_date)) : `${esc(t.season)}, date not announced`}</b></p>
             ${flags}
           </div>
         </div>
