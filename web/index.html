@@ -57,7 +57,7 @@
       <div class="hero-veil" aria-hidden="true"></div>
       <canvas class="petals" id="petals" aria-hidden="true"></canvas>
       <div class="hero-inner">
-        <p class="eyebrow">India Demand Index · launch forecasts</p>
+        <p class="eyebrow"><span class="no">01</span>India Demand Index · launch forecasts</p>
         <h1 id="hero-title" class="wordmark"><span class="wm-latin">Yosoku</span> <span class="wm-kanji" lang="ja">予測</span></h1>
         <p class="hero-question">Will it land in <em>India?</em></p>
         <p class="hero-lead">Yosoku predicts how Japanese anime will perform in India <strong>before</strong> the launch decision is made, with a verdict for every title and the evidence behind it.</p>
@@ -68,17 +68,19 @@
         </div>
         <dl class="hero-stats" id="hero-stats"></dl>
       </div>
-      <svg class="hero-edge" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V70c60-30 120-30 180 0s120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0V120Z"/></svg>
     </section>
     </div>
 
     <div class="page" id="page-forecasts" data-page="forecasts" role="tabpanel" aria-labelledby="tab-forecasts" hidden>
-    <section class="section" id="slate" aria-labelledby="slate-title">
-      <header class="section-head reveal">
-        <p class="eyebrow">The slate</p>
+    <header class="masthead">
+      <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">判定</span></div>
+      <div class="mast-inner">
+        <p class="eyebrow"><span class="no">02</span>The slate</p>
         <h1 id="slate-title">Every title, one verdict</h1>
         <p class="lead">Pick a stage of the release cycle, then open any title to see why the model thinks what it thinks.</p>
-      </header>
+      </div>
+    </header>
+    <section class="section" id="slate" aria-labelledby="slate-title">
       <div class="controls reveal" id="controls"></div>
       <p class="legend" id="legend"></p>
       <div class="grid" id="grid" aria-live="polite"></div>
@@ -88,43 +90,53 @@
     </div>
 
     <div class="page" id="page-record" data-page="record" role="tabpanel" aria-labelledby="tab-record" hidden>
-    <section class="section section-alt" id="record" aria-labelledby="record-title">
-      <header class="section-head reveal">
-        <p class="eyebrow">Track record</p>
+    <header class="masthead">
+      <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">実績</span></div>
+      <div class="mast-inner">
+        <p class="eyebrow"><span class="no">03</span>Track record</p>
         <h1 id="record-title">Would we have called it?</h1>
         <p class="lead">Every forecast against what actually happened. The 2024 titles were never seen in training.</p>
-      </header>
+      </div>
+    </header>
+    <section class="section section-alt" id="record" aria-labelledby="record-title">
       <div id="record-body" class="record reveal"></div>
     </section>
     </div>
 
     <div class="page" id="page-method" data-page="method" role="tabpanel" aria-labelledby="tab-method" hidden>
-    <section class="section" id="method" aria-labelledby="method-title">
-      <header class="section-head reveal">
-        <p class="eyebrow">Method &amp; data</p>
+    <header class="masthead">
+      <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">方法</span></div>
+      <div class="mast-inner">
+        <p class="eyebrow"><span class="no">04</span>Method &amp; data</p>
         <h1 id="method-title">How the India Demand Index is built</h1>
         <p class="lead">Public data only, measured over the first 28 days after the Japanese premiere. It measures attention in India, not revenue.</p>
-      </header>
+      </div>
+    </header>
+    <section class="section" id="method" aria-labelledby="method-title">
       <div id="method-body" class="method"></div>
     </section>
     </div>
     <div class="page" id="page-guide" data-page="guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
-    <section class="section" id="guide" aria-labelledby="guide-title">
-      <header class="section-head reveal">
-        <p class="eyebrow">Demand guide</p>
+    <header class="masthead">
+      <div class="mast-art" aria-hidden="true"><i class="mast-sun"></i><span class="mast-kanji" lang="ja">需要</span></div>
+      <div class="mast-inner">
+        <p class="eyebrow"><span class="no">05</span>Demand guide</p>
         <h1 id="guide-title">What is India actually watching?</h1>
         <p class="lead">For anyone deciding where demand lies, including those whose own title is unlikely to work. Built only from what India has watched and said: Netflix India's weekly Top 10 and the trailer comments we counted.</p>
-      </header>
+      </div>
+    </header>
+    <section class="section" id="guide" aria-labelledby="guide-title">
       <div id="guide-body" class="guide"></div>
     </section>
     </div>
   </main>
 
   <footer class="footer">
+    <span class="footer-kanji" aria-hidden="true" lang="ja">予測</span>
     <div class="footer-inner">
       <div>
-        <p class="footer-brand"><span class="brand-mark" aria-hidden="true">予</span> Yosoku 予測</p>
-        <p>Thapar Japan Hackathon · GEEK-PS-01 · Team shecodes</p>
+        <p class="footer-brand"><span class="brand-mark" aria-hidden="true">予</span> Yosoku <span lang="ja">予測</span></p>
+        <p class="footer-credit">Thapar Japan Hackathon · GEEK-PS-01 · Team shecodes</p>
       </div>
       <p class="fine">Cover art is loaded from <a href="https://anilist.co" rel="noopener">AniList</a> and belongs to its rights holders. Other artwork is drawn for this site. India map: Survey of India boundaries via <a href="https://github.com/udit-001/india-maps-data" rel="noopener">india-maps-data</a>. Japanese text on forecasts is machine-templated; have a fluent speaker check it before external use.</p>
     </div>

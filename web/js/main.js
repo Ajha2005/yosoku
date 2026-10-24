@@ -67,8 +67,8 @@ const TITLE_HASH = /^#\/title\/(\d+)(?:\/([^/]+))?$/;
 const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|method)\/?$/) || [, "home"])[1];
 
 function updateNav() {
-  // Over the hero the bar is transparent; on every other page, or once scrolled, it is solid.
-  $("#nav").classList.toggle("scrolled", state.page !== "home" || scrollY > 24);
+  // Every page opens on an ink band, so the bar is transparent at the top and turns solid once you scroll.
+  $("#nav").classList.toggle("scrolled", scrollY > 24);
 }
 
 /** Shows one page and marks its tab. Pages stay in the DOM, so a page keeps its filters while you look at another. */
