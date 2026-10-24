@@ -1,7 +1,9 @@
-// The Business tab: what the forecasts are worth to a buyer, who pays, and how the method travels to other markets.
+// The business case: what the forecasts are worth to a buyer, who pays, and how the method travels to other markets.
+// Not linked from the site: the prototype is for buyers, and this is for the team's final presentation. To show it,
+// import renderBusiness in main.js and render it into a page (see docs/demo.md, "Business story").
 
-import { MOMENTS, esc, pct, formatDate } from "./data.js?v=11";
-import { verdictIcon } from "./charts.js?v=11";
+import { MOMENTS, esc, pct, formatDate } from "./data.js?v=12";
+import { verdictIcon } from "./charts.js?v=12";
 
 const CUSTOMERS = [
   { who: "Indian streaming platforms and TV channels", decides: "Which titles to license, when to commit, and whether to dub.",

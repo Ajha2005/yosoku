@@ -310,7 +310,7 @@ split they share.
 ## The website (static, for Vercel)
 
 `web/` is the dashboard, a plain static site (no server, no build step). Vercel can host it because it is only
-HTML, CSS, JavaScript and a few JSON files. Six tabs:
+HTML, CSS, JavaScript and a few JSON files. Five tabs:
 
 - **Overview:** the poster wall and the headline numbers.
 - **Forecasts:** a verdict card for every title. Its sheet has the forecast and range (for a sealed title, the sealed
@@ -321,12 +321,13 @@ HTML, CSS, JavaScript and a few JSON files. Six tabs:
   Forecasts → Upcoming carries the seal and the daily job's status and alerts.
 - **Track record:** the 2024 backtest against simple rules, how often the ranges held and why, and the decision clock
   ("When will we know?").
-- **Business:** what following the calls would have been worth on 2024, who pays and for which decision, the
-  markets set up beyond India (`collectors/markets.py`) and the roadmap, and why us.
 - **Method:** how a forecast becomes a verdict, the index checks, how the project keeps up as data arrives every
   day, what each signal is worth, and where the data comes from and where it can mislead.
 - **Demand guide:** what India has watched (Netflix India's Top 10), what kind of title gets there, where in India,
   what India is asking for, beyond India (where anime reaches Netflix's Top 10 in 88 countries), and a check-your-title tool.
+
+The business story (what following the calls would have been worth, who pays, expansion, why us) is for the final
+presentation, not the site: `docs/demo.md` has it, and `web/js/business.js`, kept in the repo but not linked, renders it.
 
 **Update it after every pipeline run:**
 
