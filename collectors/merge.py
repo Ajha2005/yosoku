@@ -7,6 +7,7 @@ Japanese start date:
   pre     the 28 days before start (all you know before launch)
   week1   start day and the 6 days after
   month1  start day and the 27 days after (the deck's "week 4" horizon)
+  early   Reddit only: days -90 to -29, before the T-28 forecast moment
 
 A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
@@ -22,6 +23,8 @@ import pandas as pd
 from common import add_data_dir_argument, data_file, read_titles, use_data_dir
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
+# Reddit also gets "early", the days before the T-28 forecast moment (see docs/decisions.md).
+REDDIT_WINDOWS = {"early": (-90, -29), **WINDOWS}
 WIKI_LANGS = ["en", "ja", "hi", "ta", "te"]
 NETFLIX_CHARTS_START = "2021-06-28"  # first week of Netflix's per-country lists
 NETFLIX_DAYS = 90
@@ -45,10 +48,10 @@ def load(name):
     return pd.read_csv(path, encoding="utf-8-sig")
 
 
-def window_totals(rows, value, how, index):
+def window_totals(rows, value, how, index, windows=WINDOWS):
     """{window: Series indexed by anilist_id} of rows[value] summed or averaged within each window."""
     totals = {}
-    for window, (lo, hi) in WINDOWS.items():
+    for window, (lo, hi) in windows.items():
         inside = rows[rows["days_from_start"].between(lo, hi)]
         totals[window] = inside.groupby("anilist_id")[value].agg(how).reindex(index)
     return totals
@@ -137,6 +140,20 @@ def trends(titles):
     return out
 
 
+def reddit(titles):
+    posts, finished = load("reddit_posts.csv"), load("reddit_titles.csv")
+    if posts is None or finished is None:
+        return None
+    out = pd.DataFrame(index=titles.index)
+    collected = titles.index.isin(finished["anilist_id"])
+    posts["posts"] = 1
+    for value, name in (("posts", "posts"), ("score", "score"), ("num_comments", "comments")):
+        for window, total in window_totals(posts, value, "sum", titles.index, REDDIT_WINDOWS).items():
+            # A finished title with no matching posts had none: 0, not blank.
+            out[f"reddit_{name}_{window}"] = total.fillna(0).where(collected)
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_dir_argument(parser)
@@ -145,7 +162,7 @@ def main():
     read_titles()  # exits with a hint if titles.csv is missing
     titles = pd.read_csv(data_file("titles.csv"), encoding="utf-8-sig").set_index("anilist_id")
     parts = [titles]
-    for source in (wikipedia, netflix, youtube, trends):
+    for source in (wikipedia, netflix, youtube, trends, reddit):
         part = source(titles)
         if part is not None:
             covered = part.notna().any(axis=1).sum()
