@@ -4,6 +4,7 @@ import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latest
 import { posterHTML, artSVG, startPetals } from "./art.js?v=2";
 import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=2";
 import { createDetail, countUp } from "./detail.js?v=2";
+import { renderGuide } from "./guide.js?v=2";
 import { showTip, hideTip } from "./tip.js?v=2";
 import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=2";
 
@@ -61,9 +62,9 @@ function initTheme() {
   sync();
 }
 
-const PAGES = { home: "Overview", forecasts: "Forecasts", record: "Track record", method: "Method" };
+const PAGES = { home: "Overview", guide: "Demand guide", forecasts: "Forecasts", record: "Track record", method: "Method" };
 const TITLE_HASH = /^#\/title\/(\d+)(?:\/([^/]+))?$/;
-const pageFromHash = (hash) => (hash.match(/^#\/(forecasts|record|method)\/?$/) || [, "home"])[1];
+const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|method)\/?$/) || [, "home"])[1];
 
 function updateNav() {
   // Over the hero the bar is transparent; on every other page, or once scrolled, it is solid.
@@ -452,6 +453,7 @@ async function boot() {
   try { loaded = await loadData(); } catch (error) { showError(error); initReveal(); return; }
   app.data = loaded.data;
   app.covers = loaded.covers;
+  app.guide = loaded.guide;
   if (app.data.mock) $("#mock-banner").hidden = false;
 
   detail = createDetail(app, { requestClose });
@@ -466,6 +468,7 @@ async function boot() {
   renderRecord();
   initDotTips();
   renderMethod();
+  renderGuide(app, $("#guide-body"));
   initTilt();
   initReveal();
 
