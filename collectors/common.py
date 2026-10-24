@@ -106,7 +106,7 @@ def write_csv(path, rows, fields):
     """Write rows (dicts) to a CSV that Excel opens with Japanese and Indic text intact."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8-sig", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")  # as committed: the csv module's default is \r\n
         writer.writeheader()
         writer.writerows(rows)
 

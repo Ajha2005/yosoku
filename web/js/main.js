@@ -341,13 +341,18 @@ function renderRecord() {
       ${esc(split.youtube_titles)} that have one. YouTube comments were collected only for the titles most popular on AniList today, so the 2024 ones
       are mostly hits, and they beat their forecasts. Every upcoming title gets YouTube data, so its range is set from those titles' misses:
       ± ${fixed(lines.range_half_width_live, 0)} points at ${esc(MOMENTS[moment].label)}.</p>` : "";
+  // The chance of a top-third result, at the stages where it beats the base rate by enough to be shown.
+  const top = info?.top_third;
+  const chanceNote = top?.shown ? `<p class="note range-note">At this stage every forecast also gets a <b>chance of a top-third
+      result</b> (an index of ${round(top.line_live)} or more). Season by season it beats the base rate by ${pct(top.skill)} (Brier skill),
+      and when it says ${pct(top.sure)} or more, ${pct(top.sure_right)} of ${esc(top.sure_calls)} calls came true.</p>` : "";
   const score = info ? `
     <div class="scorecard">
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[used], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
       <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[used]) ? pct(t.top20[used]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
     </div>
-    ${rangeNote}
+    ${rangeNote}${chanceNote}
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
       <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
       <span>Checked on the 2024 titles, which the model never saw in training.${used !== info.main ? ` So at this stage "${esc(used)}" makes the forecasts and verdicts; the closest past titles still come from our model.` : ""}</span></p>` : "";

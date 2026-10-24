@@ -12,6 +12,23 @@
     "other": 0.8484848484848485,
     "other_titles": 33
    },
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -4.315844988630978,
+     0.07412978676536026
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -2.872875615327617,
+     0.04533802075655053
+    ],
+    "skill": 0.017115694097294076,
+    "sure_calls": 0,
+    "sure_right": null,
+    "sure": 0.7,
+    "shown": false
+   },
    "beats_baseline": false,
    "best_baseline": "Genre average",
    "table": {
@@ -88,6 +105,23 @@
     "youtube_titles": 19,
     "other": 0.7878787878787878,
     "other_titles": 33
+   },
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.3018095917177215,
+     0.11211343225834994
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.98017124903243,
+     0.1240299389053043
+    ],
+    "skill": 0.06950121950079913,
+    "sure_calls": 2,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
    },
    "beats_baseline": true,
    "best_baseline": "Genre average",
@@ -195,6 +229,23 @@
     "youtube_titles": 19,
     "other": 0.7878787878787878,
     "other_titles": 33
+   },
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.920190543116455,
+     0.12217482169561278
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -8.461802712082063,
+     0.14863217176694876
+    ],
+    "skill": 0.19491276390660484,
+    "sure_calls": 17,
+    "sure_right": 0.9411764705882353,
+    "sure": 0.7,
+    "shown": true
    },
    "beats_baseline": true,
    "best_baseline": "India YouTube alone",

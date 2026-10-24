@@ -6,7 +6,8 @@ the data dated before that day (the stages' windows cut off the day before, see 
 2019-2023 and scored on the 2024 titles and on the rolling seasons, as evaluate.py scores the three stages.
 Each day also gets its 80% range from the misses on past seasons, and every 2024 title its forecast on each
 day: how it would have moved as the buzz came in. Titles in play take the range from the misses of the titles whose
-index includes YouTube only, as theirs will (evaluate.live_width).
+index includes YouTube only, as theirs will (evaluate.live_width), and the chance of a top-third result where it
+beats the base rate by enough to be shown (models.top_third).
 
 Day 0 and later are nowcasts: from the premiere on, the inputs fall inside the 28 days the index measures.
 The clock describes our model only; at a stage where a simple rule won (gate G4) the verdicts still use the rule.
@@ -24,7 +25,7 @@ from scipy.stats import spearmanr
 from yosoku.data import add_folder_arguments, folder
 from yosoku.evaluate import MIN_TARGET, MIN_TRAIN, bootstrap, fmt, live_width, prepare, scores
 from yosoku.labels import youtube_part
-from yosoku.models import Blend, conformal_width, lookalikes, stacked_inputs
+from yosoku.models import TOP_LINE, Blend, conformal_width, lookalikes, stacked_inputs, top_third
 from yosoku.split import guard_test, rolling_folds, split_of
 
 DAYS = [-49, -42, -35, -28, -21, -14, -7, 0, 3, 7, 14]  # the day a forecast is made: it sees data up to the day before
@@ -59,15 +60,17 @@ def run(titles, labels, features):
 
     rows, paths = [], {}
     youtube = youtube_part(titles)
+    line, line_live = labels.loc[train].quantile(TOP_LINE), labels.loc[train.union(validate)].quantile(TOP_LINE)
     for day in ["cold", *DAYS]:
         f = features[cutoff(day)]
         val = blend(f, titles, labels, train, validate, looks["2024"])
-        seasons, misses, known = [], [], []
+        seasons, misses, known, frames = [], [], [], []
         for name, tr, te in folds:
             pred = blend(f, titles, labels, tr, te, looks[name])
             both = pd.concat([pred.rename("p"), labels.loc[te].rename("a")], axis=1).dropna()
             seasons.append(spearmanr(both["p"], both["a"]).statistic)
             known.append(both["a"] - both["p"])
+            frames.append(pd.DataFrame({"season": name, "pred": both["p"], "actual": both["a"]}))
             if not name.endswith("2024"):  # the range is set before the year it is checked on
                 misses += list(both["a"] - both["p"])
         actual = labels.loc[validate]
@@ -79,10 +82,17 @@ def run(titles, labels, features):
                  "rolling": np.nanmean(seasons), "width": width, "width_live": live_width(pd.concat(known), youtube),
                  "coverage": ((val - actual).abs() <= width).mean()}
         rows.append({"day": day, "stage": "cold" if day == "cold" else STAGES.get(day), "nowcast": day != "cold" and day >= 0,
-                     "seasons": len(seasons), **{k: number(v) for k, v in stats.items()}})
+                     "seasons": len(seasons), **{k: number(v) for k, v in stats.items()},
+                     "top_third": top_third(pd.concat(frames), line, line_live)})
         for anilist_id, value in val.items():
             paths.setdefault(int(anilist_id), []).append(round(float(value), 1))
     return {"days": rows, "titles": paths}
+
+
+def chance_cell(top):
+    if not top:
+        return "–"
+    return f"{fmt(top['skill'])}{' · shown' if top['shown'] else ''}"
 
 
 def report(result):
@@ -90,13 +100,14 @@ def report(result):
              "The Blend refitted for each day, using only data dated before it, trained on 2019–2023 and scored on the "
              "2024 titles. From day 0 on it is a nowcast: its inputs fall inside the 28 days being measured.", "",
              "| Forecast made on | Spearman 2024 (95% interval) | Top-20% hit | MAE | Rolling seasons | 80% range | Range held | "
-             "Range for titles in play |",
-             "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+             "Range for titles in play | Top-third chance: skill |",
+             "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in result["days"]:
         when = "cold (no buzz)" if r["day"] == "cold" else f"day {r['day']:+d}" + (f" ({r['stage']})" if r["stage"] else "")
         lines.append(f"| {when}{' · nowcast' if r['nowcast'] else ''} | {fmt(r['spearman'])} ({fmt(r['low'])} to {fmt(r['high'])}) | "
                      f"{fmt(r['top20'])} | {fmt(r['mae'], 1)} | {fmt(r['rolling'])} over {r['seasons']} | ± {fmt(r['width'], 1)} | "
-                     f"{'–' if r['coverage'] is None else format(r['coverage'], '.0%')} | ± {fmt(r['width_live'], 1)} |")
+                     f"{'–' if r['coverage'] is None else format(r['coverage'], '.0%')} | ± {fmt(r['width_live'], 1)} | "
+                     f"{chance_cell(r['top_third'])} |")
     return "\n".join(lines) + "\n"
 
 

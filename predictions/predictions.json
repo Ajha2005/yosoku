@@ -286,7 +286,24 @@
    "rolling": 0.18001622216792498,
    "width": 12.528437978214065,
    "width_live": 21.207568788923652,
-   "coverage": 0.5769230769230769
+   "coverage": 0.5769230769230769,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -7.214592978315627,
+     0.13106618072342552
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -8.807750056402478,
+     0.16064987663424452
+    ],
+    "skill": 0.036359284079023224,
+    "sure_calls": 1,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -49,
@@ -301,7 +318,24 @@
    "rolling": 0.2865071834769977,
    "width": 12.497969451727679,
    "width_live": 19.396086229333445,
-   "coverage": 0.6153846153846154
+   "coverage": 0.6153846153846154,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -5.717270542334351,
+     0.1008947379832998
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.019067742246421,
+     0.10588098225527094
+    ],
+    "skill": 0.05851121255632297,
+    "sure_calls": 1,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -42,
@@ -316,7 +350,24 @@
    "rolling": 0.3255457713081552,
    "width": 12.48004050658897,
    "width_live": 18.96359549582085,
-   "coverage": 0.6153846153846154
+   "coverage": 0.6153846153846154,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -5.180741757366216,
+     0.09013135216667752
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -5.82487614714705,
+     0.10188945653283671
+    ],
+    "skill": 0.04632340423660286,
+    "sure_calls": 1,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -35,
@@ -331,7 +382,24 @@
    "rolling": 0.3266327751196172,
    "width": 12.315564887355514,
    "width_live": 19.36560464384763,
-   "coverage": 0.6153846153846154
+   "coverage": 0.6153846153846154,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.235407345413311,
+     0.11087757866937388
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.55522794136819,
+     0.1161042039109207
+    ],
+    "skill": 0.061987931641863114,
+    "sure_calls": 3,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -28,
@@ -346,7 +414,24 @@
    "rolling": 0.3176945332788986,
    "width": 12.48046498007341,
    "width_live": 18.746105587126593,
-   "coverage": 0.6346153846153846
+   "coverage": 0.6346153846153846,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.3018095917177215,
+     0.11211343225834994
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.98017124903243,
+     0.1240299389053043
+    ],
+    "skill": 0.06950121950079913,
+    "sure_calls": 2,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -21,
@@ -361,7 +446,24 @@
    "rolling": 0.3426392892453264,
    "width": 12.06354418826527,
    "width_live": 18.86196745583271,
-   "coverage": 0.6346153846153846
+   "coverage": 0.6346153846153846,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.382450193761789,
+     0.11360967672834298
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -7.446392249426176,
+     0.13292638081040575
+    ],
+    "skill": 0.07013081972428814,
+    "sure_calls": 2,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -14,
@@ -376,7 +478,24 @@
    "rolling": 0.3174703199277503,
    "width": 12.00247488721273,
    "width_live": 18.17741675033701,
-   "coverage": 0.6153846153846154
+   "coverage": 0.6153846153846154,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.1040023248887545,
+     0.10853466805538386
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.920333439744918,
+     0.12306247851230548
+    ],
+    "skill": 0.06849247344485487,
+    "sure_calls": 2,
+    "sure_right": 1.0,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": -7,
@@ -391,7 +510,24 @@
    "rolling": 0.3762774802596784,
    "width": 12.108773656979158,
    "width_live": 17.88057447849932,
-   "coverage": 0.7115384615384616
+   "coverage": 0.7115384615384616,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -5.524706851496186,
+     0.09707501292627767
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.1137389728211335,
+     0.10698924614881626
+    ],
+    "skill": 0.07599860641470912,
+    "sure_calls": 6,
+    "sure_right": 0.8333333333333334,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": 0,
@@ -406,7 +542,24 @@
    "rolling": 0.4075818518426878,
    "width": 12.646520327502174,
    "width_live": 17.42920448179572,
-   "coverage": 0.7884615384615384
+   "coverage": 0.7884615384615384,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -5.181528750858305,
+     0.08984438184562502
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -6.654799024449188,
+     0.11633479522555493
+    ],
+    "skill": 0.08748403890941792,
+    "sure_calls": 8,
+    "sure_right": 0.875,
+    "sure": 0.7,
+    "shown": false
+   }
   },
   {
    "day": 3,
@@ -421,7 +574,24 @@
    "rolling": 0.528882406293397,
    "width": 10.915178283584982,
    "width_live": 14.303366292480879,
-   "coverage": 0.7115384615384616
+   "coverage": 0.7115384615384616,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -5.918122165289604,
+     0.10390048823055267
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -7.835022760822321,
+     0.13806179461247609
+    ],
+    "skill": 0.14580231621160133,
+    "sure_calls": 12,
+    "sure_right": 0.9166666666666666,
+    "sure": 0.7,
+    "shown": true
+   }
   },
   {
    "day": 7,
@@ -436,7 +606,24 @@
    "rolling": 0.608359622833307,
    "width": 10.347721339708588,
    "width_live": 12.71834180795863,
-   "coverage": 0.6730769230769231
+   "coverage": 0.6730769230769231,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -6.920190543116455,
+     0.12217482169561278
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -8.461802712082063,
+     0.14863217176694876
+    ],
+    "skill": 0.19491276390660484,
+    "sure_calls": 17,
+    "sure_right": 0.9411764705882353,
+    "sure": 0.7,
+    "shown": true
+   }
   },
   {
    "day": 14,
@@ -451,7 +638,24 @@
    "rolling": 0.6524732530111786,
    "width": 9.75700623360327,
    "width_live": 12.02827638229735,
-   "coverage": 0.6923076923076923
+   "coverage": 0.6923076923076923,
+   "top_third": {
+    "line": 52.98412379421221,
+    "curve": [
+     -8.228346663072703,
+     0.14718986899800512
+    ],
+    "line_live": 54.16838431307884,
+    "curve_live": [
+     -9.347263894152208,
+     0.16539380129757886
+    ],
+    "skill": 0.21984082774566327,
+    "sure_calls": 22,
+    "sure_right": 0.9090909090909091,
+    "sure": 0.7,
+    "shown": true
+   }
   }
  ],
  "label_checks": {
@@ -511,6 +715,14 @@
    }
   ]
  },
+ "markets": {
+  "titles": 160,
+  "countries": 88,
+  "countries_checked": 44,
+  "auc": 0.7,
+  "genre_auc": 0.55,
+  "india_rank": 39
+ },
  "dub_typical": 0.251,
  "evaluation": {
   "moments": {
@@ -525,6 +737,23 @@
      "youtube_titles": 19,
      "other": 0.8484848484848485,
      "other_titles": 33
+    },
+    "top_third": {
+     "line": 52.98412379421221,
+     "curve": [
+      -4.315844988630978,
+      0.07412978676536026
+     ],
+     "line_live": 54.16838431307884,
+     "curve_live": [
+      -2.872875615327617,
+      0.04533802075655053
+     ],
+     "skill": 0.017115694097294076,
+     "sure_calls": 0,
+     "sure_right": null,
+     "sure": 0.7,
+     "shown": false
     },
     "beats_baseline": false,
     "best_baseline": "Genre average",
@@ -602,6 +831,23 @@
      "youtube_titles": 19,
      "other": 0.7878787878787878,
      "other_titles": 33
+    },
+    "top_third": {
+     "line": 52.98412379421221,
+     "curve": [
+      -6.3018095917177215,
+      0.11211343225834994
+     ],
+     "line_live": 54.16838431307884,
+     "curve_live": [
+      -6.98017124903243,
+      0.1240299389053043
+     ],
+     "skill": 0.06950121950079913,
+     "sure_calls": 2,
+     "sure_right": 1.0,
+     "sure": 0.7,
+     "shown": false
     },
     "beats_baseline": true,
     "best_baseline": "Genre average",
@@ -709,6 +955,23 @@
      "youtube_titles": 19,
      "other": 0.7878787878787878,
      "other_titles": 33
+    },
+    "top_third": {
+     "line": 52.98412379421221,
+     "curve": [
+      -6.920190543116455,
+      0.12217482169561278
+     ],
+     "line_live": 54.16838431307884,
+     "curve_live": [
+      -8.461802712082063,
+      0.14863217176694876
+     ],
+     "skill": 0.19491276390660484,
+     "sure_calls": 17,
+     "sure_right": 0.9411764705882353,
+     "sure": 0.7,
+     "shown": true
     },
     "beats_baseline": true,
     "best_baseline": "India YouTube alone",
@@ -1243,7 +1506,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 3
-     }
+     },
+     "top_third": 0.985
     }
    },
    "trajectory": [
@@ -1259,6 +1523,73 @@
     83.3,
     90.7,
     88.5
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.501,
+      "titles": 5,
+      "typical": 0.3
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.465,
+      "titles": 5,
+      "typical": 0.457
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.465,
+      "titles": 5,
+      "typical": 0.343
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.419,
+      "titles": 4,
+      "typical": 0.329
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.419,
+      "titles": 4,
+      "typical": 0.229
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.296,
+      "titles": 3,
+      "typical": 0.329
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.208,
+      "titles": 2,
+      "typical": 0.1
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Maldives",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -1689,7 +2020,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.539
     }
    },
    "trajectory": [
@@ -1705,6 +2037,69 @@
     57.3,
     57.9,
     57.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.588,
+      "titles": 6,
+      "typical": 0.463
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.393,
+      "titles": 4,
+      "typical": 0.328
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.363,
+      "titles": 4,
+      "typical": 0.343
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.355,
+      "titles": 4,
+      "typical": 0.254
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.355,
+      "titles": 4,
+      "typical": 0.239
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.271,
+      "titles": 3,
+      "typical": 0.343
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.088,
+      "titles": 1,
+      "typical": 0.104
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Japan",
+    "Martinique",
+    "Réunion",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -2131,7 +2526,8 @@
      "dub_demand": {
       "share": 0.068,
       "titles": 3
-     }
+     },
+     "top_third": 0.846
     }
    },
    "trajectory": [
@@ -2147,6 +2543,63 @@
     65.5,
     70.6,
     67.0
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.4,
+      "titles": 4,
+      "typical": 0.348
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.27,
+      "titles": 3,
+      "typical": 0.47
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.27,
+      "titles": 3,
+      "typical": 0.333
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.196,
+      "titles": 2,
+      "typical": 0.348
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.196,
+      "titles": 2,
+      "typical": 0.242
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.176,
+      "titles": 2,
+      "typical": 0.182
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.077,
+      "titles": 1,
+      "typical": 0.106
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -2568,7 +3021,8 @@
      "dub_demand": {
       "share": 0.075,
       "titles": 3
-     }
+     },
+     "top_third": 0.85
     }
    },
    "trajectory": [
@@ -2584,7 +3038,61 @@
     59.1,
     70.8,
     69.4
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.387,
+      "titles": 4,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.295,
+      "titles": 3,
+      "typical": 0.243
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.295,
+      "titles": 3,
+      "typical": 0.214
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.295,
+      "titles": 3,
+      "typical": 0.186
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.295,
+      "titles": 3,
+      "typical": 0.171
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.288,
+      "titles": 3,
+      "typical": 0.343
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 166794,
@@ -3004,7 +3512,8 @@
      "dub_demand": {
       "share": 0.182,
       "titles": 6
-     }
+     },
+     "top_third": 0.462
     }
    },
    "trajectory": [
@@ -3020,7 +3529,61 @@
     54.0,
     55.4,
     55.0
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.287,
+      "titles": 3,
+      "typical": 0.457
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.24,
+      "titles": 2,
+      "typical": 0.3
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.171
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.329
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.189,
+      "titles": 2,
+      "typical": 0.157
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.113,
+      "titles": 1,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 137908,
@@ -3443,7 +4006,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.481
     }
    },
    "trajectory": [
@@ -3459,7 +4023,61 @@
     55.0,
     56.0,
     55.3
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.292,
+      "titles": 2,
+      "typical": 0.457
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.15,
+      "titles": 2,
+      "typical": 0.243
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.15,
+      "titles": 2,
+      "typical": 0.214
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.15,
+      "titles": 2,
+      "typical": 0.186
+     },
+     {
+      "iso2": "DO",
+      "name": "Dominican Republic",
+      "share": 0.15,
+      "titles": 2,
+      "typical": 0.157
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.119,
+      "titles": 1,
+      "typical": 0.329
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 166216,
@@ -3898,7 +4516,8 @@
      "dub_demand": {
       "share": 0.128,
       "titles": 4
-     }
+     },
+     "top_third": 0.376
     }
    },
    "trajectory": [
@@ -3914,7 +4533,61 @@
     51.4,
     52.5,
     53.1
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.46,
+      "titles": 4,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.375,
+      "titles": 3,
+      "typical": 0.171
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.326,
+      "titles": 4,
+      "typical": 0.3
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.326,
+      "titles": 4,
+      "typical": 0.257
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.257,
+      "titles": 3,
+      "typical": 0.457
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.257,
+      "titles": 3,
+      "typical": 0.329
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.093,
+      "titles": 1,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 153658,
@@ -4346,7 +5019,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.436
     }
    },
    "trajectory": [
@@ -4362,7 +5036,61 @@
     54.5,
     54.5,
     55.8
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.476,
+      "titles": 5,
+      "typical": 0.333
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.236
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.208
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.181
+     },
+     {
+      "iso2": "BO",
+      "name": "Bolivia",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.167
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.167
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.269,
+      "titles": 3,
+      "typical": 0.097
+     }
+    ]
+   }
   },
   {
    "anilist_id": 168374,
@@ -4773,7 +5501,8 @@
      "dub_demand": {
       "share": 0.256,
       "titles": 5
-     }
+     },
+     "top_third": 0.516
     }
    },
    "trajectory": [
@@ -4789,7 +5518,61 @@
     56.2,
     57.2,
     58.8
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.537,
+      "titles": 4,
+      "typical": 0.3
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.494,
+      "titles": 4,
+      "typical": 0.457
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.494,
+      "titles": 4,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.415,
+      "titles": 3,
+      "typical": 0.257
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.415,
+      "titles": 3,
+      "typical": 0.229
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.344,
+      "titles": 2,
+      "typical": 0.343
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.22,
+      "titles": 1,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 147642,
@@ -5231,7 +6014,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 1
-     }
+     },
+     "top_third": 0.496
     }
    },
    "trajectory": [
@@ -5247,6 +6031,63 @@
     55.9,
     56.5,
     56.4
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.456,
+      "titles": 5,
+      "typical": 0.25
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.378,
+      "titles": 4,
+      "typical": 0.353
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.346,
+      "titles": 4,
+      "typical": 0.221
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.346,
+      "titles": 4,
+      "typical": 0.191
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.292,
+      "titles": 3,
+      "typical": 0.471
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.292,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.095,
+      "titles": 1,
+      "typical": 0.103
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -5641,7 +6482,8 @@
      "dub_demand": {
       "share": null,
       "titles": 0
-     }
+     },
+     "top_third": 0.448
     }
    },
    "trajectory": [
@@ -5657,6 +6499,63 @@
     53.9,
     54.9,
     53.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.391,
+      "titles": 4,
+      "typical": 0.471
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.312,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.353
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.179,
+      "titles": 2,
+      "typical": 0.235
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.171,
+      "titles": 2,
+      "typical": 0.309
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.088,
+      "titles": 1,
+      "typical": 0.103
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -6078,7 +6977,8 @@
      "dub_demand": {
       "share": 0.091,
       "titles": 2
-     }
+     },
+     "top_third": 0.464
     }
    },
    "trajectory": [
@@ -6094,7 +6994,61 @@
     55.8,
     55.5,
     55.8
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.494,
+      "titles": 5,
+      "typical": 0.306
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.411,
+      "titles": 4,
+      "typical": 0.236
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.411,
+      "titles": 4,
+      "typical": 0.208
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.411,
+      "titles": 4,
+      "typical": 0.181
+     },
+     {
+      "iso2": "DO",
+      "name": "Dominican Republic",
+      "share": 0.411,
+      "titles": 4,
+      "typical": 0.153
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.397,
+      "titles": 4,
+      "typical": 0.236
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.094,
+      "titles": 1,
+      "typical": 0.097
+     }
+    ]
+   }
   },
   {
    "anilist_id": 155645,
@@ -6528,7 +7482,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 3
-     }
+     },
+     "top_third": 0.247
     }
    },
    "trajectory": [
@@ -6544,7 +7499,61 @@
     47.9,
     47.5,
     47.7
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.48,
+      "titles": 5,
+      "typical": 0.458
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.414,
+      "titles": 4,
+      "typical": 0.333
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.38,
+      "titles": 4,
+      "typical": 0.333
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.37,
+      "titles": 4,
+      "typical": 0.347
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.307,
+      "titles": 3,
+      "typical": 0.181
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.3,
+      "titles": 3,
+      "typical": 0.306
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.083,
+      "titles": 1,
+      "typical": 0.097
+     }
+    ]
+   }
   },
   {
    "anilist_id": 165314,
@@ -6954,7 +7963,8 @@
      "dub_demand": {
       "share": 0.241,
       "titles": 5
-     }
+     },
+     "top_third": 0.395
     }
    },
    "trajectory": [
@@ -6970,7 +7980,61 @@
     52.1,
     53.1,
     51.2
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.271,
+      "titles": 3,
+      "typical": 0.157
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.26,
+      "titles": 3,
+      "typical": 0.457
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.26,
+      "titles": 3,
+      "typical": 0.343
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.181,
+      "titles": 2,
+      "typical": 0.329
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.181,
+      "titles": 2,
+      "typical": 0.3
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.1,
+      "titles": 1,
+      "typical": 0.329
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.1
+     }
+    ]
+   }
   },
   {
    "anilist_id": 147850,
@@ -7413,7 +8477,8 @@
      "dub_demand": {
       "share": 0.14,
       "titles": 7
-     }
+     },
+     "top_third": 0.273
     }
    },
    "trajectory": [
@@ -7429,7 +8494,61 @@
     49.4,
     48.6,
     49.8
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.758,
+      "titles": 7,
+      "typical": 0.347
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.683,
+      "titles": 6,
+      "typical": 0.458
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.682,
+      "titles": 6,
+      "typical": 0.333
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.676,
+      "titles": 6,
+      "typical": 0.208
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.606,
+      "titles": 5,
+      "typical": 0.333
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.606,
+      "titles": 5,
+      "typical": 0.264
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.194,
+      "titles": 2,
+      "typical": 0.097
+     }
+    ]
+   }
   },
   {
    "anilist_id": 153288,
@@ -7845,7 +8964,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 5
-     }
+     },
+     "top_third": 0.893
     }
    },
    "trajectory": [
@@ -7861,6 +8981,72 @@
     72.0,
     74.0,
     72.2
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.81,
+      "titles": 8,
+      "typical": 0.434
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.81,
+      "titles": 8,
+      "typical": 0.325
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.631,
+      "titles": 6,
+      "typical": 0.325
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.631,
+      "titles": 6,
+      "typical": 0.169
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.541,
+      "titles": 5,
+      "typical": 0.337
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.533,
+      "titles": 5,
+      "typical": 0.301
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.375,
+      "titles": 4,
+      "typical": 0.084
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -8334,7 +9520,8 @@
      "dub_demand": {
       "share": 0.102,
       "titles": 6
-     }
+     },
+     "top_third": 0.929
     }
    },
    "trajectory": [
@@ -8350,6 +9537,100 @@
     80.1,
     77.7,
     78.3
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.723,
+      "titles": 7,
+      "typical": 0.442
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.723,
+      "titles": 7,
+      "typical": 0.337
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.666,
+      "titles": 6,
+      "typical": 0.326
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.666,
+      "titles": 6,
+      "typical": 0.314
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.666,
+      "titles": 6,
+      "typical": 0.233
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.662,
+      "titles": 6,
+      "typical": 0.349
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.36,
+      "titles": 3,
+      "typical": 0.081
+     }
+    ]
+   },
+   "charted": [
+    "Argentina",
+    "Bahamas",
+    "Bangladesh",
+    "Bolivia",
+    "Brazil",
+    "Chile",
+    "Colombia",
+    "Costa Rica",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "France",
+    "Guadeloupe",
+    "Guatemala",
+    "Honduras",
+    "Hong Kong",
+    "India",
+    "Indonesia",
+    "Jamaica",
+    "Japan",
+    "Malaysia",
+    "Maldives",
+    "Martinique",
+    "Mexico",
+    "Nicaragua",
+    "Pakistan",
+    "Panama",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Sri Lanka",
+    "Taiwan",
+    "Thailand",
+    "Trinidad and Tobago",
+    "Venezuela",
+    "Vietnam"
    ]
   },
   {
@@ -8801,7 +10082,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 4
-     }
+     },
+     "top_third": 0.687
     }
    },
    "trajectory": [
@@ -8817,7 +10099,61 @@
     57.8,
     63.1,
     60.2
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.45
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.343,
+      "titles": 3,
+      "typical": 0.35
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.27,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.27,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.185,
+      "titles": 1,
+      "typical": 0.237
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.158,
+      "titles": 2,
+      "typical": 0.163
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.087
+     }
+    ]
+   }
   },
   {
    "anilist_id": 163270,
@@ -9246,7 +10582,8 @@
      "dub_demand": {
       "share": 0.202,
       "titles": 8
-     }
+     },
+     "top_third": 0.385
     }
    },
    "trajectory": [
@@ -9262,6 +10599,70 @@
     53.5,
     52.8,
     58.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.438,
+      "titles": 4,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.352,
+      "titles": 3,
+      "typical": 0.171
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.285,
+      "titles": 3,
+      "typical": 0.447
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.285,
+      "titles": 3,
+      "typical": 0.342
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.285,
+      "titles": 3,
+      "typical": 0.342
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.285,
+      "titles": 3,
+      "typical": 0.303
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.199,
+      "titles": 2,
+      "typical": 0.092
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "Taiwan",
+    "Vietnam"
    ]
   },
   {
@@ -9695,7 +11096,8 @@
      "dub_demand": {
       "share": null,
       "titles": 0
-     }
+     },
+     "top_third": 0.495
     }
    },
    "trajectory": [
@@ -9711,6 +11113,72 @@
     56.3,
     56.5,
     54.4
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.579,
+      "titles": 5,
+      "typical": 0.447
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.353,
+      "titles": 4,
+      "typical": 0.342
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.282,
+      "titles": 3,
+      "typical": 0.342
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.282,
+      "titles": 3,
+      "typical": 0.303
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.272,
+      "titles": 3,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.24,
+      "titles": 3,
+      "typical": 0.224
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.088,
+      "titles": 1,
+      "typical": 0.092
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Maldives",
+    "Philippines",
+    "Singapore",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -10136,7 +11604,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 5
-     }
+     },
+     "top_third": 0.82
     }
    },
    "trajectory": [
@@ -10152,7 +11621,61 @@
     64.1,
     69.0,
     67.5
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.56,
+      "titles": 7,
+      "typical": 0.442
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.56,
+      "titles": 7,
+      "typical": 0.337
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.474,
+      "titles": 6,
+      "typical": 0.349
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.405,
+      "titles": 5,
+      "typical": 0.326
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.405,
+      "titles": 5,
+      "typical": 0.267
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.325,
+      "titles": 4,
+      "typical": 0.314
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.163,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   }
   },
   {
    "anilist_id": 136804,
@@ -10607,7 +12130,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.058
     }
    },
    "trajectory": [
@@ -10623,7 +12147,61 @@
     32.4,
     33.8,
     36.6
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.286,
+      "titles": 3,
+      "typical": 0.21
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.286,
+      "titles": 3,
+      "typical": 0.185
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.286,
+      "titles": 3,
+      "typical": 0.16
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.269,
+      "titles": 3,
+      "typical": 0.444
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.205,
+      "titles": 2,
+      "typical": 0.21
+     },
+     {
+      "iso2": "MU",
+      "name": "Mauritius",
+      "share": 0.205,
+      "titles": 2,
+      "typical": 0.148
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.086
+     }
+    ]
+   }
   },
   {
    "anilist_id": 156415,
@@ -11061,7 +12639,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.453
     }
    },
    "trajectory": [
@@ -11077,6 +12656,71 @@
     54.4,
     55.1,
     54.4
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.429,
+      "titles": 4,
+      "typical": 0.333
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.311,
+      "titles": 3,
+      "typical": 0.458
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.293,
+      "titles": 3,
+      "typical": 0.347
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.293,
+      "titles": 3,
+      "typical": 0.236
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.293,
+      "titles": 3,
+      "typical": 0.236
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.293,
+      "titles": 3,
+      "typical": 0.208
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.1,
+      "titles": 1,
+      "typical": 0.097
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -11510,7 +13154,8 @@
      "dub_demand": {
       "share": 0.093,
       "titles": 3
-     }
+     },
+     "top_third": 0.511
     }
    },
    "trajectory": [
@@ -11526,6 +13171,63 @@
     55.6,
     57.0,
     55.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.403,
+      "titles": 4,
+      "typical": 0.458
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.305,
+      "titles": 3,
+      "typical": 0.333
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.197,
+      "titles": 2,
+      "typical": 0.347
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.197,
+      "titles": 2,
+      "typical": 0.306
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.197,
+      "titles": 2,
+      "typical": 0.264
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.197,
+      "titles": 2,
+      "typical": 0.236
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.097
+     }
+    ]
+   },
+   "charted": [
+    "Taiwan"
    ]
   },
   {
@@ -11964,7 +13666,8 @@
      "dub_demand": {
       "share": 0.333,
       "titles": 1
-     }
+     },
+     "top_third": 0.431
     }
    },
    "trajectory": [
@@ -11980,6 +13683,63 @@
     53.2,
     54.4,
     53.8
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.275,
+      "titles": 3,
+      "typical": 0.458
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.237,
+      "titles": 2,
+      "typical": 0.333
+     },
+     {
+      "iso2": "BO",
+      "name": "Bolivia",
+      "share": 0.195,
+      "titles": 2,
+      "typical": 0.167
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.112,
+      "titles": 1,
+      "typical": 0.236
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.112,
+      "titles": 1,
+      "typical": 0.208
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.112,
+      "titles": 1,
+      "typical": 0.181
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.097
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -12406,7 +14166,8 @@
      "dub_demand": {
       "share": 0.157,
       "titles": 2
-     }
+     },
+     "top_third": 0.316
     }
    },
    "trajectory": [
@@ -12422,7 +14183,61 @@
     49.6,
     50.3,
     49.2
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.246,
+      "titles": 3,
+      "typical": 0.462
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.237,
+      "titles": 3,
+      "typical": 0.346
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.232,
+      "titles": 3,
+      "typical": 0.346
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.185,
+      "titles": 2,
+      "typical": 0.321
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.185,
+      "titles": 2,
+      "typical": 0.282
+     },
+     {
+      "iso2": "BO",
+      "name": "Bolivia",
+      "share": 0.168,
+      "titles": 1,
+      "typical": 0.154
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.09
+     }
+    ]
+   }
   },
   {
    "anilist_id": 165855,
@@ -12847,7 +14662,8 @@
      "dub_demand": {
       "share": 0.094,
       "titles": 3
-     }
+     },
+     "top_third": 0.361
     }
    },
    "trajectory": [
@@ -12863,7 +14679,61 @@
     52.0,
     52.0,
     54.2
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.285,
+      "titles": 2,
+      "typical": 0.303
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.281,
+      "titles": 2,
+      "typical": 0.329
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.281,
+      "titles": 2,
+      "typical": 0.171
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.231,
+      "titles": 2,
+      "typical": 0.171
+     },
+     {
+      "iso2": "BO",
+      "name": "Bolivia",
+      "share": 0.217,
+      "titles": 2,
+      "typical": 0.158
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.217,
+      "titles": 2,
+      "typical": 0.158
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.147,
+      "titles": 1,
+      "typical": 0.092
+     }
+    ]
+   }
   },
   {
    "anilist_id": 148080,
@@ -13276,7 +15146,8 @@
      "dub_demand": {
       "share": 0.185,
       "titles": 4
-     }
+     },
+     "top_third": 0.308
     }
    },
    "trajectory": [
@@ -13292,6 +15163,63 @@
     50.9,
     50.0,
     49.2
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.644,
+      "titles": 7,
+      "typical": 0.356
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.482,
+      "titles": 6,
+      "typical": 0.448
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.388,
+      "titles": 5,
+      "typical": 0.345
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.388,
+      "titles": 5,
+      "typical": 0.333
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.388,
+      "titles": 5,
+      "typical": 0.276
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.388,
+      "titles": 5,
+      "typical": 0.207
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.147,
+      "titles": 2,
+      "typical": 0.092
+     }
+    ]
+   },
+   "charted": [
+    "Taiwan"
    ]
   },
   {
@@ -13695,7 +15623,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.535
     }
    },
    "trajectory": [
@@ -13711,6 +15640,67 @@
     56.6,
     57.8,
     46.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.518,
+      "titles": 5,
+      "typical": 0.44
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.442,
+      "titles": 4,
+      "typical": 0.333
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.442,
+      "titles": 4,
+      "typical": 0.31
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.429,
+      "titles": 5,
+      "typical": 0.345
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.167
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.26,
+      "titles": 3,
+      "typical": 0.202
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.083
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "South Korea",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -14150,7 +16140,8 @@
      "dub_demand": {
       "share": 0.338,
       "titles": 5
-     }
+     },
+     "top_third": 0.405
     }
    },
    "trajectory": [
@@ -14166,6 +16157,70 @@
     52.2,
     53.5,
     53.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.331,
+      "titles": 3,
+      "typical": 0.33
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.277,
+      "titles": 3,
+      "typical": 0.443
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.277,
+      "titles": 3,
+      "typical": 0.364
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.223,
+      "titles": 2,
+      "typical": 0.17
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.183,
+      "titles": 2,
+      "typical": 0.318
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.183,
+      "titles": 2,
+      "typical": 0.273
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.075,
+      "titles": 1,
+      "typical": 0.091
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "Taiwan",
+    "Vietnam"
    ]
   },
   {
@@ -14588,7 +16643,8 @@
      "dub_demand": {
       "share": 0.312,
       "titles": 3
-     }
+     },
+     "top_third": 0.305
     }
    },
    "trajectory": [
@@ -14604,6 +16660,69 @@
     51.2,
     49.9,
     47.3
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.554,
+      "titles": 4,
+      "typical": 0.443
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.554,
+      "titles": 4,
+      "typical": 0.364
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.34,
+      "titles": 1,
+      "typical": 0.182
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.154,
+      "titles": 2,
+      "typical": 0.193
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.151,
+      "titles": 2,
+      "typical": 0.341
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.146,
+      "titles": 2,
+      "typical": 0.33
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.091
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Taiwan"
    ]
   },
   {
@@ -15041,7 +17160,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 1
-     }
+     },
+     "top_third": 0.706
     }
    },
    "trajectory": [
@@ -15057,6 +17177,65 @@
     65.2,
     63.8,
     63.2
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.632,
+      "titles": 6,
+      "typical": 0.447
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.632,
+      "titles": 6,
+      "typical": 0.372
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.622,
+      "titles": 6,
+      "typical": 0.34
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.542,
+      "titles": 5,
+      "typical": 0.319
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.442,
+      "titles": 4,
+      "typical": 0.287
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.442,
+      "titles": 4,
+      "typical": 0.213
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.111,
+      "titles": 1,
+      "typical": 0.085
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Malaysia",
+    "Philippines"
    ]
   },
   {
@@ -15503,7 +17682,8 @@
      "dub_demand": {
       "share": 0.34,
       "titles": 3
-     }
+     },
+     "top_third": 0.384
     }
    },
    "trajectory": [
@@ -15519,6 +17699,70 @@
     52.4,
     52.8,
     52.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.13,
+      "titles": 1,
+      "typical": 0.341
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.096,
+      "titles": 1,
+      "typical": 0.451
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.085,
+      "titles": 1,
+      "typical": 0.198
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.085,
+      "titles": 1,
+      "typical": 0.187
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.085,
+      "titles": 1,
+      "typical": 0.176
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.085,
+      "titles": 1,
+      "typical": 0.154
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.088
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Japan",
+    "Malaysia",
+    "Maldives",
+    "Philippines",
+    "Singapore",
+    "Taiwan",
+    "Vietnam"
    ]
   },
   {
@@ -15952,7 +18196,8 @@
      "dub_demand": {
       "share": 0.171,
       "titles": 6
-     }
+     },
+     "top_third": 0.522
     }
    },
    "trajectory": [
@@ -15968,6 +18213,63 @@
     56.7,
     57.4,
     57.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.639,
+      "titles": 6,
+      "typical": 0.323
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.605,
+      "titles": 6,
+      "typical": 0.452
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.605,
+      "titles": 6,
+      "typical": 0.323
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.538,
+      "titles": 5,
+      "typical": 0.344
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.538,
+      "titles": 5,
+      "typical": 0.237
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.503,
+      "titles": 5,
+      "typical": 0.376
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.324,
+      "titles": 3,
+      "typical": 0.086
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -16411,7 +18713,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.36
     }
    },
    "trajectory": [
@@ -16427,7 +18730,61 @@
     51.2,
     51.9,
     51.3
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.304,
+      "titles": 2,
+      "typical": 0.341
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.203,
+      "titles": 1,
+      "typical": 0.451
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.203,
+      "titles": 1,
+      "typical": 0.374
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.203,
+      "titles": 1,
+      "typical": 0.319
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.203,
+      "titles": 1,
+      "typical": 0.286
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.203,
+      "titles": 1,
+      "typical": 0.242
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.088
+     }
+    ]
+   }
   },
   {
    "anilist_id": 133845,
@@ -16869,7 +19226,8 @@
      "dub_demand": {
       "share": 0.348,
       "titles": 3
-     }
+     },
+     "top_third": 0.328
     }
    },
    "trajectory": [
@@ -16885,7 +19243,61 @@
     50.5,
     50.8,
     51.1
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.547,
+      "titles": 5,
+      "typical": 0.449
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.419,
+      "titles": 4,
+      "typical": 0.367
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.406,
+      "titles": 4,
+      "typical": 0.347
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.316,
+      "titles": 3,
+      "typical": 0.316
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.316,
+      "titles": 3,
+      "typical": 0.286
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.316,
+      "titles": 3,
+      "typical": 0.204
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.115,
+      "titles": 1,
+      "typical": 0.082
+     }
+    ]
+   }
   },
   {
    "anilist_id": 168872,
@@ -17334,7 +19746,8 @@
      "dub_demand": {
       "share": 0.07,
       "titles": 4
-     }
+     },
+     "top_third": 0.489
     }
    },
    "trajectory": [
@@ -17350,7 +19763,61 @@
     55.1,
     56.3,
     58.3
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.492,
+      "titles": 5,
+      "typical": 0.347
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.482,
+      "titles": 5,
+      "typical": 0.316
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.367,
+      "titles": 4,
+      "typical": 0.286
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.356,
+      "titles": 4,
+      "typical": 0.449
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.356,
+      "titles": 4,
+      "typical": 0.367
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.356,
+      "titles": 4,
+      "typical": 0.224
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.107,
+      "titles": 1,
+      "typical": 0.082
+     }
+    ]
+   }
   },
   {
    "anilist_id": 151117,
@@ -17782,7 +20249,8 @@
      "dub_demand": {
       "share": 0.364,
       "titles": 5
-     }
+     },
+     "top_third": 0.133
     }
    },
    "trajectory": [
@@ -17798,6 +20266,64 @@
     55.6,
     41.3,
     44.2
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.662,
+      "titles": 7,
+      "typical": 0.454
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.662,
+      "titles": 7,
+      "typical": 0.309
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.492,
+      "titles": 5,
+      "typical": 0.361
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.32
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.366,
+      "titles": 3,
+      "typical": 0.175
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.299,
+      "titles": 3,
+      "typical": 0.289
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.12,
+      "titles": 1,
+      "typical": 0.082
+     }
+    ]
+   },
+   "charted": [
+    "Japan",
+    "Taiwan"
    ]
   },
   {
@@ -18257,7 +20783,8 @@
      "dub_demand": {
       "share": 0.31,
       "titles": 6
-     }
+     },
+     "top_third": 0.873
     }
    },
    "trajectory": [
@@ -18273,6 +20800,109 @@
     70.5,
     72.4,
     73.1
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.53,
+      "titles": 5,
+      "typical": 0.343
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.438,
+      "titles": 4,
+      "typical": 0.363
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.43,
+      "titles": 4,
+      "typical": 0.441
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.43,
+      "titles": 4,
+      "typical": 0.275
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.278,
+      "titles": 2,
+      "typical": 0.294
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.262,
+      "titles": 2,
+      "typical": 0.167
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.162,
+      "titles": 1,
+      "typical": 0.078
+     }
+    ]
+   },
+   "charted": [
+    "Bahamas",
+    "Bangladesh",
+    "Bolivia",
+    "Brazil",
+    "Bulgaria",
+    "Chile",
+    "Colombia",
+    "Costa Rica",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "France",
+    "Guadeloupe",
+    "Guatemala",
+    "Honduras",
+    "Hong Kong",
+    "India",
+    "Indonesia",
+    "Italy",
+    "Jamaica",
+    "Japan",
+    "Kuwait",
+    "Lithuania",
+    "Luxembourg",
+    "Malaysia",
+    "Maldives",
+    "Martinique",
+    "Mauritius",
+    "Mexico",
+    "Morocco",
+    "New Caledonia",
+    "Nicaragua",
+    "Panama",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Réunion",
+    "Singapore",
+    "South Korea",
+    "Spain",
+    "Sri Lanka",
+    "Taiwan",
+    "Thailand",
+    "Trinidad and Tobago",
+    "United States",
+    "Venezuela",
+    "Vietnam"
    ]
   },
   {
@@ -18739,7 +21369,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 3
-     }
+     },
+     "top_third": 0.13
     }
    },
    "trajectory": [
@@ -18755,6 +21386,63 @@
     41.2,
     41.1,
     41.2
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.504,
+      "titles": 5,
+      "typical": 0.45
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.496,
+      "titles": 5,
+      "typical": 0.37
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.35
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.303,
+      "titles": 3,
+      "typical": 0.31
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.303,
+      "titles": 3,
+      "typical": 0.3
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.222,
+      "titles": 2,
+      "typical": 0.28
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.08
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -19178,7 +21866,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.961
     }
    },
    "trajectory": [
@@ -19194,6 +21883,63 @@
     76.2,
     82.9,
     80.6
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.476,
+      "titles": 5,
+      "typical": 0.347
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.331,
+      "titles": 4,
+      "typical": 0.446
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.331,
+      "titles": 4,
+      "typical": 0.307
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.331,
+      "titles": 4,
+      "typical": 0.277
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.331,
+      "titles": 4,
+      "typical": 0.198
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.297,
+      "titles": 3,
+      "typical": 0.168
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.079,
+      "titles": 1,
+      "typical": 0.079
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -19623,7 +22369,8 @@
      "dub_demand": {
       "share": 0.066,
       "titles": 2
-     }
+     },
+     "top_third": 0.978
     }
    },
    "trajectory": [
@@ -19639,6 +22386,71 @@
     85.1,
     87.5,
     85.0
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.35,
+      "titles": 5,
+      "typical": 0.447
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.35,
+      "titles": 5,
+      "typical": 0.35
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.35,
+      "titles": 5,
+      "typical": 0.282
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.282,
+      "titles": 4,
+      "typical": 0.369
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.282,
+      "titles": 4,
+      "typical": 0.223
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.204,
+      "titles": 3,
+      "typical": 0.311
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.133,
+      "titles": 2,
+      "typical": 0.087
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Indonesia",
+    "Japan",
+    "Malaysia",
+    "Philippines",
+    "Singapore",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -20039,7 +22851,8 @@
      "dub_demand": {
       "share": 0.095,
       "titles": 3
-     }
+     },
+     "top_third": 0.339
     }
    },
    "trajectory": [
@@ -20055,6 +22868,65 @@
     51.5,
     51.2,
     51.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.369
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.396,
+      "titles": 4,
+      "typical": 0.447
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.311
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.261,
+      "titles": 3,
+      "typical": 0.35
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.261,
+      "titles": 3,
+      "typical": 0.223
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.207,
+      "titles": 2,
+      "typical": 0.175
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.087
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong",
+    "Japan",
+    "Taiwan"
    ]
   },
   {
@@ -20513,7 +23385,8 @@
      "dub_demand": {
       "share": 0.194,
       "titles": 5
-     }
+     },
+     "top_third": 0.273
     }
    },
    "trajectory": [
@@ -20529,6 +23402,63 @@
     48.6,
     48.6,
     48.7
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.57,
+      "titles": 5,
+      "typical": 0.355
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.545,
+      "titles": 4,
+      "typical": 0.455
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.306,
+      "titles": 4,
+      "typical": 0.2
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.306,
+      "titles": 4,
+      "typical": 0.182
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.306,
+      "titles": 4,
+      "typical": 0.145
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.263,
+      "titles": 3,
+      "typical": 0.391
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.072,
+      "titles": 1,
+      "typical": 0.091
+     }
+    ]
+   },
+   "charted": [
+    "Hong Kong"
    ]
   },
   {
@@ -20973,7 +23903,8 @@
      "dub_demand": {
       "share": 0.224,
       "titles": 2
-     }
+     },
+     "top_third": 0.401
     }
    },
    "trajectory": [
@@ -20989,7 +23920,61 @@
     56.2,
     53.4,
     53.3
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.896,
+      "titles": 9,
+      "typical": 0.449
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.713,
+      "titles": 7,
+      "typical": 0.306
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.635,
+      "titles": 6,
+      "typical": 0.316
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.628,
+      "titles": 7,
+      "typical": 0.367
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.465,
+      "titles": 5,
+      "typical": 0.347
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.465,
+      "titles": 5,
+      "typical": 0.286
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.192,
+      "titles": 2,
+      "typical": 0.082
+     }
+    ]
+   }
   },
   {
    "anilist_id": 175019,
@@ -21428,7 +24413,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.425
     }
    },
    "trajectory": [
@@ -21444,6 +24430,63 @@
     53.1,
     54.2,
     53.4
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.273,
+      "titles": 3,
+      "typical": 0.449
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.187,
+      "titles": 2,
+      "typical": 0.347
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.187,
+      "titles": 2,
+      "typical": 0.286
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.367
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.316
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.306
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.082
+     }
+    ]
+   },
+   "charted": [
+    "Japan"
    ]
   },
   {
@@ -21877,7 +24920,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 3
-     }
+     },
+     "top_third": 0.449
     }
    },
    "trajectory": [
@@ -21893,7 +24937,61 @@
     54.4,
     55.0,
     54.6
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.299,
+      "titles": 3,
+      "typical": 0.367
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.291,
+      "titles": 3,
+      "typical": 0.347
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.204,
+      "titles": 2,
+      "typical": 0.449
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.106,
+      "titles": 1,
+      "typical": 0.316
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.106,
+      "titles": 1,
+      "typical": 0.286
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.106,
+      "titles": 1,
+      "typical": 0.204
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.082
+     }
+    ]
+   }
   },
   {
    "anilist_id": 178533,
@@ -22333,7 +25431,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 1
-     }
+     },
+     "top_third": 0.454
     }
    },
    "trajectory": [
@@ -22349,6 +25448,85 @@
     54.0,
     55.1,
     54.7
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.524,
+      "titles": 5,
+      "typical": 0.352
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.46,
+      "titles": 5,
+      "typical": 0.314
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.384,
+      "titles": 4,
+      "typical": 0.457
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.384,
+      "titles": 4,
+      "typical": 0.381
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.384,
+      "titles": 4,
+      "typical": 0.286
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.384,
+      "titles": 4,
+      "typical": 0.229
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.106,
+      "titles": 1,
+      "typical": 0.086
+     }
+    ]
+   },
+   "charted": [
+    "Bolivia",
+    "Chile",
+    "Colombia",
+    "Costa Rica",
+    "Ecuador",
+    "El Salvador",
+    "Guadeloupe",
+    "Guatemala",
+    "Honduras",
+    "Hong Kong",
+    "Italy",
+    "Japan",
+    "Martinique",
+    "Mexico",
+    "New Caledonia",
+    "Nicaragua",
+    "Panama",
+    "Peru",
+    "Réunion",
+    "South Korea",
+    "Taiwan",
+    "Thailand",
+    "Vietnam"
    ]
   },
   {
@@ -22771,7 +25949,8 @@
      "dub_demand": {
       "share": 0.182,
       "titles": 6
-     }
+     },
+     "top_third": 0.499
     }
    },
    "trajectory": [
@@ -22787,6 +25966,104 @@
     57.0,
     56.6,
     57.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.532,
+      "titles": 5,
+      "typical": 0.349
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.435,
+      "titles": 4,
+      "typical": 0.303
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.431,
+      "titles": 4,
+      "typical": 0.385
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.422,
+      "titles": 4,
+      "typical": 0.321
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.422,
+      "titles": 4,
+      "typical": 0.22
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.389,
+      "titles": 4,
+      "typical": 0.193
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.325,
+      "titles": 3,
+      "typical": 0.083
+     }
+    ]
+   },
+   "charted": [
+    "Argentina",
+    "Bahamas",
+    "Bangladesh",
+    "Belgium",
+    "Bolivia",
+    "Chile",
+    "Colombia",
+    "Costa Rica",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "France",
+    "Guadeloupe",
+    "Guatemala",
+    "Honduras",
+    "India",
+    "Indonesia",
+    "Italy",
+    "Japan",
+    "Kuwait",
+    "Lithuania",
+    "Luxembourg",
+    "Malaysia",
+    "Martinique",
+    "Mauritius",
+    "Mexico",
+    "New Caledonia",
+    "Nicaragua",
+    "Oman",
+    "Pakistan",
+    "Panama",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Qatar",
+    "Réunion",
+    "Spain",
+    "Taiwan",
+    "Thailand",
+    "United Arab Emirates",
+    "Venezuela",
+    "Vietnam"
    ]
   },
   {
@@ -23221,7 +26498,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.414
     }
    },
    "trajectory": [
@@ -23237,7 +26515,61 @@
     52.5,
     53.8,
     54.0
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.431,
+      "titles": 4,
+      "typical": 0.351
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.429,
+      "titles": 4,
+      "typical": 0.459
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.429,
+      "titles": 4,
+      "typical": 0.387
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.429,
+      "titles": 4,
+      "typical": 0.324
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.329,
+      "titles": 3,
+      "typical": 0.288
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.329,
+      "titles": 3,
+      "typical": 0.225
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.089,
+      "titles": 1,
+      "typical": 0.09
+     }
+    ]
+   }
   },
   {
    "anilist_id": 171642,
@@ -23643,7 +26975,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.463
     }
    },
    "trajectory": [
@@ -23659,7 +26992,61 @@
     55.3,
     55.4,
     55.6
-   ]
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.654,
+      "titles": 5,
+      "typical": 0.287
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.587,
+      "titles": 4,
+      "typical": 0.463
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.587,
+      "titles": 4,
+      "typical": 0.352
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.516,
+      "titles": 3,
+      "typical": 0.389
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.516,
+      "titles": 3,
+      "typical": 0.222
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.244,
+      "titles": 3,
+      "typical": 0.324
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.092,
+      "titles": 1,
+      "typical": 0.083
+     }
+    ]
+   }
   },
   {
    "anilist_id": 176292,
@@ -24103,7 +27490,8 @@
      "dub_demand": {
       "share": 0.0,
       "titles": 2
-     }
+     },
+     "top_third": 0.284
     }
    },
    "trajectory": [
@@ -24119,6 +27507,81 @@
     48.7,
     49.1,
     49.9
+   ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.584,
+      "titles": 5,
+      "typical": 0.352
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.49,
+      "titles": 4,
+      "typical": 0.305
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.469,
+      "titles": 4,
+      "typical": 0.181
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.469,
+      "titles": 4,
+      "typical": 0.162
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.469,
+      "titles": 4,
+      "typical": 0.143
+     },
+     {
+      "iso2": "DO",
+      "name": "Dominican Republic",
+      "share": 0.469,
+      "titles": 4,
+      "typical": 0.124
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.086
+     }
+    ]
+   },
+   "charted": [
+    "Bahamas",
+    "Bolivia",
+    "Brazil",
+    "Colombia",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "Guadeloupe",
+    "Guatemala",
+    "Honduras",
+    "Jamaica",
+    "Martinique",
+    "Mauritius",
+    "Mexico",
+    "New Caledonia",
+    "Nicaragua",
+    "Panama",
+    "Peru",
+    "Réunion"
    ]
   },
   {
@@ -24292,9 +27755,64 @@
      "day": "cold",
      "index": 55.0,
      "low": 33.8,
-     "high": 76.2
+     "high": 76.2,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.557,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.542,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.451,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.439,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.423,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.423,
+      "titles": 4,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.101,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -24481,9 +27999,64 @@
      "day": "cold",
      "index": 53.5,
      "low": 32.3,
-     "high": 74.7
+     "high": 74.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.654,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.493,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.282,
+      "titles": 4,
+      "typical": 0.188
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.282,
+      "titles": 4,
+      "typical": 0.163
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.282,
+      "titles": 4,
+      "typical": 0.125
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.221,
+      "titles": 3,
+      "typical": 0.169
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.06,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -24652,9 +28225,64 @@
      "day": "cold",
      "index": 52.3,
      "low": 31.1,
-     "high": 73.5
+     "high": 73.5,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.59,
+      "titles": 6,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.493,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.476,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.476,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.417,
+      "titles": 4,
+      "typical": 0.163
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.417,
+      "titles": 4,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.093,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -24838,9 +28466,64 @@
      "day": "cold",
      "index": 51.5,
      "low": 30.3,
-     "high": 72.7
+     "high": 72.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.311,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.494
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.096,
+      "titles": 1,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.096,
+      "titles": 1,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25010,9 +28693,64 @@
      "day": "cold",
      "index": 55.0,
      "low": 33.8,
-     "high": 76.2
+     "high": 76.2,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.787,
+      "titles": 7,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.787,
+      "titles": 7,
+      "typical": 0.338
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.696,
+      "titles": 6,
+      "typical": 0.188
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.696,
+      "titles": 6,
+      "typical": 0.163
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.691,
+      "titles": 6,
+      "typical": 0.356
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.571,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.387,
+      "titles": 3,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25191,9 +28929,64 @@
      "day": "cold",
      "index": 56.5,
      "low": 35.3,
-     "high": 77.7
+     "high": 77.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.512,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.413,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.413,
+      "titles": 4,
+      "typical": 0.263
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.384,
+      "titles": 4,
+      "typical": 0.169
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.379,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.379,
+      "titles": 4,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.158,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25369,9 +29162,64 @@
      "day": "cold",
      "index": 53.5,
      "low": 32.3,
-     "high": 74.7
+     "high": 74.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.517,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.42,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.42,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.332,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.332,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.332,
+      "titles": 3,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.246,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25546,9 +29394,64 @@
      "day": "cold",
      "index": 54.9,
      "low": 33.6,
-     "high": 76.1
+     "high": 76.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.821,
+      "titles": 8,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.69,
+      "titles": 7,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.69,
+      "titles": 7,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.69,
+      "titles": 7,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.69,
+      "titles": 7,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.69,
+      "titles": 7,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.288,
+      "titles": 3,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25724,9 +29627,64 @@
      "day": "cold",
      "index": 50.7,
      "low": 29.4,
-     "high": 71.9
+     "high": 71.9,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.566,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.529,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.435,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.435,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.338,
+      "titles": 3,
+      "typical": 0.237
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.333,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -25904,9 +29862,64 @@
      "day": "cold",
      "index": 52.2,
      "low": 31.0,
-     "high": 73.4
+     "high": 73.4,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.31,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.281,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.281,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.281,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.265,
+      "titles": 3,
+      "typical": 0.163
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.265,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26080,9 +30093,64 @@
      "day": "cold",
      "index": 53.2,
      "low": 31.9,
-     "high": 74.4
+     "high": 74.4,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.443,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.258,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.181,
+      "titles": 2,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.101,
+      "titles": 1,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26256,9 +30324,64 @@
      "day": "cold",
      "index": 52.5,
      "low": 31.3,
-     "high": 73.7
+     "high": 73.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.532,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.505,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.505,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.487,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.461,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.461,
+      "titles": 4,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26424,9 +30547,64 @@
      "day": "cold",
      "index": 52.3,
      "low": 31.0,
-     "high": 73.5
+     "high": 73.5,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.524,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.409,
+      "titles": 4,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.186,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26616,9 +30794,64 @@
      "day": "cold",
      "index": 48.4,
      "low": 27.2,
-     "high": 69.6
+     "high": 69.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.272,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.2,
+      "titles": 2,
+      "typical": 0.169
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.192,
+      "titles": 2,
+      "typical": 0.494
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.126,
+      "titles": 1,
+      "typical": 0.188
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.126,
+      "titles": 1,
+      "typical": 0.163
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.126,
+      "titles": 1,
+      "typical": 0.163
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26797,9 +31030,64 @@
      "day": "cold",
      "index": 55.4,
      "low": 34.2,
-     "high": 76.6
+     "high": 76.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.708,
+      "titles": 7,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.708,
+      "titles": 7,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.612,
+      "titles": 6,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.612,
+      "titles": 6,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.612,
+      "titles": 6,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.473,
+      "titles": 5,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.081,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -26966,9 +31254,64 @@
      "day": "cold",
      "index": 54.3,
      "low": 33.1,
-     "high": 75.5
+     "high": 75.5,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.527,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.488,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.488,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.448,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.415,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.34,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -27156,9 +31499,64 @@
      "day": "cold",
      "index": 52.3,
      "low": 31.1,
-     "high": 73.5
+     "high": 73.5,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.304,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.206,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -27325,9 +31723,64 @@
      "day": "cold",
      "index": 51.4,
      "low": 30.2,
-     "high": 72.6
+     "high": 72.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.613,
+      "titles": 6,
+      "typical": 0.406
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.232,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.169,
+      "titles": 1,
+      "typical": 0.169
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.123,
+      "titles": 2,
+      "typical": 0.188
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.123,
+      "titles": 2,
+      "typical": 0.163
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.123,
+      "titles": 2,
+      "typical": 0.163
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.058,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -27502,9 +31955,64 @@
      "day": "cold",
      "index": 51.3,
      "low": 30.1,
-     "high": 72.6
+     "high": 72.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.333,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.261,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.257,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.249,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.249,
+      "titles": 2,
+      "typical": 0.319
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.178,
+      "titles": 2,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -27673,9 +32181,64 @@
      "day": "cold",
      "index": 50.5,
      "low": 29.3,
-     "high": 71.7
+     "high": 71.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.395,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.395,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.276,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.248,
+      "titles": 3,
+      "typical": 0.169
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.229,
+      "titles": 2,
+      "typical": 0.319
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.181,
+      "titles": 2,
+      "typical": 0.375
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -27847,9 +32410,64 @@
      "day": "cold",
      "index": 53.0,
      "low": 31.8,
-     "high": 74.2
+     "high": 74.2,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.544,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.544,
+      "titles": 5,
+      "typical": 0.319
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.524,
+      "titles": 5,
+      "typical": 0.188
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.524,
+      "titles": 5,
+      "typical": 0.163
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.524,
+      "titles": 5,
+      "typical": 0.125
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.522,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.234,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28014,9 +32632,64 @@
      "day": "cold",
      "index": 53.4,
      "low": 32.2,
-     "high": 74.6
+     "high": 74.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.464,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.318,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.318,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.316,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.261,
+      "titles": 3,
+      "typical": 0.319
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.259,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28187,9 +32860,64 @@
      "day": "cold",
      "index": 54.9,
      "low": 33.7,
-     "high": 76.1
+     "high": 76.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.672,
+      "titles": 7,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.672,
+      "titles": 7,
+      "typical": 0.263
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.669,
+      "titles": 7,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.669,
+      "titles": 7,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.572,
+      "titles": 6,
+      "typical": 0.406
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.486,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.185,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28360,9 +33088,64 @@
      "day": "cold",
      "index": 53.0,
      "low": 31.8,
-     "high": 74.2
+     "high": 74.2,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.564,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.492,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.408,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.408,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.37,
+      "titles": 4,
+      "typical": 0.169
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.32,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28542,9 +33325,64 @@
      "day": "cold",
      "index": 52.2,
      "low": 31.0,
-     "high": 73.4
+     "high": 73.4,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.484,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.484,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.353,
+      "titles": 4,
+      "typical": 0.188
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.353,
+      "titles": 4,
+      "typical": 0.163
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.353,
+      "titles": 4,
+      "typical": 0.156
+     },
+     {
+      "iso2": "NI",
+      "name": "Nicaragua",
+      "share": 0.353,
+      "titles": 4,
+      "typical": 0.15
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28709,9 +33547,64 @@
      "day": "cold",
      "index": 50.7,
      "low": 29.5,
-     "high": 71.9
+     "high": 71.9,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.42,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.418,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.266,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.266,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.266,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.266,
+      "titles": 3,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -28883,9 +33776,64 @@
      "day": "cold",
      "index": 51.9,
      "low": 30.7,
-     "high": 73.1
+     "high": 73.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.478,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.478,
+      "titles": 5,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.478,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.478,
+      "titles": 5,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.478,
+      "titles": 5,
+      "typical": 0.263
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.469,
+      "titles": 5,
+      "typical": 0.494
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.285,
+      "titles": 3,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29050,9 +33998,64 @@
      "day": "cold",
      "index": 53.6,
      "low": 32.4,
-     "high": 74.8
+     "high": 74.8,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.228,
+      "titles": 2,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.228,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.122,
+      "titles": 1,
+      "typical": 0.156
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.109,
+      "titles": 1,
+      "typical": 0.188
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.109,
+      "titles": 1,
+      "typical": 0.169
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.109,
+      "titles": 1,
+      "typical": 0.163
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29200,9 +34203,64 @@
      "day": "cold",
      "index": 53.4,
      "low": 32.2,
-     "high": 74.6
+     "high": 74.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.261,
+      "titles": 3,
+      "typical": 0.169
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.244,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.244,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.244,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.242,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.242,
+      "titles": 3,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.159,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29377,9 +34435,64 @@
      "day": "cold",
      "index": 53.5,
      "low": 32.3,
-     "high": 74.7
+     "high": 74.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.428,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.397,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.397,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.322,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.316,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.295,
+      "titles": 3,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.1,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29554,9 +34667,64 @@
      "day": "cold",
      "index": 52.9,
      "low": 31.7,
-     "high": 74.1
+     "high": 74.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.383,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.34,
+      "titles": 3,
+      "typical": 0.169
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.251,
+      "titles": 2,
+      "typical": 0.188
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.251,
+      "titles": 2,
+      "typical": 0.163
+     },
+     {
+      "iso2": "MU",
+      "name": "Mauritius",
+      "share": 0.251,
+      "titles": 2,
+      "typical": 0.125
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.251,
+      "titles": 2,
+      "typical": 0.125
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29718,9 +34886,64 @@
      "day": "cold",
      "index": 56.6,
      "low": 35.4,
-     "high": 77.8
+     "high": 77.8,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.801,
+      "titles": 7,
+      "typical": 0.169
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.781,
+      "titles": 7,
+      "typical": 0.494
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.729,
+      "titles": 6,
+      "typical": 0.188
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.699,
+      "titles": 6,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.692,
+      "titles": 6,
+      "typical": 0.319
+     },
+     {
+      "iso2": "RE",
+      "name": "Réunion",
+      "share": 0.666,
+      "titles": 5,
+      "typical": 0.15
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.09,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -29889,9 +35112,64 @@
      "day": "cold",
      "index": 53.7,
      "low": 32.5,
-     "high": 74.9
+     "high": 74.9,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.358,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.278,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.278,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.184,
+      "titles": 2,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.184,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.184,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30068,9 +35346,64 @@
      "day": "cold",
      "index": 54.5,
      "low": 33.3,
-     "high": 75.7
+     "high": 75.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.798,
+      "titles": 8,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.627,
+      "titles": 6,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.627,
+      "titles": 6,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.598,
+      "titles": 6,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.511,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.38,
+      "titles": 4,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30236,9 +35569,64 @@
      "day": "cold",
      "index": 53.8,
      "low": 32.6,
-     "high": 75.0
+     "high": 75.0,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.399,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.318,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.318,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.318,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.318,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.241,
+      "titles": 2,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30416,9 +35804,64 @@
      "day": "cold",
      "index": 52.9,
      "low": 31.7,
-     "high": 74.1
+     "high": 74.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.407,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.329,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.356
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.236,
+      "titles": 2,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.236,
+      "titles": 2,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30606,9 +36049,64 @@
      "day": "cold",
      "index": 52.6,
      "low": 31.4,
-     "high": 73.8
+     "high": 73.8,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.188
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.163
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.163
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.156
+     },
+     {
+      "iso2": "NI",
+      "name": "Nicaragua",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.15
+     },
+     {
+      "iso2": "SV",
+      "name": "El Salvador",
+      "share": 0.105,
+      "titles": 1,
+      "typical": 0.15
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30762,9 +36260,64 @@
      "day": "cold",
      "index": 53.9,
      "low": 32.7,
-     "high": 75.1
+     "high": 75.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.403,
+      "titles": 4,
+      "typical": 0.406
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.133,
+      "titles": 1,
+      "typical": 0.169
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.338
+     },
+     {
+      "iso2": "TH",
+      "name": "Thailand",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.319
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.117,
+      "titles": 1,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -30945,9 +36498,64 @@
      "day": "cold",
      "index": 53.4,
      "low": 32.2,
-     "high": 74.6
+     "high": 74.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.321,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.321,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.321,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.229,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.229,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.229,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31114,9 +36722,64 @@
      "day": "cold",
      "index": 52.6,
      "low": 31.3,
-     "high": 73.8
+     "high": 73.8,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.819,
+      "titles": 8,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.819,
+      "titles": 8,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.819,
+      "titles": 8,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.729,
+      "titles": 7,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.729,
+      "titles": 7,
+      "typical": 0.338
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.63,
+      "titles": 6,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.225,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31283,9 +36946,64 @@
      "day": "cold",
      "index": 52.2,
      "low": 31.0,
-     "high": 73.4
+     "high": 73.4,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.323,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.243,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.243,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.16,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.16,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.16,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31463,9 +37181,64 @@
      "day": "cold",
      "index": 53.8,
      "low": 32.5,
-     "high": 75.0
+     "high": 75.0,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.354,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.354,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.262,
+      "titles": 3,
+      "typical": 0.237
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.171,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31643,9 +37416,64 @@
      "day": "cold",
      "index": 51.8,
      "low": 30.6,
-     "high": 73.1
+     "high": 73.1,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.45,
+      "titles": 5,
+      "typical": 0.188
+     },
+     {
+      "iso2": "GP",
+      "name": "Guadeloupe",
+      "share": 0.45,
+      "titles": 5,
+      "typical": 0.163
+     },
+     {
+      "iso2": "JM",
+      "name": "Jamaica",
+      "share": 0.364,
+      "titles": 4,
+      "typical": 0.125
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.343,
+      "titles": 4,
+      "typical": 0.169
+     },
+     {
+      "iso2": "DO",
+      "name": "Dominican Republic",
+      "share": 0.269,
+      "titles": 3,
+      "typical": 0.131
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.267,
+      "titles": 3,
+      "typical": 0.163
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31815,9 +37643,64 @@
      "day": "cold",
      "index": 53.1,
      "low": 31.9,
-     "high": 74.3
+     "high": 74.3,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.424,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.363,
+      "titles": 3,
+      "typical": 0.188
+     },
+     {
+      "iso2": "NC",
+      "name": "New Caledonia",
+      "share": 0.363,
+      "titles": 3,
+      "typical": 0.169
+     },
+     {
+      "iso2": "RE",
+      "name": "Réunion",
+      "share": 0.363,
+      "titles": 3,
+      "typical": 0.15
+     },
+     {
+      "iso2": "MU",
+      "name": "Mauritius",
+      "share": 0.363,
+      "titles": 3,
+      "typical": 0.125
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.324,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -31994,9 +37877,64 @@
      "day": "cold",
      "index": 51.8,
      "low": 30.6,
-     "high": 73.0
+     "high": 73.0,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.314,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.217,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.217,
+      "titles": 2,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.217,
+      "titles": 2,
+      "typical": 0.237
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -32170,9 +38108,64 @@
      "day": "cold",
      "index": 51.4,
      "low": 30.1,
-     "high": 72.6
+     "high": 72.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.279,
+      "titles": 3,
+      "typical": 0.375
+     },
+     {
+      "iso2": "PE",
+      "name": "Peru",
+      "share": 0.211,
+      "titles": 2,
+      "typical": 0.163
+     },
+     {
+      "iso2": "PA",
+      "name": "Panama",
+      "share": 0.211,
+      "titles": 2,
+      "typical": 0.156
+     },
+     {
+      "iso2": "NI",
+      "name": "Nicaragua",
+      "share": 0.211,
+      "titles": 2,
+      "typical": 0.15
+     },
+     {
+      "iso2": "SV",
+      "name": "El Salvador",
+      "share": 0.211,
+      "titles": 2,
+      "typical": 0.15
+     },
+     {
+      "iso2": "EC",
+      "name": "Ecuador",
+      "share": 0.211,
+      "titles": 2,
+      "typical": 0.144
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -32327,9 +38320,64 @@
      "day": "cold",
      "index": 53.2,
      "low": 32.0,
-     "high": 74.4
+     "high": 74.4,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.672,
+      "titles": 6,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.672,
+      "titles": 6,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.556,
+      "titles": 5,
+      "typical": 0.356
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.464,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.464,
+      "titles": 4,
+      "typical": 0.338
+     },
+     {
+      "iso2": "KR",
+      "name": "South Korea",
+      "share": 0.45,
+      "titles": 4,
+      "typical": 0.169
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -32492,9 +38540,64 @@
      "day": "cold",
      "index": 52.4,
      "low": 31.2,
-     "high": 73.6
+     "high": 73.6,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.346,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.346,
+      "titles": 4,
+      "typical": 0.356
+     },
+     {
+      "iso2": "MV",
+      "name": "Maldives",
+      "share": 0.265,
+      "titles": 3,
+      "typical": 0.156
+     },
+     {
+      "iso2": "MQ",
+      "name": "Martinique",
+      "share": 0.263,
+      "titles": 3,
+      "typical": 0.188
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.232,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.232,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.152,
+      "titles": 2,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -32664,9 +38767,64 @@
      "day": "cold",
      "index": 53.7,
      "low": 32.5,
-     "high": 74.9
+     "high": 74.9,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.404,
+      "titles": 4,
+      "typical": 0.494
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.404,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.313,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "SG",
+      "name": "Singapore",
+      "share": 0.313,
+      "titles": 3,
+      "typical": 0.237
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.309,
+      "titles": 3,
+      "typical": 0.406
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.218,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"
@@ -32835,9 +38993,64 @@
      "day": "cold",
      "index": 50.5,
      "low": 29.3,
-     "high": 71.7
+     "high": 71.7,
+     "top_third": null
     }
    ],
+   "markets": {
+    "of": 10,
+    "countries": [
+     {
+      "iso2": "HK",
+      "name": "Hong Kong",
+      "share": 0.595,
+      "titles": 6,
+      "typical": 0.494
+     },
+     {
+      "iso2": "TW",
+      "name": "Taiwan",
+      "share": 0.482,
+      "titles": 5,
+      "typical": 0.406
+     },
+     {
+      "iso2": "PH",
+      "name": "Philippines",
+      "share": 0.385,
+      "titles": 4,
+      "typical": 0.375
+     },
+     {
+      "iso2": "MY",
+      "name": "Malaysia",
+      "share": 0.301,
+      "titles": 3,
+      "typical": 0.338
+     },
+     {
+      "iso2": "VN",
+      "name": "Vietnam",
+      "share": 0.212,
+      "titles": 2,
+      "typical": 0.356
+     },
+     {
+      "iso2": "ID",
+      "name": "Indonesia",
+      "share": 0.212,
+      "titles": 2,
+      "typical": 0.263
+     },
+     {
+      "iso2": "IN",
+      "name": "India",
+      "share": 0.0,
+      "titles": 0,
+      "typical": 0.081
+     }
+    ]
+   },
    "sealed": {
     "date": "2026-10-24",
     "file": "2026-10-24-winter2027.json"

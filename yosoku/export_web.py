@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "collectors"))
 from common import request_json  # noqa: E402  (retrying HTTP helper shared with the collectors)
 from yosoku import guide as demand_guide  # noqa: E402
+from yosoku.money import MONEY  # noqa: E402  (a partner's amounts, published only with --with-money)
 
 ANILIST_URL = "https://graphql.anilist.co"
 BATCH = 50
@@ -40,6 +41,22 @@ def referenced_ids(predictions):
         for forecast in title["forecasts"].values():
             ids.update(look["anilist_id"] for look in forecast["lookalikes"])
     return sorted(ids)
+
+
+def with_money(predictions, path):
+    """The forecasts with each one's amount range from yosoku.money, and a summary of the fit (not the partner's figures)."""
+    if not path.exists():
+        raise SystemExit(f"{shown(path)} not found: run `python -m yosoku.money` first.")
+    money = json.loads(path.read_text(encoding="utf-8"))
+    fit = money["fit"]
+    predictions = {**predictions, "money": {"unit": money["unit"], "symbol": money["symbol"],
+                                            **{k: fit[k] for k in ("titles", "per_10_points", "rank_correlation", "median_miss")}}}
+    for title in predictions["titles"]:
+        for moment, forecast in title["forecasts"].items():
+            amount = money["forecasts"].get(str(title["anilist_id"]), {}).get(moment)
+            if amount:
+                forecast["money"] = amount
+    return predictions
 
 
 def guide_ids(guide):
@@ -86,6 +103,9 @@ def main():
     parser.add_argument("--out-dir", default="web/data", help="where the site reads its data (default: web/data)")
     parser.add_argument("--data-dir", default="data", help="collected data for the demand guide (default: data)")
     parser.add_argument("--no-covers", action="store_true", help="skip the AniList lookup and keep covers.json as it is")
+    parser.add_argument("--with-money", action="store_true",
+                        help="add the amounts from data/partner/money.json (python -m yosoku.money); only for a site the "
+                             "partner has agreed to, never the public one")
     args = parser.parse_args()
 
     source = ROOT / args.predictions
@@ -93,6 +113,8 @@ def main():
         source = ROOT / "web" / "data" / "mock_predictions.json"
         print(f"{args.predictions} not found; using the mock forecasts ({shown(source)})")
     predictions = json.loads(source.read_text(encoding="utf-8"))
+    if args.with_money:
+        predictions = with_money(predictions, ROOT / MONEY)
     out = ROOT / args.out_dir
     write_json(out / "predictions.json", predictions)
 

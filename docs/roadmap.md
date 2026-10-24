@@ -54,7 +54,12 @@ The first row was measured when that change was made; the rest were run again af
 | One model per index part, also trained on the 944 titles with only one part | All | better at T−28 (0.41) | worse (0.27 against 0.32) | Rejected |
 | Buzz from days −120 to −57 | T−28 / T+7 | 0.23 / 0.66 | 0.34 / 0.60 (against 0.32 / 0.61) | Rejected: +0.02 and −0.01, within noise |
 | Year trend or level correction | All | lower error on 2024 | no change | Rejected: fix the measurement instead |
-| Chance of a top-third result | T+7 | Brier 0.18 against 0.24 for the base rate | | Informative only at T+7; not shipped |
+| Chance of a top-third result | Cold / T−28 / T+7; clock days | | Brier skill 0.02 / 0.07 / 0.19; day +3 0.15, day +14 0.22 | Shipped where the skill is 0.10 or more: T+7 and from day +3 |
+| AniList's dated list count (users with the title on their list, from AniList's daily trend history) | 90 days out / day −49 / T−28 / T+7 | 0.05 → 0.07 / 0.15 → 0.16 / 0.23 → 0.25 / 0.66 → 0.66 | 0.18 → 0.24 / 0.29 → 0.30 / 0.32 → 0.33 / 0.61 → 0.62 | **Promising:** the largest gain found, at the stage where licences are signed. Next to adopt; it needs an AniList collector, at 30 requests a minute, and AniList's licence |
+| Season, episode count, Wikipedia momentum, dub requests before the cutoff, first-trailer timing | All | within ±0.04 | within ±0.02 | Rejected |
+| Ranges per title (misses scaled by a model of each title's difficulty) | All | | interval score 53 / 51 / 41 against 53 / 49 / 40 | Rejected |
+| Earlier seasons sell again when a new one airs ("series heat") | | 0 of 5 earlier seasons re-entered Netflix India's Top 10 | | Rejected |
+| Countries of similar titles, for the next market | | | AUC per country 0.70 (0.55 by genre); top-5 countries 83% (85% for the most common) | Shipped, each country beside its typical rate |
 
 Two conclusions. With today's data the limit is the data, not the model: nothing beat the Blend on the rolling
 seasons. And the 2024 split cannot referee small differences, so the gate should read the rolling seasons first.
@@ -141,7 +146,8 @@ large one where demand for anime is barely measured.
    ranking goes from 0.29 at day −49 to 0.38 at day −7. Three days after the premiere it reaches 0.53 (0.64 on
    2024). So: license with a small minimum guarantee and an escalator tied to the day-3 or day-7 reading, and
    order the dub between day 3 and day 7. That turns forecast uncertainty into contract terms, which a dashboard
-   of scores does not do. *Built: the clock and each title's forecast path. Next: a deal-structure note on each sheet.*
+   of scores does not do. *Built: the clock, each title's forecast path, and from day 3 a chance of a top-third
+   result (at T+7, 94% of its calls of 70% or more came true). Next: a deal-structure note on each sheet.*
 2. **Sealed, graded forecasts.** Every forecast for an unreleased title is frozen with a SHA-256 fingerprint in a
    public ledger, and graded once the title airs, on a scale that no longer moves. In a market that values
    accountability, a published track record is the moat: no competitor can backfill one. *Built: seals, frozen
@@ -169,8 +175,12 @@ large one where demand for anime is barely measured.
 7. **The next market, from the same engine.** Netflix's Top 10 file covers nearly 100 countries and territories; the
    collector reads only India's rows today. "Where else does this title travel?" (Indonesia, the Philippines,
    Brazil, Mexico, the Gulf) is a short step, and comment language is easier to read there than Hinglish.
+   *Built: every forecast lists where its closest earlier titles charted (88 countries; AUC 0.70 per country against
+   0.55 by genre), and the Demand guide shows where anime charts: India comes 39th of 88. Next: platforms beyond Netflix.*
 8. **Money, once a partner shares it.** The index measures attention. India revenue or viewing hours for 30–50 titles
    from one rights holder or platform would let Yosoku forecast money. That is the single most valuable partnership to seek.
+   *Built: the plumbing (`yosoku/money.py`): 30 or more titles of partner figures turn every forecast into a range in
+   yen, private unless the partner agrees to publish it. Next: the partner.*
 
 ### 5.3 What not to claim
 
@@ -228,6 +238,8 @@ Taking the comment text out of the public repo:
 - Merge this branch; show the decision clock in the demo.
 - Take the comment text out of the public repo (section 7).
 - Collect the 103 trailers cut at 1,000 comments in full (needs the YouTube key; one day of quota).
+- Adopt AniList's dated list counts as an input: the largest gain found where licences are signed (90 days out,
+  0.18 → 0.24 over the rolling seasons). Write the collector and check AniList's commercial terms first.
 - Run `yosoku.daily` every morning on one machine with fastText installed; collect YouTube for the 50 Winter 2027
   titles in refresh mode.
 - Before sealing Spring 2027: pre-register picking methods on the rolling seasons, and add a data fingerprint to seals.
@@ -257,6 +269,9 @@ Taking the comment text out of the public repo:
 - **インドの声を言語圏別に**：ヒングリッシュ（ローマ字のヒンディー語）を含むインドからのコメントを、ヒンディー、タミル、テルグなどの言語圏別に数え、「ヒンディー語吹替はいつ？」といった吹替の要望も測ります。
 - **毎日更新**：放送前後の作品は毎日予測し直し、判定の範囲を外れた作品をアラートでお知らせします。
 - **稟議書をそのまま出力**：各作品のページから、結論・根拠・前例（類似作品とその共通点、インドでの実績）・リスク・次の判断日をまとめた1枚の稟議書（案）を印刷できます。
+- **ヒットの確率**：放送3日後から、インドで上位3分の1に入る確率を示します（放送7日後の検証では、70%以上とした予測の94%が的中）。
+- **他の市場**：Netflixの88か国のTop 10から、類似作品がヒットした国を作品ごとに示します（インドは88か国中39位）。
+- **売上見込み**：パートナーから過去30作品以上のインドでの実績をご提供いただければ、すべての予測に円建ての範囲を付けられます（非公開で運用）。
 - **インドが求めている作品**：インドのファンが吹替や視聴方法を求めたコメント（68作品、1,197件。うちヒンディー語吹替1,016件）を作品ごとに一覧にしています。
 - **現状の課題も正直に**：放送前（コールド）の予測はまだ弱く、指数の多くはインド固有ではない英語版Wikipediaの閲覧数に依存しています。インドからのWikipedia閲覧数、Google Trends API、インドの配信事業者のYouTubeチャンネルで、指数をインド固有のものにしていきます。
 - **お願いしたいこと**：インドでの売上または視聴時間（30〜50作品分）をご提供いただければ、注目度ではなく収益を予測できるようになります。

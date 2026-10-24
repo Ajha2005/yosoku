@@ -106,3 +106,13 @@ def test_asks_list_agrees_with_its_totals():
     assert all(0 <= r["recent"] <= r["asks"] and (r["dub"] or r["watch"]) for r in asks["titles"])
     assert asks["titles"] == sorted(asks["titles"], key=lambda r: (-r["asks"], -r["recent"], r["name"]))
     assert {r["id"] for r in asks["titles"]} <= set(export_web.guide_ids(built))  # every listed title gets its poster
+
+
+def test_beyond_india_agrees_with_the_country_charts():
+    from yosoku import guide
+
+    world = guide.build(ROOT / "data")["markets"]
+    counts = [c["titles"] for c in world["by_country"]]
+    assert counts == sorted(counts, reverse=True) and counts[0] <= world["titles"] and len(counts) == world["countries"]
+    assert world["by_country"][world["india_rank"] - 1]["iso2"] == "IN"
+    assert 0.5 < world["auc"] <= 1  # the countries of similar titles beat chance at picking where a title charts

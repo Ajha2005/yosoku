@@ -17,6 +17,7 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 - Forecasts and verdicts use: **Genre average**. The model does not beat this rule, so the rule is shipped (gate G4 fallback).
 - 80% range (Genre average): ± 14.5 points; contains the truth for **67%** of 2024 titles (target 70–90%): 85% of the 33 whose index has no YouTube part, 37% of the 19 that have one.
 - 80% range for titles not released yet: ± 21.9 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
+- Chance of a top-third result (an index of 54 or more): Brier skill 0.02 against the base rate, season by season; calls of 70% or more came true – of 0 times. Not shown: under the 0.10 bar.
 
 ## Moment: t-28
 
@@ -34,6 +35,7 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 - Forecasts and verdicts use: **Blend**.
 - 80% range (Blend): ± 12.5 points; contains the truth for **63%** of 2024 titles (target 70–90%): 79% of the 33 whose index has no YouTube part, 37% of the 19 that have one.
 - 80% range for titles not released yet: ± 18.7 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
+- Chance of a top-third result (an index of 54 or more): Brier skill 0.07 against the base rate, season by season; calls of 70% or more came true 100% of 2 times. Not shown: under the 0.10 bar.
 
 ## Moment: t+7
 
@@ -51,6 +53,7 @@ Labelled titles: 235 train (2019–2023), 52 validation (2024). 2025 test titles
 - Forecasts and verdicts use: **Blend**.
 - 80% range (Blend): ± 10.3 points; contains the truth for **67%** of 2024 titles (target 70–90%): 79% of the 33 whose index has no YouTube part, 47% of the 19 that have one.
 - 80% range for titles not released yet: ± 12.7 points, from the misses of the titles whose index includes YouTube, in every rolling season including 2024.
+- Chance of a top-third result (an index of 54 or more): Brier skill 0.19 against the base rate, season by season; calls of 70% or more came true 94% of 17 times. **Shown.**
 
 ## Why the 2024 ranges miss
 

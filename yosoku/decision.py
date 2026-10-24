@@ -12,7 +12,8 @@ before 2024; titles not released yet take it from every season known by now, the
 from the titles whose index includes YouTube, as theirs will (evaluate.live_width).
 With reports/clock.json (python -m yosoku.clock), each 2024 title also gets its forecast day by day.
 A stage already sealed (python -m yosoku.seal) shows the sealed numbers, which anyone can check against the file,
-with today's forecast for it kept beside them as "now".
+with today's forecast for it kept beside them as "now". Each title also gets where else it could travel: the
+countries whose Netflix Top 10 its closest past titles reached (yosoku/markets.py), and a past title where it did.
 
     python -m yosoku.decision             # 2024 backtest plus upcoming titles in data/upcoming/
     python -m yosoku.decision --final     # also the 2025 test titles (after evaluate --final)
@@ -27,10 +28,11 @@ import numpy as np
 import pandas as pd
 
 from yosoku import features as feat
+from yosoku import markets
 from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
 from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
-from yosoku.models import baselines, forecast
+from yosoku.models import baselines, chance, forecast
 from yosoku.seal import sealed_forecasts
 from yosoku.split import guard_test, split_of
 
@@ -174,7 +176,8 @@ def common_ground(titles, a, b):
             "tags": len(set(ta["tag_list"]) & set(tb["tag_list"]))}
 
 
-def entries(titles, labels, out, width, lines, rule=None):
+def entries(titles, labels, out, width, lines, rule=None, curve=None):
+    """{anilist_id: forecast entry}; `curve` (models.chance_curve) adds the chance of a top-third result."""
     names = titles["name"].to_dict()
     label_map = labels.to_dict()
     result = {}
@@ -199,6 +202,8 @@ def entries(titles, labels, out, width, lines, rule=None):
             "region_comments": row["region"].get("_comments"),
             "dub_demand": dict(zip(("share", "titles"), dub_demand(titles, row["lookalikes"]))),
         }
+        if curve is not None:
+            result[anilist_id]["top_third"] = round(float(chance(point, curve)), 3)
     return result
 
 
@@ -213,6 +218,8 @@ def show_sealed(record, sealed):
         if entry is None:
             continue
         entry["now"] = {k: entry[k] for k in SHOWN}
+        if "top_third" in entry:  # today's chance goes with today's forecast: the seal has none
+            entry["now"]["top_third"] = entry.pop("top_third")
         entry.update({k: f[k] for k in SHOWN})
         method = sealed["methods"].get(moment)
         shown = [f"{l['name']} ({whole(l['india_index'])})" for l in entry["lookalikes"][:3]]
@@ -298,6 +305,8 @@ def main():
         lines = tune(val["forecast"], labels.loc[validate], width)
         # Titles not released yet get the range from every season known by now, the 2024 misses included.
         live = info.get("width_live", width)
+        top = info.get("top_third")
+        shown = top if top and top.get("shown") else None  # the chance, only where it beats the base rate by enough
         thresholds[moment] = {"launch_line": lines[0], "hold_line": lines[1], "range_half_width": round(width, 1),
                               "range_half_width_live": round(live, 1), "range_coverage": info["coverage"],
                               "range_coverage_by_part": info.get("coverage_by_part"), "method": used}
@@ -308,7 +317,9 @@ def main():
         if upcoming is not None:
             groups.append(("upcoming", predict(moment, used, features[moment], titles, labels, train_all, upcoming.index)))
         for group, out in groups:
-            for anilist_id, entry in entries(titles, labels, out, width if group == "validation" else live, lines, rule).items():
+            curve = None if shown is None else shown["curve"] if group == "validation" else shown["curve_live"]
+            for anilist_id, entry in entries(titles, labels, out, width if group == "validation" else live, lines, rule,
+                                             curve).items():
                 record = records.setdefault(anilist_id, title_info(titles, anilist_id, group, labels, args.today))
                 if moment in record["moments_available"]:
                     record["forecasts"][moment] = entry
@@ -328,9 +339,18 @@ def main():
     if history is not None:
         for anilist_id, rows in history.groupby("anilist_id"):
             if anilist_id in records:  # one point per clock day, the latest made on it
-                points = [{**r, "day": r["day"] if r["day"] == "cold" else int(r["day"])}
-                          for r in rows.drop_duplicates("day", keep="last")[["date", "day", "index", "low", "high"]].to_dict("records")]
+                columns = [c for c in ("date", "day", "index", "low", "high", "top_third") if c in rows]
+                points = [{**{k: None if isinstance(v, float) and math.isnan(v) else v for k, v in r.items()},
+                           "day": r["day"] if r["day"] == "cold" else int(r["day"])}
+                          for r in rows.drop_duplicates("day", keep="last")[columns].to_dict("records")]
                 records[anilist_id]["history"] = sorted(points, key=lambda r: -1e9 if r["day"] == "cold" else r["day"])
+    reach, names = markets.charted(data_dir)
+    if reach:  # where else each title could travel, and where each past one charted (yosoku/markets.py)
+        for anilist_id, found in markets.travel(titles, reach, names, list(records)).items():
+            records[anilist_id]["markets"] = found
+        for anilist_id, record in records.items():
+            if anilist_id in reach:
+                record["charted"] = sorted(names.get(c, c) for c in reach[anilist_id])
     for anilist_id, sealed in sealed_forecasts(out_dir).items():
         if anilist_id in records and records[anilist_id]["group"] == "upcoming":
             show_sealed(records[anilist_id], sealed)
@@ -341,6 +361,7 @@ def main():
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
         "sources": sources, "ablation": ablation, "clock": clock["days"] if clock else None,
         "label_checks": label_checks(label_table, parts, ranks, data_dir),
+        "markets": {k: v for k, v in markets.summary(titles, reach, names).items() if k != "by_country"} if reach else None,
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),

@@ -248,6 +248,16 @@ split they share.
   **dub demand** (the share of Indian trailer comments on its closest past titles that ask for or about an
   Indian-language dub) and a **release-window what-if** (how labelled past titles did in the festive, board-exam, IPL
   and other windows; a window is shown only with 10 or more titles). `docs/decisions.md` has the reasoning.
+- From T+7, and from day +3 in the daily forecasts, every forecast also gets a **chance of a top-third result**: a
+  logistic curve on the forecast, fitted on the rolling seasons, shown only where it beats the base rate by 0.10
+  (Brier skill). At T+7 it does (0.19), and 94% of its calls of 70% or more came true; before the premiere it does not.
+- **Where else it could travel:** every forecast lists the countries whose Netflix Top 10 its 10 most similar earlier
+  titles reached within six months, beyond Japan, beside how often anime in general did (`yosoku/markets.py`, from
+  `data/netflix_countries.csv`, which `collect_netflix.py` writes with stricter matching than India's).
+- **In yen, with a partner's figures:** `python -m yosoku.money` fits what 30 or more past titles earned in India
+  (`data/partner/revenue.csv`, never committed) to their index and gives every forecast a range in yen. The site
+  shows it only when exported with `python -m yosoku.export_web --with-money`, for a deployment the partner agreed
+  to. `data/partner/README.md` says what to send.
 - The 2025 test titles are scored once, at the very end: `python -m yosoku.run --final`.
 - Tests, including the check that no input uses data from after its forecast moment: `python -m pytest tests`.
 - See `docs/decisions.md` for what was fixed in advance and what changed since (the change log at the bottom).
