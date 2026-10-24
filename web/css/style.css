@@ -811,8 +811,8 @@ svg.scatter { display: block; overflow: visible; }
   body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .nav { justify-content: space-between; }
   .tabs {
-    position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; margin: 0; gap: 0; display: grid; grid-template-columns: repeat(6, 1fr);
-    padding: 0 4px env(safe-area-inset-bottom); height: calc(64px + env(safe-area-inset-bottom));
+    position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; margin: 0; gap: 0; display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 0 6px env(safe-area-inset-bottom); height: calc(64px + env(safe-area-inset-bottom));
     background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(18px) saturate(1.4); border-top: 1px solid var(--line);
   }
   .tabs a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 2px; font-size: 11.5px; color: var(--muted); opacity: 1; }
