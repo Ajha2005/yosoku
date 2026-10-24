@@ -6,7 +6,6 @@ import { esc, pct, round, clamp, titleCase, formatDate } from "./data.js?v=2";
 import { posterHTML } from "./art.js?v=2";
 import { regionMap, bindRegions } from "./charts.js?v=2";
 import { showTip, hideTip } from "./tip.js?v=2";
-import { LIMITS, NEXT } from "./content.js?v=2";
 
 const MIN_TITLES = 8;       // a rate over fewer titles than this says nothing
 const MIN_COMMENTS = 1000;  // likewise for the share of comments that came from India
@@ -135,16 +134,7 @@ export function renderGuide(app, host) {
       <div class="ck-out" id="g-check-out" aria-live="polite"></div>
     </section>`;
 
-  const limits = `
-    <section class="g-block g-limits reveal" aria-labelledby="g-limits">
-      <h2 id="g-limits">What this can't see</h2>
-      <div class="limits">
-        <ul>${LIMITS.map((l) => `<li><b>${esc(l.title)}</b> ${esc(l.body)}</li>`).join("")}</ul>
-        <div class="next"><h3>What we would add next</h3><ul>${NEXT.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></div>
-      </div>
-    </section>`;
-
-  host.innerHTML = headline + hits + patterns + where + checker + limits;
+  host.innerHTML = headline + hits + patterns + where + checker;
 
   // ------------------------------------------------------------ the weekly strip
   const weekly = host.querySelector("#g-weekly");
