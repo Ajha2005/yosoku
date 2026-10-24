@@ -1,6 +1,6 @@
 // Charts, hand-built from HTML and SVG so they stay light, crisp and themeable. Each returns markup (or fills a node).
 
-import { VERDICTS, MOMENTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=6";
+import { VERDICTS, MOMENTS, HUB_STATES, esc, round, pct, clamp, formatDate } from "./data.js?v=6";
 import { INDIA } from "./india-map.js?v=6";
 import { showTip, hideTip } from "./tip.js?v=6";
 
@@ -277,15 +277,14 @@ export function clockChart(host, days) {
   bindPointTips(host, tips);
 }
 
-/** One title's forecast on each clock day with its 80% range, against what happened (if known). `values` lines up with `days`. */
-export function trajectoryChart(host, days, values, actual) {
+/** One title's forecasts with their 80% ranges, against what happened (if known), on the decision clock's days.
+ *  domain: predictions.json "clock" (the days and stages to draw); rows: [{day, value, lo, hi, date?}], all or some days. */
+export function trajectoryChart(host, domain, rows, actual) {
   const width = Math.max(host.clientWidth, 280);
   const height = clamp(Math.round(width * 0.42), 200, 260);
   const m = { l: 34, r: 14, t: 28, b: 40 };
-  const X = clockX(days.map((d) => d.day), m.l, width - m.r);
+  const X = clockX(domain.map((d) => d.day), m.l, width - m.r);
   const Y = (v) => m.t + ((100 - clamp(v, 0, 100)) / 100) * (height - m.t - m.b);
-  const rows = days.map((d, i) => ({ ...d, value: values[i], lo: values[i] - (d.width ?? 0), hi: values[i] + (d.width ?? 0) }))
-    .filter((r) => Number.isFinite(r.value));
   const timed = rows.filter((r) => r.day !== "cold"), cold = rows.find((r) => r.day === "cold");
   const band = timed.length > 1 ? `<path class="tj-band" d="${path(timed, X, Y, "hi")}${[...timed].reverse().map((r) => `L${X(r.day)},${Y(r.lo)}`).join("")}Z"/>` : "";
   const coldBar = cold ? `<line class="tj-err" x1="${X("cold")}" x2="${X("cold")}" y1="${Y(cold.hi)}" y2="${Y(cold.lo)}"/>` : "";
@@ -293,13 +292,15 @@ export function trajectoryChart(host, days, values, actual) {
     `<text class="tick" x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`).join("");
   const truth = actual == null ? "" : `<line class="tj-actual" x1="${m.l}" x2="${width - m.r}" y1="${Y(actual)}" y2="${Y(actual)}"/>
     <text class="tj-actual-t" x="${m.l + 4}" y="${Y(actual) + (actual > 80 ? 14 : -6)}">Actual ${round(actual)}</text>`;
-  const tips = rows.map((r) => `<b>${esc(clockWhen(r))}</b><br>Forecast ${round(r.value)}, 80% range ${round(clamp(r.lo, 0, 100))}–${round(clamp(r.hi, 0, 100))}` +
+  const stageOf = Object.fromEntries(domain.map((d) => [d.day, d.stage]));
+  const when = (r) => clockWhen({ day: r.day, stage: stageOf[r.day] }) + (r.date ? `, ${formatDate(r.date)}` : "");
+  const tips = rows.map((r) => `<b>${esc(when(r))}</b><br>Forecast ${round(r.value)}, 80% range ${round(clamp(r.lo, 0, 100))}–${round(clamp(r.hi, 0, 100))}` +
     (actual == null ? "" : `<br>Actual ${round(actual)}`));
   const dots = rows.map((r, i) => `<circle class="tj-pt" cx="${X(r.day)}" cy="${Y(r.value)}" r="4.5" tabindex="0" data-tip-i="${i}"
-      aria-label="${esc(clockWhen(r))}: forecast ${round(r.value)}"/>`).join("");
+      aria-label="${esc(when(r))}: forecast ${round(r.value)}"/>`).join("");
   host.innerHTML = `<svg class="scatter clock traj" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="group"
-      aria-label="This title's India Demand Index forecast by the day it is made${actual == null ? "" : `, against the actual ${round(actual)}`}">
-    ${clockFrame(days, X, m.t, height - m.b, width - m.r)}${grid}${band}${coldBar}${truth}
+      aria-label="This title's India Demand Index forecast by the day it was made${actual == null ? "" : `, against the actual ${round(actual)}`}">
+    ${clockFrame(domain, X, m.t, height - m.b, width - m.r)}${grid}${band}${coldBar}${truth}
     <path class="tj-line" d="${path(timed, X, Y, "value")}"/>${dots}</svg>`;
   bindPointTips(host, tips);
 }

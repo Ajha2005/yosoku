@@ -102,6 +102,23 @@ def test_blank_is_not_zero():
     assert idi.notna().tolist() == [True, False, True]  # the middle title has only one part
 
 
+def test_comment_counts_replace_the_text(fake, tmp_path):
+    """Without the comment text, the daily counts merge.py keeps give the same dataset and the same model inputs."""
+    import shutil
+    titles = load_titles(fake)
+    wiki, comments = load_daily(fake, titles)
+    genres = sorted({g for gs in titles["genre_list"] for g in gs})
+    copy = tmp_path / "no-text"
+    shutil.copytree(fake, copy, ignore=shutil.ignore_patterns("youtube_comments.csv", "dataset.csv", "out", "upcoming"))
+    subprocess.run([sys.executable, "collectors/merge.py", "--data-dir", str(copy)], cwd=ROOT, check=True)
+    assert (copy / "dataset.csv").read_bytes() == (fake / "dataset.csv").read_bytes()
+    _, counts = load_daily(copy, titles)
+    assert "text" not in counts and len(counts) < len(comments)
+    for moment in [*feat.MOMENTS, -15, 13]:
+        pd.testing.assert_frame_equal(feat.build(titles, wiki, comments, moment, genres),
+                                      feat.build(titles, wiki, counts, moment, genres))
+
+
 def test_labels_do_not_move_when_titles_are_added():
     """With the ranking pool frozen, adding titles never changes an existing label; a new one is placed among the pool."""
     rng = np.random.default_rng(1)
@@ -311,3 +328,31 @@ def test_seal(fake, tmp_path):
     assert run().returncode != 0  # the same day again: never rewritten
     sealed[0].write_bytes(sealed[0].read_bytes().replace(b'"index":', b'"index": '))
     assert run("--verify").returncode != 0
+
+
+def test_daily_job(fake, tmp_path):
+    """The daily job forecasts only the titles still in play, logs one row per title per day, and publishes the log."""
+    import shutil
+    from yosoku.clock import DAYS
+    out = tmp_path / "out"
+    shutil.copytree(fake / "out", out)  # test_end_to_end's full run: clock.json, predictions.json, the frozen pool
+
+    def run(today, *extra):
+        subprocess.run([sys.executable, "-m", "yosoku.daily", "--data-dir", str(fake), "--out-dir", str(out), "--upcoming-dir",
+                        str(fake / "upcoming"), "--no-collect", "--today", today, *extra], cwd=ROOT, check=True)
+        return pd.read_csv(out / "predictions" / "history.csv", encoding="utf-8-sig", dtype={"day": str})
+
+    upcoming = load_titles(fake / "upcoming")  # Winter 2027: all in play in January
+    history = run("2027-01-20", "--no-publish")
+    assert len(history) == len(upcoming) and (history["low"] <= history["index"]).all() and (history["index"] <= history["high"]).all()
+    expected = ((pd.Timestamp("2027-01-20") - upcoming["start"]).dt.days.clip(upper=DAYS[-1])
+                .map(lambda d: "cold" if d < DAYS[0] else str(d)))
+    assert history.set_index("anilist_id")["day"].to_dict() == expected.to_dict()
+    assert len(run("2027-01-20", "--no-publish")) == len(upcoming)  # twice on one day: the later run replaces the earlier
+    assert len(run("2027-01-21")) == 2 * len(upcoming)
+    assert (out / "reports" / "alerts.md").read_text(encoding="utf-8").startswith("# Alerts, 2027-01-21")
+    payload = json.loads((out / "predictions" / "predictions.json").read_text(encoding="utf-8"))
+    for title in (t for t in payload["titles"] if t["group"] == "upcoming"):
+        assert title["history"][-1]["date"] == "2027-01-21"  # the log reaches the forecast sheet
+        assert len({str(h["day"]) for h in title["history"]}) == len(title["history"])  # one point per clock day
+    assert len(run("2027-06-01", "--no-publish")) == 2 * len(upcoming)  # past day 90 nothing is in play

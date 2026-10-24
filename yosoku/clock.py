@@ -59,19 +59,22 @@ def run(titles, labels, features):
     for day in ["cold", *DAYS]:
         f = features[cutoff(day)]
         val = blend(f, titles, labels, train, validate, looks["2024"])
-        seasons, misses = [], []
+        seasons, misses, known = [], [], []
         for name, tr, te in folds:
             pred = blend(f, titles, labels, tr, te, looks[name])
             both = pd.concat([pred.rename("p"), labels.loc[te].rename("a")], axis=1).dropna()
             seasons.append(spearmanr(both["p"], both["a"]).statistic)
+            known += list(both["a"] - both["p"])
             if not name.endswith("2024"):  # the range is set before the year it is checked on
                 misses += list(both["a"] - both["p"])
         actual = labels.loc[validate]
         s = scores(val, actual)
         low, high = bootstrap(val, actual)
         width = conformal_width(misses)
+        # width_live, from every season known now, is the range for titles not released yet (yosoku/daily.py).
         stats = {"spearman": s["spearman"], "low": low, "high": high, "top20": s["top20"], "mae": s["mae"],
-                 "rolling": np.nanmean(seasons), "width": width, "coverage": ((val - actual).abs() <= width).mean()}
+                 "rolling": np.nanmean(seasons), "width": width, "width_live": conformal_width(known),
+                 "coverage": ((val - actual).abs() <= width).mean()}
         rows.append({"day": day, "stage": "cold" if day == "cold" else STAGES.get(day), "nowcast": day != "cold" and day >= 0,
                      "seasons": len(seasons), **{k: number(v) for k, v in stats.items()}})
         for anilist_id, value in val.items():

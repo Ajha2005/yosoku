@@ -78,6 +78,22 @@ def classify(text, indic=None):
     return out
 
 
+COUNTS = ["n", "india", "dub_ask", "any_hub", *HUBS]  # the columns of youtube_comment_daily.csv besides its keys
+
+
+def daily_counts(comments, languages=None):
+    """Comments per title, video and day (UTC): how many, and how many are Indian, ask for a dub or point to each hub.
+
+    Everything merge.py and the models read from the comments, without their text, so this file can be shared
+    and kept instead of youtube_comments.csv. `languages` as for indic_flags.
+    """
+    found = classify(comments["text"], indic_flags(comments, languages))
+    flags = found[["india", "dub_ask", *HUBS]].astype(int).assign(any_hub=found[list(HUBS)].any(axis=1).astype(int), n=1)
+    day = pd.to_datetime(comments["published_at"], utc=True).dt.strftime("%Y-%m-%d")
+    keys = pd.DataFrame({"anilist_id": comments["anilist_id"], "video_id": comments["video_id"], "date": day})
+    return pd.concat([keys, flags], axis=1).groupby(["anilist_id", "video_id", "date"], as_index=False)[COUNTS].sum()
+
+
 def indic_flags(comments, languages):
     """Series (index of comments) that is True where IndicLID read the comment as an Indian language.
 

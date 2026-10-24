@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 
 from yosoku import features as feat
-from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles
+from yosoku.data import HUBS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
 from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
 from yosoku.models import baselines, forecast
@@ -268,6 +268,13 @@ def main():
         for anilist_id, path in clock["titles"].items():
             if int(anilist_id) in records:
                 records[int(anilist_id)]["trajectory"] = path
+    history = read(out_dir / "predictions" / "history.csv", required=False)  # the daily job's log (yosoku/daily.py)
+    if history is not None:
+        for anilist_id, rows in history.groupby("anilist_id"):
+            if anilist_id in records:  # one point per clock day, the latest made on it
+                points = [{**r, "day": r["day"] if r["day"] == "cold" else int(r["day"])}
+                          for r in rows.drop_duplicates("day", keep="last")[["date", "day", "index", "low", "high"]].to_dict("records")]
+                records[anilist_id]["history"] = sorted(points, key=lambda r: -1e9 if r["day"] == "cold" else r["day"])
 
     payload = {
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
