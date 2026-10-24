@@ -170,6 +170,9 @@ git add web/data predictions && git commit -m "Update website data" && git push
 Automatic matching makes mistakes. Before modelling, look through:
 
 - **`wiki_articles.csv`**: rows with `match_method` = `search` were guessed. Fix the article names by hand and rerun step 2.
+  Rows with `match_method` = `fallback` were swapped automatically because the matched English article had no
+  views around launch (it was written later); `wiki_articles_fixes.csv` lists the old and new names (action
+  `fallback`). A sequel swapped to its main article counts attention to the whole show, not only that season.
 - **`netflix_matches.csv`**: names are matched loosely, and live-action remakes (One Piece, Yu Yu Hakusho) share their anime's name.
   To drop a wrong match, add a line `anilist_id,show_title,reason` to `data/netflix_match_exclusions.csv`
   (first line: `anilist_id,show_title,reason`) and rerun step 3, then step 6. The ones found so far are already listed there.
@@ -212,7 +215,7 @@ Automatic matching makes mistakes. Before modelling, look through:
   launch, because they were written later (often "<show> season 1" pages), and comments were not collected for
   94 of the 200 YouTube titles. `merge.py` and the models treat both as unknown. Fixing the article names in
   `wiki_articles.csv` (to the article that existed at launch) and finishing the YouTube comments would label
-  about 100 more titles.
+  about 100 more titles. Rerunning step 2 now does the Wikipedia part itself (see `fallback` above).
 
 ## Responsible data use
 

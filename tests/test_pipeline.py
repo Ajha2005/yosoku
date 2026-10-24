@@ -168,3 +168,18 @@ def test_youtube_part_is_india_comments():
                            "wiki_en_month1": [1, 2, 3]})
     parts = raw_parts(titles)
     assert parts["youtube"].tolist()[:2] == [0.0, 3.0] and np.isnan(parts["youtube"].iloc[2])
+
+
+def test_wikipedia_launch_article():
+    """An English article written after launch is swapped for the related page readers used then."""
+    sys.path.insert(0, str(ROOT / "collectors"))
+    from collect_wikipedia import launch_article, launch_names
+    assert launch_names("Frieren (TV series)") == ["Frieren", "List of Frieren episodes"]
+    assert launch_names("Demon Slayer: Kimetsu no Yaiba – The Movie: Mugen Train")[0] == "Demon Slayer: Kimetsu no Yaiba"
+    views = {"Demon Slayer: Kimetsu no Yaiba": 50_000, "List of Demon Slayer: Kimetsu no Yaiba episodes": 9_000,
+             "Lazarus": 80_000, "List of Lazarus episodes": 500}
+    fetch = lambda name: [{"views": views[name]}] if name in views else []  # noqa: E731
+    links = {"Demon Slayer: Kimetsu no Yaiba", "List of Demon Slayer: Kimetsu no Yaiba episodes", "List of Lazarus episodes"}
+    related = lambda page, article: page in links  # noqa: E731
+    assert launch_article("Demon Slayer: Kimetsu no Yaiba season 1", fetch, related)[0] == "Demon Slayer: Kimetsu no Yaiba"
+    assert launch_article("Lazarus (Japanese TV series)", fetch, related) is None  # the Bible's Lazarus does not link to it; the list has too few views
