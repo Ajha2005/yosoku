@@ -140,9 +140,10 @@ export function scatter(host, rows, lines, moment, hidden, onPick) {
   // A forecast is Launch when its range (index ± half-width) clears the launch line, Hold when it stays under the hold line.
   const hw = lines.range_half_width ?? 0;
   const holdCut = clamp(lines.hold_line - hw, 0, 100), launchCut = clamp(lines.launch_line + hw, 0, 100);
+  // A zone's name is only written when the zone is wide enough to hold it; narrow zones keep their tint.
   const band = (cls, a, b, label) => b - a < 3 ? "" :
     `<rect class="${cls}" x="${X(a)}" y="${m.t}" width="${X(b) - X(a)}" height="${height - m.t - m.b}"/>` +
-    `<text class="zone-label ${cls}-t" x="${(X(a) + X(b)) / 2}" y="${m.t - 10}" text-anchor="middle">${label}</text>`;
+    (X(b) - X(a) >= label.length * 8.2 + 8 ? `<text class="zone-label ${cls}-t" x="${(X(a) + X(b)) / 2}" y="${m.t - 10}" text-anchor="middle">${label}</text>` : "");
   const zones = band("zone-hold", 0, holdCut, "Hold") + band("zone-test", holdCut, launchCut, "Test-market") + band("zone-launch", launchCut, 100, "Launch");
   const dots = rows.filter((r) => !hidden.has(r.verdict)).map((r) =>
     `<circle class="dot dot-${vclass(r.verdict)}" cx="${X(r.forecast)}" cy="${Y(r.actual)}" r="6" tabindex="0" role="button"
