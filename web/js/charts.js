@@ -131,24 +131,28 @@ export function scatter(host, rows, lines, moment, hidden, onPick) {
   });
 }
 
-/** Models against simple baselines on the 2024 backtest: rank correlation with its 95% interval. */
+/** Models against simple baselines on the 2024 backtest: rank correlation with its 95% interval. A model with no score yet (null) is listed last as "n/a". */
 export function modelBars(info) {
   const t = info.table;
-  const names = Object.keys(t.spearman).sort((a, b) => t.spearman[b] - t.spearman[a]);
-  const lo = Math.min(-0.2, ...names.map((n) => t.low[n]));
+  const has = (n) => Number.isFinite(t.spearman[n]);
+  const names = Object.keys(t.spearman).sort((a, b) => (has(b) - has(a)) || (t.spearman[b] - t.spearman[a]));
+  const lows = names.filter(has).map((n) => (Number.isFinite(t.low[n]) ? t.low[n] : t.spearman[n]));
+  const lo = Math.min(-0.2, ...lows);
   const S = (v) => ((v - lo) / (1 - lo)) * 100;
+  const fixed = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
   const rows = names.map((n) => {
     const main = n === info.main, base = n === info.best_baseline;
-    return `<li class="mb${main ? " is-main" : ""}">
-      <span class="mb-name">${esc(n)}${main ? "<em>our model</em>" : base ? "<em>best simple rule</em>" : ""}</span>
-      <span class="mb-track" aria-hidden="true">
-        <u style="left:${S(0)}%"></u>
-        <i style="left:${S(t.low[n])}%;width:${S(t.high[n]) - S(t.low[n])}%"></i>
-        <b style="left:${S(t.spearman[n])}%"></b>
-      </span>
-      <span class="mb-val">${t.spearman[n].toFixed(2)}</span>
-      <span class="mb-extra">${pct(t.top20[n])}</span>
-      <span class="mb-extra">${t.mae[n].toFixed(1)}</span>
+    const track = has(n)
+      ? `<u style="left:${S(0)}%"></u>` +
+        (Number.isFinite(t.low[n]) && Number.isFinite(t.high[n]) ? `<i style="left:${S(t.low[n])}%;width:${S(t.high[n]) - S(t.low[n])}%"></i>` : "") +
+        `<b style="left:${S(t.spearman[n])}%"></b>`
+      : "";
+    return `<li class="mb${main ? " is-main" : ""}${has(n) ? "" : " no-score"}">
+      <span class="mb-name">${esc(n)}${main ? "<em>our model</em>" : base ? "<em>best simple rule</em>" : !has(n) ? "<em>not enough data yet</em>" : ""}</span>
+      <span class="mb-track" aria-hidden="true">${track}</span>
+      <span class="mb-val">${fixed(t.spearman[n], 2)}</span>
+      <span class="mb-extra">${Number.isFinite(t.top20[n]) ? pct(t.top20[n]) : "n/a"}</span>
+      <span class="mb-extra">${fixed(t.mae[n], 1)}</span>
     </li>`;
   }).join("");
   return `<div class="mb-head" aria-hidden="true"><span>Model</span><span>Rank correlation, with 95% range</span><span>ρ</span><span class="mb-extra">Top-20% hits</span><span class="mb-extra">Avg. miss (pts)</span></div><ul class="mbs">${rows}</ul>`;

@@ -122,7 +122,7 @@ function renderHero() {
     { n: app.data.titles.length, suffix: "", label: "titles forecast" },
     { n: Object.keys(MOMENTS).length, suffix: "", label: "stages of the release cycle" },
   ];
-  if (evaluation) {
+  if (evaluation && Number.isFinite(evaluation.info.table.spearman[evaluation.info.main])) {
     const { info } = evaluation;
     stats.push({ n: info.table.spearman[info.main], suffix: "", label: `rank correlation on the 2024 backtest (${MOMENTS[evaluation.key].label})`, decimals: 2 });
     stats.push({ n: Math.round(info.coverage * 100), suffix: "%", label: "of titles landed inside the 80% range" });
@@ -288,12 +288,13 @@ function renderRecord() {
   }).join("");
 
   const t = info?.table;
+  const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
   const score = info ? `
     <div class="scorecard">
-      <div class="tile"><span class="tile-label">Rank correlation</span><b>${t.spearman[info.main].toFixed(2)}</b><span class="tile-note">95% range ${t.low[info.main].toFixed(2)} to ${t.high[info.main].toFixed(2)}</span></div>
-      <div class="tile"><span class="tile-label">Top-20% hit rate</span><b>${pct(t.top20[info.main])}</b><span class="tile-note">of the true top fifth, found</span></div>
-      <div class="tile"><span class="tile-label">Average miss</span><b>${t.mae[info.main].toFixed(1)}</b><span class="tile-note">index points</span></div>
-      <div class="tile"><span class="tile-label">80% range held</span><b>${pct(info.coverage)}</b><span class="tile-note">of titles</span></div>
+      <div class="tile"><span class="tile-label">Rank correlation</span><b>${fx(t.spearman[info.main], 2)}</b><span class="tile-note">95% range ${fx(t.low[info.main], 2)} to ${fx(t.high[info.main], 2)}</span></div>
+      <div class="tile"><span class="tile-label">Top-20% hit rate</span><b>${Number.isFinite(t.top20[info.main]) ? pct(t.top20[info.main]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
+      <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[info.main], 1)}</b><span class="tile-note">index points</span></div>
+      <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
     </div>
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
       <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
@@ -308,7 +309,7 @@ function renderRecord() {
     </div>
     <div class="record-grid">
       <div class="panel scatter-panel"><div id="scatter" class="scatter-host"></div>
-        <p class="note">Each dot is one title. On the dotted line the forecast was exactly right. Open any dot to see why.</p></div>
+        <p class="note">Each dot is one title. On the dotted line the forecast was exactly right. Open any dot to see why. The verdict lines were tuned on these same titles, so the Launch and Hold split looks a little better here than it will on new ones.</p></div>
       <div class="record-side">${score}<div class="tiles">${medians}</div></div>
     </div>
     ${info ? `<div class="panel models"><h3>The model against simple rules</h3>${modelBars(info)}
