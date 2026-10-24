@@ -3,7 +3,8 @@
     python -m yosoku.export_web                 # predictions/predictions.json (or the mock) + guide + covers from AniList
     python -m yosoku.export_web --no-covers     # no AniList lookup, e.g. when offline
 
-Writes web/data/predictions.json, guide.json and covers.json. Commit them; Vercel serves them as-is.
+Writes web/data/predictions.json, guide.json and covers.json, and copies the sealed forecasts and the daily job's
+alerts.json when they exist. Commit them; Vercel serves them as-is.
 
 Covers are links to AniList's image servers, not copies of the images. Mock forecasts use made-up ids that
 collide with real AniList ids, so covers are never fetched for them (the guide uses real titles, so it gets its own).
@@ -42,8 +43,8 @@ def referenced_ids(predictions):
 
 
 def guide_ids(guide):
-    """Titles the demand guide shows posters for: every anime that reached India's Top 10."""
-    return sorted(row["id"] for row in guide["watched"])
+    """Titles the demand guide shows posters for: every anime that reached India's Top 10, and every one India asks for."""
+    return sorted({row["id"] for row in guide["watched"]} | {row["id"] for row in (guide.get("asks") or {}).get("titles", [])})
 
 
 def cover_entry(media):
@@ -102,6 +103,13 @@ def main():
         for path in sealed.iterdir():
             if path.suffix in (".json", ".md"):
                 (out / "sealed" / path.name).write_bytes(path.read_bytes())
+
+    # The daily job's status and alerts (python -m yosoku.daily) name real titles, so never beside mock forecasts.
+    alerts, shown_alerts = ROOT / "predictions" / "alerts.json", out / "alerts.json"
+    if alerts.exists() and not predictions.get("mock"):
+        shown_alerts.write_bytes(alerts.read_bytes())
+    elif shown_alerts.exists():
+        shown_alerts.unlink()
 
     guide = demand_guide.build(ROOT / args.data_dir)
     write_json(out / "guide.json", guide)

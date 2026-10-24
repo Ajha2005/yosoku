@@ -314,6 +314,13 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
 .legend { margin: var(--s-5) auto var(--s-5); font-size: 14px; color: var(--muted); }
 .legend b { color: var(--text); font-weight: 600; }
 .legend span::before { content: "·"; margin: 0 8px; opacity: 0.5; }
+.legend .seal-line::before { content: none; }   /* the boxed lines start on their own row: no separator */
+/* The daily job's alerts (yosoku/daily.py) under the legend, and the badge on a title that moved. */
+.alerts { display: grid; gap: 8px; margin: calc(-1 * var(--s-2)) 0 var(--s-5); padding: 0; list-style: none; }
+.alerts li { padding: 10px 14px; border-left: 3px solid var(--shu); background: var(--surface); font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.alerts a { color: var(--text); font-weight: 600; }
+.alerts small { margin: 0 6px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.moved-tag { position: absolute; z-index: 2; top: 10px; right: 10px; padding: 5px 8px; border-radius: 2px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--shu-fill); }
 
 /* ------------------------------------------------------------------ poster cards */
 
@@ -421,6 +428,9 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .d-date b { color: var(--text); font-weight: 600; }
 .flag { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s-3); padding: 10px 14px; border-radius: var(--r); font-size: 14px; background: color-mix(in srgb, var(--test) 14%, transparent); border: 1px solid color-mix(in srgb, var(--test) 35%, transparent); }
 .flag .ico { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--test); }
+.flag.moved { margin: 0 0 var(--s-4); background: color-mix(in srgb, var(--shu) 12%, transparent); border-color: color-mix(in srgb, var(--shu) 35%, transparent); }
+.flag.sealed { background: color-mix(in srgb, var(--asagi) 12%, transparent); border-color: color-mix(in srgb, var(--asagi) 35%, transparent); }
+.flag.sealed .ico { color: var(--asagi); }
 
 .d-verdict, .d-section, .d-syn { margin: 0 clamp(18px, 4vw, 44px); }
 .d-verdict {
@@ -587,6 +597,30 @@ svg.scatter { display: block; overflow: visible; }
 .mb-extra { text-align: right; font-variant-numeric: tabular-nums; }
 .mb-head span:nth-child(3), .mb-head span:nth-child(4) { text-align: right; }
 
+/* The decision clock (Track record) and a title's forecast path (sheet): vermilion is what we forecast, the dashed
+   ink line the rolling seasons, and the tinted zone from the premiere on is the nowcast. */
+.clock-panel .lead-sm { max-width: 760px; margin-bottom: var(--s-4); }
+.clock-panel .lead-sm b { color: var(--text); }
+.clock .ck-now { fill: var(--text); opacity: 0.04; }
+.clock .ck-prem { stroke: var(--shu); stroke-width: 2; stroke-dasharray: 5 4; opacity: 0.8; }
+.clock .ck-now-t { fill: var(--faint); font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.clock .ck-stage { fill: var(--shu); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; }
+.clock .ck-zero { stroke: var(--line-2); }
+.clock .ck-band, .traj .tj-band { fill: var(--shu); opacity: 0.13; }
+.clock .ck-err, .traj .tj-err { stroke: var(--shu); stroke-width: 6; stroke-linecap: round; opacity: 0.18; }
+.clock .ck-line, .traj .tj-line { fill: none; stroke: var(--shu); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.clock .ck-rline { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.clock .ck-roll { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
+.clock .ck-pt, .traj .tj-pt { fill: var(--shu); stroke: var(--surface); stroke-width: 2; cursor: pointer; transition: r 0.15s; }
+.clock .ck-pt:hover, .clock .ck-pt:focus-visible, .traj .tj-pt:hover, .traj .tj-pt:focus-visible { r: 8; outline: none; stroke: var(--text); }
+.traj .tj-actual { stroke: var(--text); stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.7; }
+.traj .tj-actual-t { fill: var(--text); font-size: 11.5px; font-weight: 700; }
+.traj-host { width: 100%; }
+.ck-key i { display: inline-block; }
+.ck-k-line { width: 18px; height: 10px; border-top: 2.5px solid var(--shu); background: color-mix(in srgb, var(--shu) 20%, transparent); }
+.ck-k-roll { width: 18px; border-top: 2px dashed var(--muted); }
+.ck-k-now { width: 14px; height: 12px; border-left: 2px dashed var(--shu); background: color-mix(in srgb, var(--text) 10%, transparent); }
+
 /* ------------------------------------------------------------------ method */
 
 .method { display: grid; gap: clamp(36px, 5vw, 64px); }
@@ -702,6 +736,18 @@ svg.scatter { display: block; overflow: visible; }
 .gb-val small { display: block; font-size: 12px; color: var(--faint); }
 .gb-empty { padding: 20px 4px; color: var(--muted); }
 .g-block .note { max-width: 780px; }
+.asks { display: grid; gap: var(--s-3); margin-top: var(--s-5); padding: 0; list-style: none; }
+.ask { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: var(--s-4); align-items: center; padding: var(--s-3) var(--s-4) var(--s-3) var(--s-3); border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--surface); animation: rise 0.6s var(--ease) calc(var(--i, 0) * 45ms) both; }
+.ask-art { aspect-ratio: 2 / 3; border-radius: var(--r); overflow: hidden; box-shadow: 0 0 0 1px var(--line); }
+.ask-name { font-weight: 600; line-height: 1.3; }
+.ask-name small { margin-left: 8px; font-size: 12px; font-weight: 400; color: var(--faint); }
+.ask-jp { margin-top: 2px; font-size: 12px; color: var(--faint); }
+.ask-track { display: block; height: 6px; margin: 8px 0 6px; border-radius: 3px; background: var(--map-base); overflow: hidden; }
+.ask-track i { display: block; height: 100%; border-radius: 3px; background: var(--sun); }
+.ask-meta { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.ask-n { font-size: 12px; text-align: right; color: var(--faint); }
+.ask-n b { display: block; font: 800 26px/1 var(--font-display); color: var(--text); }
+@media (max-width: 640px) { .ask { grid-template-columns: 44px minmax(0, 1fr); } .ask-n { grid-column: 2; text-align: left; } .ask-n b { display: inline; margin-right: 4px; font-size: 18px; } }
 .g-block .regions { margin-top: var(--s-5); }
 
 .ck-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin: var(--s-5) 0 20px; }
@@ -942,3 +988,33 @@ svg.scatter { display: block; overflow: visible; }
 .seal-line b { color: var(--text); }
 .seal-line code { overflow-wrap: anywhere; }
 .seal-line a { color: var(--shu); }
+
+/* 稟議書: the Japanese one-page brief (web/js/ringi.js), printed from the forecast sheet */
+.ringi-btn span { font: 700 17px/1 var(--font-display); }
+#print-root.ringi { color: #111; background: #fff; }
+.ringi-doc { max-width: 190mm; margin: 0 auto; font: 400 10px/1.55 "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; color: #111; background: #fff; }
+.ringi-doc .r-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.ringi-doc h1 { font: 700 22px/1.2 "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif; letter-spacing: 0.3em; }
+.ringi-doc .r-meta { margin-top: 6px; font-size: 9.5px; color: #444; }
+.ringi-doc .r-hanko { border-collapse: collapse; flex: none; }
+.ringi-doc .r-hanko th, .ringi-doc .r-hanko td { width: 15mm; border: 1px solid #111; font-size: 9px; font-weight: 500; text-align: center; }
+.ringi-doc .r-hanko td { height: 13mm; }
+.ringi-doc .r-subject { margin: 8px 0 6px; padding: 5px 10px; border: 1.5px solid #111; font-size: 13px; font-weight: 700; }
+.ringi-doc .r-form { width: 100%; border-collapse: collapse; }
+.ringi-doc .r-form > tbody > tr > th { width: 16mm; padding: 5px 4px; border: 1px solid #111; background: #f1eee6; font-weight: 700; letter-spacing: 0.15em; text-align: center; vertical-align: top; }
+.ringi-doc .r-form > tbody > tr > td { padding: 5px 10px; border: 1px solid #111; vertical-align: top; }
+.ringi-doc .r-form tr { break-inside: avoid; }
+.ringi-doc .r-verdict { font-size: 13px; }
+.ringi-doc .r-stamp { display: inline-block; margin-right: 10px; padding: 0 10px; border: 2px solid #c8321f; border-radius: 3px; color: #c8321f; font-weight: 700; letter-spacing: 0.12em; }
+.ringi-doc ul { margin: 0; padding-left: 1.2em; }
+.ringi-doc li + li { margin-top: 2px; }
+.ringi-doc p + p { margin-top: 3px; }
+.ringi-doc .r-small { font-size: 9.5px; color: #444; }
+.ringi-doc .r-sub { width: 100%; border-collapse: collapse; font-size: 10px; }
+.ringi-doc .r-sub th, .ringi-doc .r-sub td { padding: 3px 6px; border-bottom: 1px solid #bbb; text-align: left; vertical-align: top; }
+.ringi-doc .r-sub th { font-weight: 700; color: #333; white-space: nowrap; }
+.ringi-doc .r-looks { table-layout: fixed; }
+.ringi-doc .r-nowrap { white-space: nowrap; }
+.ringi-doc .r-done { color: #888; }
+.ringi-doc .r-foot { margin-top: 8px; font-size: 9px; color: #555; overflow-wrap: anywhere; }
+@media print { html.printing body::after { display: none; } }   /* no paper grain on paper */

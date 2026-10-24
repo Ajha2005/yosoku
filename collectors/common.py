@@ -144,6 +144,17 @@ def parse_date(text):
     return date.fromisoformat(text[:10]) if text else None
 
 
+# A title's data stops changing once its last window closes: the buzz windows end on day +6 after the Japanese start
+# date, the India Demand Index's on day +27 and its Netflix weeks on day +90. Until then it is worth collecting again;
+# after that it never is, so daily work grows with the titles in play, not with the archive.
+LAST_WINDOW_DAY = 90
+
+
+def is_active(start_date, today):
+    """True while a title's data can still change: its start date is unknown, still to come, or at most 90 days ago."""
+    return start_date is None or (today - start_date).days <= LAST_WINDOW_DAY
+
+
 def normalize(text):
     """Lowercase text without punctuation or repeated spaces, for matching names across sources."""
     text = unicodedata.normalize("NFKC", text).replace("×", " x ").lower()

@@ -1,7 +1,7 @@
 // The Business tab: what the forecasts are worth to a buyer, who pays, and how the method travels to other markets.
 
-import { MOMENTS, esc, pct, formatDate } from "./data.js?v=7";
-import { verdictIcon } from "./charts.js?v=7";
+import { MOMENTS, esc, pct, formatDate } from "./data.js?v=9";
+import { verdictIcon } from "./charts.js?v=9";
 
 const CUSTOMERS = [
   { who: "Indian streaming platforms and TV channels", decides: "Which titles to license, when to commit, and whether to dub.",

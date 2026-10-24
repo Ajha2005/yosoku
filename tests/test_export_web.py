@@ -57,6 +57,7 @@ def test_mock_forecasts_never_get_covers_but_the_guide_does(tmp_path, monkeypatc
     assert asked and set(asked[0]) == set(export_web.guide_ids(guide))
     assert not (set(asked[0]) & {90001, 90002, 501})
     assert mock_ids - set(asked[0])
+    assert not (tmp_path / "alerts.json").exists()  # the daily job's alerts name real titles, never mock ones
 
 
 def test_real_forecasts_get_covers(tmp_path, monkeypatch):
@@ -72,6 +73,15 @@ def test_real_forecasts_get_covers(tmp_path, monkeypatch):
     export_web.main()
     assert len(json.loads((out / "covers.json").read_text(encoding="utf-8"))) == 3
     assert set(export_web.referenced_ids(predictions)) <= asked[0]   # real forecasts get covers for every title and lookalike
+    assert (out / "alerts.json").exists() == (ROOT / "predictions" / "alerts.json").exists()   # and the daily job's status
+
+
+def test_stale_alerts_are_removed_beside_mock_forecasts(tmp_path, monkeypatch):
+    (tmp_path / "alerts.json").write_text('{"date": "2026-10-24", "alerts": []}', encoding="utf-8")
+    monkeypatch.setattr(export_web, "fetch_covers", lambda ids: {})
+    monkeypatch.setattr("sys.argv", ["export_web", "--predictions", "does/not/exist.json", "--out-dir", str(tmp_path)])
+    export_web.main()
+    assert not (tmp_path / "alerts.json").exists()
 
 
 def test_guide_counts_agree_with_the_collected_files():
@@ -85,3 +95,14 @@ def test_guide_counts_agree_with_the_collected_files():
     assert {r["id"] for r in built["watched"]} <= {r["id"] for r in built["titles"]}   # every charted title is in the pool
     assert set(built["voice"]["hubs"]) == set(built["hubs"])
     json.dumps(built, allow_nan=False)   # no NaN: the browser's JSON.parse would reject it
+
+
+def test_asks_list_agrees_with_its_totals():
+    from yosoku import guide
+
+    built = guide.build(ROOT / "data")
+    asks = built["asks"]
+    assert asks["comments"] == sum(r["asks"] for r in asks["titles"]) and asks["watch"] == sum(r["watch"] for r in asks["titles"])
+    assert all(0 <= r["recent"] <= r["asks"] and (r["dub"] or r["watch"]) for r in asks["titles"])
+    assert asks["titles"] == sorted(asks["titles"], key=lambda r: (-r["asks"], -r["recent"], r["name"]))
+    assert {r["id"] for r in asks["titles"]} <= set(export_web.guide_ids(built))  # every listed title gets its poster

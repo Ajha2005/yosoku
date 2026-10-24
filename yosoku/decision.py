@@ -7,7 +7,12 @@ under the hold line, otherwise Test-market. The two lines start at 60 and 40 and
 Two extras go to the dashboard, both described rather than modelled: how past titles did by release
 window (the what-if), and how often fans of the closest past titles asked for an Indian-language dub.
 At a moment where the model did not beat the best simple rule (gate G4), that rule makes the forecasts;
-the lookalikes and the regional view still come from the model.
+the lookalikes and the regional view still come from the model. The 2024 backtest keeps the 80% range set
+before 2024; titles not released yet take it from every season known by now, the 2024 misses included, and only
+from the titles whose index includes YouTube, as theirs will (evaluate.live_width).
+With reports/clock.json (python -m yosoku.clock), each 2024 title also gets its forecast day by day.
+A stage already sealed (python -m yosoku.seal) shows the sealed numbers, which anyone can check against the file,
+with today's forecast for it kept beside them as "now".
 
     python -m yosoku.decision             # 2024 backtest plus upcoming titles in data/upcoming/
     python -m yosoku.decision --final     # also the 2025 test titles (after evaluate --final)
@@ -22,15 +27,18 @@ import numpy as np
 import pandas as pd
 
 from yosoku import features as feat
-from yosoku.data import COMMENT_MARKETS, HUBS, MARKETS, add_folder_arguments, folder, load_daily, load_reddit, load_titles
+from yosoku.data import COMMENT_MARKETS, HUBS, MARKETS, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
-from yosoku.labels import against_rest, build as build_labels, checks as label_checks
+from yosoku.labels import against_rest, build as build_labels, checks as label_checks, load_reference
 from yosoku.models import baselines, forecast
+from yosoku.seal import sealed_forecasts
 from yosoku.split import guard_test, split_of
 
 LAUNCH_LINE, HOLD_LINE = 60, 40
 PRECISION_TARGET = 0.70
 VERDICT_JA = {"Launch": "投入推奨", "Test-market": "テスト販売", "Hold": "見送り"}
+RULE_JA = {"Genre average": "ジャンル平均", "Sequel carry-over": "前作の実績", "Global buzz (en+ja Wikipedia)": "英語・日本語Wikipediaの閲覧数",
+           "India Wikipedia alone": "インドの言語のWikipedia閲覧数", "India YouTube alone": "インドからの予告編コメント数"}
 WINDOW_CLASHES = [  # (months, warning)
     ({10, 11}, "Festive season (Diwali, Oct–Nov): crowded release slate, high leisure spend"),
     ({2, 3}, "Board exams (Feb–Mar): students, the core audience, watch less"),
@@ -125,13 +133,13 @@ def predict(moment, used, features, titles, labels, train_ids, target_ids):
     return out
 
 
-def reasons(point, low, high, label, looks, drivers, names, labels, rule=None):
-    shown = [f"{names.get(i, i)} ({whole(labels.get(i, float('nan')))})" for i, _ in looks[:3]]
+def reasons(point, low, high, label, shown, drivers, rule=None):
+    """(English, Japanese) one-line reason; `shown` names the closest past titles with their index, "Name (72)"."""
     en = f"{label}: India Demand Index forecast {whole(point)} (80% range {whole(low)}–{whole(high)})."
     ja = f"判定：{VERDICT_JA[label]}。インド需要指数の予測 {whole(point)}（80%範囲 {whole(low)}–{whole(high)}）。"
     if rule:
         en += f" Forecast by the simple rule \"{rule}\", which beat our model on the 2024 titles."
-        ja += f"予測方法：単純ルール「{rule}」（2024年の検証でモデルを上回ったため）。"
+        ja += f"予測方法：単純ルール「{RULE_JA.get(rule, rule)}」（2024年の検証でモデルを上回ったため）。"
     if shown:
         en += " Closest past titles: " + ", ".join(shown) + "."
         ja += "類似作品：" + "、".join(shown) + "。"
@@ -139,6 +147,31 @@ def reasons(point, low, high, label, looks, drivers, names, labels, rule=None):
         name, points = drivers[0]
         en += f" Biggest driver: {name} ({points:+.1f} points)."
     return en, ja
+
+
+def franchise(titles, anilist_id, depth=8):
+    """The title and the prequels above it."""
+    chain = set()
+    while anilist_id in titles.index and anilist_id not in chain and len(chain) < depth:
+        chain.add(anilist_id)
+        prequel = titles.at[anilist_id, "prequel_anilist_id"]
+        if pd.isna(prequel):
+            break
+        anilist_id = int(prequel)
+    return chain
+
+
+def common_ground(titles, a, b):
+    """What past title b shares with title a, so a brief can say why it is a precedent (the similarity is TF-IDF)."""
+    if a not in titles.index or b not in titles.index:
+        return None
+    ta, tb = titles.loc[a], titles.loc[b]
+    same = lambda col: ta[col] if isinstance(ta[col], str) and ta[col] == tb[col] else None  # noqa: E731
+    return {"franchise": bool(franchise(titles, a) & franchise(titles, b)),
+            "genres": [g for g in ta["genre_list"] if g in tb["genre_list"]],
+            "studio": same("studio"), "source": same("source"), "format": same("format"),
+            "audience": same("demographic") if ta["demographic"] != "Not tagged" else None,
+            "tags": len(set(ta["tag_list"]) & set(tb["tag_list"]))}
 
 
 def entries(titles, labels, out, width, lines, rule=None):
@@ -149,14 +182,17 @@ def entries(titles, labels, out, width, lines, rule=None):
         point = float(row["forecast"])
         low, high = max(0.0, point - width), min(100.0, point + width)
         label = verdict(low, high, *lines)
-        en, ja = reasons(point, low, high, label, row["lookalikes"], row["drivers"], names, label_map, rule)
+        shown = [f"{names.get(i, i)} ({whole(label_map.get(i, float('nan')))})" for i, _ in row["lookalikes"][:3]]
+        en, ja = reasons(point, low, high, label, shown, row["drivers"], rule)
         result[anilist_id] = {
             "index": round(point, 1), "low": round(low, 1), "high": round(high, 1), "verdict": label,
             "reason_en": en, "reason_ja": ja,
             "drivers": [{"name": n, "points": p} for n, p in row["drivers"]],
             "lookalikes": [{"anilist_id": i, "name": names.get(i, str(i)), "similarity": s,
+                            "title_japanese": jp if isinstance(jp := titles["title_japanese"].get(i), str) else "",
                             "year": int(titles.loc[i, "start"].year) if i in titles.index and pd.notna(titles.loc[i, "start"]) else None,
-                            "india_index": round(label_map[i], 1) if i in label_map else None}
+                            "india_index": round(label_map[i], 1) if i in label_map else None,
+                            "shared": common_ground(titles, anilist_id, i)}
                            for i, s in row["lookalikes"][:5]],
             "regions": {k: v for k, v in row["region"].items() if not k.startswith("_")},
             "region_titles": row["region"].get("_titles", 0),
@@ -164,6 +200,27 @@ def entries(titles, labels, out, width, lines, rule=None):
             "dub_demand": dict(zip(("share", "titles"), dub_demand(titles, row["lookalikes"]))),
         }
     return result
+
+
+SHOWN = ("index", "low", "high", "verdict")
+
+
+def show_sealed(record, sealed):
+    """Give each sealed stage of an upcoming title the sealed numbers, verdict and lines, so the site matches the file
+    anyone can download; today's forecast for that stage stays beside them as "now"."""
+    for moment, f in sealed["forecasts"].items():
+        entry = record["forecasts"].get(moment)
+        if entry is None:
+            continue
+        entry["now"] = {k: entry[k] for k in SHOWN}
+        entry.update({k: f[k] for k in SHOWN})
+        method = sealed["methods"].get(moment)
+        shown = [f"{l['name']} ({whole(l['india_index'])})" for l in entry["lookalikes"][:3]]
+        drivers = [(d["name"], d["points"]) for d in entry["drivers"]]
+        rule = None if method in (None, "Lookalike", "Blend") else method
+        entry["reason_en"], entry["reason_ja"] = reasons(f["index"], f["low"], f["high"], f["verdict"], shown, drivers, rule)
+        entry["sealed"] = {"date": sealed["date"], "file": sealed["file"], **sealed["lines"].get(moment, {})}
+    record["sealed"] = {"date": sealed["date"], "file": sealed["file"]}
 
 
 def title_info(titles, anilist_id, group, labels, today):
@@ -200,14 +257,16 @@ def main():
     evaluation = json.loads(evaluation_file.read_text(encoding="utf-8"))
     ablation_file = out_dir / "reports" / "ablation.json"
     ablation = json.loads(ablation_file.read_text(encoding="utf-8")) if ablation_file.exists() else None
+    clock_file = out_dir / "reports" / "clock.json"  # the decision clock (python -m yosoku.clock), optional
+    clock = json.loads(clock_file.read_text(encoding="utf-8")) if clock_file.exists() else None
     split = split_of(titles)
     train = split.index[split == "train"].intersection(labels.index)
     validate = split.index[split == "validate"].intersection(labels.index)
     train_all = split.index[split.isin(["train", "validate"])].intersection(labels.index)
     test = split.index[split == "test"].intersection(labels.index)
 
-    label_table, parts, ranks = build_labels(titles)
-    sources = {"released": len(parts), "labelled": int(labels.notna().sum()),
+    label_table, parts, ranks = build_labels(titles, load_reference(out_dir))
+    sources = {"released": len(parts), "labelled": int(labels.index.isin(titles.index).sum()),
                "parts": {part: {"titles": int(r.titles), "pairs": int(r.pairs),
                                 "agreement": None if pd.isna(r.spearman) else round(float(r.spearman), 2)}
                          for part, r in against_rest(parts, ranks).iterrows()}}
@@ -237,8 +296,11 @@ def main():
         rule = None if used in ("Lookalike", "Blend") else used
         val = predict(moment, used, features[moment], titles, labels, train, validate)
         lines = tune(val["forecast"], labels.loc[validate], width)
+        # Titles not released yet get the range from every season known by now, the 2024 misses included.
+        live = info.get("width_live", width)
         thresholds[moment] = {"launch_line": lines[0], "hold_line": lines[1], "range_half_width": round(width, 1),
-                              "range_coverage": info["coverage"], "method": used}
+                              "range_half_width_live": round(live, 1), "range_coverage": info["coverage"],
+                              "range_coverage_by_part": info.get("coverage_by_part"), "method": used}
         groups = [("validation", val)]
         if args.final:
             guard_test(test, titles, final=True)
@@ -246,7 +308,7 @@ def main():
         if upcoming is not None:
             groups.append(("upcoming", predict(moment, used, features[moment], titles, labels, train_all, upcoming.index)))
         for group, out in groups:
-            for anilist_id, entry in entries(titles, labels, out, width, lines, rule).items():
+            for anilist_id, entry in entries(titles, labels, out, width if group == "validation" else live, lines, rule).items():
                 record = records.setdefault(anilist_id, title_info(titles, anilist_id, group, labels, args.today))
                 if moment in record["moments_available"]:
                     record["forecasts"][moment] = entry
@@ -258,13 +320,28 @@ def main():
             + ", ".join(f"{v} {counts.get(v, 0)}" for v in ("Launch", "Test-market", "Hold")) + " |")
     report += ["", "Gate G5: median index of Launch > Test-market > Hold at each moment. "
                "Thresholds are tuned on these same titles, so this table is optimistic; the 2025 test is the honest check."]
+    if clock:  # how each 2024 title's forecast would have moved, one value per clock day
+        for anilist_id, path in clock["titles"].items():
+            if int(anilist_id) in records:
+                records[int(anilist_id)]["trajectory"] = path
+    history = read(out_dir / "predictions" / "history.csv", required=False)  # the daily job's log (yosoku/daily.py)
+    if history is not None:
+        for anilist_id, rows in history.groupby("anilist_id"):
+            if anilist_id in records:  # one point per clock day, the latest made on it
+                points = [{**r, "day": r["day"] if r["day"] == "cold" else int(r["day"])}
+                          for r in rows.drop_duplicates("day", keep="last")[["date", "day", "index", "low", "high"]].to_dict("records")]
+                records[anilist_id]["history"] = sorted(points, key=lambda r: -1e9 if r["day"] == "cold" else r["day"])
+    for anilist_id, sealed in sealed_forecasts(out_dir).items():
+        if anilist_id in records and records[anilist_id]["group"] == "upcoming":
+            show_sealed(records[anilist_id], sealed)
 
     payload = {
         "generated": args.today, "mock": args.mock, "thresholds": thresholds,
         "hubs": {name: states for name, states in HUBS.values()},
         "window_evidence": window_evidence(titles, labels, train_all), "min_evidence": MIN_EVIDENCE,
         "markets": {code: {**market, "comments": code in COMMENT_MARKETS} for code, market in MARKETS.items()},
-        "sources": sources, "ablation": ablation, "label_checks": label_checks(label_table, parts, ranks, data_dir),
+        "sources": sources, "ablation": ablation, "clock": clock["days"] if clock else None,
+        "label_checks": label_checks(label_table, parts, ranks, data_dir),
         "dub_typical": round(float(titles.loc[train_all, "yt_dub_share"].mean()), 3)
         if "yt_dub_share" in titles and titles.loc[train_all, "yt_dub_share"].notna().any() else None,
         "evaluation": evaluation, "titles": list(records.values()),

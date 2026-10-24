@@ -13,6 +13,7 @@ The file is small and committed, so only one person needs to run this.
 Needs `pip install fasttext` (not in requirements.txt, it needs a C++ compiler on some laptops)
 and the model, a 230 MB download from GitHub, saved in data/raw/indiclid/ the first time.
 Comments already in comment_languages.csv are skipped, so rerun it after collecting more comments.
+The daily job (yosoku/daily.py) does that for the upcoming folder, after each YouTube refresh.
 
     python collectors/detect_languages.py
 """

@@ -67,7 +67,12 @@ def load_titles(data_dir):
 
 
 def load_daily(data_dir, titles):
-    """(wikipedia_daily, youtube_comments) with days_from_start; either is None if not collected."""
+    """(wikipedia_daily, youtube_comments) with days_from_start; either is None if not collected.
+
+    The comments are one row per comment when their text is here, or else one row per title, video and day from
+    youtube_comment_daily.csv (written by merge.py). Either way `n` counts the comments in a row and `india` the
+    Indian ones among them.
+    """
     wiki = read(data_dir / "wikipedia_daily.csv", required=False)
     comments = read(data_dir / "youtube_comments.csv", required=False)
     if comments is not None:
@@ -75,6 +80,9 @@ def load_daily(data_dir, titles):
         comments["days_from_start"] = (published - comments["anilist_id"].map(titles["start"])).dt.days
         languages = read(data_dir / "comment_languages.csv", required=False)  # IndicLID, optional
         comments["india"] = classify(comments["text"], indic_flags(comments, languages))["india"].astype(int)
+        comments["n"] = 1
+    elif (counts := read(data_dir / "youtube_comment_daily.csv", required=False)) is not None:
+        comments = counts.assign(days_from_start=(pd.to_datetime(counts["date"]) - counts["anilist_id"].map(titles["start"])).dt.days)
     return wiki, comments
 
 
