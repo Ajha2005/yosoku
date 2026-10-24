@@ -3,7 +3,9 @@
 For each forecast moment it trains on 2019-2023 and scores 2024 (validation), and repeats the
 season-by-season rolling check from Winter 2020 to Fall 2024. Scores: rank correlation (Spearman)
 with a bootstrap 95% interval, top-20% hit rate, mean absolute error, and errors by segment.
-The rolling errors also set the width of the 80% ranges, which are then checked on 2024.
+The rolling errors also set the width of the 80% ranges, which are then checked on 2024, separately for the
+titles whose index includes YouTube. Titles not released yet take their range from those titles' misses only:
+every upcoming title gets YouTube data, so its index will include it too (labels.youtube_part).
 
     python -m yosoku.evaluate            # writes reports/evaluation.md and reports/evaluation.json
     python -m yosoku.evaluate --final    # also scores the 2025 test titles once: reports/final.md
@@ -18,12 +20,23 @@ from scipy.stats import spearmanr
 
 from yosoku import features as feat
 from yosoku.data import add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
+from yosoku.labels import youtube_part
 from yosoku.models import baselines, conformal_width, forecast
 from yosoku.split import guard_test, rolling_folds, split_of
 
 MAIN = {"cold": "Blend", "t-28": "Blend", "t+7": "Blend"}
 MIN_TRAIN, MIN_TARGET = 20, 5
+MIN_MISSES = 30  # past misses needed before a range is set from one group of titles alone
 TOP_SHARE = 0.20
+
+
+def live_width(misses, youtube):
+    """Half-width of the range for titles not released yet, from out-of-sample misses (a Series by anilist_id).
+
+    Only the misses of titles whose index includes YouTube, as an upcoming title's will (labels.youtube_part); all
+    misses while there are too few of those."""
+    own = misses[youtube.reindex(misses.index, fill_value=False).to_numpy()]
+    return conformal_width(own.to_numpy() if len(own.dropna()) >= MIN_MISSES else misses.to_numpy())
 
 
 def prepare(data_dir, out_dir, version="v1", moments=feat.MOMENTS):
@@ -82,6 +95,10 @@ def fmt(x, digits=2):
     return "–" if x is None or (isinstance(x, float) and np.isnan(x)) else f"{x:.{digits}f}"
 
 
+def share(x):
+    return "–" if x is None else f"{x:.0%}"
+
+
 def evaluate(titles, labels, features):
     split = split_of(titles)
     train = split.index[split == "train"].intersection(labels.index)
@@ -96,6 +113,7 @@ def evaluate(titles, labels, features):
         return "\n".join(lines) + "\n", results
 
     sequel = titles["is_sequel"]
+    youtube = youtube_part(titles)
     for moment in feat.MOMENTS:
         methods, _ = predict_all(moment, features[moment], titles, labels, train, validate)
         actual = labels.loc[validate]
@@ -127,9 +145,15 @@ def evaluate(titles, labels, features):
             if len(before_validation) else np.nan
         if np.isnan(width):  # too few rolling seasons: fall back to validation errors, and say so
             width = conformal_width((methods[used] - actual).to_numpy())
-        inside = ((methods[used] - actual).abs() <= width).mean()
-        # Titles not released yet also get the 2024 misses in their range: every season whose outcome is known now.
-        live = conformal_width((roll[used] - labels.reindex(roll.index)).to_numpy()) if len(roll) else np.nan
+        miss = (methods[used] - actual).abs()
+        inside = (miss <= width).mean()
+        # Checked apart: the titles whose index includes YouTube, picked (for past titles) by how popular they are today.
+        has = youtube.reindex(validate, fill_value=False).to_numpy()
+        held = {"youtube": float((miss[has] <= width).mean()) if has.any() else None, "youtube_titles": int(has.sum()),
+                "other": float((miss[~has] <= width).mean()) if (~has).any() else None, "other_titles": int((~has).sum())}
+        # Titles not released yet: every season whose outcome is known now, the 2024 misses included, and only the
+        # titles whose index includes YouTube, as theirs will.
+        live = live_width(roll[used] - labels.reindex(roll.index), youtube) if len(roll) else np.nan
         live = width if np.isnan(live) else live
 
         lines += [f"## Moment: {moment}", "",
@@ -145,12 +169,21 @@ def evaluate(titles, labels, features):
                   f"- Forecasts and verdicts use: **{used}**."
                   + ("" if used == main else " The model does not beat this rule, so the rule is shipped (gate G4 fallback)."),
                   f"- 80% range ({used}): ± {fmt(width, 1)} points; contains the truth for **{inside:.0%}** of 2024 titles "
-                  "(target 70–90%).",
-                  f"- 80% range for titles not released yet: ± {fmt(live, 1)} points, from every rolling season including 2024.", ""]
+                  f"(target 70–90%): {share(held['other'])} of the {held['other_titles']} whose index has no YouTube part, "
+                  f"{share(held['youtube'])} of the {held['youtube_titles']} that have one.",
+                  f"- 80% range for titles not released yet: ± {fmt(live, 1)} points, from the misses of the titles whose index "
+                  "includes YouTube, in every rolling season including 2024.", ""]
         results["moments"][moment] = {"main": main, "used": used, "width": width, "width_live": live, "coverage": float(inside),
+                                      "coverage_by_part": held,
                                       "beats_baseline": bool(beats), "best_baseline": best,
                                       "table": json.loads(table.to_json())}
     passed = all(m["beats_baseline"] for m in results["moments"].values())
+    lines += ["## Why the 2024 ranges miss", "",
+              "YouTube comments were collected only for the 200 titles most popular on AniList today. A 2024 title has had "
+              "less time to get there, so the 2024 titles whose index includes YouTube are mostly hits, and they beat their "
+              "forecasts; the ranges hold for the others. Every upcoming title gets YouTube data from the daily job, so its "
+              "range comes from the misses of the titles whose index includes YouTube, which makes it wider. Collecting "
+              "YouTube for every title (label v2) removes the cause.", ""]
     lines += ["## Gate G4", "", f"Main model beats the best baseline at every moment: **{'PASS' if passed else 'FAIL'}**. "
               "Where it does not, the best baseline makes the forecasts and the model's lookalikes are kept as evidence "
               "(marked **(used)** above)."]

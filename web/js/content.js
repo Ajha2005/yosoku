@@ -57,7 +57,7 @@ export const FORECAST_STEPS = [
   { title: "Closest past titles", body: "Find the 10 past titles most like this one by genres, tags, source, format, studio, audience and synopsis words, and average their India Demand Index, closest counting most." },
   { title: "Blend", body: "A linear model weighs that average with genre, format, source and audience, the stage's buzz (none at Cold; Wikipedia views and trailer comments from T−28 on) and how the prequel did in India. Each forecast lists what moved it, in index points." },
   { title: "Beat a simple rule, or step aside", body: "Every stage is scored on the 2024 titles against simple rules anyone could apply. Where our model does not beat the best one, that rule makes the forecasts instead, and the forecast sheet says so." },
-  { title: "An honest range", body: "The 80% range comes from how far forecasts missed on past seasons the model had not seen, so it is wide where the model is unsure. For titles not released yet it also counts the latest season's misses." },
+  { title: "An honest range", body: "The 80% range comes from how far forecasts missed on past seasons the model had not seen, so it is wide where the model is unsure. For titles not released yet it also counts the latest season's misses, and only those of titles whose index includes YouTube, as theirs will." },
   { title: "Verdict from the range", body: "Launch only if even the low end of the range clears the launch line; Hold only if even the high end is under the hold line; anything else is Test-market. The lines are tuned on the 2024 titles." },
 ];
 
@@ -85,5 +85,5 @@ export const KEPT_HONEST = [
   { name: "Every comment read the same way", why: "AI4Bharat's IndicLID reads each new comment the day it is collected, as it read the old ones." },
   { name: "No comment is missed", why: "Titles in play are fetched newest first until the newest comment already kept, every day, so a busy trailer no longer loses its launch week to a 1,000-comment cap." },
   { name: "Counts, not text", why: "Comments are kept as counts per title and day, with no text; view counts are kept for 30 days, as YouTube's rules require." },
-  { name: "Ranges that learn", why: "Titles not released yet get 80% ranges that include every season's misses so far, the latest one included." },
+  { name: "Ranges that learn", why: "Titles not released yet get 80% ranges from every season's misses so far, the latest one included, on the titles measured the way theirs will be: with YouTube." },
 ];

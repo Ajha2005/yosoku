@@ -1,14 +1,16 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=7";
-import { posterHTML } from "./art.js?v=7";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=7";
-import { showTip, hideTip, showToast } from "./tip.js?v=7";
-import { RULE_NOTES } from "./content.js?v=7";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=8";
+import { posterHTML } from "./art.js?v=8";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=8";
+import { showTip, hideTip, showToast } from "./tip.js?v=8";
+import { RULE_NOTES } from "./content.js?v=8";
+import { ringiHTML } from "./ringi.js?v=8";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CALENDAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 3v4M16 3v4"/></svg>';
+const LOCK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h12v9H6v-9ZM8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>';
 
 export function countUp(el, to, ms = 900) {
   if (reduced) { el.textContent = to; return; }
@@ -45,6 +47,18 @@ function windowSection(t, evidence, minN) {
   return `<ul class="wins">${rows}</ul>
     <p class="callout">${verdict}</p>
     <p class="note">Average India Demand Index of the labelled past titles that started in each window, and the difference from this title's window. Windows with fewer than ${esc(minN)} titles are not shown. An association, not a cause: few anime start in Feb–Mar because Japanese seasons start in January and April.</p>`;
+}
+
+/** A sealed stage shows the numbers in the sealed file, which the title will be graded on; say so, and what the
+ *  current model says today if that differs. */
+function sealedNote(f) {
+  if (!f.sealed) return "";
+  const now = f.now;
+  const moved = now && ["index", "low", "high", "verdict"].some((k) => now[k] !== f[k]);
+  const wider = moved && now.high - now.low > f.high - f.low + 1;
+  return `<p class="flag sealed">${LOCK}<span><b>Sealed ${esc(formatDate(f.sealed.date))}.</b> These are the numbers in the sealed file; this title will be graded on them.${moved
+    ? ` Today the current model says ${round(now.index)} (80% range ${round(now.low)}–${round(now.high)}), ${esc(now.verdict)}.${wider
+      ? " Its range is wider: ranges for titles not released yet now come from the misses of past titles whose index includes YouTube, as this title's will." : ""}` : ""}</span></p>`;
 }
 
 /** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
@@ -175,7 +189,8 @@ export function createDetail(app, { requestClose }) {
     const t = byId(current.id);
     const moment = current.moment;
     const f = t.forecasts[moment];
-    const lines = app.data.thresholds[moment];
+    // A sealed stage is drawn on the lines it was sealed with, as the downloadable file has it.
+    const lines = f.sealed ? { ...app.data.thresholds[moment], launch_line: f.sealed.launch_line, hold_line: f.sealed.hold_line } : app.data.thresholds[moment];
     const v = VERDICTS[f.verdict];
     const cover = app.covers[t.anilist_id];
     const banner = safeUrl(cover?.b);   // a still frame from the anime itself
@@ -245,6 +260,7 @@ export function createDetail(app, { requestClose }) {
         </div>
         ${gauge(f, lines, actual)}
         <p class="note rule">${esc(ruleText(lines))}</p>
+        ${sealedNote(f)}
         <div class="reason">
           <p>${esc(f.reason_en)}</p>
           <p lang="ja" class="ja">${esc(f.reason_ja)}</p>
@@ -280,18 +296,29 @@ export function createDetail(app, { requestClose }) {
     }
   }
 
-  /** A one-page brief for executives: this title's sheet, on its own, in the light theme. */
-  function printBrief() {
+  /** Print `content` on its own, in the light theme. */
+  function printPage(content, kind = "") {
     const html = document.documentElement, theme = html.dataset.theme;
     const root = document.createElement("div");
     root.id = "print-root";
-    root.innerHTML = `<p class="print-head"><b>Yosoku 予測</b> · India launch brief · ${esc(MOMENTS[current.moment].label)} forecast · ${esc(location.href)}</p>${body.innerHTML}`;
+    root.className = kind;
+    root.innerHTML = content;
     document.body.append(root);
     html.dataset.theme = "light";
     html.classList.add("printing");
     const done = () => { root.remove(); html.classList.remove("printing"); html.dataset.theme = theme; };
     addEventListener("afterprint", done, { once: true });
     print();
+  }
+
+  /** A one-page brief for executives: this title's sheet, on its own. */
+  function printBrief() {
+    printPage(`<p class="print-head"><b>Yosoku 予測</b> · India launch brief · ${esc(MOMENTS[current.moment].label)} forecast · ${esc(location.href)}</p>${body.innerHTML}`);
+  }
+
+  /** The same decision as a Japanese ringi-sho, the form a Japanese company approves it on (web/js/ringi.js). */
+  function printRingi() {
+    printPage(ringiHTML(byId(current.id), current.moment, app.data, app.seal), "ringi");
   }
 
   function show(id, moment) {
@@ -346,6 +373,7 @@ export function createDetail(app, { requestClose }) {
     catch { showToast("Copy the address bar to share this forecast"); }
   });
   document.getElementById("sheet-print").addEventListener("click", printBrief);
+  document.getElementById("sheet-ringi").addEventListener("click", printRingi);
   scroller.addEventListener("scroll", hideTip, { passive: true });
   dlg.addEventListener("cancel", (e) => { e.preventDefault(); requestClose(); });          // Esc
   dlg.addEventListener("click", (e) => { if (e.target === dlg) requestClose(); });          // click on the dimmed backdrop

@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=7";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=7";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=7";
-import { createDetail, countUp } from "./detail.js?v=7";
-import { renderGuide } from "./guide.js?v=7";
-import { showTip, hideTip } from "./tip.js?v=7";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=7";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=8";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=8";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=8";
+import { createDetail, countUp } from "./detail.js?v=8";
+import { renderGuide } from "./guide.js?v=8";
+import { showTip, hideTip } from "./tip.js?v=8";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=8";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -334,12 +334,20 @@ function renderRecord() {
 
   const t = info?.table, used = info?.used ?? info?.main, clock = app.data.clock;
   const fx = (v, digits) => (Number.isFinite(v) ? v.toFixed(digits) : "n/a");
+  // Where the range missed: the 2024 titles whose index includes YouTube were picked by how popular they are today.
+  const split = info?.coverage_by_part;
+  const rangeNote = split?.youtube_titles && split?.other_titles ? `<p class="note range-note">The range held for
+      <b>${pct(split.other)}</b> of the ${esc(split.other_titles)} titles whose index has no YouTube part and <b>${pct(split.youtube)}</b> of the
+      ${esc(split.youtube_titles)} that have one. YouTube comments were collected only for the titles most popular on AniList today, so the 2024 ones
+      are mostly hits, and they beat their forecasts. Every upcoming title gets YouTube data, so its range is set from those titles' misses:
+      ± ${fixed(lines.range_half_width_live, 0)} points at ${esc(MOMENTS[moment].label)}.</p>` : "";
   const score = info ? `
     <div class="scorecard">
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[used], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
       <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[used]) ? pct(t.top20[used]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
     </div>
+    ${rangeNote}
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
       <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
       <span>Checked on the 2024 titles, which the model never saw in training.${used !== info.main ? ` So at this stage "${esc(used)}" makes the forecasts and verdicts; the closest past titles still come from our model.` : ""}</span></p>` : "";
@@ -509,7 +517,7 @@ function forecastSteps() {
     const th = app.data.thresholds[m], rule = RULE_NOTES[th.method];
     const by = rule ? `<b>Simple rule: ${esc(th.method)}</b><small>${esc(rule)}; our model did not beat it on 2024</small>`
       : `<b>Our model (${esc(th.method === "Blend" ? "Blend" : "closest past titles")})</b><small>beat every simple rule on 2024</small>`;
-    return `<tr><th scope="row">${MOMENTS[m].label}<small>${esc(MOMENTS[m].long)}</small></th><td>${by}</td><td>± ${fixed(th.range_half_width, 0)} points</td><td>${esc(th.launch_line)} / ${esc(th.hold_line)}</td></tr>`;
+    return `<tr><th scope="row">${MOMENTS[m].label}<small>${esc(MOMENTS[m].long)}</small></th><td>${by}</td><td>± ${fixed(th.range_half_width, 0)} points<small>± ${fixed(th.range_half_width_live, 0)} for titles not released yet</small></td><td>${esc(th.launch_line)} / ${esc(th.hold_line)}</td></tr>`;
   }).join("");
   return `<div class="scorecard-wrap reveal">
       <h2>From signals to a verdict</h2>

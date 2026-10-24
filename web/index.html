@@ -13,11 +13,11 @@
   <meta property="og:image" content="img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <script src="js/theme.js?v=7"></script>
+  <script src="js/theme.js?v=8"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -150,6 +150,7 @@
         <button class="icon-btn" type="button" id="sheet-prev" aria-label="Previous title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
         <button class="icon-btn" type="button" id="sheet-next" aria-label="Next title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         <span class="sheet-bar-gap"></span>
+        <button class="icon-btn ringi-btn" type="button" id="sheet-ringi" aria-label="Print a one-page brief in Japanese (ringi-sho)" title="稟議書（日本語）を印刷"><span lang="ja" aria-hidden="true">稟</span></button>
         <button class="icon-btn" type="button" id="sheet-print" aria-label="Print a one-page brief" title="Print brief"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7v-6Z"/></svg></button>
         <button class="icon-btn" type="button" id="sheet-share" aria-label="Copy link to this forecast" title="Copy link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
         <button class="icon-btn" type="button" id="sheet-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -161,6 +162,6 @@
   <div class="tip" id="tip" role="tooltip" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Yosoku needs JavaScript to show the forecasts.</p></noscript>
-  <script type="module" src="js/main.js?v=7"></script>
+  <script type="module" src="js/main.js?v=8"></script>
 </body>
 </html>

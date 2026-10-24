@@ -9,11 +9,12 @@ current ones.
 | 0:20 | Forecasts, open any 2024 title | Open it at Cold: Test-market, and the real result is far off. Switch the stage to T+7: the range now holds the real result. "T+7 is a nowcast: that launch week is part of the 28 days we measure, and we say so. So: test-market first, decide at T+7." |
 | 0:40 | Same sheet, *Launch plan* | "A verdict is not enough, so every title gets a plan": license small, the exact rule for deciding again at T+7, which dub first, whether to move the date. Every step comes from evidence lower on the sheet. |
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
-| 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
+| 1:20 | Print icon, then 稟 on the sheet | "Every title prints as a one-page brief for an executive who will never open the site, or as a Japanese 稟議書: conclusion, grounds, the closest past titles and what they share, risks, the next decision dates, and boxes for the approvers' seals. It goes straight into the approval process." |
 | 1:40 | Track record | Forecast against reality for 2024. At Cold a simple rule (genre average) makes the forecasts, because our model did not beat it; the page says so. From T−28 on, our model beats every simple rule. |
 | 2:00 | Track record, *When will we know?* | The decision clock: "Before the premiere, waiting helps little: 0.29 seven weeks out, 0.38 one week out. Three days after it, 0.53. So: license small and early, decide the dub on day 3 to 7." Then open Solo Leveling's sheet, *How the forecast moved*: 53 at Cold, 58 at T−28, 83 by day 3; it ended at 80. |
-| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: genre, format, source and audience carry Cold, global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia and prequels add nothing. |
-| 2:45 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air." |
+| 2:15 | Demand guide, *What India is asking for* | "1,197 Indian comments on 68 titles ask for a dub, mostly Hindi, or for when and where they can watch. Join where each title is already available in India, and this is a sales list: the titles India asks for and cannot get." |
+| 2:30 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: genre, format, source and audience carry Cold, global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia and prequels add nothing. |
+| 2:50 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air." Each sheet shows the sealed numbers, with today's forecast beside them. |
 
 ## Questions to prepare for
 
@@ -36,6 +37,12 @@ current ones.
 - **Why not more modelling?** The models beat simple rules once buzz exists, but cold forecasts stay near chance; the limit is data, not the
   model. More India-specific data (streaming beyond Netflix) would help most.
 - **Why no X/Twitter or merchandise?** No usable public source by title and country.
+- **The 80% ranges held for only 67% of 2024 titles. Why trust them?** The misses are the 19 titles whose index
+  includes YouTube: 37–47% inside, against 79–85% of the other 33. YouTube was collected for the 200 titles most
+  popular today, so the 2024 ones are mostly hits. Upcoming titles all get YouTube data, so their ranges are set from
+  those titles' misses, and are wider (± 22 at Cold). Collecting YouTube for every title removes the cause.
+- **Are the numbers on the site the sealed ones?** Yes, for every sealed stage; the sheet shows today's forecast beside
+  them when it differs.
 - **How do we know you did not change the upcoming forecasts after the fact?** They are sealed: the file's SHA-256 is in
   `predictions/sealed/LEDGER.md`, dated by its git commit. `sha256sum` on the downloaded file must match it, and
   `python -m yosoku.seal --score` will grade them once the titles air.

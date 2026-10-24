@@ -43,8 +43,8 @@ def referenced_ids(predictions):
 
 
 def guide_ids(guide):
-    """Titles the demand guide shows posters for: every anime that reached India's Top 10."""
-    return sorted(row["id"] for row in guide["watched"])
+    """Titles the demand guide shows posters for: every anime that reached India's Top 10, and every one India asks for."""
+    return sorted({row["id"] for row in guide["watched"]} | {row["id"] for row in (guide.get("asks") or {}).get("titles", [])})
 
 
 def cover_entry(media):

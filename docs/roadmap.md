@@ -29,13 +29,15 @@ and a daily job. The rest needs data (section 6), licences (section 7) and partn
 | 2 | The label scale moved with every collection | Adding the 2025 titles moved the 2019–2024 labels by 1.0 point on average, up to 3.0 | **Fixed.** Frozen ranking pool, `labels/reference_v1.csv`; today's labels unchanged byte for byte |
 | 3 | The index is mostly global attention | Netflix part 0 for 195 of 208 titles; India YouTube comments 0 for 152 of 200; the Wikipedia part is almost all English views | **Open:** label v2 (section 6) |
 | 4 | The index drifts up by year | Mean 47.1 (2019) → 62.5 (2025). Some is real growth; some is how it is measured: Netflix's charts start June 2021, comments were capped at the newest 1,000 per trailer | **Partly fixed:** daily capture removes the cap from now on |
-| 5 | 80% ranges held 58–67% of 2024 titles | Set season by season from earlier seasons only, they held 78–82% of titles up to 2023; 2024 titles came in about 5 points above their cold and T−28 forecasts | **Partly fixed:** titles not released yet get ranges that include the 2024 misses (± 16.4 / 14.0 / 11.0) |
+| 5 | 80% ranges held 63–67% of 2024 titles | Set season by season from earlier seasons only, they held 78–82% of titles up to 2023. In 2024 they held for 79–85% of the 33 titles whose index has no YouTube part and 37–47% of the 19 that have one: YouTube was collected for the 200 titles most popular today, so the 2024 ones are mostly hits, which beat their forecasts | **Partly fixed:** titles not released yet, which all get YouTube data, take their range from the misses of the titles whose index includes YouTube (± 21.9 / 18.7 / 12.7). Label v2 item 4 removes the cause |
 | 6 | One 52-title season cannot pick a method | A rank correlation on 52 titles has a 95% interval about ± 0.27 wide. The 2024 split and the 20 rolling seasons disagreed on the best method at least four times (section 3) | **Proposal:** pick on the rolling seasons, pre-registered before the next seal |
 | 7 | The collectors could not run daily | YouTube comments and searches were cached forever after the first fetch, so an upcoming title never got its launch-week comments or its later trailers | **Fixed:** `collect_youtube.py --refresh`, `collect_titles.py --keep`, `yosoku/daily.py` |
 | 8 | Personal data in a public repo | 25 MB of YouTube comment text is committed, against decision 6 in `docs/decisions.md` | **Mitigated:** the pipeline runs from per-day counts (2 MB, no text). Removing the text is the team's call (section 7) |
 | 9 | Commercial terms unchecked | AniList needs a licence above $150 a month of revenue; YouTube limits keeping API data without the channel owner's authorisation to 30 days | **Open** (section 7). The new view-count log keeps 30 days only |
 | 10 | IndicLID read only 45% of the comments | Its labels predated the full YouTube rerun: 74,542 of 167,323 comments in Latin letters had one, and 92 of 197 titles had comments read by the word list alone | **Fixed:** every comment labelled (37 more India comments in the first 28 days, 661 → 698); the daily job labels new ones |
 | 11 | One comment can move a title by 30 points | 152 of 200 titles have no India comment in their first 28 days, all tied at the bottom of the YouTube part, which weighs 50%. Kaguya-sama Season 3's first one moved it from 50 to 82 | **Open:** label v2 (section 6, item 5) |
+| 12 | The site's numbers were not the sealed ones | The 50 upcoming titles showed today's forecasts beside "Sealed 24 Oct 2026"; all 50 differed from the downloadable file | **Fixed:** a sealed stage shows the sealed numbers and lines, today's forecast beside them; alerts judge the sealed verdict |
+| 13 | Busy trailers lost their earliest comments | The one-time collection kept the newest 1,000 comments per video. 103 of 600 trailers hit that, on 80 of the 200 titles: on 66 the pre-premiere windows are at least partly cut, and on 14 (13 titles) none of the index's 28 days is left. They are busy trailers (a median of 9,234 comments), so popular titles | **Open:** collect those 103 in full (at most about 6,700 quota units, one day of the default 10,000), then rerun as label v2. New titles are collected every day, so they lose nothing |
 
 ## 3. Model experiments: what did not help
 
@@ -143,19 +145,27 @@ large one where demand for anime is barely measured.
 2. **Sealed, graded forecasts.** Every forecast for an unreleased title is frozen with a SHA-256 fingerprint in a
    public ledger, and graded once the title airs, on a scale that no longer moves. In a market that values
    accountability, a published track record is the moat: no competitor can backfill one. *Built: seals, frozen
-   scale, aired titles labelled. Next: a public scorecard page from February 2027, and data fingerprints in seals.*
+   scale, aired titles labelled, and the site shows the sealed numbers. Next: a public scorecard page from February
+   2027, data fingerprints in seals, and then a guarantee: a season free if fewer than 70% of its titles land inside
+   the 80% ranges. With 50 titles and ranges that really hold 80%, that happens about one season in 30; offer it only
+   once sealed seasons show the ranges hold (in 2024 they did not, row 5).*
 3. **India's own voice, by language.** Hinglish read with AI4Bharat's IndicLID, language hubs (Hindi, Tamil, Telugu,
-   Bengali, Kannada, Malayalam) and dub requests such as "hindi dub kab aayega". *Built. Next: comments on Indian
-   distributors' own channels, where nearly every commenter is in India.*
+   Bengali, Kannada, Malayalam) and dub requests such as "hindi dub kab aayega". *Built, and the Demand guide lists
+   what India asks for, title by title: 1,197 comments on 68 titles ask for a dub (Hindi 1,016, Tamil 50, Telugu 23)
+   or for when and where to watch (160). Next: join where each title can already be watched in India (JustWatch's
+   partner API, or TMDB's provider data under a commercial licence), which turns it into a sales list of titles
+   India asks for and cannot get; and comments on Indian distributors' own channels.*
 4. **Living forecasts and alerts.** Titles in play are forecast every day; a title that leaves its verdict's range
    is flagged, so a Tamil dub can be brought forward while it still matters. *Built: daily job, history on each
    sheet, alerts file. Next: delivery to the buyer's chat tool, and alerts per language hub.*
 5. **Japanese-first decision papers.** A brief per title and per slate that can go straight into a 稟議書 (ringi-sho,
-   the internal approval document): 件名, 判断, 根拠, リスク, 次の判断時期. Business Japanese, reviewed by a native
-   speaker, with an Excel export. The Japanese on the site today is machine-templated, and the footer says so; for a
-   Japanese buyer, polished Japanese is the minimum, not a feature.
+   the internal approval document): 件名, 結論, 根拠, 前例, リスク, 次の判断日, with boxes for the approvers' seals.
+   Business Japanese, reviewed by a native speaker, with an Excel export. *Built: the one-page brief per title (the 稟
+   button on each sheet). Next: native review, a slate version, the Excel export.* The Japanese is machine-templated,
+   and the page says so; for a Japanese buyer, polished Japanese is the minimum, not a feature.
 6. **Comparable titles with reasons.** Licensing teams argue by comparables (類似作品). Show why each one is close
-   (shared tags, studio, source) and how it did in India. *Built: the closest five. Next: the reasons.*
+   (shared tags, studio, source) and how it did in India. *Built: the closest five, and in the Japanese brief the
+   closest three with what they share (series, genres, studio, source, format, audience, tags). Next: the same on the sheet.*
 7. **The next market, from the same engine.** Netflix's Top 10 file covers nearly 100 countries and territories; the
    collector reads only India's rows today. "Where else does this title travel?" (Indonesia, the Philippines,
    Brazil, Mexico, the Gulf) is a short step, and comment language is easier to read there than Hinglish.
@@ -181,7 +191,8 @@ large one where demand for anime is barely measured.
    owner's authorisation, the YouTube Analytics API gives their views and watch time from India, and authorised
    data can be kept for as long as the authorisation lasts (it is re-checked every 30 days).
 4. **The same measurement for every title.** YouTube for every title in the universe, not the top 200 by today's
-   popularity, captured daily from now on.
+   popularity, captured daily from now on, and the 103 trailers cut at 1,000 comments collected in full (section 2,
+   row 13). The selection is also what broke the 2024 ranges (row 5).
 5. **Below the chart is not zero.** Netflix's Top 10 hides everything below rank 10, so a title that did not chart
    is censored, not measured at zero; model it that way. YouTube has the same problem: 152 of 200 titles have no
    India comment in their first 28 days, tied at the bottom, so a single comment can move a title 30 points
@@ -216,6 +227,7 @@ Taking the comment text out of the public repo:
 **Next two weeks**
 - Merge this branch; show the decision clock in the demo.
 - Take the comment text out of the public repo (section 7).
+- Collect the 103 trailers cut at 1,000 comments in full (needs the YouTube key; one day of quota).
 - Run `yosoku.daily` every morning on one machine with fastText installed; collect YouTube for the 50 Winter 2027
   titles in refresh mode.
 - Before sealing Spring 2027: pre-register picking methods on the rolling seasons, and add a data fingerprint to seals.
@@ -244,6 +256,8 @@ Taking the comment text out of the public repo:
 - **検証できる実績**：未放送作品の予測は、放送前にSHA-256で封印して公開台帳に記録しています。後から書き換えることはできず、放送後にそのまま採点されます。
 - **インドの声を言語圏別に**：ヒングリッシュ（ローマ字のヒンディー語）を含むインドからのコメントを、ヒンディー、タミル、テルグなどの言語圏別に数え、「ヒンディー語吹替はいつ？」といった吹替の要望も測ります。
 - **毎日更新**：放送前後の作品は毎日予測し直し、判定の範囲を外れた作品をアラートでお知らせします。
+- **稟議書をそのまま出力**：各作品のページから、結論・根拠・前例（類似作品とその共通点、インドでの実績）・リスク・次の判断日をまとめた1枚の稟議書（案）を印刷できます。
+- **インドが求めている作品**：インドのファンが吹替や視聴方法を求めたコメント（68作品、1,197件。うちヒンディー語吹替1,016件）を作品ごとに一覧にしています。
 - **現状の課題も正直に**：放送前（コールド）の予測はまだ弱く、指数の多くはインド固有ではない英語版Wikipediaの閲覧数に依存しています。インドからのWikipedia閲覧数、Google Trends API、インドの配信事業者のYouTubeチャンネルで、指数をインド固有のものにしていきます。
 - **お願いしたいこと**：インドでの売上または視聴時間（30〜50作品分）をご提供いただければ、注目度ではなく収益を予測できるようになります。
 

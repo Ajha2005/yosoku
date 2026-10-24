@@ -4,8 +4,14 @@
    "main": "Blend",
    "used": "Genre average",
    "width": 14.541808666421097,
-   "width_live": 16.43020783867779,
+   "width_live": 21.9410536178994,
    "coverage": 0.6730769230769231,
+   "coverage_by_part": {
+    "youtube": 0.3684210526315789,
+    "youtube_titles": 19,
+    "other": 0.8484848484848485,
+    "other_titles": 33
+   },
    "beats_baseline": false,
    "best_baseline": "Genre average",
    "table": {
@@ -75,8 +81,14 @@
    "main": "Blend",
    "used": "Blend",
    "width": 12.48046498007341,
-   "width_live": 14.029069092397876,
+   "width_live": 18.746105587126593,
    "coverage": 0.6346153846153846,
+   "coverage_by_part": {
+    "youtube": 0.3684210526315789,
+    "youtube_titles": 19,
+    "other": 0.7878787878787878,
+    "other_titles": 33
+   },
    "beats_baseline": true,
    "best_baseline": "Genre average",
    "table": {
@@ -176,8 +188,14 @@
    "main": "Blend",
    "used": "Blend",
    "width": 10.347721339708588,
-   "width_live": 11.045937146878638,
+   "width_live": 12.71834180795863,
    "coverage": 0.6730769230769231,
+   "coverage_by_part": {
+    "youtube": 0.47368421052631576,
+    "youtube_titles": 19,
+    "other": 0.7878787878787878,
+    "other_titles": 33
+   },
    "beats_baseline": true,
    "best_baseline": "India YouTube alone",
    "table": {
