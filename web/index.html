@@ -13,11 +13,11 @@
   <meta property="og:image" content="img/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <script src="js/theme.js"></script>
+  <script src="js/theme.js?v=2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -34,10 +34,10 @@
       <span class="brand-name">Yosoku<small>予測</small></span>
     </a>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Pages">
-      <a role="tab" id="tab-home" href="#/" data-page="home" aria-controls="page-home" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-7.5Z"/></svg><span>Overview</span></a>
-      <a role="tab" id="tab-forecasts" href="#/forecasts" data-page="forecasts" aria-controls="page-forecasts" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Forecasts</span></a>
-      <a role="tab" id="tab-record" href="#/record" data-page="record" aria-controls="page-record" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Track record</span></a>
-      <a role="tab" id="tab-method" href="#/method" data-page="method" aria-controls="page-method" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8v.01"/></svg><span>Method</span></a>
+      <a role="tab" id="tab-home" href="#/" data-page="home" aria-controls="page-home" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-7.5Z"/></svg><span>Overview</span></a>
+      <a role="tab" id="tab-forecasts" href="#/forecasts" data-page="forecasts" aria-controls="page-forecasts" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Forecasts</span></a>
+      <a role="tab" id="tab-record" href="#/record" data-page="record" aria-controls="page-record" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Track record</span></a>
+      <a role="tab" id="tab-method" href="#/method" data-page="method" aria-controls="page-method" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8v.01"/></svg><span>Method</span></a>
     </nav>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">
       <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
@@ -133,6 +133,6 @@
   <div class="tip" id="tip" role="tooltip" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Yosoku needs JavaScript to show the forecasts.</p></noscript>
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>
