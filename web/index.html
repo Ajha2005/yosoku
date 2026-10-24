@@ -35,6 +35,7 @@
     </a>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Pages">
       <a role="tab" id="tab-home" href="#/" data-page="home" aria-controls="page-home" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-7.5Z"/></svg><span>Overview</span></a>
+      <a role="tab" id="tab-guide" href="#/guide" data-page="guide" aria-controls="page-guide" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg><span><span class="tab-long">Demand guide</span><span class="tab-short">Guide</span></span></a>
       <a role="tab" id="tab-forecasts" href="#/forecasts" data-page="forecasts" aria-controls="page-forecasts" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>Forecasts</span></a>
       <a role="tab" id="tab-record" href="#/record" data-page="record" aria-controls="page-record" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Track record</span></a>
       <a role="tab" id="tab-method" href="#/method" data-page="method" aria-controls="page-method" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8v.01"/></svg><span>Method</span></a>
@@ -62,10 +63,22 @@
         <div class="hero-cta">
           <a class="btn btn-primary" href="#/forecasts">Explore the forecasts <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="#/record">See the track record</a>
+          <a class="btn btn-ghost" href="#/guide">What India watches</a>
         </div>
         <dl class="hero-stats" id="hero-stats"></dl>
       </div>
       <svg class="hero-edge" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V70c60-30 120-30 180 0s120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0 120-30 180 0 120 30 180 0V120Z"/></svg>
+    </section>
+    </div>
+
+    <div class="page" id="page-guide" data-page="guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+    <section class="section" id="guide" aria-labelledby="guide-title">
+      <header class="section-head reveal">
+        <p class="eyebrow">Demand guide</p>
+        <h1 id="guide-title">What is India actually watching?</h1>
+        <p class="lead">For anyone deciding where demand lies, including those whose own title is unlikely to work. Built only from what India has watched and said: Netflix India's weekly Top 10 and the trailer comments we counted.</p>
+      </header>
+      <div id="guide-body" class="guide"></div>
     </section>
     </div>
 

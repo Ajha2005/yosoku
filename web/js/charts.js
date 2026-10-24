@@ -2,6 +2,7 @@
 
 import { VERDICTS, HUB_STATES, esc, round, pct, clamp } from "./data.js?v=2";
 import { INDIA } from "./india-map.js?v=2";
+import { showTip, hideTip } from "./tip.js?v=2";
 
 const vclass = (verdict) => VERDICTS[verdict]?.cls ?? "test";
 
@@ -98,6 +99,32 @@ export function regionMap(regions, hubs) {
       <span class="hub-where">${esc(hubs[hub] ?? "")}</span>
     </li>`).join("");
   return `<div class="regions"><div class="map-wrap">${map}</div><ul class="hub-list">${rows}</ul></div>`;
+}
+
+/** Hovering a language hub or a state lights up both the list and the map. Call once on any container that holds region maps. */
+export function bindRegions(root) {
+  const light = (el, hub) => {
+    const box = el.closest(".regions");
+    if (box) box.querySelectorAll(".st.hub, .hub-row").forEach((x) => x.classList.toggle("dim", Boolean(hub) && x.dataset.hub !== hub));
+  };
+  const share = (target) => target.closest(".regions").querySelector(`.hub-row[data-hub="${target.dataset.hub}"] .hub-val`).textContent;
+  const tip = (target, e) => showTip(`<b>${esc(target.dataset.state)}</b><br>${esc(target.dataset.hub)} hub · ${esc(share(target))} of Indian-language engagement`, e.clientX, e.clientY);
+  root.addEventListener("pointerover", (e) => {
+    const target = e.target.closest(".st.hub, .hub-row");
+    if (!target) return;
+    light(target, target.dataset.hub);
+    if (target.classList.contains("st")) tip(target, e);
+  });
+  root.addEventListener("pointermove", (e) => {
+    const target = e.target.closest(".st.hub");
+    if (target && !document.getElementById("tip").hidden) tip(target, e);
+  });
+  root.addEventListener("pointerout", (e) => {
+    const target = e.target.closest(".st.hub, .hub-row");
+    if (target) { light(target, null); hideTip(); }
+  });
+  root.addEventListener("focusin", (e) => { const row = e.target.closest(".hub-row"); if (row) light(row, row.dataset.hub); });
+  root.addEventListener("focusout", (e) => { const row = e.target.closest(".hub-row"); if (row) light(row, null); });
 }
 
 /** Forecast against actual, one dot per title. Sized to its container, so labels stay readable on phones. */

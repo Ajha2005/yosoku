@@ -134,7 +134,7 @@ python -m http.server -d web 8000  # the dashboard, at http://localhost:8000
 
 ## The website (static, for Vercel)
 
-`web/` is the dashboard, a plain static site (no server, no build step) with four tabs (Overview, Forecasts, Track record, Method):
+`web/` is the dashboard, a plain static site (no server, no build step) with five tabs (Overview, Demand guide, Forecasts, Track record, Method):
 poster wall, a verdict card for every title, an India language-hub map, the backtest and the method. Vercel can
 host it because it is only HTML, CSS, JavaScript and two JSON files.
 
@@ -146,6 +146,9 @@ python -m yosoku.export_web         # copies it to web/data/ and fetches cover a
 git add web/data predictions && git commit -m "Update website data" && git push
 ```
 
+- The **Demand guide** tab ("what is India actually watching?") is built by `python -m yosoku.guide`, which `export_web` runs for you.
+  It counts only two real signals: which anime reached Netflix India's weekly Top 10 (`data/netflix_matches.csv`) and the
+  India-flagged YouTube trailer comments in `data/dataset.csv`. It does not use the forecast model or the India Demand Index.
 - Without `predictions/predictions.json` the site shows the mock forecasts with a yellow "Preview data" banner.
   Mock titles get generated Japanese-print posters instead of covers, because their made-up ids collide with real AniList ids.
 - `--no-covers` skips the AniList lookup (offline). Covers are links to AniList's image servers, not copies,
