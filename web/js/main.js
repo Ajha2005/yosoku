@@ -118,7 +118,10 @@ function renderHero() {
   }).join("");
 
   const evaluation = bestEvaluation();
-  const stats = [{ n: app.data.titles.length, suffix: "", label: "titles forecast" }];
+  const stats = [
+    { n: app.data.titles.length, suffix: "", label: "titles forecast" },
+    { n: Object.keys(MOMENTS).length, suffix: "", label: "stages of the release cycle" },
+  ];
   if (evaluation) {
     const { info } = evaluation, label = MOMENTS[evaluation.key].label;
     if (Number.isFinite(info.table.mae[info.main])) stats.push({ n: info.table.mae[info.main], suffix: "", label: `average miss, in index points, on the 2024 titles (${label})`, decimals: 1 });
@@ -226,7 +229,7 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
   }).join("");
 
   const m = MOMENTS[state.moment];
-  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(ruleText(app.data.thresholds[state.moment], true))}`;
+  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>`;
 
   const list = visibleTitles();
   $("#grid").classList.toggle("still", keepFocus);
@@ -291,7 +294,10 @@ function renderRecord() {
       <div class="tile"><span class="tile-label">Average miss</span><b>${fx(t.mae[info.main], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${Number.isFinite(info.coverage) ? pct(info.coverage) : "n/a"}</b><span class="tile-note">of titles</span></div>
       <div class="tile"><span class="tile-label">Top-20% hits</span><b>${Number.isFinite(t.top20[info.main]) ? pct(t.top20[info.main]) : "n/a"}</b><span class="tile-note">of the true top fifth, found</span></div>
-    </div>` : "";
+    </div>
+    <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
+      <b>${esc(info.main)}</b> ${info.beats_baseline ? "beats" : "does not yet beat"} the best simple rule (${esc(info.best_baseline)}).
+      <span>Checked on the 2024 titles, which the model never saw in training.</span></p>` : "";
 
   host.innerHTML = `
     <div class="record-top">
