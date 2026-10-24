@@ -431,6 +431,10 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .flag.moved { margin: 0 0 var(--s-4); background: color-mix(in srgb, var(--shu) 12%, transparent); border-color: color-mix(in srgb, var(--shu) 35%, transparent); }
 .flag.sealed { background: color-mix(in srgb, var(--asagi) 12%, transparent); border-color: color-mix(in srgb, var(--asagi) 35%, transparent); }
 .flag.sealed .ico { color: var(--asagi); }
+.chance { display: flex; gap: 12px; align-items: baseline; margin-top: var(--s-3); padding: 10px 14px; border-radius: var(--r); background: var(--surface-2); font-size: 13.5px; color: var(--muted); }
+.chance b { flex: none; font: 800 28px/1 var(--font-display); color: var(--text); }
+#print-root .chance { margin-top: 4px; padding: 4px 8px; font-size: 10px; }
+#print-root .chance b { font-size: 18px; }
 
 .d-verdict, .d-section, .d-syn { margin: 0 clamp(18px, 4vw, 44px); }
 .d-verdict {

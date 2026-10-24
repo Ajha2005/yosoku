@@ -367,6 +367,35 @@ def test_alerts_judge_a_sealed_verdict_on_its_own_lines():
         "Forecast 66, above the 40–60 range of its sealed Cold verdict (Test-market)."]
 
 
+def test_markets_follow_similar_earlier_titles():
+    from yosoku import markets
+    n = 24  # 12 action titles that charted in the Philippines, 12 romance titles that charted in Brazil
+    genres = [["Action"]] * 12 + [["Romance"]] * 12 + [["Action"], ["Action"]]
+    titles = pd.DataFrame({"genre_list": genres, "tag_list": [[]] * (n + 2), "source": "MANGA", "format": "TV",
+                           "demographic": "Not tagged", "studio": "S", "synopsis": "", "main_genre": [g[0] for g in genres],
+                           "start": pd.to_datetime(["2022-01-01"] * n + ["2023-01-01", "2024-01-01"])}, index=range(1, n + 3))
+    reach = {i: {"PH"} if i <= 12 else {"BR"} for i in range(1, n + 1)}
+    reach[n + 2] = {"US"}  # a later title is never a neighbour
+    names = {"PH": "Philippines", "BR": "Brazil", "IN": "India", "US": "United States"}
+    found = markets.travel(titles, reach, names, [n + 1])[n + 1]
+    shares = {c["iso2"]: c["share"] for c in found["countries"]}
+    assert found["of"] == markets.NEIGHBOURS and shares["PH"] == 1.0 and "BR" not in shares and "US" not in shares
+    assert shares["IN"] == 0.0  # India is always listed, here with no similar title charting there
+
+
+def test_top_third_chance_is_calibrated_and_gated():
+    from yosoku.models import MIN_SKILL, chance, top_third
+    rng = np.random.default_rng(0)
+    frames = []
+    for s in range(12):  # forecasts that track the outcome well, season after season
+        actual = rng.uniform(0, 100, 30)
+        frames.append(pd.DataFrame({"season": f"S{s:02d} 20{20 + s // 4}", "pred": actual + rng.normal(0, 8, 30), "actual": actual}))
+    top = top_third(pd.concat(frames), 66, 66)
+    assert top["shown"] and top["skill"] >= MIN_SKILL and chance(90, top["curve_live"]) > 0.9 > 0.1 > chance(20, top["curve_live"])
+    noise = pd.concat(frames).assign(pred=lambda f: rng.uniform(0, 100, len(f)))  # forecasts that know nothing
+    assert not top_third(noise, 66, 66)["shown"]
+
+
 def test_wikipedia_disambiguation_is_not_related(monkeypatch):
     """A disambiguation page links to the show's article, but is not about the show."""
     sys.path.insert(0, str(ROOT / "collectors"))

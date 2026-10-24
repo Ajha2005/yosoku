@@ -165,3 +165,26 @@ def test_daily_job_labels_new_comments_with_indiclid(tmp_path, monkeypatch, caps
         assert calls == ["collect_titles.py", "collect_wikipedia.py", "collect_netflix.py", "collect_youtube.py",
                          *(["detect_languages.py"] if installed else []), "merge.py"]
     assert "pip install fasttext" in capsys.readouterr().out
+
+
+def test_country_charts_match_strictly(tmp_path, monkeypatch):
+    """Abroad, a film row matches only an anime film by its exact name, a TV row only a series, within 180 days."""
+    import collect_netflix
+    titles = [{"anilist_id": "1", "title_english": "The Boy and the Heron", "title_romaji": "Kimitachi wa Dou Ikiru ka",
+               "synonyms": "", "start_date": "2023-07-14", "format": "MOVIE"},
+              {"anilist_id": "2", "title_english": "Jujutsu Kaisen Season 2", "title_romaji": "Jujutsu Kaisen 2nd Season",
+               "synonyms": "", "start_date": "2023-07-06", "format": "TV"}]
+
+    def row(show, category, week):
+        return {"country_name": "Philippines", "country_iso2": "PH", "week": week, "category": category, "weekly_rank": "3",
+                "show_title": show, "season_title": "N/A", "cumulative_weeks_in_top_10": "1"}
+
+    rows = [row("The Boy", "Films", "2023-08-06"),  # another film: films match by their exact name only
+            row("The Boy and the Heron", "Films", "2023-08-06"),
+            row("Jujutsu Kaisen", "TV", "2023-07-16"),  # a series, by the start of its name
+            row("Jujutsu Kaisen", "Films", "2023-07-16"),  # a film row never matches a series
+            row("Jujutsu Kaisen", "TV", "2024-06-30")]  # past 180 days
+    monkeypatch.setattr(collect_netflix, "data_file", lambda name: tmp_path / name)  # no exclusions file
+    found = collect_netflix.country_matches(rows, titles)
+    assert [(m["anilist_id"], m["show_title"], m["category"]) for m in found] == [
+        ("1", "The Boy and the Heron", "Films"), ("2", "Jujutsu Kaisen", "TV")]

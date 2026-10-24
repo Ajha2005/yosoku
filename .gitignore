@@ -4,6 +4,11 @@
 # cached API responses (big, and rebuilt by rerunning the collectors)
 data/raw/
 
+# a partner's revenue figures and the amounts fitted on them are confidential (yosoku/money.py)
+data/partner/*
+!data/partner/README.md
+!data/partner/revenue_template.csv
+
 # comment text and Reddit posts get large; share them outside git if needed
 youtube_comments.csv
 reddit_posts.csv

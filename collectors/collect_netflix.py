@@ -1,8 +1,13 @@
-"""Step 3: weeks each title spent in Netflix India's Top 10.
+"""Step 3: weeks each title spent in Netflix India's Top 10, and where else in the world it charted.
 
 Downloads Netflix's public Top 10 history (weekly, per country, from June 2021)
 and keeps India's rows in data/netflix_india_top10.csv. Then matches them to
 titles.csv by name into data/netflix_matches.csv.
+
+Every other country's charts go to data/netflix_countries.csv, for the next-market finder (yosoku/markets.py):
+the weeks a title spent in each country's Top 10 within 180 days of its Japanese start. Matching there is
+stricter, because a name shared with a film or a live-action remake is likelier somewhere among 90-odd countries:
+a film row matches only an anime film, by its exact name, and a TV row only a series.
 
 Check the matches by eye: names are matched loosely, and live-action remakes
 (One Piece, Yu Yu Hakusho) share their anime's name. Titles that started before
@@ -32,10 +37,13 @@ NETFLIX_URL = "https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv"
 TSV_PATH = RAW_DIR / "netflix" / "all-weeks-countries.tsv"
 INDIA_CSV = "netflix_india_top10.csv"
 MATCHES_CSV = "netflix_matches.csv"
+COUNTRIES_CSV = "netflix_countries.csv"
+MARKET_DAYS = 180  # how long after the Japanese start a chart week counts for the next-market finder
 EXCLUSIONS_CSV = "netflix_match_exclusions.csv"  # optional, written by hand: anilist_id,show_title,reason
 
 INDIA_FIELDS = ["week", "category", "weekly_rank", "show_title", "season_title", "cumulative_weeks_in_top_10"]
 MATCH_FIELDS = ["anilist_id", "title_english", "title_romaji", "days_from_start", *INDIA_FIELDS]
+COUNTRY_FIELDS = ["anilist_id", "country_iso2", "country_name", "week", "category", "weekly_rank", "show_title", "days_from_start"]
 
 
 def download():
@@ -53,13 +61,18 @@ def download():
     partial.replace(TSV_PATH)
 
 
-def read_india_rows():
+def read_rows():
+    """Every country's chart rows."""
     with open(TSV_PATH, encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f, delimiter="\t")
-        missing = {"country_iso2", *INDIA_FIELDS} - set(reader.fieldnames or [])
+        missing = {"country_iso2", "country_name", *INDIA_FIELDS} - set(reader.fieldnames or [])
         if missing:
             sys.exit(f"Netflix's file format has changed; missing columns: {sorted(missing)}")
-        return [{field: row[field] for field in INDIA_FIELDS} for row in reader if row["country_iso2"] == "IN"]
+        return list(reader)
+
+
+def read_india_rows(rows=None):
+    return [{field: row[field] for field in INDIA_FIELDS} for row in (rows or read_rows()) if row["country_iso2"] == "IN"]
 
 
 def title_names(title):
@@ -99,14 +112,31 @@ def match(india_rows, titles):
     return matches
 
 
-def drop_excluded(matches):
-    """Remove the matches of every (anilist_id, show_title) pair listed in the exclusions file, if there is one."""
+def country_matches(rows, titles):
+    """match() over every country, stricter (see the docstring), and only within MARKET_DAYS of the Japanese start."""
+    by_id = {title["anilist_id"]: title for title in titles}
+    kept = []
+    for m in match(rows, titles):
+        title, film = by_id[m["anilist_id"]], m["category"] == "Films"
+        if film != (title["format"] == "MOVIE") or not 0 <= m["days_from_start"] <= MARKET_DAYS:
+            continue
+        if film and normalize(m["show_title"]) not in title_names(title):
+            continue  # "The Boy" (a film) is not The Boy and the Heron
+        kept.append({field: m[field] for field in COUNTRY_FIELDS})
+    return drop_excluded(kept, quiet=True)
+
+
+def drop_excluded(matches, quiet=False):
+    """Remove the matches of every (anilist_id, show_title) pair listed in the exclusions file, if there is one.
+    `quiet` skips the check that every line still matches something (the country pass filters some out first)."""
     path = data_file(EXCLUSIONS_CSV)
     if not path.exists():
         return matches
     excluded = {(row["anilist_id"], normalize(row["show_title"])) for row in read_csv(path)}
     pair = lambda m: (m["anilist_id"], normalize(m["show_title"]))
     kept = [m for m in matches if pair(m) not in excluded]
+    if quiet:
+        return kept
     print(f"Dropped {len(matches) - len(kept)} rows listed in {path}")
     for anilist_id, show in sorted(excluded - {pair(m) for m in matches}):
         print(f"  no match for {anilist_id} / {show}; check that line of the exclusions file")
@@ -123,13 +153,20 @@ def main():
     if args.refresh or not TSV_PATH.exists():
         download()
 
-    india_rows = read_india_rows()
+    rows = read_rows()
+    india_rows = read_india_rows(rows)
     write_csv(data_file(INDIA_CSV), india_rows, INDIA_FIELDS)
     print(f"Saved {len(india_rows)} India Top 10 rows to {data_file(INDIA_CSV)}")
 
-    matches = drop_excluded(match(india_rows, read_titles()))
+    titles = read_titles()
+    matches = drop_excluded(match(india_rows, titles))
     write_csv(data_file(MATCHES_CSV), matches, MATCH_FIELDS)
     print(f"Matched {len(matches)} rows to {len({m['anilist_id'] for m in matches})} titles; saved {data_file(MATCHES_CSV)}")
+
+    countries = country_matches(rows, titles)
+    write_csv(data_file(COUNTRIES_CSV), countries, COUNTRY_FIELDS)
+    print(f"Matched {len(countries)} rows in {len({m['country_iso2'] for m in countries})} countries' charts to "
+          f"{len({m['anilist_id'] for m in countries})} titles, within {MARKET_DAYS} days of their start; saved {data_file(COUNTRIES_CSV)}")
 
 
 if __name__ == "__main__":

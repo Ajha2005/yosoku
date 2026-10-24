@@ -10,6 +10,8 @@ import { showTip, hideTip } from "./tip.js?v=8";
 const MIN_TITLES = 8;       // a rate over fewer titles than this says nothing
 const MIN_COMMENTS = 1000;  // likewise for the share of comments that came from India
 const ASKS_SHOWN = 12;      // titles in the "What India is asking for" list
+const WORLD_SHOWN = 15;     // countries in "Beyond India" (India is added if it is not among them)
+const ordinal = (n) => `${n}${[, "st", "nd", "rd"][(n % 100 >> 3 ^ 1) && n % 10] || "th"}`;
 
 const FORMATS = { TV: "TV", TV_SHORT: "TV short", MOVIE: "Movie", ONA: "Web (ONA)", OVA: "OVA", SPECIAL: "Special" };
 const audienceName = (a) => (a === "Not tagged" ? "No audience tag" : a);
@@ -153,7 +155,28 @@ export function renderGuide(app, host) {
     </section>`;
   })() : "";
 
-  // ------------------------------------------------------------ 5. check your title
+  // ------------------------------------------------------------ 5. beyond India
+  const W = G.markets;
+  const world = W?.by_country?.length ? (() => {
+    const top = W.by_country.slice(0, WORLD_SHOWN), most = top[0].titles;
+    const india = W.by_country.find((c) => c.iso2 === "IN");
+    const row = (c) => `<li class="win${c.iso2 === "IN" ? " is-mine" : ""}"><span class="win-name">${esc(c.name)}</span>
+      <span class="win-track" aria-hidden="true"><i style="width:${(100 * c.titles / most).toFixed(1)}%"></i></span>
+      <span class="win-val">${esc(c.titles)}</span><span class="win-extra">${pct(c.titles / W.titles)}</span></li>`;
+    return `
+    <section class="g-block reveal" aria-labelledby="g-world">
+      <h2 id="g-world">Beyond India</h2>
+      <p class="g-sub">Where anime reaches Netflix's weekly Top 10: of the ${esc(W.titles)} titles that charted in any of ${esc(W.countries)}
+        countries within six months of their Japanese start, how many charted in each.</p>
+      <ul class="wins">${top.map(row).join("")}${india && !top.includes(india) ? row(india) : ""}</ul>
+      <p class="note">India comes ${esc(ordinal(W.india_rank))} of ${esc(W.countries)}. Southeast and East Asia lead, after Japan itself.
+        Every forecast sheet lists the countries where titles like it charted (Where else it could travel).${W.auc ? ` Checked on past
+        titles, that list ranks the titles that charted in a country above the rest at ${W.auc.toFixed(2)} on average over
+        ${esc(W.countries_checked)} countries (0.5 is chance).` : ""} Netflix only: a title has to be on Netflix to chart.</p>
+    </section>`;
+  })() : "";
+
+  // ------------------------------------------------------------ 6. check your title
   const count = (key, valueOf) => {
     const tally = new Map();
     for (const t of onNetflix) for (const v of [].concat(valueOf(t))) tally.set(v, (tally.get(v) || 0) + 1);
@@ -178,7 +201,7 @@ export function renderGuide(app, host) {
       <div class="ck-out" id="g-check-out" aria-live="polite"></div>
     </section>`;
 
-  host.innerHTML = headline + hits + patterns + where + asking + checker;
+  host.innerHTML = headline + hits + patterns + where + asking + world + checker;
 
   // ------------------------------------------------------------ the weekly strip
   const weekly = host.querySelector("#g-weekly");

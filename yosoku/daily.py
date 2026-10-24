@@ -9,7 +9,8 @@ the archive; refitting and the backtests (python -m yosoku.run) only need rerunn
                again on Wednesdays), YouTube in --refresh mode (new comments only, view counts logged), IndicLID on
                the comments not labelled yet (when fastText is installed), merge
   2. label     upcoming titles whose 28 days are over get their India Demand Index (yosoku.labels)
-  3. forecast  every title in play, as of today: data up to yesterday, the decision clock's model and range
+  3. forecast  every title in play, as of today: data up to yesterday, the decision clock's model and range, and
+               from the clock day where it is shown, the chance of a top-third result
   4. log       predictions/history.csv, one row per title per day: the forecast as it stood that day
   5. alert     reports/alerts.md, and predictions/alerts.json for the site: a forecast that left the 80% range of
                the title's last verdict, or crossed a verdict line
@@ -33,14 +34,14 @@ from yosoku import features as feat
 from yosoku.clock import DAYS
 from yosoku.data import ROOT, add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.evaluate import prepare
-from yosoku.models import forecast
+from yosoku.models import chance, forecast
 from yosoku.split import split_of
 
 sys.path.insert(0, str(ROOT / "collectors"))
 from common import is_active  # noqa: E402  (when a title's data stops changing, shared with the collectors)
 
 HISTORY = "predictions/history.csv"
-HISTORY_FIELDS = ["date", "anilist_id", "name", "day", "index", "low", "high"]
+HISTORY_FIELDS = ["date", "anilist_id", "name", "day", "index", "low", "high", "top_third"]
 ALERTS = "predictions/alerts.json"  # the day's status and alerts, copied to the site by export_web
 STAGE_LABELS = {"cold": "Cold", "t-28": "T−28", "t+7": "T+7"}
 
@@ -64,7 +65,7 @@ def nowcasts(data_dir, upcoming_dir, out_dir, today):
     train = split.index[split.isin(["train", "validate"])].intersection(labels.index)  # never the 2025 test titles
     upcoming = load_titles(upcoming_dir)
     clock = json.loads((out_dir / "reports" / "clock.json").read_text(encoding="utf-8"))["days"]
-    width = {d["day"]: d["width_live"] for d in clock}
+    by_day = {d["day"]: d for d in clock}
     days = pd.Series({i: clock_day(upcoming.at[i, "start"], today) for i in in_play(upcoming, today)}, dtype=object)
     sources = [(titles, *load_daily(data_dir, titles), load_reddit(data_dir)),
                (upcoming, *load_daily(upcoming_dir, upcoming), load_reddit(upcoming_dir))]
@@ -75,12 +76,15 @@ def nowcasts(data_dir, upcoming_dir, out_dir, today):
         f = pd.concat([feat.build(t.loc[t.index.isin(train) | t.index.isin(ids)], wiki, comments, moment, genres, reddit)
                        for t, wiki, comments, reddit in sources])
         out = forecast(moment, f, pd.concat([titles, upcoming]), labels, train, pd.Index(ids))
-        # The range of the latest clock day this one has reached (an earlier day's range is never narrower).
-        half = width["cold" if day == "cold" else max(d for d in DAYS if d <= day)]
+        # The range of the latest clock day this one has reached (an earlier day's range is never narrower), and its
+        # chance of a top-third result if that day shows one.
+        reached = by_day["cold" if day == "cold" else max(d for d in DAYS if d <= day)]
+        half, top = reached["width_live"], reached.get("top_third")
         for anilist_id, value in out["forecast"].items():
             rows.append({"anilist_id": anilist_id, "name": upcoming.at[anilist_id, "name"], "day": day,
                          "index": round(float(value), 1), "low": round(max(0.0, value - half), 1),
-                         "high": round(min(100.0, value + half), 1)})
+                         "high": round(min(100.0, value + half), 1),
+                         "top_third": round(float(chance(value, top["curve_live"])), 3) if top and top["shown"] else None})
     return pd.DataFrame(rows, columns=HISTORY_FIELDS[1:]).assign(date=today.date().isoformat())[HISTORY_FIELDS]
 
 

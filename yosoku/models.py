@@ -7,13 +7,15 @@ With a few hundred labelled titles, simple models that hold up beat clever ones 
   Blend      ridge regression on the moment's features plus the lookalike forecast and the prequel's
              index. Its drivers are exact: coefficient x standardised value.
   Ranges     split conformal: the 80th percentile of out-of-sample errors from the rolling seasons.
+  Chance     of a top-third result: a logistic curve on the forecast, fitted on the rolling seasons' forecasts,
+             shown only where it beats the base rate by MIN_SKILL (Brier skill score).
 """
 
 import numpy as np
 import pandas as pd
 from scipy.sparse import hstack
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import RidgeCV
+from sklearn.linear_model import LogisticRegression, RidgeCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler, normalize
 
@@ -23,6 +25,9 @@ from yosoku.features import prequel_label, signal
 K = 10
 SYNOPSIS_WEIGHT = 0.5  # synopsis words count half as much as the hand-curated genres and tags
 COVERAGE = 0.80
+TOP_LINE = 2 / 3  # a top-third result: an India Demand Index at or above this quantile of past titles' index
+MIN_SKILL = 0.10  # a chance is shown only where it beats the base rate by this much (Brier skill score), set in advance
+SURE = 0.70  # a confident call, as the reports count them
 
 
 def meta_tokens(titles):
@@ -67,9 +72,13 @@ class Lookalike:
             parts.append(SYNOPSIS_WEIGHT * self.words.transform(synopsis))
         return normalize(hstack(parts).tocsr())
 
+    def similarities(self, titles):
+        """Array (titles x training titles) of similarities, as the lookalikes are picked by."""
+        return (self._vectors(titles) @ self.matrix.T).toarray()
+
     def predict(self, titles):
         """DataFrame: forecast, lookalikes [(anilist_id, similarity)], and the regional profile."""
-        sims = (self._vectors(titles) @ self.matrix.T).toarray()
+        sims = self.similarities(titles)
         train_ids = np.asarray(self.labels.index)
         rows = []
         for i, anilist_id in enumerate(titles.index):
@@ -189,3 +198,49 @@ def conformal_width(errors):
         return np.nan
     n = len(errors)
     return float(np.quantile(errors, min(1.0, np.ceil((n + 1) * COVERAGE) / n)))
+
+
+def chance_curve(pred, actual, line):
+    """(intercept, slope) of the logistic curve for P(index >= line) against the forecast, from out-of-sample pairs."""
+    hit = (np.asarray(actual, dtype=float) >= line).astype(int)
+    model = LogisticRegression().fit(np.asarray(pred, dtype=float).reshape(-1, 1), hit)
+    return float(model.intercept_[0]), float(model.coef_[0][0])
+
+
+def chance(pred, curve):
+    """The chance of a top-third result for a forecast, or an array of them, from a chance_curve."""
+    a, b = curve
+    return 1 / (1 + np.exp(-(a + b * np.asarray(pred, dtype=float))))
+
+
+def chance_check(frame, line, first=4):
+    """How good the chance is, season by season, each season's curve fitted on the seasons before it: its Brier skill
+    against the base rate, and how often a call of SURE or more came true. `frame`: season, pred, actual, in order."""
+    seasons = list(dict.fromkeys(frame["season"]))
+    brier, base, sure = [], [], []
+    for i, season in enumerate(seasons[first:], start=first):
+        past, now = frame[frame["season"].isin(seasons[:i])], frame[frame["season"] == season]
+        if (past["actual"] >= line).nunique() < 2:
+            continue
+        hit = (now["actual"] >= line).astype(int).to_numpy()
+        p = chance(now["pred"], chance_curve(past["pred"], past["actual"], line))
+        brier += list((p - hit) ** 2)
+        base += list(((past["actual"] >= line).mean() - hit) ** 2)
+        sure += [h for q, h in zip(p, hit) if q >= SURE]
+    skill = 1 - np.mean(brier) / np.mean(base) if brier and np.mean(base) > 0 else None
+    return {"skill": None if skill is None else float(skill), "sure_calls": len(sure),
+            "sure_right": float(np.mean(sure)) if sure else None}
+
+
+def top_third(frame, line, line_live):
+    """The chance of a top-third result at one stage or clock day, from its out-of-sample forecasts on the rolling
+    seasons (frame: season, pred, actual): the curve for the 2024 backtest, from the seasons before 2024; the curve for
+    titles not released yet, from every season; how good it is; and whether it is shown (MIN_SKILL)."""
+    frame = frame.dropna()
+    pre = frame[~frame["season"].str.endswith("2024")]
+    if (pre["actual"] >= line).nunique() < 2 or (frame["actual"] >= line_live).nunique() < 2:
+        return None
+    check = chance_check(frame, line)
+    return {"line": float(line), "curve": chance_curve(pre["pred"], pre["actual"], line),
+            "line_live": float(line_live), "curve_live": chance_curve(frame["pred"], frame["actual"], line_live),
+            **check, "sure": SURE, "shown": check["skill"] is not None and check["skill"] >= MIN_SKILL}

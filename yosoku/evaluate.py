@@ -21,7 +21,7 @@ from scipy.stats import spearmanr
 from yosoku import features as feat
 from yosoku.data import add_folder_arguments, folder, load_daily, load_reddit, load_titles, read
 from yosoku.labels import youtube_part
-from yosoku.models import baselines, conformal_width, forecast
+from yosoku.models import MIN_SKILL, SURE, TOP_LINE, baselines, conformal_width, forecast, top_third
 from yosoku.split import guard_test, rolling_folds, split_of
 
 MAIN = {"cold": "Blend", "t-28": "Blend", "t+7": "Blend"}
@@ -155,6 +155,10 @@ def evaluate(titles, labels, features):
         # titles whose index includes YouTube, as theirs will.
         live = live_width(roll[used] - labels.reindex(roll.index), youtube) if len(roll) else np.nan
         live = width if np.isnan(live) else live
+        # The chance of a top-third result, from the same out-of-sample forecasts (models.top_third).
+        top = top_third(pd.DataFrame({"season": roll["season"], "pred": roll[used], "actual": labels.reindex(roll.index)}),
+                        labels.loc[train].quantile(TOP_LINE), labels.loc[train.union(validate)].quantile(TOP_LINE)) \
+            if len(roll) else None
 
         lines += [f"## Moment: {moment}", "",
                   "| Method | Spearman (95% interval) | Top-20% hit | MAE | New shows | Sequels | Rolling seasons |",
@@ -172,9 +176,15 @@ def evaluate(titles, labels, features):
                   f"(target 70–90%): {share(held['other'])} of the {held['other_titles']} whose index has no YouTube part, "
                   f"{share(held['youtube'])} of the {held['youtube_titles']} that have one.",
                   f"- 80% range for titles not released yet: ± {fmt(live, 1)} points, from the misses of the titles whose index "
-                  "includes YouTube, in every rolling season including 2024.", ""]
+                  "includes YouTube, in every rolling season including 2024."]
+        if top:
+            lines.append(f"- Chance of a top-third result (an index of {fmt(top['line_live'], 0)} or more): Brier skill "
+                         f"{fmt(top['skill'])} against the base rate, season by season; calls of {SURE:.0%} or more came true "
+                         f"{share(top['sure_right'])} of {top['sure_calls']} times. "
+                         + ("**Shown.**" if top["shown"] else f"Not shown: under the {MIN_SKILL:.2f} bar."))
+        lines.append("")
         results["moments"][moment] = {"main": main, "used": used, "width": width, "width_live": live, "coverage": float(inside),
-                                      "coverage_by_part": held,
+                                      "coverage_by_part": held, "top_third": top,
                                       "beats_baseline": bool(beats), "best_baseline": best,
                                       "table": json.loads(table.to_json())}
     passed = all(m["beats_baseline"] for m in results["moments"].values())

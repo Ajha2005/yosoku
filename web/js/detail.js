@@ -61,6 +61,53 @@ function sealedNote(f) {
       ? " Its range is wider: ranges for titles not released yet now come from the misses of past titles whose index includes YouTube, as this title's will." : ""}` : ""}</span></p>`;
 }
 
+/** The chance of a top-third result, given only at stages where it beats the base rate by enough (models.top_third),
+ *  with how often its confident calls came true. */
+function chanceLine(p, top) {
+  if (p == null || !top) return "";
+  const record = top.sure_calls ? ` When it says ${pct(top.sure)} or more, ${pct(top.sure_right)} of ${top.sure_calls} past calls came true.` : "";
+  return `<p class="chance"><b>${pct(p)}</b><span>chance of a top-third result in India: an index of ${round(top.line_live)} or more.${record}</span></p>`;
+}
+
+/** An amount in the partner's unit: yen, rupees, dollars or viewing hours (yosoku/money.py). */
+export function amountText(x, money) {
+  const n = Math.round(x).toLocaleString("en-GB");
+  return money.unit === "HOURS" ? `${n} hours` : `${money.symbol}${n}`;
+}
+
+/** What the forecast is worth: a range in money on a site exported with a partner's figures, else what it would take. */
+function moneySection(f, money) {
+  const body = f.money && money
+    ? `<div class="dub"><span class="dub-n">${esc(amountText(f.money.point, money))}</span>
+        <span>forecast for India (80% range ${esc(amountText(f.money.low, money))} to ${esc(amountText(f.money.high, money))}),
+        from the India Demand Index forecast and what ${esc(money.titles)} past titles earned there.</span></div>
+       <p class="note">Each 10 points of the index went with ${money.per_10_points >= 0 ? "+" : "−"}${pct(Math.abs(money.per_10_points))} in ${esc(money.unit)}.
+        Left out one at a time, the fit ranked those titles at ${money.rank_correlation.toFixed(2)} and missed by ${pct(money.median_miss)} at the median.</p>`
+    : `<p class="callout">Not on this site. With what 30 or more past titles earned in India, shared by a rights holder or platform,
+        every forecast gets a range in yen (or rupees, or viewing hours). The figures stay private: see <code>data/partner/README.md</code>.</p>`;
+  return `<section class="d-section d-money"><h3>What it's worth <small>in money, with a partner's figures</small></h3>${body}</section>`;
+}
+
+/** Where else a title could travel: the countries whose Netflix Top 10 its closest past titles reached
+ *  (yosoku/markets.py), and, for a past title, where it did. India is always listed. */
+function marketsSection(t, info) {
+  const m = t.markets;
+  if (!m && !t.charted?.length) return "";
+  const own = t.charted?.length ? `<p class="callout">It reached Netflix's Top 10 in ${t.charted.length} ${t.charted.length === 1 ? "country" : "countries"}
+      within six months of its Japanese start: ${esc(t.charted.join(", "))}.</p>` : "";
+  const list = m ? `<ul class="wins">${m.countries.map((c) => `<li class="win${c.iso2 === "IN" ? " is-mine" : ""}">
+      <span class="win-name">${esc(c.name)}</span>
+      <span class="win-track" aria-hidden="true"><i style="width:${(100 * c.share).toFixed(0)}%"></i></span>
+      <span class="win-val">${esc(c.titles)}/${esc(m.of)}</span>
+      <span class="win-extra">typical ${pct(c.typical)}</span></li>`).join("")}</ul>
+    <p class="note">Of the ${esc(m.of)} most similar past titles that reached a Netflix Top 10 anywhere, how many reached it in each
+      country within six months of their Japanese start; typical is the share of all such titles. Netflix only: a title has to
+      be on Netflix to chart.${info?.auc ? ` Checked on past titles, these shares rank the titles that charted in a country above
+      the rest at ${info.auc.toFixed(2)} on average over ${esc(info.countries_checked)} countries (0.5 is chance; titles of the same
+      genre: ${info.genre_auc.toFixed(2)}).` : ""}</p>` : "";
+  return `<section class="d-section d-markets"><h3>Where else it could travel <small>Netflix's Top 10 in other countries</small></h3>${own}${list}</section>`;
+}
+
 /** What to do with this forecast: the decision, when to revisit it, which dub first and whether to move the date.
  *  Built from evidence on the sheet and the decision clock (Track record), so every step can be traced. */
 function launchPlan(t, f, moment, data) {
@@ -125,7 +172,7 @@ function launchPlan(t, f, moment, data) {
  *  job (yosoku/daily.py) has logged so far for an upcoming one. */
 function pathRows(t, clock) {
   if (t.trajectory) return clock.map((d, i) => ({ day: d.day, value: t.trajectory[i], lo: t.trajectory[i] - d.width, hi: t.trajectory[i] + d.width }));
-  return (t.history || []).map((h) => ({ day: h.day, value: h.index, lo: h.low, hi: h.high, date: h.date }));
+  return (t.history || []).map((h) => ({ day: h.day, value: h.index, lo: h.low, hi: h.high, date: h.date, top: h.top_third }));
 }
 
 /** How a 2024 title's forecast moved over the decision clock; for an upcoming title, how it is moving (with the daily
@@ -149,7 +196,8 @@ function movedSection(t, data, daily) {
       ${alerts ? `<p class="flag moved"><span><b>Moved since its last verdict</b> (${esc(formatDate(daily.date))}). ${alerts}</span></p>` : ""}
       <div class="traj-host" id="traj"></div>
       <p class="note">Our model's forecast for this title as the daily job has made it: ${round(first.value)} on ${esc(formatDate(first.date))}${rows.length > 1
-        ? `, ${round(last.value)} on ${esc(formatDate(last.date))}` : ""}. Shaded: the 80% range on each day. It fills in as the premiere nears.${ruleNote}</p></section>`;
+        ? `, ${round(last.value)} on ${esc(formatDate(last.date))}` : ""}.${last.top != null ? ` Chance of a top-third result in India: ${pct(last.top)}.` : ""}
+        Shaded: the 80% range on each day. It fills in as the premiere nears.${ruleNote}</p></section>`;
   }
   if (t.group !== "upcoming") return chart;
   const next = [["t-28", -28], ["t+7", 7]].filter(([key]) => !momentsOf(t).includes(key));
@@ -258,6 +306,7 @@ export function createDetail(app, { requestClose }) {
           <span class="d-big"><span data-count="${round(f.index)}">${round(f.index)}</span></span>
           <span class="d-score-text"><b>India Demand Index</b><br>80% range ${round(f.low)}–${round(f.high)}. ${esc(MOMENTS[moment].note)}</span>
         </div>
+        ${chanceLine(f.top_third, app.data.evaluation?.moments?.[moment]?.top_third)}
         ${gauge(f, lines, actual)}
         <p class="note rule">${esc(ruleText(lines))}</p>
         ${sealedNote(f)}
@@ -269,6 +318,7 @@ export function createDetail(app, { requestClose }) {
       </section>
 
       <section class="d-section d-plan"><h3>Launch plan <small>what to do with this forecast</small></h3>${launchPlan(t, f, moment, app.data)}</section>
+      ${moneySection(f, app.data.money)}
       <section class="d-section"><h3>What moves this forecast</h3>${whySection}</section>
       <section class="d-section d-stage"><h3>What this forecast could see <small>${esc(MOMENTS[moment].label)}</small></h3>
         ${stageTimeline([moment], moment)}
@@ -279,6 +329,7 @@ export function createDetail(app, { requestClose }) {
         ${lookalikes(f.lookalikes, (l) => posterHTML({ anilist_id: l.anilist_id, title_japanese: "" }, app.covers[l.anilist_id]))}
         <p class="note">Similarity combines genres, tags, source, format, studio, audience and synopsis words. The badge is each past title's India Demand Index.</p>
       </section>
+      ${marketsSection(t, app.data.markets)}
       <section class="d-section"><h3>Where in India <small>language hubs</small></h3>${regionsSection}</section>
       <section class="d-section d-dub"><h3>Dub demand <small>from fans of similar titles</small></h3>${dubSection}</section>
       ${whatIf ? `<section class="d-section d-whatif"><h3>Release window what-if <small>how past titles did</small></h3>${whatIf}</section>` : ""}

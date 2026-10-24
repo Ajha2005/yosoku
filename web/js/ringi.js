@@ -41,6 +41,20 @@ const RECOMMEND = {
     : "現時点では契約を見送ります。80%範囲の全体が見送りラインを下回っています。初週に話題が出た場合に限り再検討します。"),
 };
 
+/** An amount as a Japanese brief writes it: 万円 and 億円 for yen, the unit otherwise. */
+function amountJa(x, money) {
+  if (money.unit === "JPY") return x >= 1e8 ? `${(x / 1e8).toFixed(1)}億円` : `${Math.round(x / 1e4).toLocaleString("ja-JP")}万円`;
+  if (money.unit === "HOURS") return `${Math.round(x).toLocaleString("ja-JP")}時間`;
+  return `${money.symbol}${Math.round(x).toLocaleString("ja-JP")}`;
+}
+
+/** Country names in Japanese, from their codes (the browser knows them); the English name if it does not. */
+function regionJa() {
+  let names = null;
+  try { names = new Intl.DisplayNames(["ja"], { type: "region" }); } catch { /* an old browser: English names */ }
+  return (c) => { try { return names?.of(c.iso2) || c.name; } catch { return c.name; } };
+}
+
 const jaDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return `${y}年${m}月${d}日`; };
 const addDays = (iso, days) => new Date(Date.parse(`${iso}T00:00:00Z`) + days * 864e5).toISOString().slice(0, 10);
 const signed = (x) => `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(1)}`;
@@ -69,6 +83,13 @@ function sharedJa(s) {
 function placeJa(x, lines) {
   if (x == null) return "未測定";
   return `${round(x)}（${x >= lines.launch_line ? "投入圏" : x < lines.hold_line ? "見送り圏" : "中間"}）`;
+}
+
+/** The chance of a top-third result, where the backtests show it (models.top_third), with its record. */
+function chanceJa(f, top) {
+  if (f.top_third == null || !top) return "";
+  return `<p>インドで上位3分の1（需要指数${round(top.line_live)}以上）に入る確率：<b>${pct(f.top_third)}</b>${top.sure_calls
+    ? `（過去の検証では、確率${pct(top.sure)}以上とした${top.sure_calls}件のうち${pct(top.sure_right)}が実際に上位3分の1）` : ""}</p>`;
 }
 
 /** The rows of 次の判断日: the stages still ahead of an upcoming title, and when its index is written. */
@@ -126,6 +147,12 @@ export function ringiHTML(t, moment, data, seal) {
   if (hubs.length) {
     grounds.push(`言語ハブ：${hubs.map(([h, s]) => `${HUB[h] || h} ${pct(s)}`).join("、")}（言語を示すコメント${f.region_comments ?? "–"}件に基づく推定）。`);
   }
+  if (t.markets?.countries?.length) {
+    const m = t.markets, ja = regionJa();
+    const list = m.countries.filter((c) => c.iso2 !== "IN").slice(0, 4).map((c) => `${ja(c)}${c.titles}本`).join("、");
+    const india = m.countries.find((c) => c.iso2 === "IN");
+    grounds.push(`他の市場：Netflixのいずれかの国でTop 10に入った類似作品${m.of}本のうち、${list}がその国でもTop 10入りしました（放送開始から6か月以内${india ? `。インドは${india.titles}本` : ""}）。`);
+  }
   if (t.actual_index != null) {
     const inside = t.actual_index >= f.low && t.actual_index <= f.high;
     grounds.push(`実績：インド需要指数 ${round(t.actual_index)}（予測との差 ${signed(t.actual_index - f.index)}、80%範囲の${inside ? "内" : "外"}）。`);
@@ -171,6 +198,8 @@ export function ringiHTML(t, moment, data, seal) {
       <tr><th>作品</th><td><b>${esc(name)}</b>${t.title_japanese ? `（${esc(t.name)}）` : ""}<br><span class="r-small">${esc(facts)}</span></td></tr>
       <tr><th>結論</th><td>
         <p class="r-verdict"><span class="r-stamp">${esc(VERDICTS[f.verdict].ja)}</span>インド需要指数の予測 <b>${round(f.index)}</b>（80%範囲 ${round(f.low)}〜${round(f.high)}）　判定時点：${STAGE[moment]}</p>
+        ${chanceJa(f, ev?.top_third)}
+        ${f.money && data.money ? `<p>インドでの${data.money.unit === "HOURS" ? "視聴時間" : "売上"}見込み：<b>${esc(amountJa(f.money.point, data.money))}</b>（80%範囲 ${esc(amountJa(f.money.low, data.money))}〜${esc(amountJa(f.money.high, data.money))}。過去${esc(data.money.titles)}作品の実績から推定）</p>` : ""}
         <p>${RECOMMEND[f.verdict](moment)}</p>
         <p class="r-small">判定ルール：${rule}。</p>${sealed}</td></tr>
       <tr><th>根拠</th><td><ul>${grounds.map((g) => `<li>${esc(g)}</li>`).join("")}</ul></td></tr>
