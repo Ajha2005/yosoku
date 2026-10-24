@@ -7,7 +7,8 @@ rescaled exactly as for any other missing part:
   YouTube from India           30%  yt_india_month1: trailer comments by people in India
                                     (Indian scripts, Hinglish or naming India; collectors/india_signals.py)
   Streaming                    20%  netflix_top10_weeks_90d
-  Wikipedia                    10%  wiki_hi/ta/te/en_month1, summed
+  Wikipedia                    10%  wiki_hi/ta/te/en_month1, summed (English plus the market's own
+                                    languages: every language but Japanese; see collectors/markets.py)
 
 Each part is log-transformed and turned into a percentile rank among the titles that have it.
 The index averages the parts a title has, rescaling the weights; fewer than two parts, no label.
@@ -22,6 +23,7 @@ scale once its 28 days are over, so its sealed forecast can be scored.
 """
 
 import argparse
+import re
 from itertools import combinations
 
 import numpy as np
@@ -43,7 +45,7 @@ def raw_parts(titles):
         parts["youtube"] = titles["yt_india_month1"]
     if "netflix_top10_weeks_90d" in titles:
         parts["streaming"] = titles["netflix_top10_weeks_90d"]
-    wiki = [f"wiki_{lang}_month1" for lang in ("hi", "ta", "te", "en") if f"wiki_{lang}_month1" in titles]
+    wiki = [c for c in titles.columns if re.fullmatch(r"wiki_[a-z]+_month1", c) and c != "wiki_ja_month1"]
     if wiki:
         parts["wikipedia"] = titles[wiki].sum(axis=1, min_count=1)
     return parts

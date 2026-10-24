@@ -1,12 +1,13 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=8";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=8";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=8";
-import { createDetail, countUp } from "./detail.js?v=8";
-import { renderGuide } from "./guide.js?v=8";
-import { showTip, hideTip } from "./tip.js?v=8";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=8";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=11";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=11";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline, clockChart, dayText } from "./charts.js?v=11";
+import { createDetail, countUp } from "./detail.js?v=11";
+import { renderGuide } from "./guide.js?v=11";
+import { renderBusiness } from "./business.js?v=11";
+import { showTip, hideTip } from "./tip.js?v=11";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, FORECAST_STEPS, RULE_NOTES, STAYS_CURRENT, KEPT_HONEST } from "./content.js?v=11";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -62,9 +63,9 @@ function initTheme() {
   sync();
 }
 
-const PAGES = { home: "Overview", guide: "Demand guide", forecasts: "Forecasts", record: "Track record", method: "Method" };
+const PAGES = { home: "Overview", guide: "Demand guide", forecasts: "Forecasts", record: "Track record", business: "Business", method: "Method" };
 const TITLE_HASH = /^#\/title\/(\d+)(?:\/([^/]+))?$/;
-const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|method)\/?$/) || [, "home"])[1];
+const pageFromHash = (hash) => (hash.match(/^#\/(guide|forecasts|record|business|method)\/?$/) || [, "home"])[1];
 
 function updateNav() {
   // Every page opens on an ink band, so the bar is transparent at the top and turns solid once you scroll.
@@ -465,24 +466,6 @@ function staysCurrent() {
     </div>`;
 }
 
-function scorecard() {
-  const src = app.data.sources;
-  const num = (n) => Number(n).toLocaleString("en-IN");
-  const rows = SCORECARD.map((r) => {
-    const p = r.part && src?.parts?.[r.part];
-    const coverage = p ? `${num(p.titles)} of ${num(src.released)}` : r.coverage || "–";
-    return `<tr><th scope="row">${esc(r.name)}<small>${esc(r.role)}</small></th><td>${coverage}</td><td>${esc(r.india)}</td><td>${esc(r.lead)}</td><td>${esc(r.bias)}</td></tr>`;
-  }).join("");
-  return `<div class="scorecard-wrap reveal">
-      <h2>Source scorecard</h2>
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Source scorecard, scrolls sideways on narrow screens"><table class="srccard">
-        <thead><tr><th scope="col">Source</th><th scope="col">Titles covered</th><th scope="col">India-specific</th><th scope="col">Lead time</th><th scope="col">Known bias</th></tr></thead>
-        <tbody>${rows}</tbody></table></div>
-      <h3>Considered, not used</h3>
-      <ul class="notused">${NOT_USED.map((n) => `<li><b>${esc(n.name)}</b><span>${esc(n.why)}</span></li>`).join("")}</ul>
-    </div>`;
-}
-
 /** What each signal is worth: how much rank correlation the Blend loses without it (reports/ablation.json). */
 function signalWorth() {
   const abl = app.data.ablation;
@@ -580,7 +563,6 @@ function renderMethod() {
     ${indexChecks()}
     ${staysCurrent()}
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
-    ${scorecard()}
     ${signalWorth()}
     <h2 class="sources-title reveal">Where the data comes from, and where it can mislead</h2>
     <div class="sources">${SOURCES.map((s, i) => `<article class="source reveal" style="--i:${i}">
@@ -670,6 +652,7 @@ async function boot() {
   renderSlate();
   renderRecord();
   initDotTips();
+  renderBusiness(app, $("#business-body"));
   renderMethod();
   renderGuide(app, $("#guide-body"));
   initTilt();

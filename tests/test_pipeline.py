@@ -59,7 +59,7 @@ def test_leakage(fake):
                 assert list(before.columns) == list(after.columns)
             pd.testing.assert_frame_equal(before, after)
         if cutoff is not None:
-            assert before.loc[late, "has_india_article"] == 0  # its Hindi article was written after the cutoff
+            assert before.loc[late, "has_local_article"] == 0  # its Hindi article was written after the cutoff
             assert not any(c.startswith("has_youtube") for c in before.columns)  # chosen by today's popularity
 
 
@@ -201,6 +201,7 @@ def test_end_to_end(fake):
     assert set(sources["parts"]) <= {"youtube", "streaming", "wikipedia"} and sources["released"] > 0
     for part in sources["parts"].values():
         assert part["pairs"] <= part["titles"] <= sources["released"]
+    assert payload["markets"]["IN"]["comments"] and not payload["markets"]["ID"]["comments"]  # the Business tab's markets
     checks = payload["label_checks"]  # the Method page's index checks (gate G2)
     assert checks["passed"] == (checks["parts_agree"] and checks["ranking_holds"])
     assert checks["weakest_shift"] in sources["parts"]
@@ -269,6 +270,28 @@ def test_youtube_part_is_india_comments():
                            "wiki_en_month1": [1, 2, 3]})
     parts = raw_parts(titles)
     assert parts["youtube"].tolist()[:2] == [0.0, 3.0] and np.isnan(parts["youtube"].iloc[2])
+
+
+def test_market_is_a_setting_of_the_folder(tmp_path):
+    """A data folder remembers its market; India is the default and folders never mix markets."""
+    sys.path.insert(0, str(ROOT / "collectors"))
+    import markets
+    assert markets.of_folder(tmp_path)["code"] == "IN"
+    assert markets.of_folder(tmp_path, "id")["wiki"] == ["id"]
+    assert markets.of_folder(tmp_path)["name"] == "Indonesia"  # remembered without --market
+    with pytest.raises(SystemExit):
+        markets.of_folder(tmp_path, "BR")
+    with pytest.raises(SystemExit):
+        markets.profile("ZZ")
+
+
+def test_other_markets_use_their_own_wikipedia_languages():
+    """The Wikipedia part is English plus the market's languages (Indonesian here), never Japanese."""
+    titles = pd.DataFrame({"wiki_en_month1": [10.0, np.nan], "wiki_ja_month1": [500.0, 500.0], "wiki_id_month1": [5.0, 7.0],
+                           "netflix_top10_weeks_90d": [1, 0]})
+    assert raw_parts(titles)["wikipedia"].tolist() == [15.0, 7.0]
+    wiki = pd.DataFrame({"lang": ["en", "ja", "id", "id"]})
+    assert feat.wiki_groups(wiki) == {"en": ["en"], "ja": ["ja"], "local": ["id"]}
 
 
 def test_wikipedia_launch_article():

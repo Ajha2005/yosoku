@@ -1,11 +1,11 @@
 // The forecast sheet: one title, its verdict and the evidence behind it, in a modal drawer.
 
-import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=8";
-import { posterHTML } from "./art.js?v=8";
-import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=8";
-import { showTip, hideTip, showToast } from "./tip.js?v=8";
-import { RULE_NOTES } from "./content.js?v=8";
-import { ringiHTML } from "./ringi.js?v=8";
+import { VERDICTS, MOMENTS, safeUrl, esc, round, pct, formatDate, titleCase, momentsOf, latestMoment, ruleText } from "./data.js?v=11";
+import { posterHTML } from "./art.js?v=11";
+import { gauge, seal, verdictIcon, drivers, lookalikes, regionMap, bindRegions, stageTimeline, trajectoryChart } from "./charts.js?v=11";
+import { showTip, hideTip, showToast } from "./tip.js?v=11";
+import { RULE_NOTES } from "./content.js?v=11";
+import { ringiHTML } from "./ringi.js?v=11";
 
 const THIN_REGION = 30;   // fewer hub-pointing comments than this behind a map: say so on the page
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;

@@ -131,7 +131,7 @@ def main():
                         help="also keep the titles already in titles.csv that are no longer in the top --per-season")
     add_data_dir_argument(parser)
     args = parser.parse_args()
-    use_data_dir(args.data_dir)
+    use_data_dir(args.data_dir, args.market)
 
     rows = []
     for year in range(args.start_year, args.end_year + 1):
