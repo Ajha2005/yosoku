@@ -25,17 +25,17 @@ As of 24 October 2026. The files in `reports/` are generated and are the source 
 - **No Google Trends this round**, so the India Demand Index is YouTube 50%, Streaming 33%, Wikipedia 17%.
   319 titles have at least two parts and get a label. The ranking pool is frozen (`labels/reference_v1.csv`), so
   collecting new titles never moves an existing label. `docs/decisions.md` has the change log.
-- **Label checks (gate G2): fail, narrowly.** All three pairs of parts now agree positively (YouTube and Netflix 0.51,
-  the Wikipedia pairs about 0.14), but lowering the Wikipedia weight by 0.10 still moves the ranking (Kendall's tau 0.69,
+- **Label checks (gate G2): fail, narrowly.** All three pairs of parts now agree positively (YouTube and Netflix 0.50,
+  the Wikipedia pairs about 0.14), but lowering the Wikipedia weight by 0.10 still moves the ranking (Kendall's tau 0.70,
   target 0.9). The box-office check covers only 6 films (rank correlation 0.43, interval −0.60 to 1.00).
 - **Forecast checks (gate G4): fail at Cold only.** On the 52 labelled 2024 titles the Blend beats every simple rule at
-  T−28 (rank correlation 0.25) and T+7 (0.66, interval 0.46 to 0.81). At Cold it ranks the 20 rolling seasons at 0.21
-  against the genre average's 0.08, but loses on 2024 alone (0.06 against 0.12), and the rule picks on 2024, so the
+  T−28 (rank correlation 0.23) and T+7 (0.66, interval 0.47 to 0.80). At Cold it ranks the 20 rolling seasons at 0.18
+  against the genre average's 0.09, but loses on 2024 alone (0.05 against 0.12), and the rule picks on 2024, so the
   genre average makes the cold forecasts. T+7 is a nowcast: its inputs sit inside the 28 days it measures.
 - **The decision clock** (Track record tab, `reports/clock.md`) scores a forecast made on each day: over 20 seasons
-  it barely improves from day −49 (0.30) to day −7 (0.36), then jumps between the premiere (0.39) and day +3 (0.54).
+  it improves little from day −49 (0.29) to day −7 (0.38), then jumps between the premiere (0.41) and day +3 (0.53).
 - **Verdicts:** the cold ranges are too wide to separate titles, so every title is Test-market there. On the 2024
-  split, T−28 gives 5 Launch and 47 Test-market; T+7 gives 11 Launch, 40 Test-market, 1 Hold.
+  split, T−28 gives 4 Launch and 48 Test-market; T+7 gives 11 Launch, 40 Test-market, 1 Hold.
 - **What the site shows:** 50 upcoming Winter 2027 titles (cold forecasts, dated 24 October 2026; 39 have no announced
   start date yet) and the 2024 backtest, 52 titles. The 2025 test titles are unscored: that happens once, at the very end.
 - **Wikipedia articles written after launch** were swapped for the page readers used then (`fallback` rows in
@@ -333,10 +333,11 @@ Automatic matching makes mistakes. Before modelling, look through:
   dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
   There is no Trends data in the current dataset, so the Search part of the index is left out.
 - **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
-  Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 100 comments match, and fewer
+  Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 70 comments match, and fewer
   than 1 in 2,000 use an Indian script. When `comment_languages.csv` exists, AI4Bharat's IndicLID also counts short
-  Hinglish the word rules miss ("Kab release hogi ye movie"): 550 Hinglish comments instead of 373, and nearly all
-  of the extra ones checked by hand were real Hinglish.
+  Hinglish the word rules miss ("Kab release hogi ye movie"): 858 Hinglish comments instead of 561, and in an earlier
+  hand check nearly all of the extra ones were real Hinglish. Every comment in Latin letters has an IndicLID label, and
+  the daily job labels new ones as they come.
   IndicLID only knows Indian languages and English, so on its own it calls Spanish, Indonesian and emoji Indian,
   and it often names the wrong Indian language. A comment therefore also needs two Hindi words, and its exact
   language is not used. `comment_languages.csv` is committed, so only one person needs fastText and the model.

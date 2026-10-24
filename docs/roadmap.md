@@ -11,13 +11,14 @@ rare, and it is the strongest thing to sell. As a product, three gaps would surf
 
 1. **The decision that pays gets the weakest forecast.** Licences are signed months before the Japanese premiere.
    At that stage the forecast ranks the 2024 titles at 0.12 (the genre average makes it), and all 52 are Test-market.
-2. **The India Demand Index is mostly not about India.** Only 51 of the 319 labelled titles (14 of the 52 in 2024)
+2. **The India Demand Index is mostly not about India.** Only 53 of the 319 labelled titles (14 of the 52 in 2024)
    have any India-specific part above zero. The rest are ranked by English Wikipedia views, which are worldwide
-   (rank correlation 0.58 with the index).
+   (rank correlation 0.57 with the index).
 3. **It answers with an index**, not with a decision in money, timing or deal terms.
 
 This branch fixes what the data in the repo allowed: two hindsight inputs, a label scale that moved with every
-collection, collectors that could not run daily, comment text the pipeline depended on. It adds the decision clock
+collection, comments IndicLID had never read, collectors that could not run daily, comment text the pipeline
+depended on. It adds the decision clock
 and a daily job. The rest needs data (section 6), licences (section 7) and partners (section 5).
 
 ## 2. What the review found
@@ -25,28 +26,31 @@ and a daily job. The rest needs data (section 6), licences (section 7) and partn
 | # | Finding | Evidence | Status |
 | --- | --- | --- | --- |
 | 1 | Two model inputs carried information from after the forecast | `has_youtube` marked the YouTube top 200, chosen by today's AniList popularity; `has_india_article` counted article views up to day +120 | **Fixed.** 2024: T−28 0.27 → 0.25, T+7 0.69 → 0.66. The leakage test now also removes post-cutoff rows |
-| 2 | The label scale moved with every collection | Adding the 2025 titles moved the 2019–2024 labels by 0.9 points on average, up to 2.8 | **Fixed.** Frozen ranking pool, `labels/reference_v1.csv`; today's labels unchanged byte for byte |
-| 3 | The index is mostly global attention | Netflix part 0 for 195 of 208 titles; India YouTube comments 0 for 154 of 200; the Wikipedia part is almost all English views | **Open:** label v2 (section 6) |
-| 4 | The index drifts up by year | Mean 47.5 (2019) → 61.9 (2025). Some is real growth; some is how it is measured: Netflix's charts start June 2021, comments were capped at the newest 1,000 per trailer | **Partly fixed:** daily capture removes the cap from now on |
-| 5 | 80% ranges held 58–67% of 2024 titles | Set season by season from earlier seasons only, they held 78–82% of titles up to 2023; 2024 titles came in about 5 points above their cold and T−28 forecasts | **Partly fixed:** titles not released yet get ranges that include the 2024 misses (± 15.6 / 13.9 / 10.8) |
-| 6 | One 52-title season cannot pick a method | A rank correlation on 52 titles has a 95% interval about ± 0.27 wide. The 2024 split and the 20 rolling seasons disagreed on the best method three times (section 3) | **Proposal:** pick on the rolling seasons, pre-registered before the next seal |
+| 2 | The label scale moved with every collection | Adding the 2025 titles moved the 2019–2024 labels by 1.0 point on average, up to 3.0 | **Fixed.** Frozen ranking pool, `labels/reference_v1.csv`; today's labels unchanged byte for byte |
+| 3 | The index is mostly global attention | Netflix part 0 for 195 of 208 titles; India YouTube comments 0 for 152 of 200; the Wikipedia part is almost all English views | **Open:** label v2 (section 6) |
+| 4 | The index drifts up by year | Mean 47.1 (2019) → 62.5 (2025). Some is real growth; some is how it is measured: Netflix's charts start June 2021, comments were capped at the newest 1,000 per trailer | **Partly fixed:** daily capture removes the cap from now on |
+| 5 | 80% ranges held 58–67% of 2024 titles | Set season by season from earlier seasons only, they held 78–82% of titles up to 2023; 2024 titles came in about 5 points above their cold and T−28 forecasts | **Partly fixed:** titles not released yet get ranges that include the 2024 misses (± 16.4 / 14.0 / 11.0) |
+| 6 | One 52-title season cannot pick a method | A rank correlation on 52 titles has a 95% interval about ± 0.27 wide. The 2024 split and the 20 rolling seasons disagreed on the best method at least four times (section 3) | **Proposal:** pick on the rolling seasons, pre-registered before the next seal |
 | 7 | The collectors could not run daily | YouTube comments and searches were cached forever after the first fetch, so an upcoming title never got its launch-week comments or its later trailers | **Fixed:** `collect_youtube.py --refresh`, `collect_titles.py --keep`, `yosoku/daily.py` |
 | 8 | Personal data in a public repo | 25 MB of YouTube comment text is committed, against decision 6 in `docs/decisions.md` | **Mitigated:** the pipeline runs from per-day counts (2 MB, no text). Removing the text is the team's call (section 7) |
 | 9 | Commercial terms unchecked | AniList needs a licence above $150 a month of revenue; YouTube limits keeping API data without the channel owner's authorisation to 30 days | **Open** (section 7). The new view-count log keeps 30 days only |
+| 10 | IndicLID read only 45% of the comments | Its labels predated the full YouTube rerun: 74,542 of 167,323 comments in Latin letters had one, and 92 of 197 titles had comments read by the word list alone | **Fixed:** every comment labelled (37 more India comments in the first 28 days, 661 → 698); the daily job labels new ones |
+| 11 | One comment can move a title by 30 points | 152 of 200 titles have no India comment in their first 28 days, all tied at the bottom of the YouTube part, which weighs 50%. Kaguya-sama Season 3's first one moved it from 50 to 82 | **Open:** label v2 (section 6, item 5) |
 
 ## 3. Model experiments: what did not help
 
 Each was scored like `yosoku.evaluate` scores the stages. Rolling is the mean rank correlation over 20 seasons
 (Winter 2020 to Fall 2024, each forecast from the seasons before it): about four times as many forecasts as 2024 alone.
+The first row was measured when that change was made; the rest were run again after every comment got its IndicLID label.
 
 | Change | Stage | 2024 | Rolling | Outcome |
 | --- | --- | --- | --- | --- |
 | Remove the two hindsight inputs | T−28 / T+7 | 0.27 → 0.25 / 0.69 → 0.66 | 0.34 → 0.33 / 0.63 → 0.62 | Adopted: integrity |
-| Blend at cold (metadata, lookalike, prequel), against the genre average | Cold | 0.06 against 0.12 | 0.21 against 0.08 | Main model at cold; the genre average still ships, because the rule picks on 2024 |
-| Prequel's own attention, studio's India record | Cold | worse | 0.18–0.19 | Rejected |
-| Gradient-boosted trees | Cold | 0.15 | 0.16 | Rejected |
-| One model per index part, also trained on the 944 titles with only one part | All | better at T−28 (0.38) | worse (0.29 against 0.33) | Rejected |
-| Buzz from days −120 to −57 | T−28 / T+7 | 0.23 / 0.66 | 0.35 / 0.60 | Rejected |
+| Blend at cold (metadata, lookalike, prequel), against the genre average | Cold | 0.05 against 0.12 | 0.18 against 0.09 (sequel carry-over 0.20) | Main model at cold; the genre average still ships, because the rule picks on 2024 |
+| Prequel's own attention, studio's India record | Cold | worse | 0.15–0.16 | Rejected |
+| Gradient-boosted trees | Cold | 0.25, the best on 2024 | 0.16 | Rejected: worse on the rolling seasons |
+| One model per index part, also trained on the 944 titles with only one part | All | better at T−28 (0.41) | worse (0.27 against 0.32) | Rejected |
+| Buzz from days −120 to −57 | T−28 / T+7 | 0.23 / 0.66 | 0.34 / 0.60 (against 0.32 / 0.61) | Rejected: +0.02 and −0.01, within noise |
 | Year trend or level correction | All | lower error on 2024 | no change | Rejected: fix the measurement instead |
 | Chance of a top-third result | T+7 | Brier 0.18 against 0.24 for the base rate | | Informative only at T+7; not shipped |
 
@@ -131,7 +135,7 @@ large one where demand for anime is barely measured.
 ### 5.2 The selling points, in order
 
 1. **The decision clock, and deals built on it.** Before the premiere, waiting buys little: over 20 seasons the
-   ranking goes from 0.30 at day −49 to 0.36 at day −7. Three days after the premiere it reaches 0.54 (0.63 on
+   ranking goes from 0.29 at day −49 to 0.38 at day −7. Three days after the premiere it reaches 0.53 (0.64 on
    2024). So: license with a small minimum guarantee and an escalator tied to the day-3 or day-7 reading, and
    order the dub between day 3 and day 7. That turns forecast uncertainty into contract terms, which a dashboard
    of scores does not do. *Built: the clock and each title's forecast path. Next: a deal-structure note on each sheet.*
@@ -178,7 +182,9 @@ large one where demand for anime is barely measured.
 4. **The same measurement for every title.** YouTube for every title in the universe, not the top 200 by today's
    popularity, captured daily from now on.
 5. **Below the chart is not zero.** Netflix's Top 10 hides everything below rank 10, so a title that did not chart
-   is censored, not measured at zero; model it that way.
+   is censored, not measured at zero; model it that way. YouTube has the same problem: 152 of 200 titles have no
+   India comment in their first 28 days, tied at the bottom, so a single comment can move a title 30 points
+   (section 2, row 11). More comments per title (item 3) and a part that grows smoothly from zero both help.
 6. **A new version, a new pool.** Label v2 gets its own frozen pool; v1 stays to grade the October 2026 seal.
 
 Dated pre-launch signals worth testing: AniList's daily trend records (popularity, trending), if their history
@@ -209,7 +215,8 @@ Taking the comment text out of the public repo:
 **Next two weeks**
 - Merge this branch; show the decision clock in the demo.
 - Take the comment text out of the public repo (section 7).
-- Run `yosoku.daily` every morning on one machine; collect YouTube for the 50 Winter 2027 titles in refresh mode.
+- Run `yosoku.daily` every morning on one machine with fastText installed; collect YouTube for the 50 Winter 2027
+  titles in refresh mode.
 - Before sealing Spring 2027: pre-register picking methods on the rolling seasons, and add a data fingerprint to seals.
 - Have a native speaker review the Japanese; add an Excel export of the slate.
 - Apply for the Google Trends API; write to AniList about commercial terms.
@@ -232,7 +239,7 @@ Taking the comment text out of the public repo:
 **Yosoku（予測）：日本のアニメがインドでどれだけ見られるかを、放送前と放送直後に予測します。**
 
 - **何がわかるか**：作品ごとに「投入推奨・テスト販売・見送り」の判定と、その根拠（類似作品のインドでの実績、言語圏別の反応、吹替需要）を示します。
-- **判断のタイミング（ディシジョン・クロック）**：過去20シーズンの検証では、放送前の数週間は予測の精度がほとんど上がらず（順位相関 0.30 → 0.36）、放送開始から3日で大きく上がります（0.54）。そこで、ライセンスは低めの最低保証と放送後の実績連動で結び、吹替は放送3〜7日後に決める、という段階的な判断を提案できます。
+- **判断のタイミング（ディシジョン・クロック）**：過去20シーズンの検証では、放送前の数週間は予測の精度があまり上がらず（順位相関 0.29 → 0.38）、放送開始から3日で大きく上がります（0.53）。そこで、ライセンスは低めの最低保証と放送後の実績連動で結び、吹替は放送3〜7日後に決める、という段階的な判断を提案できます。
 - **検証できる実績**：未放送作品の予測は、放送前にSHA-256で封印して公開台帳に記録しています。後から書き換えることはできず、放送後にそのまま採点されます。
 - **インドの声を言語圏別に**：ヒングリッシュ（ローマ字のヒンディー語）を含むインドからのコメントを、ヒンディー、タミル、テルグなどの言語圏別に数え、「ヒンディー語吹替はいつ？」といった吹替の要望も測ります。
 - **毎日更新**：放送前後の作品は毎日予測し直し、判定の範囲を外れた作品をアラートでお知らせします。
