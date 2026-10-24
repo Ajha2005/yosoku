@@ -14,7 +14,7 @@ export const PRINCIPLES = [
 ];
 
 export const SOURCES = [
-  { name: "YouTube trailer comments", tells: "India's own voice: comments in Indian scripts, Hinglish typed in Latin letters (“bhai hindi dub kab aayega”), or naming India, an Indian language or city. About 1 in 100 comments. AI4Bharat's IndicLID language model also catches short Hinglish the word list misses.",
+  { name: "YouTube trailer comments", tells: "India's own voice: comments in Indian scripts, Hinglish typed in Latin letters (“bhai hindi dub kab aayega”), or naming India, an Indian language or city. About 1 in 70 comments. AI4Bharat's IndicLID language model also catches short Hinglish the word list misses.",
     bias: "Most popular 200 titles only; newest 1,000 comments per video; a word list, so it misses some Indian English and catches a few non-Indian comments.", reliability: "Strong signal for big titles; sparse for small ones (many have none)." },
   { name: "Netflix India Top 10", tells: "Real viewing in India, published by Netflix.",
     bias: "Only Netflix titles, only from June 2021; a top-10 list hides everything below rank 10.", reliability: "Reliable but coarse; blank (not zero) for titles not on Netflix." },

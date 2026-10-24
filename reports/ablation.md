@@ -8,31 +8,31 @@ The Blend refitted without one group of inputs at a time. *Loss* is how much ran
 
 | Inputs | Spearman 2024 (95% interval) | Loss 2024 | Rolling seasons | Loss rolling |
 | --- | --- | --- | --- | --- |
-| All inputs | 0.06 (-0.23 to 0.33) |  | 0.21 over 20 |  |
-| without Similar past titles (lookalike) | 0.03 (-0.25 to 0.30) | 0.03 | 0.22 over 20 | -0.01 |
-| without Prequel's India index | 0.07 (-0.22 to 0.33) | -0.01 | 0.21 over 20 | -0.00 |
-| without Genre, format, source, audience | 0.12 (-0.19 to 0.44) | -0.06 | 0.14 over 20 | 0.07 |
+| All inputs | 0.05 (-0.26 to 0.32) |  | 0.18 over 20 |  |
+| without Similar past titles (lookalike) | 0.02 (-0.27 to 0.30) | 0.03 | 0.19 over 20 | -0.01 |
+| without Prequel's India index | 0.06 (-0.25 to 0.32) | -0.01 | 0.18 over 20 | 0.00 |
+| without Genre, format, source, audience | 0.08 (-0.24 to 0.40) | -0.03 | 0.13 over 20 | 0.05 |
 
 ## t-28 (52 validation titles)
 
 | Inputs | Spearman 2024 (95% interval) | Loss 2024 | Rolling seasons | Loss rolling |
 | --- | --- | --- | --- | --- |
-| All inputs | 0.25 (-0.07 to 0.51) |  | 0.33 over 20 |  |
-| without YouTube trailer comments | 0.18 (-0.12 to 0.46) | 0.07 | 0.32 over 20 | 0.01 |
-| without Wikipedia, English and Japanese | 0.11 (-0.19 to 0.39) | 0.14 | 0.22 over 20 | 0.11 |
-| without Wikipedia, Indian languages | 0.24 (-0.08 to 0.51) | 0.01 | 0.33 over 20 | 0.00 |
-| without Similar past titles (lookalike) | 0.24 (-0.10 to 0.50) | 0.01 | 0.31 over 20 | 0.02 |
-| without Prequel's India index | 0.28 (-0.02 to 0.54) | -0.03 | 0.34 over 20 | -0.01 |
-| without Genre, format, source, audience | 0.33 (0.06 to 0.59) | -0.08 | 0.28 over 20 | 0.05 |
+| All inputs | 0.23 (-0.08 to 0.49) |  | 0.32 over 20 |  |
+| without YouTube trailer comments | 0.18 (-0.12 to 0.46) | 0.05 | 0.30 over 20 | 0.02 |
+| without Wikipedia, English and Japanese | 0.09 (-0.22 to 0.36) | 0.14 | 0.20 over 20 | 0.12 |
+| without Wikipedia, Indian languages | 0.23 (-0.08 to 0.49) | -0.00 | 0.32 over 20 | 0.00 |
+| without Similar past titles (lookalike) | 0.23 (-0.09 to 0.49) | 0.01 | 0.30 over 20 | 0.02 |
+| without Prequel's India index | 0.25 (-0.04 to 0.51) | -0.02 | 0.34 over 20 | -0.02 |
+| without Genre, format, source, audience | 0.35 (0.07 to 0.59) | -0.12 | 0.31 over 20 | 0.01 |
 
 ## t+7 (52 validation titles)
 
 | Inputs | Spearman 2024 (95% interval) | Loss 2024 | Rolling seasons | Loss rolling |
 | --- | --- | --- | --- | --- |
-| All inputs | 0.66 (0.46 to 0.81) |  | 0.62 over 20 |  |
-| without YouTube trailer comments | 0.31 (0.01 to 0.58) | 0.35 | 0.43 over 20 | 0.19 |
-| without Wikipedia, English and Japanese | 0.43 (0.15 to 0.68) | 0.23 | 0.39 over 20 | 0.23 |
-| without Wikipedia, Indian languages | 0.66 (0.46 to 0.81) | -0.00 | 0.61 over 20 | 0.01 |
-| without Similar past titles (lookalike) | 0.63 (0.42 to 0.80) | 0.02 | 0.62 over 20 | -0.00 |
-| without Prequel's India index | 0.69 (0.50 to 0.82) | -0.03 | 0.63 over 20 | -0.01 |
-| without Genre, format, source, audience | 0.79 (0.63 to 0.90) | -0.13 | 0.62 over 20 | -0.01 |
+| All inputs | 0.66 (0.47 to 0.80) |  | 0.61 over 20 |  |
+| without YouTube trailer comments | 0.32 (0.03 to 0.59) | 0.34 | 0.42 over 20 | 0.19 |
+| without Wikipedia, English and Japanese | 0.41 (0.14 to 0.66) | 0.24 | 0.36 over 20 | 0.25 |
+| without Wikipedia, Indian languages | 0.66 (0.47 to 0.81) | -0.00 | 0.61 over 20 | 0.00 |
+| without Similar past titles (lookalike) | 0.65 (0.45 to 0.80) | 0.01 | 0.60 over 20 | 0.00 |
+| without Prequel's India index | 0.69 (0.49 to 0.82) | -0.03 | 0.62 over 20 | -0.02 |
+| without Genre, format, source, audience | 0.80 (0.64 to 0.90) | -0.14 | 0.62 over 20 | -0.02 |

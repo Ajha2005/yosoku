@@ -11,7 +11,7 @@ current ones.
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
 | 1:40 | Track record | Forecast against reality for 2024. At Cold a simple rule (genre average) makes the forecasts, because our model did not beat it; the page says so. From T−28 on, our model beats every simple rule. |
-| 2:00 | Track record, *When will we know?* | The decision clock: "Before the premiere, waiting barely helps: 0.30 seven weeks out, 0.36 one week out. Three days after it, 0.54. So: license small and early, decide the dub on day 3 to 7." Then open Solo Leveling's sheet, *How the forecast moved*: 53 at Cold, 58 at T−28, 83 by day 3; it ended at 80. |
+| 2:00 | Track record, *When will we know?* | The decision clock: "Before the premiere, waiting helps little: 0.29 seven weeks out, 0.38 one week out. Three days after it, 0.53. So: license small and early, decide the dub on day 3 to 7." Then open Solo Leveling's sheet, *How the forecast moved*: 53 at Cold, 58 at T−28, 83 by day 3; it ended at 80. |
 | 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: genre, format, source and audience carry Cold, global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia and prequels add nothing. |
 | 2:45 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air." |
 
@@ -27,7 +27,7 @@ current ones.
   job only collects and forecasts the titles still in play, and the archive never has to be recomputed. Labels sit on a
   frozen scale, so new titles never move old ones. `docs/roadmap.md`, section 4.
 - **Gate G2 fails. Is the index trustworthy?** Narrowly. All three parts now agree positively (YouTube and Netflix most,
-  at 0.51), but moving the Wikipedia weight by 0.10 reshuffles the ranking more than our target allows (details in
+  at 0.50), but moving the Wikipedia weight by 0.10 reshuffles the ranking more than our target allows (details in
   `reports/label.md`; the Method tab shows the pass/fail in plain words). The parts measure different things (talk, viewing,
   reading) and few titles have all three. Six films' India box office ranks with the index at 0.43, but six is too few to
   prove anything (range −0.60 to 1.00); the Method tab lists the six beside their index.
