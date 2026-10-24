@@ -88,6 +88,8 @@ class Lookalike:
                 mix = np.average(profiles[has].to_numpy(), axis=0, weights=weights[has])
                 region = {HUBS[hub][0]: round(float(v), 3) for hub, v in zip(HUBS, mix)}
                 region["_titles"] = int(has.sum())
+                if "yt_hub_comments" in self.train:
+                    region["_comments"] = int(self.train["yt_hub_comments"].iloc[top].to_numpy()[has].sum())
             rows.append({"forecast": forecast,
                          "lookalikes": [(int(train_ids[j]), round(float(sim[j]), 3)) for j in top],
                          "region": region})

@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=3";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=3";
-import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=3";
-import { createDetail, countUp } from "./detail.js?v=3";
-import { renderGuide } from "./guide.js?v=3";
-import { showTip, hideTip } from "./tip.js?v=3";
-import { INDEX_PARTS, PRINCIPLES, SOURCES } from "./content.js?v=3";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js?v=4";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=4";
+import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js?v=4";
+import { createDetail, countUp } from "./detail.js?v=4";
+import { renderGuide } from "./guide.js?v=4";
+import { showTip, hideTip } from "./tip.js?v=4";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, WAITING } from "./content.js?v=4";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -167,6 +167,57 @@ function renderHero() {
   });
   watcher.observe($("#hero-stats"));
   startPetals($("#petals"));
+}
+
+// ---------------------------------------------------------------- value of waiting
+
+/** The title that best shows the point: well off when cold, close at T+7 (an example, picked by that rule). */
+function showcaseTitle() {
+  const miss = (t, m) => Math.abs(t.forecasts[m].index - t.actual_index);
+  return app.data.titles
+    .filter((t) => t.actual_index != null && t.forecasts.cold && t.forecasts["t+7"])
+    .sort((a, b) => (miss(b, "cold") - miss(b, "t+7")) - (miss(a, "cold") - miss(a, "t+7")))[0];
+}
+
+function renderWaiting() {
+  const moments = app.data.evaluation?.moments || {};
+  const keys = Object.keys(MOMENTS).filter((k) => moments[k]);
+  if (keys.length < 2) return;
+  const rho = (k) => moments[k].table.spearman[moments[k].used ?? moments[k].main];
+  const lo = -0.4, S = (v) => ((Math.max(lo, Math.min(1, v)) - lo) / (1 - lo)) * 100;
+  const rows = keys.map((k) => {
+    const info = moments[k], used = info.used ?? info.main, t = info.table, rule = info.best_baseline;
+    const r = t.spearman[used], ruleR = rule && rule !== used ? t.spearman[rule] : null;
+    return `<li class="wt">
+      <span class="wt-name"><b>${MOMENTS[k].label}</b>${k === "t+7" ? " <small>nowcast</small>" : ""}<em>${esc(MOMENTS[k].long)} · ${esc(used)}</em></span>
+      <span class="wt-track" aria-hidden="true">
+        <u style="left:${S(0)}%"></u>
+        ${Number.isFinite(t.low[used]) ? `<i style="left:${S(t.low[used])}%;width:${S(t.high[used]) - S(t.low[used])}%"></i>` : ""}
+        ${Number.isFinite(ruleR) ? `<s style="left:${S(ruleR)}%" title="Best simple rule: ${esc(rule)} ${ruleR.toFixed(2)}"></s>` : ""}
+        <b style="left:${S(r)}%"></b>
+      </span>
+      <span class="wt-val">${Number.isFinite(r) ? r.toFixed(2) : "–"}</span>
+    </li>`;
+  }).join("");
+  const pre = [...new Set(keys.filter((k) => k !== "t+7").map((k) => rho(k).toFixed(2)))];
+  const before = pre.length === 1 ? `${pre[0]} at both pre-launch stages` : pre.join(" and ");
+  const after = moments["t+7"] ? rho("t+7").toFixed(2) : null;
+  const rule = moments["t+7"]?.best_baseline, ruleR = rule ? moments["t+7"].table.spearman[rule] : null;
+  const show = showcaseTitle();
+  $("#waiting-title").textContent = WAITING.title;
+  $("#waiting-lead").textContent = WAITING.lead;
+  $("#waiting-body").innerHTML = `
+    <p class="exec">Before launch, our forecasts rank 2024 titles barely better than chance (rank correlation ${before}, where 0 is chance and 1 is perfect)${
+      after ? `. One week after launch they reach <b>${after}</b>` : ""}. A launch decision made cold is close to a coin flip; a small test release, then a decision at T+7, is far better informed.</p>
+    <div class="panel wt-panel">
+      <div class="wt-head" aria-hidden="true"><span>Stage · method used</span><span class="wt-scale"><span>−0.4</span><span style="left:${S(0)}%">0 = chance</span><span style="left:${S(0.5)}%">0.5</span><span style="right:0">1 = perfect</span></span><span>ρ</span></div>
+      <ul class="wts" role="img" aria-label="Rank correlation with the real India Demand Index by forecast stage: ${keys.map((k) => `${MOMENTS[k].label} ${rho(k).toFixed(2)}`).join(", ")}">${rows}</ul>
+      <p class="note">Dot: rank correlation between forecast and real India Demand Index on the 48 labelled 2024 titles, which no model saw in training. Bar: its 95% range. Tick: the best simple rule at that stage. T+7 is a nowcast: its inputs (the launch week) are part of the 28 days being measured${
+        Number.isFinite(ruleR) ? `, and a simple rule using global Wikipedia buzz already reaches ${ruleR.toFixed(2)}` : ""}.</p>
+    </div>
+    ${show ? `<p class="wt-demo"><a class="btn btn-outline" href="#/title/${show.anilist_id}/cold">See it on one title: ${esc(show.name)}</a>
+      <span>Open it at Cold, then switch to T+7 and compare with what happened.</span></p>` : ""}`;
+  $("#waiting").hidden = false;
 }
 
 // ---------------------------------------------------------------- slate
@@ -373,6 +424,27 @@ function initDotTips() {
 
 // ---------------------------------------------------------------- method
 
+function scorecard() {
+  const src = app.data.sources;
+  const num = (n) => Number(n).toLocaleString("en-IN");
+  const rows = SCORECARD.map((r) => {
+    const p = r.part && src?.parts?.[r.part];
+    const coverage = p ? `${num(p.titles)} of ${num(src.released)}` : r.coverage || "–";
+    const agree = p && Number.isFinite(p.agreement)
+      ? `<b class="${p.agreement >= 0.3 ? "ok" : "weak"}">${p.agreement.toFixed(2)}</b><small>${num(p.pairs)} titles</small>` : "–";
+    return `<tr><th scope="row">${esc(r.name)}<small>${esc(r.role)}</small></th><td>${coverage}</td><td>${esc(r.india)}</td><td>${esc(r.lead)}</td><td>${agree}</td><td>${esc(r.bias)}</td></tr>`;
+  }).join("");
+  return `<div class="scorecard-wrap reveal">
+      <h2>Source scorecard</h2>
+      <div class="table-scroll"><table class="srccard">
+        <thead><tr><th scope="col">Source</th><th scope="col">Titles covered</th><th scope="col">India-specific</th><th scope="col">Lead time</th><th scope="col">Agrees with the rest (ρ)</th><th scope="col">Known bias</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+      <p class="note">Agreement is the rank correlation between a part and an index built from the other parts, on titles that have both; 0.3 or more would be reassuring. Today all three are close to zero: the parts measure different kinds of attention (talk, viewing, reading), few titles have more than one, and the Wikipedia part still misses the biggest shows (fixed once it is collected again). This is why the index needs two parts per title and why the label check (gate G2) does not pass yet.</p>
+      <h3>Considered, not used</h3>
+      <ul class="notused">${NOT_USED.map((n) => `<li><b>${esc(n.name)}</b><span>${esc(n.why)}</span></li>`).join("")}</ul>
+    </div>`;
+}
+
 function renderMethod() {
   $("#method-body").innerHTML = `
     <div class="composition reveal">
@@ -382,6 +454,7 @@ function renderMethod() {
       <ul class="comp-legend">${INDEX_PARTS.map((p) => `<li><i class="swatch comp-${p.key}"></i><span><b>${esc(p.name)}</b>${esc(p.detail)}</span></li>`).join("")}</ul>
     </div>
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
+    ${scorecard()}
     <h2 class="sources-title reveal">Where the data comes from, and where it can mislead</h2>
     <div class="sources">${SOURCES.map((s, i) => `<article class="source reveal" style="--i:${i}">
       <h3>${esc(s.name)}</h3>
@@ -463,6 +536,7 @@ async function boot() {
   state.moment = have[have.length - 1] || "cold";
 
   renderHero();
+  renderWaiting();
   renderControls();
   renderSlate();
   renderRecord();
