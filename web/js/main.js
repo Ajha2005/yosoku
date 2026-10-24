@@ -1,6 +1,6 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, momentsOf, latestMoment, ruleText } from "./data.js";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, momentsOf, latestMoment, ruleText } from "./data.js";
 import { posterHTML, artSVG, startPetals } from "./art.js";
 import { miniBar, verdictIcon, scatter, modelBars } from "./charts.js";
 import { createDetail, countUp } from "./detail.js";
@@ -124,7 +124,9 @@ function renderHero() {
   ];
   if (evaluation) {
     const { info } = evaluation;
-    stats.push({ n: info.table.spearman[info.main], suffix: "", label: `rank correlation on the 2024 backtest (${MOMENTS[evaluation.key].label})`, decimals: 2 });
+    if (Number.isFinite(info.table.spearman[info.main])) {
+      stats.push({ n: info.table.spearman[info.main], suffix: "", label: `rank correlation on the 2024 backtest (${MOMENTS[evaluation.key].label})`, decimals: 2 });
+    }
     stats.push({ n: Math.round(info.coverage * 100), suffix: "%", label: "of titles landed inside the 80% range" });
   }
   $("#hero-stats").innerHTML = stats.map((s) => `<div><dt>${s.label}</dt><dd data-to="${s.n}" data-dec="${s.decimals || 0}" data-suffix="${s.suffix}">${s.decimals ? s.n.toFixed(2) : s.n}${s.suffix}</dd></div>`).join("");
@@ -290,9 +292,9 @@ function renderRecord() {
   const t = info?.table;
   const score = info ? `
     <div class="scorecard">
-      <div class="tile"><span class="tile-label">Rank correlation</span><b>${t.spearman[info.main].toFixed(2)}</b><span class="tile-note">95% range ${t.low[info.main].toFixed(2)} to ${t.high[info.main].toFixed(2)}</span></div>
+      <div class="tile"><span class="tile-label">Rank correlation</span><b>${fixed(t.spearman[info.main], 2)}</b><span class="tile-note">95% range ${fixed(t.low[info.main], 2)} to ${fixed(t.high[info.main], 2)}</span></div>
       <div class="tile"><span class="tile-label">Top-20% hit rate</span><b>${pct(t.top20[info.main])}</b><span class="tile-note">of the true top fifth, found</span></div>
-      <div class="tile"><span class="tile-label">Average miss</span><b>${t.mae[info.main].toFixed(1)}</b><span class="tile-note">index points</span></div>
+      <div class="tile"><span class="tile-label">Average miss</span><b>${fixed(t.mae[info.main], 1)}</b><span class="tile-note">index points</span></div>
       <div class="tile"><span class="tile-label">80% range held</span><b>${pct(info.coverage)}</b><span class="tile-note">of titles</span></div>
     </div>
     <p class="verdict-line ${info.beats_baseline ? "yes" : "no"}">
