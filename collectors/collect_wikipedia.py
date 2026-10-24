@@ -44,9 +44,11 @@ SPARQL = """
 SELECT ?mal ?lang ?article WHERE {
   VALUES ?mal { %s }
   ?item wdt:P4086 ?mal .
-  ?article schema:about ?item ; schema:inLanguage ?lang ; schema:isPartOf ?site .
-  VALUES ?lang { "en" "ja" "hi" "ta" "te" }
-  FILTER(STR(?site) = CONCAT("https://", ?lang, ".wikipedia.org/"))
+  VALUES (?lang ?site) {
+    ("en" <https://en.wikipedia.org/>) ("ja" <https://ja.wikipedia.org/>)
+    ("hi" <https://hi.wikipedia.org/>) ("ta" <https://ta.wikipedia.org/>) ("te" <https://te.wikipedia.org/>)
+  }
+  ?article schema:about ?item ; schema:isPartOf ?site .
 }
 """
 
