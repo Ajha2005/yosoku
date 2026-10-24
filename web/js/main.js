@@ -1,12 +1,12 @@
 // Yosoku dashboard: boots the page, renders the hero, slate, track record and method, and routes to the forecast sheet.
 
-import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText } from "./data.js?v=5";
-import { posterHTML, artSVG, startPetals } from "./art.js?v=5";
-import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=5";
-import { createDetail, countUp } from "./detail.js?v=5";
-import { renderGuide } from "./guide.js?v=5";
-import { showTip, hideTip } from "./tip.js?v=5";
-import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES } from "./content.js?v=5";
+import { loadData, VERDICTS, MOMENTS, GROUPS, esc, round, pct, fixed, safeUrl, momentsOf, latestMoment, ruleText, formatDate } from "./data.js?v=6";
+import { posterHTML, artSVG, startPetals } from "./art.js?v=6";
+import { miniBar, verdictIcon, scatter, modelBars, stageTimeline } from "./charts.js?v=6";
+import { createDetail, countUp } from "./detail.js?v=6";
+import { renderGuide } from "./guide.js?v=6";
+import { showTip, hideTip } from "./tip.js?v=6";
+import { INDEX_PARTS, PRINCIPLES, SOURCES, SCORECARD, NOT_USED, FORECAST_STEPS, RULE_NOTES } from "./content.js?v=6";
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -251,7 +251,8 @@ function renderSlate({ keepFocus = false } = {}) {   // keepFocus: re-rendering 
   }).join("");
 
   const m = MOMENTS[state.moment];
-  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>`;
+  $("#legend").innerHTML = `<b>${m.label} · ${m.long}.</b> ${esc(m.note)} <span>${esc(ruleText(app.data.thresholds[state.moment], true))}</span> <span>${GROUPS[state.group].full}.</span>${
+    state.group === "upcoming" ? sealLine() : ""}`;
 
   const list = visibleTitles();
   $("#grid").classList.toggle("still", keepFocus);
@@ -371,6 +372,21 @@ function initDotTips() {
   host.addEventListener("focusout", (e) => { if (e.target.closest(".dot")) hideTip(); });
 }
 
+// ---------------------------------------------------------------- sealed forecasts
+
+const LEDGER_URL = "https://github.com/Ajha2005/yosoku/blob/main/predictions/sealed/LEDGER.md";
+
+/** The upcoming forecasts were sealed before any of the titles aired: say when, and how anyone can check. */
+function sealLine() {
+  const s = app.seal;
+  if (!s?.sha256) return "";
+  return `<span class="seal-line"><b>Sealed ${esc(formatDate(s.date))}, before these titles aired.</b>
+    ${esc(s.titles)} forecasts, SHA-256 fingerprint <code title="${esc(s.sha256)}">${esc(s.sha256.slice(0, 16))}…</code>
+    <a href="data/sealed/${encodeURIComponent(s.file)}" download>Download the sealed file</a> ·
+    <a href="${LEDGER_URL}" target="_blank" rel="noopener">fingerprint ledger on GitHub</a>.
+    Check it with <code>sha256sum</code>; when they air, we will be scored against it.</span>`;
+}
+
 // ---------------------------------------------------------------- method
 
 function scorecard() {
@@ -388,6 +404,39 @@ function scorecard() {
         <tbody>${rows}</tbody></table></div>
       <h3>Considered, not used</h3>
       <ul class="notused">${NOT_USED.map((n) => `<li><b>${esc(n.name)}</b><span>${esc(n.why)}</span></li>`).join("")}</ul>
+    </div>`;
+}
+
+/** What each signal is worth: how much rank correlation the Blend loses without it (reports/ablation.json). */
+function signalWorth() {
+  const abl = app.data.ablation;
+  if (!abl) return "";
+  const lo = -0.1, hi = 0.4, S = (v) => ((Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)) * 100;
+  const sign = (v) => (!Number.isFinite(v) ? "–" : Math.abs(v) < 0.005 ? "0.00" : `${v > 0 ? "−" : "+"}${Math.abs(v).toFixed(2)}`);
+  const panels = Object.entries(abl).filter(([k]) => MOMENTS[k]).map(([moment, result]) => {
+    const full = result.variants["All inputs"];
+    const groups = Object.entries(result.variants).filter(([name]) => name !== "All inputs")
+      .sort((a, b) => b[1].rolling_loss - a[1].rolling_loss);
+    const rows = groups.map(([name, r]) => {
+      const v = r.rolling_loss, left = Math.min(S(0), S(v)), width = Math.abs(S(v) - S(0));
+      return `<li class="ab${v >= 0.05 ? " carries" : ""}">
+        <span class="ab-name">${esc(name)}</span>
+        <span class="ab-track" aria-hidden="true"><u style="left:${S(0)}%"></u><i class="${v < 0 ? "neg" : ""}" style="left:${left}%;width:${width}%"></i></span>
+        <span class="ab-val" title="Change in rank correlation without it: rolling seasons (2024 alone ${sign(r.loss)})">${sign(v)}</span>
+      </li>`;
+    }).join("");
+    const top = groups[0];
+    return `<div class="ab-panel">
+      <h3>${MOMENTS[moment].label} <small>${esc(MOMENTS[moment].long)} · all inputs ρ ${full.rolling.toFixed(2)}</small></h3>
+      <ul class="abs" role="img" aria-label="Rank correlation lost without each input at ${MOMENTS[moment].label}: ${groups.map(([n, r]) => `${n} ${sign(r.rolling_loss)}`).join(", ")}">${rows}</ul>
+      <p class="ab-take">${top && top[1].rolling_loss >= 0.05 ? `Carried by <b>${esc(top[0])}</b>.` : "No single input carries it."}</p>
+    </div>`;
+  }).join("");
+  return `<div class="worth reveal">
+      <h2>What each signal is worth</h2>
+      <p class="lead-sm">We retrained the model without one input at a time. The bar is how much rank correlation it loses without that input, averaged over 20 seasons of rolling backtests (2020–2024); a longer bar means the input matters more. Inputs that lose nothing, or even help when removed, are noise for this question.</p>
+      <div class="ab-grid">${panels}</div>
+      <p class="note">YouTube's value at T+7 is partly the nowcast effect: launch-week comments from India are also part of the 28 days being measured. Netflix is not an input: it is only known after release. Hover a number to see the 2024-only figure.</p>
     </div>`;
 }
 
@@ -455,6 +504,7 @@ function renderMethod() {
     ${indexChecks()}
     <div class="principles">${PRINCIPLES.map((p, i) => `<article class="principle reveal" style="--i:${i}"><span class="pn">${p.n}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p></article>`).join("")}</div>
     ${scorecard()}
+    ${signalWorth()}
     <h2 class="sources-title reveal">Where the data comes from, and where it can mislead</h2>
     <div class="sources">${SOURCES.map((s, i) => `<article class="source reveal" style="--i:${i}">
       <h3>${esc(s.name)}</h3>
@@ -527,6 +577,7 @@ async function boot() {
   app.data = loaded.data;
   app.covers = loaded.covers;
   app.guide = loaded.guide;
+  app.seal = loaded.seal;
   if (app.data.mock) $("#mock-banner").hidden = false;
 
   detail = createDetail(app, { requestClose });

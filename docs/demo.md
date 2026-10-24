@@ -7,11 +7,12 @@ current ones.
 | --- | --- | --- |
 | 0:00 | Overview, hero | "Yosoku asks one question for a Japanese studio or distributor: will this anime land in India?" |
 | 0:20 | Forecasts, open any 2024 title | Open it at Cold: Test-market, and the real result is far off. Switch the stage to T+7: the range now holds the real result. "T+7 is a nowcast: that launch week is part of the 28 days we measure, and we say so. So: test-market first, decide at T+7." |
+| 0:40 | Same sheet, *Launch plan* | "A verdict is not enough, so every title gets a plan": license small, the exact rule for deciding again at T+7, which dub first, whether to move the date. Every step comes from evidence lower on the sheet. |
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
 | 1:40 | Track record | Forecast against reality for 2024. At Cold a simple rule (genre average) makes the forecasts, because our model did not beat it; the page says so. From T−28 on, our model beats every simple rule. |
-| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). |
-| 2:45 | Forecasts, *Upcoming* | Dated forecasts for unreleased titles: "check us when they air." (Only once `data/upcoming/` is collected.) |
+| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia, prequels and metadata add nothing. |
+| 2:45 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air." |
 
 ## Questions to prepare for
 
@@ -28,3 +29,8 @@ current ones.
 - **Why not more modelling?** The models beat simple rules once buzz exists, but cold forecasts stay near chance; the limit is data, not the
   model. More India-specific data (streaming beyond Netflix) would help most.
 - **Why no X/Twitter or merchandise?** No usable public source by title and country.
+- **How do we know you did not change the upcoming forecasts after the fact?** They are sealed: the file's SHA-256 is in
+  `predictions/sealed/LEDGER.md`, dated by its git commit. `sha256sum` on the downloaded file must match it, and
+  `python -m yosoku.seal --score` will grade them once the titles air.
+- **Which data actually matters?** Method → *What each signal is worth*. Global Wikipedia attention and India's
+  YouTube comments carry the forecasts; Indian-language Wikipedia and metadata add nothing measurable.

@@ -1,7 +1,7 @@
 """Run the whole pipeline after the collectors: label, evaluate, decide. Then open the dashboard.
 
     python collectors/merge.py
-    python -m yosoku.run                  # labels/, reports/, predictions/predictions.json
+    python -m yosoku.run                  # labels/, reports/ (incl. ablation), predictions/predictions.json
     python -m yosoku.run --final          # once, at the end: also scores the 2025 test titles
     python -m yosoku.export_web           # then see web/ (the dashboard)
 """
@@ -21,7 +21,7 @@ def main():
     args = parser.parse_args()
     folders = ["--data-dir", args.data_dir, "--out-dir", args.out_dir]
     final = ["--final"] if args.final else []
-    for module, extra in (("yosoku.labels", []), ("yosoku.evaluate", final),
+    for module, extra in (("yosoku.labels", []), ("yosoku.evaluate", final), ("yosoku.ablation", []),
                           ("yosoku.decision", [*final, "--upcoming-dir", args.upcoming_dir])):
         print(f"== {module}")
         subprocess.run([sys.executable, "-m", module, *folders, *extra], cwd=ROOT, check=True)
