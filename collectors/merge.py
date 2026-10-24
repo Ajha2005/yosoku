@@ -10,7 +10,8 @@ Japanese start date:
   early   Reddit only: days -90 to -29, before the T-28 forecast moment
 
 yt_india_* counts comments written by people in India (Indian scripts, Hinglish typed in Latin
-letters, or naming India); yt_share_<hub> is the share pointing to each language hub.
+letters, or naming India); yt_share_<hub> is the share pointing to each language hub. If
+comment_languages.csv exists (collectors/detect_languages.py), IndicLID helps find Hinglish.
 
 A blank cell means "no data", which is different from zero: a title with no
 Hindi Wikipedia article, a title not on Netflix, or one that started before
@@ -24,7 +25,7 @@ import argparse
 import pandas as pd
 
 from common import add_data_dir_argument, data_file, read_titles, use_data_dir
-from india_signals import HUBS, classify
+from india_signals import HUBS, classify, indic_flags
 
 WINDOWS = {"pre": (-28, -1), "week1": (0, 6), "month1": (0, 27)}
 # Reddit also gets "early", the days before the T-28 forecast moment (see docs/decisions.md).
@@ -59,9 +60,11 @@ def wikipedia(titles):
     articles = articles.set_index("anilist_id").reindex(titles.index)
     out = pd.DataFrame(index=titles.index)
     for lang in WIKI_LANGS:
-        has_article = articles[lang].notna() & titles["start_date"].notna()
+        # Days with no views are absent from the API's answer, but an article with no rows at all in the
+        # 240-day window did not exist yet (often a "season 1" page written later), so its views are unknown.
+        has_rows = titles.index.isin(daily.loc[daily["lang"] == lang, "anilist_id"])
+        has_article = articles[lang].notna() & titles["start_date"].notna() & has_rows
         for window, views in window_totals(daily[daily["lang"] == lang], "views", "sum", titles.index).items():
-            # Days with no views are absent from the API's answer, so an article with no rows had 0 views.
             out[f"wiki_{lang}_{window}"] = views.fillna(0).where(has_article)
     return out
 
@@ -94,11 +97,14 @@ def youtube(titles):
     comments = load("youtube_comments.csv")
     if comments is None:
         return out
+    # A title whose videos have comments but none in the file was not collected (quota ran out): unknown, not 0.
+    has_comments = videos.groupby("anilist_id")["comments"].sum().reindex(titles.index).fillna(0) > 0
+    searched = searched & (titles.index.isin(comments["anilist_id"]) | ~has_comments.to_numpy())
     start = pd.to_datetime(titles["start_date"])
     published = pd.to_datetime(comments["published_at"], utc=True).dt.tz_localize(None).dt.normalize()
     comments["days_from_start"] = (published - comments["anilist_id"].map(start)).dt.days
     comments["one"] = 1
-    found = classify(comments["text"])
+    found = classify(comments["text"], indic_flags(comments, load("comment_languages.csv")))
     comments["india"] = found["india"].astype(int)
     for window, count in window_totals(comments, "one", "sum", titles.index).items():
         out[f"yt_comments_{window}"] = count.fillna(0).where(searched)
