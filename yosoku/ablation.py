@@ -1,8 +1,8 @@
 """What each signal is worth: retrain the Blend without one group of inputs at a time and see how much it loses.
 
-For T-28 and T+7 (the cold forecast has no buzz signals), the Blend is refitted with each group below left out,
-then scored the way evaluate.py scores it: rank correlation (Spearman) on the 2024 validation titles, and its
-average over the rolling seasons (Winter 2020 to Fall 2024), which rests on many more titles. A group whose
+At every stage, the Blend is refitted with each group below left out (cold has only the lookalike, prequel and
+metadata groups), then scored the way evaluate.py scores it: rank correlation (Spearman) on the 2024 validation
+titles, and its average over the rolling seasons (Winter 2020 to Fall 2024), which rests on many more titles. A group whose
 removal costs a lot of correlation carries real information; one that costs nothing is noise for this question.
 
     python -m yosoku.ablation             # writes reports/ablation.md and reports/ablation.json
@@ -20,10 +20,10 @@ from yosoku.evaluate import MIN_TARGET, MIN_TRAIN, bootstrap, fmt, prepare
 from yosoku.models import Blend, stacked_inputs
 from yosoku.split import guard_test, rolling_folds, split_of
 
-MOMENTS = ["t-28", "t+7"]
+MOMENTS = ["cold", "t-28", "t+7"]
 # Input groups, as a reader would name them. A column belongs to the first group whose test it passes.
 GROUPS = {
-    "YouTube trailer comments": lambda c: c.startswith("yt_") or c == "has_youtube",
+    "YouTube trailer comments": lambda c: c.startswith("yt_"),
     "Wikipedia, English and Japanese": lambda c: c.startswith(("wiki_en_", "wiki_ja_")),
     "Wikipedia, Indian languages": lambda c: c.startswith("wiki_india_") or c == "has_india_article",
     "Reddit posts": lambda c: c.startswith("reddit_"),

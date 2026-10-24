@@ -314,6 +314,13 @@ code { font: 500 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; padding:
 .legend { margin: var(--s-5) auto var(--s-5); font-size: 14px; color: var(--muted); }
 .legend b { color: var(--text); font-weight: 600; }
 .legend span::before { content: "·"; margin: 0 8px; opacity: 0.5; }
+.legend .seal-line::before { content: none; }   /* the boxed lines start on their own row: no separator */
+/* The daily job's alerts (yosoku/daily.py) under the legend, and the badge on a title that moved. */
+.alerts { display: grid; gap: 8px; margin: calc(-1 * var(--s-2)) 0 var(--s-5); padding: 0; list-style: none; }
+.alerts li { padding: 10px 14px; border-left: 3px solid var(--shu); background: var(--surface); font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+.alerts a { color: var(--text); font-weight: 600; }
+.alerts small { margin: 0 6px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.moved-tag { position: absolute; z-index: 2; top: 10px; right: 10px; padding: 5px 8px; border-radius: 2px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--shu-fill); }
 
 /* ------------------------------------------------------------------ poster cards */
 
@@ -421,6 +428,7 @@ dialog.sheet.closing { animation: slide-out 0.18s ease-in forwards; }
 .d-date b { color: var(--text); font-weight: 600; }
 .flag { display: flex; gap: 10px; align-items: flex-start; margin-top: var(--s-3); padding: 10px 14px; border-radius: var(--r); font-size: 14px; background: color-mix(in srgb, var(--test) 14%, transparent); border: 1px solid color-mix(in srgb, var(--test) 35%, transparent); }
 .flag .ico { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--test); }
+.flag.moved { margin: 0 0 var(--s-4); background: color-mix(in srgb, var(--shu) 12%, transparent); border-color: color-mix(in srgb, var(--shu) 35%, transparent); }
 
 .d-verdict, .d-section, .d-syn { margin: 0 clamp(18px, 4vw, 44px); }
 .d-verdict {
@@ -586,6 +594,30 @@ svg.scatter { display: block; overflow: visible; }
 .mb-val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
 .mb-extra { text-align: right; font-variant-numeric: tabular-nums; }
 .mb-head span:nth-child(3), .mb-head span:nth-child(4) { text-align: right; }
+
+/* The decision clock (Track record) and a title's forecast path (sheet): vermilion is what we forecast, the dashed
+   ink line the rolling seasons, and the tinted zone from the premiere on is the nowcast. */
+.clock-panel .lead-sm { max-width: 760px; margin-bottom: var(--s-4); }
+.clock-panel .lead-sm b { color: var(--text); }
+.clock .ck-now { fill: var(--text); opacity: 0.04; }
+.clock .ck-prem { stroke: var(--shu); stroke-width: 2; stroke-dasharray: 5 4; opacity: 0.8; }
+.clock .ck-now-t { fill: var(--faint); font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.clock .ck-stage { fill: var(--shu); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; }
+.clock .ck-zero { stroke: var(--line-2); }
+.clock .ck-band, .traj .tj-band { fill: var(--shu); opacity: 0.13; }
+.clock .ck-err, .traj .tj-err { stroke: var(--shu); stroke-width: 6; stroke-linecap: round; opacity: 0.18; }
+.clock .ck-line, .traj .tj-line { fill: none; stroke: var(--shu); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.clock .ck-rline { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.clock .ck-roll { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
+.clock .ck-pt, .traj .tj-pt { fill: var(--shu); stroke: var(--surface); stroke-width: 2; cursor: pointer; transition: r 0.15s; }
+.clock .ck-pt:hover, .clock .ck-pt:focus-visible, .traj .tj-pt:hover, .traj .tj-pt:focus-visible { r: 8; outline: none; stroke: var(--text); }
+.traj .tj-actual { stroke: var(--text); stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.7; }
+.traj .tj-actual-t { fill: var(--text); font-size: 11.5px; font-weight: 700; }
+.traj-host { width: 100%; }
+.ck-key i { display: inline-block; }
+.ck-k-line { width: 18px; height: 10px; border-top: 2.5px solid var(--shu); background: color-mix(in srgb, var(--shu) 20%, transparent); }
+.ck-k-roll { width: 18px; border-top: 2px dashed var(--muted); }
+.ck-k-now { width: 14px; height: 12px; border-left: 2px dashed var(--shu); background: color-mix(in srgb, var(--text) 10%, transparent); }
 
 /* ------------------------------------------------------------------ method */
 
