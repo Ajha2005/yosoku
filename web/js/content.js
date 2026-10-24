@@ -23,3 +23,37 @@ export const SOURCES = [
   { name: "AniList metadata", tells: "Genres, tags, source, studio, audience and sequel links.",
     bias: "Today's popularity and score include the outcome, so they are never model inputs.", reliability: "Reliable; audience tags are the only age proxy in public data." },
 ];
+
+// The source scorecard on the Method page. Coverage and agreement come from the data (predictions.json "sources");
+// the columns here are judgements, written once. `part` links a row to its numbers.
+export const SCORECARD = [
+  { part: "youtube", name: "YouTube trailer comments from India", role: "Index 50% · model input",
+    india: "High: Indian scripts, Hinglish or naming India", lead: "Months: trailers come out before launch",
+    bias: "Top 200 titles only; newest 1,000 comments per video; misses Indian English" },
+  { part: "streaming", name: "Netflix India Top 10", role: "Index 33%",
+    india: "High: India's own chart", lead: "None: only after release",
+    bias: "Netflix titles only, from June 2021; a top-10 list hides the rest" },
+  { part: "wikipedia", name: "Wikipedia pageviews", role: "Index 17% · model input",
+    india: "Low: English views are global", lead: "Weeks: articles exist before launch",
+    bias: "Indian-language articles exist mostly for big titles" },
+  { name: "AniList metadata", role: "Model input", coverage: "1,400 of 1,400",
+    india: "None: describes the show", lead: "Full: known at announcement",
+    bias: "Popularity and score are today's values, so they are never inputs" },
+  { name: "India box office", role: "Check only", coverage: "6 films",
+    india: "High", lead: "None: only after release",
+    bias: "Six films: rank correlation 0.60, but its 95% range is −0.50 to 1.00" },
+];
+
+export const NOT_USED = [
+  { name: "Google Trends", why: "Collecting the history takes nights at a polite request rate; there was not time. Its 40% index weight was rescaled over the other parts." },
+  { name: "X / Twitter", why: "No usable free public API for historical posts." },
+  { name: "AniList popularity and score", why: "Measured today, so they include how the show turned out: using them would be hindsight (leakage)." },
+  { name: "Merchandise and ticket sales", why: "No public source by title and country." },
+  { name: "Reddit", why: "Collector built (Arctic Shift archive) and wired into the models, but global rather than India-specific, so not part of the index; optional." },
+];
+
+// The headline: what the backtest says about when to decide.
+export const WAITING = {
+  title: "Don't commit on a cold forecast",
+  lead: "Test-market first, then decide one week after launch.",
+};
