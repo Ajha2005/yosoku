@@ -72,6 +72,63 @@
    }
   }
  },
+ "label_checks": {
+  "parts_agree": true,
+  "ranking_holds": false,
+  "passed": false,
+  "weight_shift": 0.1,
+  "weakest_shift": "wikipedia",
+  "box_office": [
+   {
+    "anilist_id": 178788,
+    "name": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
+    "india_gross_inr": 660000000,
+    "basis": "net after about two weeks (run still going)",
+    "source": "https://respawn.outlookindia.com/pop-culture/pop-culture-news/chainsaw-man-has-modest-indian-debut-amid-demon-slayer-craze",
+    "india_index": 73.3
+   },
+   {
+    "anilist_id": 142770,
+    "name": "Suzume",
+    "india_gross_inr": 100000000,
+    "basis": "gross (PVRINOX milestone)",
+    "source": "https://www.animenewsnetwork.com/news/2023-05-26/suzume-anime-film-crosses-10-crore-at-indian-box-office/.198464",
+    "india_index": 66.5
+   },
+   {
+    "anilist_id": 131573,
+    "name": "Jujutsu Kaisen 0",
+    "india_gross_inr": 57000000,
+    "basis": "gross (Sacnilk)",
+    "source": "https://www.sacnilk.com/quicknews/Jujutsu_Kaisen_0_2022_Box_Office_Collection_Day_Wise_Worldwide",
+    "india_index": 49.2
+   },
+   {
+    "anilist_id": 171627,
+    "name": "Chainsaw Man – The Movie: Reze Arc",
+    "india_gross_inr": 54200000,
+    "basis": "17-day total",
+    "source": "https://respawn.outlookindia.com/pop-culture/pop-culture-news/chainsaw-man-reze-arc-box-office-rebound-and-3d-renewal-in-india",
+    "india_index": 85.7
+   },
+   {
+    "anilist_id": 153658,
+    "name": "HAIKYU!! The Dumpster Battle",
+    "india_gross_inr": 49500000,
+    "basis": "total to 22 June 2024 (Sacnilk lists 3.6 crore gross)",
+    "source": "https://www.sacnilk.com/movie/Haikyuu_The_Dumpster_Battle_2024",
+    "india_index": 32.0
+   },
+   {
+    "anilist_id": 158928,
+    "name": "SPY x FAMILY CODE: White",
+    "india_gross_inr": 3300000,
+    "basis": "gross (Sacnilk; low confidence)",
+    "source": "https://www.sacnilk.com/movie/Spy_X_Family_Code_White_2024",
+    "india_index": 58.6
+   }
+  ]
+ },
  "dub_typical": 0.26,
  "evaluation": {
   "moments": {

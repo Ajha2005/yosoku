@@ -9,21 +9,22 @@ current ones.
 | 0:20 | Forecasts, open any 2024 title | Open it at Cold: Test-market, and the real result is far off. Switch the stage to T+7: the range now holds the real result. "T+7 is a nowcast: that launch week is part of the 28 days we measure, and we say so. So: test-market first, decide at T+7." |
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
-| 1:40 | Track record | Forecast against reality for 2024. At T−28 a simple rule (sequel carry-over) makes the forecasts, because our model did not beat it; the page says so. |
-| 2:20 | Method | Source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). |
+| 1:40 | Track record | Forecast against reality for 2024. At Cold a simple rule (genre average) makes the forecasts, because our model did not beat it; the page says so. From T−28 on, our model beats every simple rule. |
+| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). |
 | 2:45 | Forecasts, *Upcoming* | Dated forecasts for unreleased titles: "check us when they air." (Only once `data/upcoming/` is collected.) |
 
 ## Questions to prepare for
 
 - **Isn't T+7 just week 1 predicting month 1?** Partly, yes. Its inputs (launch-week views and comments) are inside the
-  label window (days 0–27). That is why we call it a nowcast, and why a simple global-buzz rule does almost as well (average miss
-  10.5 against 9.4). The value is the decision rule: wait a week before committing.
-- **Gate G2 fails. Is the index trustworthy?** The three parts barely agree with each other today (details in `reports/label.md`, not shown on the site).
-  They measure different things (talk, viewing, reading), few titles have more than one, and the Wikipedia part
-  missed the biggest shows until its articles were fixed. Six films' India box office ranks with the index at 0.60,
-  but six is too few to prove anything (range −0.50 to 1.00).
-- **How big are the samples?** 234 labelled titles of 1,400; 48 in the 2024 test. Titles were chosen by popularity, so
+  label window (days 0–27). That is why we call it a nowcast, and why a simple rule (India trailer comments alone) comes close (average miss
+  9.5 against 8.3). The value is the decision rule: wait a week before committing.
+- **Gate G2 fails. Is the index trustworthy?** Narrowly. All three parts now agree positively (YouTube and Netflix most,
+  at 0.51), but moving the Wikipedia weight by 0.10 reshuffles the ranking more than our target allows (details in
+  `reports/label.md`; the Method tab shows the pass/fail in plain words). The parts measure different things (talk, viewing,
+  reading) and few titles have all three. Six films' India box office ranks with the index at 0.43, but six is too few to
+  prove anything (range −0.60 to 1.00); the Method tab lists the six beside their index.
+- **How big are the samples?** 319 labelled titles of 1,400; 52 in the 2024 validation set. Titles were chosen by popularity, so
   hits are over-represented, and every result is measured on that set.
-- **Why not more modelling?** The lookalike and blend models barely beat simple rules; the limit is data, not the
+- **Why not more modelling?** The models beat simple rules once buzz exists, but cold forecasts stay near chance; the limit is data, not the
   model. More India-specific data (streaming beyond Netflix) would help most.
 - **Why no X/Twitter or merchandise?** No usable public source by title and country.
