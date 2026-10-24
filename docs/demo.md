@@ -11,14 +11,21 @@ current ones.
 | 0:50 | Same sheet, scroll | Dub demand (share of Indian comments asking for a Hindi/Tamil dub, against a typical title), the language-hub map with its evidence count and the *thin evidence* flag, and the release-window what-if ("the window makes no clear difference"). |
 | 1:20 | Print icon on the sheet | "Every title prints as a one-page brief for an executive who will never open the site." |
 | 1:40 | Track record | Forecast against reality for 2024. At Cold a simple rule (genre average) makes the forecasts, because our model did not beat it; the page says so. From T−28 on, our model beats every simple rule. |
-| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia, prequels and metadata add nothing. |
+| 2:00 | Track record, *When will we know?* | The decision clock: "Before the premiere, waiting barely helps: 0.30 seven weeks out, 0.36 one week out. Three days after it, 0.54. So: license small and early, decide the dub on day 3 to 7." Then open Solo Leveling's sheet, *How the forecast moved*: 53 at Cold, 58 at T−28, 83 by day 3; it ended at 80. |
+| 2:20 | Method | How a forecast becomes a verdict (and which method makes each stage), the index checks with the six India box office films beside their index, then the source scorecard: coverage, India-specificity, lead time, bias, and the sources we rejected and why (X, AniList popularity as leakage). Then *What each signal is worth*: genre, format, source and audience carry Cold, global Wikipedia carries T−28, Wikipedia plus YouTube carry T+7, and Indian-language Wikipedia and prequels add nothing. |
 | 2:45 | Forecasts, *Upcoming* | 50 Winter 2027 titles, sealed on 24 October 2026 with a SHA-256 fingerprint in a public ledger: "we cannot quietly change these. Check us when they air." |
 
 ## Questions to prepare for
 
 - **Isn't T+7 just week 1 predicting month 1?** Partly, yes. Its inputs (launch-week views and comments) are inside the
   label window (days 0–27). That is why we call it a nowcast, and why a simple rule (India trailer comments alone) comes close (average miss
-  9.5 against 8.3). The value is the decision rule: wait a week before committing.
+  9.5 against 8.4). The value is the decision rule: wait until day 3 to 7 before committing, and the decision clock shows why.
+- **The forecast numbers went down since the last version. Why?** Two inputs leaked: one flagged the titles we had
+  searched on YouTube, which were picked by today's popularity, and one counted Indian-language Wikipedia articles
+  written after the forecast date. Removing them cost 0.02 to 0.03 of rank correlation. Honest numbers over flattering ones.
+- **What happens as data keeps coming in?** A title's data stops changing 90 days after its premiere, so the daily
+  job only collects and forecasts the titles still in play, and the archive never has to be recomputed. Labels sit on a
+  frozen scale, so new titles never move old ones. `docs/roadmap.md`, section 4.
 - **Gate G2 fails. Is the index trustworthy?** Narrowly. All three parts now agree positively (YouTube and Netflix most,
   at 0.51), but moving the Wikipedia weight by 0.10 reshuffles the ranking more than our target allows (details in
   `reports/label.md`; the Method tab shows the pass/fail in plain words). The parts measure different things (talk, viewing,
@@ -33,4 +40,5 @@ current ones.
   `predictions/sealed/LEDGER.md`, dated by its git commit. `sha256sum` on the downloaded file must match it, and
   `python -m yosoku.seal --score` will grade them once the titles air.
 - **Which data actually matters?** Method → *What each signal is worth*. Global Wikipedia attention and India's
-  YouTube comments carry the forecasts; Indian-language Wikipedia and metadata add nothing measurable.
+  YouTube comments carry the forecasts; Indian-language Wikipedia adds nothing measurable, and genre, format, source
+  and audience matter only at Cold.

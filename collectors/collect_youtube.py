@@ -21,7 +21,9 @@ already cached, so a daily run catches every comment as it comes (a single fetch
 --comment-pages pages, and a busy trailer loses its launch week); it is searched again every --search-every days,
 so trailers posted later are found; and its videos' views, likes and comment counts are logged each day to
 
-  data/youtube_video_stats.csv  one row per video per day it was collected (YouTube keeps no history of these)
+  data/youtube_video_stats.csv  one row per video per day collected, for the last 30 days only: YouTube keeps no
+                                history of these counts, and its API policies let a client keep statistics it is
+                                not authorised by the channel to keep for 30 days at most
 
     python collectors/collect_youtube.py
     python collectors/collect_youtube.py --limit 100 --budget 9000 --no-hindi
@@ -51,6 +53,7 @@ VIDEO_FIELDS = [
 ]
 COMMENT_FIELDS = ["anilist_id", "video_id", "comment_id", "published_at", "likes", "replies", "text"]
 STATS_FIELDS = ["video_id", "collected_on", "views", "likes", "comments"]
+STATS_DAYS = 30  # YouTube API policies: statistics kept without the channel owner's authorisation, 30 days at most
 
 
 class QuotaExceeded(Exception):
@@ -189,10 +192,13 @@ def log_stats(youtube, video_ids, today):
     return rows
 
 
-def append_stats(rows):
-    """Add rows to youtube_video_stats.csv; a video collected twice on one day keeps the later counts."""
+def append_stats(rows, today):
+    """Add rows to youtube_video_stats.csv and drop those older than STATS_DAYS; a video collected twice on one day
+    keeps the later counts."""
     path = data_file(STATS_CSV)
-    kept = {(r["video_id"], r["collected_on"]): r for r in (read_csv(path) if path.exists() else []) + rows}
+    oldest = (today - timedelta(days=STATS_DAYS)).isoformat()
+    kept = {(r["video_id"], r["collected_on"]): r for r in (read_csv(path) if path.exists() else []) + rows
+            if r["collected_on"] > oldest}
     write_csv(path, list(kept.values()), STATS_FIELDS)
 
 
@@ -279,7 +285,7 @@ def main():
         fetch_stats(youtube, list(dict.fromkeys(video_id for *_, video_id in found)))
         if args.refresh:  # titles in play: today's counts, logged because YouTube keeps no history of them
             live = [v for title, _, _, v in found if is_active(parse_date(title["start_date"]), today)]
-            append_stats(log_stats(youtube, list(dict.fromkeys(live)), today))
+            append_stats(log_stats(youtube, list(dict.fromkeys(live)), today), today)
     except QuotaExceeded:
         print("No quota left for view counts; they will be filled in on the next run.")
 

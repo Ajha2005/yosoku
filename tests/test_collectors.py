@@ -95,16 +95,18 @@ def test_refresh_leaves_finished_titles_alone(tmp_path, monkeypatch):
     assert cached_ids("v-old") == ["a2", "a1"] and cached_ids("v-new") == ["b2", "b1"]
 
 
-def test_view_counts_are_logged_once_a_day(tmp_path, monkeypatch):
+def test_view_counts_are_logged_once_a_day_and_kept_30_days(tmp_path, monkeypatch):
     monkeypatch.setattr(collect_youtube, "CACHE", tmp_path / "raw")
     monkeypatch.setattr(common, "_data_dir", tmp_path)
     youtube = FakeYouTube()
+    log = lambda day: collect_youtube.append_stats(collect_youtube.log_stats(youtube, ["v1", "v2"], day), day)  # noqa: E731
     for day in (date(2026, 12, 1), date(2026, 12, 1), date(2026, 12, 2)):
-        collect_youtube.append_stats(collect_youtube.log_stats(youtube, ["v1", "v2"], day))
-    rows = common.read_csv(tmp_path / collect_youtube.STATS_CSV)
-    assert [(r["video_id"], r["collected_on"]) for r in rows] == [
-        ("v1", "2026-12-01"), ("v2", "2026-12-01"), ("v1", "2026-12-02"), ("v2", "2026-12-02")]
+        log(day)
+    rows = lambda: [(r["video_id"], r["collected_on"]) for r in common.read_csv(tmp_path / collect_youtube.STATS_CSV)]  # noqa: E731
+    assert rows() == [("v1", "2026-12-01"), ("v2", "2026-12-01"), ("v1", "2026-12-02"), ("v2", "2026-12-02")]
     assert youtube.units_used == 3  # one call per day for both videos
+    log(date(2026, 12, 31))  # 30 days after 1 December: that day's counts are dropped (YouTube's API policies)
+    assert rows() == [("v1", "2026-12-02"), ("v2", "2026-12-02"), ("v1", "2026-12-31"), ("v2", "2026-12-31")]
 
 
 def test_titles_are_active_until_their_last_window_closes():
