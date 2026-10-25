@@ -11,6 +11,7 @@ Thapar Japan Hackathon · GEEK-PS-01 · Team shecodes
 
 [![tests](https://github.com/Ajha2005/yosoku/actions/workflows/tests.yml/badge.svg)](https://github.com/Ajha2005/yosoku/actions/workflows/tests.yml)
 ![python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776ab)
+[![MIT license](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 
 [**Demo video**](docs/Yosoku_shecodes_demo.mp4) · [**Pitch deck**](docs/Yosoku_shecodes_deck.pdf) · [**Quick start**](#quick-start) · [**How it works**](#how-it-works) · [**Results**](#results-at-a-glance) · [**Docs**](#documentation)
 
@@ -321,9 +322,12 @@ tools/         one-off generators (the India map outlines)
 | [`docs/Yosoku_shecodes_demo.mp4`](docs/Yosoku_shecodes_demo.mp4) | a 2:26 captioned demo video with voice-over |
 | [`reports/`](reports/) | the generated evidence: evaluation, ablation, decision clock, verdicts, label checks, alerts |
 
-## Data and credits
+## License, data and credits
 
 Built by **Team shecodes** for the Thapar Japan Hackathon (problem statement GEEK-PS-01).
+
+The code, documents and site are released under the [MIT License](LICENSE). The data they use comes from third-party
+sources, each with its own terms (below), which the MIT License does not change.
 
 Data from [AniList](https://anilist.co), [Wikimedia](https://www.wikimedia.org) (Wikidata and pageviews), the
 [YouTube Data API](https://developers.google.com/youtube/v3), [Netflix's Top 10](https://www.netflix.com/tudum/top10)
