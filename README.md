@@ -116,7 +116,7 @@ Leave out `--no-covers` to fetch cover art from AniList.
 | 1 | `collect_titles.py` | AniList API | ~3 min | `titles.csv` |
 | 2 | `collect_wikipedia.py` | Wikidata + Wikipedia pageviews API | ~15–30 min | `wiki_articles.csv`, `wiki_articles_fixes.csv`, `wikipedia_daily.csv` |
 | 3 | `collect_netflix.py` | Netflix Top 10 download (94 countries) | ~1 min | `netflix_india_top10.csv`, `netflix_matches.csv`, `netflix_countries.csv` |
-| 4 | `collect_youtube.py` | YouTube Data API (needs a key) | a few days (daily quota) | `youtube_videos.csv`, `youtube_comments.csv` |
+| 4 | `collect_youtube.py` | YouTube Data API (needs a key) | a few days (daily quota) | `youtube_videos.csv`, `youtube_comments.csv` (git-ignored) |
 | 4b | `detect_languages.py` (optional) | IndicLID language ID on the trailer comments (needs `pip install fasttext`) | ~1 min, plus a 230 MB model download | `comment_languages.csv` |
 | 5 | `collect_trends.py` | Google Trends via `pytrends-modern` | overnight or longer | `trends_terms.csv`, `trends_india_daily.csv`, `trends_india_states.csv`, `trends_countries.csv` |
 | 5b | `collect_reddit.py` (optional) | Reddit posts, read from the Arctic Shift archive | ~15–20 min for 200 titles | `reddit_posts.csv`, `reddit_titles.csv` |
@@ -449,11 +449,10 @@ score, comment count and flair are kept, never usernames or post text.
 The optional language step runs AI4Bharat's [IndicLID](https://github.com/AI4Bharat/IndicLID) model on your own laptop
 (a one-off 230 MB download), so no comment text is sent anywhere. Only its verdict per comment is saved.
 
-**Comment text should not be in a public repo.** `data/youtube_comments.csv` is committed today, although decision 6
-in `docs/decisions.md` says it never should be. `merge.py` now keeps `data/youtube_comment_daily.csv`, the same
-comments counted per title, video and day with no text, and the whole pipeline runs from it. To take the text out:
-every teammate first keeps a private copy (git deletes it from working copies once the removal is pulled), then
-`git rm --cached data/youtube_comments.csv` and commit. It stays in git's history until that is rewritten, which is
+**Comment text is not in the repo.** `data/youtube_comments.csv` (decision 6 in `docs/decisions.md`) is git-ignored and
+was taken out of the committed files; it stays on the laptops that collected it. `merge.py` keeps
+`data/youtube_comment_daily.csv`, the same comments counted per title, video and day with no text, and the whole
+pipeline runs from it. The text is still in git's history; removing it from there means rewriting that history, which is
 the repo owner's call.
 
 **A partner's figures are confidential.** `data/partner/` is git-ignored except its README and template, the amounts

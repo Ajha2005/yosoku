@@ -32,7 +32,7 @@ and a daily job. The rest needs data (section 6), licences (section 7) and partn
 | 5 | 80% ranges held 63–67% of 2024 titles | Set season by season from earlier seasons only, they held 78–82% of titles up to 2023. In 2024 they held for 79–85% of the 33 titles whose index has no YouTube part and 37–47% of the 19 that have one: YouTube was collected for the 200 titles most popular today, so the 2024 ones are mostly hits, which beat their forecasts | **Partly fixed:** titles not released yet, which all get YouTube data, take their range from the misses of the titles whose index includes YouTube (± 21.9 / 18.7 / 12.7). Label v2 item 4 removes the cause |
 | 6 | One 52-title season cannot pick a method | A rank correlation on 52 titles has a 95% interval about ± 0.27 wide. The 2024 split and the 20 rolling seasons disagreed on the best method at least four times (section 3) | **Proposal:** pick on the rolling seasons, pre-registered before the next seal |
 | 7 | The collectors could not run daily | YouTube comments and searches were cached forever after the first fetch, so an upcoming title never got its launch-week comments or its later trailers | **Fixed:** `collect_youtube.py --refresh`, `collect_titles.py --keep`, `yosoku/daily.py` |
-| 8 | Personal data in a public repo | 25 MB of YouTube comment text is committed, against decision 6 in `docs/decisions.md` | **Mitigated:** the pipeline runs from per-day counts (2 MB, no text). Removing the text is the team's call (section 7) |
+| 8 | Personal data in a public repo | 25 MB of YouTube comment text is committed, against decision 6 in `docs/decisions.md` | **Fixed:** the pipeline runs from per-day counts (2 MB, no text) and the text file is no longer committed. It remains in git's history (section 7) |
 | 9 | Commercial terms unchecked | AniList needs a licence above $150 a month of revenue; YouTube limits keeping API data without the channel owner's authorisation to 30 days | **Open** (section 7). The new view-count log keeps 30 days only |
 | 10 | IndicLID read only 45% of the comments | Its labels predated the full YouTube rerun: 74,542 of 167,323 comments in Latin letters had one, and 92 of 197 titles had comments read by the word list alone | **Fixed:** every comment labelled (37 more India comments in the first 28 days, 661 → 698); the daily job labels new ones |
 | 11 | One comment can move a title by 30 points | 152 of 200 titles have no India comment in their first 28 days, all tied at the bottom of the YouTube part, which weighs 50%. Kaguya-sama Season 3's first one moved it from 50 to 82 | **Open:** label v2 (section 6, item 5) |
@@ -223,20 +223,16 @@ before the anime was announced.
 | Wikimedia pageviews | Open data | Attribute; the per-country counts carry noise by design |
 | Comment text | Personal data: India's Digital Personal Data Protection Act 2023; Japan's APPI for Japanese clients | Keep counts, not text |
 
-Taking the comment text out of the public repo:
-
-1. Each teammate keeps a private copy of `data/youtube_comments.csv`, or keeps `data/raw/youtube/`. Do this first:
-   once step 2 is pulled, git deletes the file from every working copy.
-2. `git rm --cached data/youtube_comments.csv` and commit. It is already in `.gitignore`, and the pipeline runs from
-   `data/youtube_comment_daily.csv`.
-3. The file stays in git's history. Removing it from history means rewriting it (`git filter-repo`) and
-   force-pushing, after which everyone clones again. That is the repo owner's decision.
+The comment text is out of the public repo's files (`data/youtube_comments.csv` is git-ignored; the pipeline runs from
+`data/youtube_comment_daily.csv`). Anyone who pulls the removal should first keep a private copy, or keep
+`data/raw/youtube/`, because git deletes the file from working copies. It stays in git's history. Removing it from there
+means rewriting it (`git filter-repo`) and force-pushing, after which everyone clones again. That is the repo owner's
+decision.
 
 ## 8. Plan
 
 **Next two weeks**
 - Merge this branch; show the decision clock in the demo.
-- Take the comment text out of the public repo (section 7).
 - Collect the 103 trailers cut at 1,000 comments in full (needs the YouTube key; one day of quota).
 - Adopt AniList's dated list counts as an input: the largest gain found where licences are signed (90 days out,
   0.18 → 0.24 over the rolling seasons). Write the collector and check AniList's commercial terms first.
