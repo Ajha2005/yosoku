@@ -1,42 +1,147 @@
+<div align="center">
+
+<img src="web/img/og.png" alt="Yosoku 予測: will it land in India?" width="860">
+
 # Yosoku 予測
 
-Predicting how Japanese anime will perform in India before the launch decision is made.
-Thapar Japan Hackathon, GEEK-PS-01, Team shecodes.
+### Will this anime land in India?
+A launch verdict for every title, with the evidence behind it, before the licensing decision is made.
 
-The repo has three parts, in the order the data flows:
+Thapar Japan Hackathon · GEEK-PS-01 · Team shecodes
 
-1. **Collectors** (`collectors/`): small Python scripts that download public data from official APIs and save it
-   as CSV files in `data/`, ending in `data/dataset.csv` (one row per title).
-2. **Model pipeline** (`yosoku/`): turns that data into the India Demand Index (the label), forecasts it at three
-   moments around launch, tests the forecasts against simple rules, and gives every title a verdict:
-   Launch, Test-market or Hold.
-3. **Website** (`web/`): a static dashboard for Vercel with the forecasts, the track record, the method and a guide
-   to what India is actually watching.
+[![tests](https://github.com/Ajha2005/yosoku/actions/workflows/tests.yml/badge.svg)](https://github.com/Ajha2005/yosoku/actions/workflows/tests.yml)
+![python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776ab)
 
-## What it gives a Japanese rights holder
+[**Demo video**](docs/Yosoku_shecodes_demo.mp4) · [**Pitch deck**](docs/Yosoku_shecodes_deck.pdf) · [**Quick start**](#quick-start) · [**How it works**](#how-it-works) · [**Results**](#results-at-a-glance) · [**Docs**](#documentation)
 
-| Question | What Yosoku answers | Where |
+</div>
+
+---
+
+## The problem
+
+Streaming platforms, Japanese licensors, cinema chains and dubbing studios decide every season which anime to bring to
+India, when to commit and which language to dub first. The sums are in crores, and before launch there is little
+India-specific evidence to go on.
+
+## What Yosoku does
+
+Yosoku turns public data into an **India Demand Index** (a 0–100 score for how much India watched, discussed and read
+about a title in its first 28 days), forecasts that score at three moments around the Japanese premiere, and turns each
+forecast into a verdict:
+
+- **Launch**: the low end of the 80% range clears the launch line, so commit.
+- **Test-market**: the range straddles the lines, so license small and decide again when buzz arrives.
+- **Hold**: the high end sits under the hold line, so wait.
+
+Every verdict comes with its range, a launch plan and the evidence it rests on.
+
+| A rights holder asks | Yosoku answers | Where |
 | --- | --- | --- |
 | Should we sell this title's India rights? | Launch, Test-market or Hold, with an 80% range and a launch plan | every forecast sheet |
-| Can we trust the numbers? | Forecasts for unreleased titles are sealed with a SHA-256 fingerprint before they air and graded after; the site shows the sealed numbers | Forecasts → Upcoming, `predictions/sealed/` |
+| Can we trust the numbers? | Forecasts for unreleased titles are sealed with a SHA-256 fingerprint before they air and graded after | Forecasts → Upcoming, [`predictions/sealed/`](predictions/sealed/LEDGER.md) |
 | When do we know enough to decide? | The decision clock: little changes before the premiere, most in its first days | Track record |
-| How likely is a hit? | From T+7, and day 3 in the daily forecasts, the chance of a top-third result; 94% of its calls of 70% or more came true | forecast sheets at T+7 |
+| How likely is a hit? | From T+7 (and day 3 in the daily forecasts), the chance of a top-third result; 94% of its calls of 70% or more came true | forecast sheets at T+7 |
 | Which dub language, if any? | Dub demand and the language hubs of Indian fans' comments, read in Hinglish too | forecast sheets |
 | What is India asking for? | Indian comments asking for a dub or for where to watch, title by title: 1,197 on 68 titles | Demand guide |
-| Where else will it travel? | The countries whose Netflix Top 10 similar titles reached, beyond Japan, in 88 countries | forecast sheets, Demand guide → Beyond India |
+| Where else will it travel? | The countries whose Netflix Top 10 similar titles reached beyond Japan, across 88 countries | forecast sheets, Demand guide |
 | How do we get it approved? | A one-page 稟議書 in Japanese: conclusion, grounds, precedents, risks, next decision dates, approval boxes | the 稟 button on every sheet |
-| What is it worth in yen? | A range in yen for every forecast, once a partner shares what 30 or more past titles earned in India | `python -m yosoku.money` (private) |
+| What is it worth in yen? | A yen range for every forecast, once a partner shares what 30 or more past titles earned in India | `python -m yosoku.money` (private) |
 
-## Where things stand
+## How it works
+
+```mermaid
+flowchart LR
+    A["Public data<br/>AniList · Wikipedia<br/>YouTube · Netflix"] --> B["Collectors<br/>data/*.csv"]
+    B --> C["India Demand<br/>Index<br/>(the label)"]
+    C --> D["Forecasts<br/>and checks"]
+    D --> E["Verdicts,<br/>ranges, plans<br/>and seals"]
+    E --> F["Dashboard<br/>web/"]
+```
+
+**The label.** The India Demand Index blends three parts, each a percentile rank against a frozen pool of 1,400 titles: YouTube
+trailer comments from India (50%), streaming (Netflix India's Top 10, 33%) and Wikipedia pageviews (17%). A title needs
+two parts to be labelled, and the ranking pool is frozen (`labels/reference_v1.csv`), so collecting new titles never
+moves an existing label. Indian comments are found with a word list that reads Hinglish and with AI4Bharat's IndicLID.
+
+**Three forecast moments.** Days are counted from the Japanese premiere (day 0). The index measures days 0 to 27.
+
+| Moment | Made | What it sees |
+| --- | --- | --- |
+| **Cold** | any time before launch | metadata only: genre, format, source, audience, the closest past titles, the prequel's index |
+| **T−28** | 28 days before the premiere | adds buzz from days −56 to −29 |
+| **T+7** | 7 days after the premiere | adds days −28 to −1 and launch week (days 0 to 6); a nowcast, since those days sit inside the 28 measured |
+
+The **Blend** is the main model at every moment. Simple rules (genre average, sequel carry-over, India YouTube alone,
+global Wikipedia) are the baselines it must beat, and where it does not, the rule makes the forecasts and the report
+says so. The **decision clock** refits the Blend for every day from −49 to +14, and the daily job uses it to forecast
+every title still in play. Nothing is trained on the future: a test checks that no input uses data from after its
+forecast moment.
+
+| Step | Module | Writes |
+| --- | --- | --- |
+| Label | `yosoku/labels.py` | `labels/label_v1.csv`, `reports/label.md` (agreement, stability and box-office checks) |
+| Evaluate | `yosoku/evaluate.py` | `reports/evaluation.md` / `.json`: models against baselines on 2024 |
+| Ablation | `yosoku/ablation.py` | `reports/ablation.md` / `.json`: what each signal is worth |
+| Clock | `yosoku/clock.py` | `reports/clock.md` / `.json`: a forecast made on each day, scored |
+| Decide | `yosoku/decision.py` | `predictions/predictions.json`, `reports/decision.md`: verdicts, ranges, plans |
+| Daily | `yosoku/daily.py` | `predictions/history.csv`, `reports/alerts.md`: titles in play, every day |
+| Seal | `yosoku/seal.py` | `predictions/sealed/`: forecasts frozen before titles air, with fingerprints |
+| Export | `yosoku/export_web.py`, `yosoku/guide.py` | `web/data/`: the site's data and the Demand guide |
+
+The split is by Japanese start date: train 2019–2023, validate 2024, test 2025. The 2025 titles are scored once, at the
+very end (`python -m yosoku.run --final`). Reasoning behind every choice is in [`docs/decisions.md`](docs/decisions.md),
+and every module is described in the [operations guide](docs/operations.md#from-data-to-forecasts).
+
+## Results at a glance
+
+On the **52 titles of 2024**, which the models never trained on:
+
+| Moment | Forecast made by | Rank correlation with the real index (95% interval) | Verdicts: Launch / Test-market / Hold |
+| --- | --- | --- | --- |
+| Cold | genre average (the model does not beat it here) | 0.12 (−0.13 to 0.37) | 0 / 52 / 0 |
+| T−28 | Blend | 0.23 (−0.08 to 0.49) | 4 / 48 / 0 |
+| T+7 | Blend | **0.66** (0.47 to 0.80) | 11 / 40 / 1 |
+
+- **Launch calls held up.** At T−28, 4 of 4 titles called Launch ended in the top third of real India demand; at T+7, 10
+  of 11. Chance alone puts a title there one time in three. The verdict lines were tuned on these same titles, so these
+  rates are optimistic: the sealed forecasts and the 2025 test are the honest checks.
+- **The decision clock.** Over 20 rolling seasons, rank correlation improves little before the premiere (0.29 seven weeks
+  out, 0.38 one week out), then jumps (0.41 at the premiere, 0.53 on day 3). So: license small and early, decide the dub
+  on day 3 to 7.
+- **A chance of a hit.** From T+7, the chance of a top-third result beats the base rate (Brier skill 0.19),
+  and 94% of its 17 calls of 70% or more came true.
+- **Sealed ahead of time.** 50 forecasts for Winter 2027 titles were sealed on 24 October 2026, before any of them aired.
+
+### Honest limits
+
+We would rather show these than have you find them:
+
+- **Cold forecasts are near chance.** Before any buzz the ranges are too wide to separate titles, so every title is
+  Test-market there, which is itself the advice. The model loses to the genre average on 2024 alone (gate G4).
+- **T+7 is a nowcast.** Its inputs sit inside the 28 days it measures. The value is the rule it supports: wait until
+  day 3 to 7 before committing.
+- **The 80% ranges held for 63–67% of 2024 titles** (target 70–90%): 79–85% of titles without YouTube data, but only
+  37–47% of the 19 with it, because YouTube was collected for the 200 titles most popular today, which are mostly hits.
+  Ranges for upcoming titles are set from those titles' misses, and are wider.
+- **The index checks fail narrowly (gate G2).** All three parts agree positively, but lowering the Wikipedia weight by 0.10
+  still reshuffles the ranking (Kendall's tau 0.70, target 0.9). The box-office check covers only 6 films.
+- **No Google Trends this round.** The index is YouTube, streaming and Wikipedia only. YouTube covers the top 200
+  titles; upcoming titles have none yet (the API key was rejected), so they get cold forecasts only.
+
+The files in [`reports/`](reports/) are generated and are the source of truth if any number here drifts.
+
+<details>
+<summary><b>Full status notes, as of 24 October 2026</b></summary>
 
 As of 24 October 2026. The files in `reports/` are generated and are the source of truth if these lines drift.
 
 - **Data:** 1,400 titles, the 50 most popular Japanese anime of every season from 2019 to 2025. The 200 most popular
   also have YouTube trailer comments (trailer search only, `--no-hindi`). The collected CSVs are committed in `data/`
-  (the Reddit files are not), so the model and the site run without any API key (see "Run the model and the site").
+  (the Reddit files are not), so the model and the site run without any API key (see [Quick start](#quick-start)).
   The comments are also kept as per-day counts without text (`data/youtube_comment_daily.csv`, and the comments asking
-  for a dub or for where to watch in `data/youtube_ask_daily.csv`), and the pipeline runs from those alone: see
-  "Responsible data use" for taking the text out of the public repo. Netflix's Top 10 is kept for India
+  for a dub or for where to watch in `data/youtube_ask_daily.csv`), and the pipeline runs from those alone, so the comment text
+  itself is not in the repo (see [Responsible data use](#responsible-data-use)). Netflix's Top 10 is kept for India
   (`netflix_matches.csv`, part of the index) and for every other country (`netflix_countries.csv`: 160 titles reached
   a Top 10 in 88 countries within six months of their Japanese start; India comes joint 36th, with 13 titles).
 - **No Google Trends this round**, so the India Demand Index is YouTube 50%, Streaming 33%, Wikipedia 17%.
@@ -68,420 +173,159 @@ As of 24 October 2026. The files in `reports/` are generated and are the source 
 - **What to build next** is in `docs/roadmap.md`: a review of the model, how the project scales as data arrives
   every day, what would make Japanese rights holders buy it, and the licences to check before selling it.
 
-## Setup (once per laptop)
+</details>
 
-1. **Install Python 3.10 or newer** from [python.org](https://www.python.org/downloads/).
-   On Windows, tick **"Add python.exe to PATH"** in the installer.
-2. **Get the code** (or download the ZIP from GitHub):
-   ```
-   git clone https://github.com/ajha2005/yosoku.git
-   cd yosoku
-   ```
-3. **Create a virtual environment**, a private folder for this project's libraries:
-   - Mac / Linux: `python3 -m venv .venv` then `source .venv/bin/activate`
-   - Windows: `py -m venv .venv` then `.venv\Scripts\activate`
+### Check our sealed forecasts
 
-   Your prompt now starts with `(.venv)`. Run the activate command again whenever you open a new terminal.
-4. **Install the libraries:**
-   ```
-   pip install -r requirements.txt
-   ```
-5. **Only if you will collect data:** copy `.env.example` to a new file named `.env` and fill it in.
-   `YOUTUBE_API_KEY` is needed for step 4 of the collectors (see below); `YOSOKU_CONTACT` is an optional email or URL
-   that Wikipedia can reach you on. `.env` holds your API key, so it is git-ignored. Never commit it or paste it in chat.
-
-## Run the model and the site
-
-The collected CSVs are committed, so this needs no key and no collecting. Run it from the `yosoku` folder with the
-virtual environment active:
+The 50 Winter 2027 forecasts are in [`predictions/sealed/`](predictions/sealed/). A seal is never rewritten: its
+SHA-256 fingerprint sits in the public [ledger](predictions/sealed/LEDGER.md), dated by the commit that added it.
 
 ```
-python -m yosoku.run                    # label, evaluation, decision clock and verdicts (about 2 minutes)
-python -m yosoku.export_web --no-covers # copies the forecasts to web/data/ and builds the Demand guide
-python -m http.server -d web 8000       # the dashboard, at http://localhost:8000
-python -m pytest tests                  # about 2 minutes
+python -m yosoku.seal --verify     # every sealed file still matches its ledger fingerprint
+python -m yosoku.seal --score      # after the titles air and are labelled: how the sealed forecasts did
 ```
 
-GitHub Actions runs the tests on every push and pull request (`.github/workflows/tests.yml`).
-For a presentation, `docs/demo.md` is a 3-minute walk through the site, with answers to the questions judges are likely to ask.
+Without Python, `sha256sum predictions/sealed/2026-10-24-winter2027.json` (on Windows,
+`certutil -hashfile <file> SHA256`) must print the fingerprint in the ledger.
 
-It rewrites `labels/`, `reports/` and `predictions/` with the same content as is committed. A few scipy "constant
-input" warnings during the evaluation are normal: some baselines predict the same value for every title.
-Leave out `--no-covers` to fetch cover art from AniList.
+> **A note on commit hashes.** On 25 October 2026 the repository's commit history was rewritten once, to credit the team
+> as the authors of every commit. File contents, dates and trees are unchanged, so the fingerprints still verify, but
+> commit hashes changed. The sealed file and ledger record the model commit as `9d28896`; that commit is now `3872758`.
 
-## Collecting data
+## The dashboard
 
-| Step | Script | Source | Time | Output in `data/` |
-|---|---|---|---|---|
-| 1 | `collect_titles.py` | AniList API | ~3 min | `titles.csv` |
-| 2 | `collect_wikipedia.py` | Wikidata + Wikipedia pageviews API | ~15–30 min | `wiki_articles.csv`, `wiki_articles_fixes.csv`, `wikipedia_daily.csv` |
-| 3 | `collect_netflix.py` | Netflix Top 10 download (94 countries) | ~1 min | `netflix_india_top10.csv`, `netflix_matches.csv`, `netflix_countries.csv` |
-| 4 | `collect_youtube.py` | YouTube Data API (needs a key) | a few days (daily quota) | `youtube_videos.csv`, `youtube_comments.csv` (git-ignored) |
-| 4b | `detect_languages.py` (optional) | IndicLID language ID on the trailer comments (needs `pip install fasttext`) | ~1 min, plus a 230 MB model download | `comment_languages.csv` |
-| 5 | `collect_trends.py` | Google Trends via `pytrends-modern` | overnight or longer | `trends_terms.csv`, `trends_india_daily.csv`, `trends_india_states.csv`, `trends_countries.csv` |
-| 5b | `collect_reddit.py` (optional) | Reddit posts, read from the Arctic Shift archive | ~15–20 min for 200 titles | `reddit_posts.csv`, `reddit_titles.csv` |
-| 6 | `merge.py` | the files above | seconds | `dataset.csv` (one row per title), `youtube_comment_daily.csv`, `youtube_ask_daily.csv` |
+`web/` is a static site (HTML, CSS and JavaScript, no server and no build step) that Vercel can host as it is.
 
-Steps 5 and 5b were **not** collected for the current dataset (no Trends this round, and no Reddit file is committed);
-`merge.py` and the models simply run without them. The scripts still work if you want them back.
+| Tab | What it shows |
+| --- | --- |
+| **Overview** | the poster wall and the headline numbers |
+| **Forecasts** | a verdict card for every title; each sheet has the forecast and range, the launch plan, what moves the forecast, its path day by day, the closest past titles, where else it could travel, the India language-hub map, dub demand and the release-window what-if. It prints as a one-page brief in English, or as a Japanese 稟議書 |
+| **Track record** | the 2024 backtest against simple rules, how often the ranges held and why, and the decision clock |
+| **Method** | how a forecast becomes a verdict, the index checks, what each signal is worth, and where the data comes from and can mislead |
+| **Demand guide** | what India has watched, what kind of title gets there, where in India, what India is asking for, beyond India, and a check-your-title tool |
 
-### Getting a YouTube API key (free, ~5 minutes)
+The business story (what following the calls would have been worth, who pays, expansion, why us) is told in the final
+presentation rather than on the site: see the [pitch deck](docs/Yosoku_shecodes_deck.pdf) and
+[`docs/demo.md`](docs/demo.md), which also has a 3-minute walk-through and prepared answers.
 
-1. Open [console.cloud.google.com](https://console.cloud.google.com/), sign in and create a project (e.g. "yosoku").
+## Quick start
+
+No API key and no data collection needed: the collected CSVs are committed. You need
+[Python 3.10 or newer](https://www.python.org/downloads/) (on Windows, tick **Add python.exe to PATH**).
+
+```bash
+git clone https://github.com/Ajha2005/yosoku.git
+cd yosoku
+
+python3 -m venv .venv
+source .venv/bin/activate              # Windows: py -m venv .venv, then .venv\Scripts\activate
+pip install -r requirements.txt
+
+python -m yosoku.run                   # label, evaluation, decision clock and verdicts (about 2 minutes)
+python -m yosoku.export_web --no-covers   # copies the forecasts to web/data/ and builds the Demand guide
+python -m http.server -d web 8000      # the dashboard, at http://localhost:8000
+python -m pytest tests                 # the test suite (about 2 minutes)
+```
+
+`yosoku.run` rewrites `labels/`, `reports/` and `predictions/` with the committed numbers; on a different version of
+numpy or scikit-learn the last digit of some floats can differ. A few scipy "constant input" warnings are normal: some
+baselines predict the same value for every title. Leave out `--no-covers` to fetch cover art from AniList (the site
+links to AniList's image servers rather than copying the images).
+
+GitHub Actions runs the tests, and checks that every site script parses and every JSON file loads, on every push and
+pull request ([`.github/workflows/tests.yml`](.github/workflows/tests.yml)).
+
+To put the site online, import the repo on [vercel.com/new](https://vercel.com/new), set **Root Directory** to `web`,
+leave the framework as **Other** and deploy. The steps are in the
+[operations guide](docs/operations.md#the-website-static-for-vercel).
+
+## Collect your own data
+
+Optional: the committed CSVs are enough to run everything. Each collector reads a public source and writes into `data/`;
+`merge.py` ends in `data/dataset.csv`, one row per title.
+
+| Step | Script | Source | Needs |
+| --- | --- | --- | --- |
+| 1 | `collect_titles.py` | AniList | nothing (run first) |
+| 2 | `collect_wikipedia.py` | Wikidata and Wikipedia pageviews | nothing |
+| 3 | `collect_netflix.py` | Netflix Top 10 (about 94 countries) | nothing |
+| 4 | `collect_youtube.py` | YouTube Data API | a free API key |
+| 4b | `detect_languages.py` | IndicLID on the trailer comments | `pip install fasttext` (optional) |
+| 5, 5b | `collect_trends.py`, `collect_reddit.py` | Google Trends, Reddit via Arctic Shift | optional; not collected this round |
+| 6 | `merge.py` | the files above | nothing |
+
+Copy `.env.example` to `.env` and fill it in (`.env` is git-ignored: never commit it or paste it in chat).
+`YOSOKU_CONTACT` is an email or URL that Wikipedia can reach you on; `YOUTUBE_API_KEY` is only for step 4.
+
+<details>
+<summary><b>Getting a YouTube API key (free, about 5 minutes)</b></summary>
+
+1. Open [console.cloud.google.com](https://console.cloud.google.com/), sign in and create a project (for example "yosoku").
 2. **APIs & Services → Library**, search **YouTube Data API v3**, click **Enable**.
 3. **APIs & Services → Credentials → Create credentials → API key**.
-4. Put it in `.env` as `YOUTUBE_API_KEY=...`. In the key's settings, restricting it to the YouTube Data API v3 is a good idea.
+4. Put it in `.env` as `YOUTUBE_API_KEY=...`. Restricting the key to the YouTube Data API v3 is a good idea.
 
-Each key gets 10,000 quota units a day, so three teammates with a key each collect three times as fast (see below).
+Each key gets 10,000 quota units a day, so teammates with a key each collect faster: see
+[sharing the YouTube work](docs/operations.md#sharing-the-youtube-work-between-three-keys).
 
-### Running the collectors
+</details>
 
-Run them from the `yosoku` folder with the virtual environment active:
+Everything else, in the [operations guide](docs/operations.md): running the collectors, choosing titles, forecasting
+unreleased titles and sealing them, the daily job, other markets (Indonesia, Thailand, Brazil and Mexico are set up),
+what to check by hand, and the traps in the data.
 
-```
-python collectors/collect_titles.py
-python collectors/collect_wikipedia.py
-python collectors/collect_netflix.py
-python collectors/collect_youtube.py
-python collectors/detect_languages.py  # optional, after YouTube
-python collectors/collect_trends.py    # skipped this round
-python collectors/collect_reddit.py    # optional
-python collectors/merge.py
-```
-
-- **Step 1 comes first**; the others all read `data/titles.csv`. After that, steps 2–5 are independent and can run at the same time in separate terminals.
-  If you do use Trends (step 5), **start it early**: it is the slowest.
-- Every script explains its options with `--help`, e.g. `python collectors/collect_titles.py --help`.
-- **Stopping is safe.** Finished work is cached in `data/raw/` (git-ignored); rerun the same command and it carries on.
-- `merge.py` works with whatever has been collected so far, so you can run it any time.
-
-### Choosing titles
-
-`collect_titles.py` keeps the 50 most popular Japanese anime of each season from 2019 to 2025
-(about 1,400 titles). Change that with `--start-year`, `--end-year`, `--per-season` and `--seasons`.
-YouTube and Trends are slow, so they only take the `--limit` most popular titles (default 200).
-Each title comes with its synopsis and its well-fitting, spoiler-free AniList tags, which the
-lookalike model uses.
-
-### Upcoming titles (live forecasts)
-
-Unreleased titles get their own folder, so they never mix into the training data. Give every step
-the same `--data-dir`:
+## Repository layout
 
 ```
-python collectors/collect_titles.py --data-dir data/upcoming --start-year 2027 --end-year 2027 --seasons WINTER
-python collectors/collect_wikipedia.py --data-dir data/upcoming
-python collectors/collect_youtube.py --data-dir data/upcoming
-python collectors/merge.py --data-dir data/upcoming
-python -m yosoku.run                   # picks up data/upcoming/ and adds the titles to predictions.json
+collectors/    data collectors for AniList, Wikipedia, Netflix, YouTube, Trends and Reddit, plus merge.py
+yosoku/        the model pipeline (labels to verdicts), the daily job, sealing, and the site export
+data/          collected CSVs; data/upcoming/ holds unreleased titles; data/partner/ stays private
+labels/        the India Demand Index of every labelled title, and the frozen ranking pool
+predictions/   forecasts and verdicts, the daily forecast log, and the sealed forecasts
+reports/       generated reports (fix the code, not the report)
+web/           the dashboard: a static site for Vercel; web/data/ is written by yosoku.export_web
+docs/          operations guide, decisions, roadmap, demo script, pitch deck and demo video
+tests/         pipeline, collector and site-export tests on fake data and a fake YouTube API
+tools/         one-off generators (the India map outlines)
+.github/       CI: tests, and site syntax checks, on every push and pull request
 ```
 
-(Add `collect_trends.py --data-dir data/upcoming` before `merge.py` if Trends is back in use.)
-
-**Seal the forecasts** so anyone can check later that they were made before launch:
-
-```
-python -m yosoku.seal            # writes predictions/sealed/<date>-<season>.json and its SHA-256 in LEDGER.md
-python -m yosoku.export_web      # copies the seal to the site (Forecasts → Upcoming shows it)
-git add predictions/sealed web/data && git commit -m "Seal forecasts" && git push
-python -m yosoku.seal --verify   # any time: every sealed file still matches its fingerprint
-python -m yosoku.seal --score    # after the titles air and are labelled: how the sealed forecasts did
-```
-
-A seal is never rewritten; sealing again on another day adds a new file. The 50 Winter 2027 forecasts were sealed
-on 24 October 2026.
-An upcoming title gets a cold forecast right away, and T−28 / T+7 forecasts once those dates pass and its
-Wikipedia and YouTube data are collected. Their windows are still running, so these titles are fetched fresh on
-every run; rerun them before the demo for the latest buzz. The cache in `data/raw/` is shared between folders,
-which is safe because it is keyed by title. Once a title's 28 days are over, `python -m yosoku.labels` gives it an
-India Demand Index on the frozen scale, and `seal --score` can grade it.
-
-### Every day: the titles in play
-
-A title's data stops changing 90 days after its Japanese premiere (its last window, Netflix weeks, closes then), so
-only the titles before that point need collecting and forecasting again. One command does it all:
-
-```
-python -m yosoku.daily                # collect, label, forecast today, log, alert, publish to web/data
-python -m yosoku.daily --no-collect   # the same from the files already collected (no network)
-```
-
-- It runs the collectors for `data/upcoming`: `collect_titles.py --keep` (picks up announced start dates and never
-  drops a title already forecast), Wikipedia, Netflix (the weekly file fetched again on Wednesdays),
-  `collect_youtube.py --refresh`, which fetches only comments newer than the cached ones, searches again weekly for
-  new trailers and logs today's view counts (kept 30 days, as YouTube's API policies require), then IndicLID on the
-  comments it has not labelled yet, so new comments are read the way the old ones were. IndicLID needs
-  `pip install fasttext` on the machine that runs the job; without it, the job says so and uses the word list alone.
-- Each title in play is forecast as of today with the decision clock's model; the forecast goes into
-  `predictions/history.csv` (one row per title per day), and each upcoming title's sheet on the site draws it.
-- `reports/alerts.md` lists titles whose forecast has left the 80% range of their last verdict, or crossed a
-  verdict line, once buzz is in; `predictions/alerts.json` carries the same for the site, which shows the day's
-  status and alerts on Forecasts → Upcoming and a *Moved* badge on those titles. Verdicts themselves still change
-  only at the three stages.
-- Run it once a day on a machine whose disk persists: the comment refresh builds on the cache in `data/raw/`. With cron:
-  `30 6 * * * cd ~/yosoku && .venv/bin/python -m yosoku.daily`, then commit `data/upcoming`, `predictions/history.csv`,
-  `reports/alerts.md` and `web/data`. Rerun `python -m yosoku.run` weekly, or when titles get labels.
-
-### Other markets (countries)
-
-India is the default market. A data folder can be collected for another country instead: its Netflix
-Top 10 chart and its own Wikipedia languages replace India's (English and Japanese stay as global buzz).
-The markets are listed in `collectors/markets.py` (India, Indonesia, Thailand, Brazil, Mexico); adding one is a line there.
-
-```
-python collectors/collect_titles.py --data-dir data/markets/id --market ID
-python collectors/collect_wikipedia.py --data-dir data/markets/id
-python collectors/collect_netflix.py --data-dir data/markets/id
-python collectors/merge.py --data-dir data/markets/id
-python -m yosoku.labels --data-dir data/markets/id --out-dir out/id
-```
-
-The folder remembers its market (`market.txt`), so only the first step needs `--market`, and a folder never mixes two.
-Trailer comments, language detection and Trends are India only (the word list that finds Indian commenters has no
-equivalent elsewhere yet), so another market's index has two parts, Netflix and Wikipedia. Report and site wording
-still says India: the site is the India product. No other market has been collected yet.
-
-### Sharing the YouTube work between three keys
-
-Each person runs a different slice of the top 200:
-
-```
-python collectors/collect_youtube.py --limit 70                # person 1: titles 1–70
-python collectors/collect_youtube.py --limit 140 --skip 70     # person 2: titles 71–140
-python collectors/collect_youtube.py --limit 200 --skip 140    # person 3: titles 141–200
-```
-
-Rerun the same command on the following days until it says it is done. Then copy everyone's
-`data/raw/youtube/` folders into one, and run `python collectors/collect_youtube.py` once more on that
-laptop: it rebuilds the CSV files from the cache and only spends a few units on view counts.
-
-## From data to forecasts
-
-After `merge.py`, `python -m yosoku.run` runs the label, evaluate, ablation, clock and decide steps below in order.
-`yosoku/features.py`, `models.py` and `split.py` hold the model inputs, the models and the train / validate / test
-split they share.
-
-| Step | Module | Writes |
-|---|---|---|
-| Label | `yosoku/labels.py` | `labels/label_v1.csv`, `reports/label.md` (agreement, stability and box-office checks: gate G2); the first run also freezes the ranking pool in `labels/reference_v1.csv` |
-| Evaluate | `yosoku/evaluate.py` | `reports/evaluation.md` and `.json` (models against baselines on 2024: gate G4); with `--final`, `reports/final.md` |
-| Ablation | `yosoku/ablation.py` | `reports/ablation.md` and `.json` (what each signal is worth) |
-| Clock | `yosoku/clock.py` | `reports/clock.md` and `.json` (the decision clock: a forecast made on each day from −49 to +14, scored) |
-| Decide | `yosoku/decision.py` | `predictions/predictions.json`, `reports/decision.md` (verdicts: gate G5) |
-| Daily | `yosoku/daily.py` | `predictions/history.csv`, `reports/alerts.md` (titles in play, every day; not part of `run`) |
-| Seal | `yosoku/seal.py` | `predictions/sealed/` (forecasts frozen before titles air, and their fingerprints; not part of `run`) |
-| Travel | `yosoku/travel.py` | where else a title could travel, for `decision` and `guide` (from `data/netflix_countries.csv`) |
-| Money | `yosoku/money.py` | `data/partner/money.json`, never committed (only with a partner's `data/partner/revenue.csv`; not part of `run`) |
-| Guide | `yosoku/guide.py` | `web/data/guide.json` (run by `export_web`) |
-| Export | `yosoku/export_web.py` | copies the forecasts to `web/data/` and fetches cover art; `--with-money` adds the yen ranges |
-
-- Forecast moments: **cold** (metadata only, any time before launch), **T−28** and **T+7**, each using only data
-  from before its cutoff. Days are counted from the Japanese premiere (day 0): T−28 is made 28 days before it and sees
-  days −56 to −29 (a fixed window, not the gap between the trailer and the premiere); T+7 is made 7 days after it and
-  adds days −28 to −1 and launch week, days 0 to 6. The Method tab and each forecast sheet draw this timeline.
-  The split is by Japanese start date: train 2019–2023, validate 2024, test 2025.
-- The Blend is the main model at every stage; at cold its inputs are the metadata, the closest past titles and the
-  prequel's index. The decision clock refits it for the days in between (`features.stage` cuts the same windows off
-  at any day), and the daily job uses it for titles in play.
-- If the model does not beat the best simple rule at a moment, that rule makes the forecasts there and the report says so (gate G4 fallback).
-- The 80% ranges come from how far forecasts missed on the rolling seasons: for the 2024 backtest, only seasons
-  before 2024; for titles not released yet, every season, the 2024 misses included, and only the titles whose index
-  includes YouTube, as theirs will. In 2024 the ranges held for 79–85% of the other titles but 37–47% of those: YouTube
-  was collected for the 200 titles most popular today, so the 2024 ones are mostly hits. A stage already sealed shows
-  the sealed numbers on the site, with today's forecast beside them.
-- Each title also carries two described, not modelled, extras that change neither the forecast nor the verdict:
-  **dub demand** (the share of Indian trailer comments on its closest past titles that ask for or about an
-  Indian-language dub) and a **release-window what-if** (how labelled past titles did in the festive, board-exam, IPL
-  and other windows; a window is shown only with 10 or more titles). `docs/decisions.md` has the reasoning.
-- From T+7, and from day +3 in the daily forecasts, every forecast also gets a **chance of a top-third result**: a
-  logistic curve on the forecast, fitted on the rolling seasons, shown only where it beats the base rate by 0.10
-  (Brier skill). At T+7 it does (0.19), and 94% of its calls of 70% or more came true; before the premiere it does not.
-- **Where else it could travel:** every forecast lists the countries whose Netflix Top 10 its 10 most similar earlier
-  titles reached within six months, beyond Japan, beside how often anime in general did (`yosoku/travel.py`, from
-  `data/netflix_countries.csv`, which `collect_netflix.py` writes with stricter matching than India's).
-- **In yen, with a partner's figures:** `python -m yosoku.money` fits what 30 or more past titles earned in India
-  (`data/partner/revenue.csv`, never committed) to their index and gives every forecast a range in yen. The site
-  shows it only when exported with `python -m yosoku.export_web --with-money`, for a deployment the partner agreed
-  to. `data/partner/README.md` says what to send.
-- The 2025 test titles are scored once, at the very end: `python -m yosoku.run --final`.
-- Tests, including the check that no input uses data from after its forecast moment: `python -m pytest tests`.
-- See `docs/decisions.md` for what was fixed in advance and what changed since (the change log at the bottom).
-
-## The website (static, for Vercel)
-
-`web/` is the dashboard, a plain static site (no server, no build step). Vercel can host it because it is only
-HTML, CSS, JavaScript and a few JSON files. Five tabs:
-
-- **Overview:** the poster wall and the headline numbers.
-- **Forecasts:** a verdict card for every title. Its sheet has the forecast and range (for a sealed title, the sealed
-  numbers with today's forecast beside them), from T+7 the chance of a top-third result, the launch plan, what moves
-  the forecast, its forecast path (day by day for the 2024 titles, from the daily log for upcoming ones), the closest
-  past titles, where else it could travel, the India language-hub map, dub demand, the release-window what-if, and
-  what it is worth in money. It prints as a one-page brief in English, or as a Japanese 稟議書 with the 稟 button.
-  Forecasts → Upcoming carries the seal and the daily job's status and alerts.
-- **Track record:** the 2024 backtest against simple rules, how often the ranges held and why, and the decision clock
-  ("When will we know?").
-- **Method:** how a forecast becomes a verdict, the index checks, how the project keeps up as data arrives every
-  day, what each signal is worth, and where the data comes from and where it can mislead.
-- **Demand guide:** what India has watched (Netflix India's Top 10), what kind of title gets there, where in India,
-  what India is asking for, beyond India (where anime reaches Netflix's Top 10 in 88 countries), and a check-your-title tool.
-
-The business story (what following the calls would have been worth, who pays, expansion, why us) is for the final
-presentation, not the site: `docs/demo.md` has it, and `web/js/business.js`, kept in the repo but not linked, renders it.
-
-**Update it after every pipeline run:**
-
-```
-python -m yosoku.run                # writes predictions/predictions.json
-python -m yosoku.export_web         # copies it to web/data/ and fetches cover art from AniList
-git add web/data predictions && git commit -m "Update website data" && git push
-```
-
-- The **Demand guide** tab ("what is India actually watching?") is built by `python -m yosoku.guide`, which `export_web` runs for you.
-  It counts real signals only: which anime reached Netflix India's weekly Top 10 (`data/netflix_matches.csv`), the
-  India-flagged YouTube trailer comments in `data/dataset.csv`, with the ones asking for a dub (by language) or for when
-  and where to watch listed title by title ("What India is asking for", `data/youtube_ask_daily.csv`), and every
-  other country's Netflix Top 10 ("Beyond India", `data/netflix_countries.csv`). It does not use the forecast model or
-  the India Demand Index.
-- **Money stays off the public site.** Yen ranges appear only when the site is exported with `--with-money`, for a
-  private deployment the partner who shared the figures has agreed to. Without them, each sheet says what it would take.
-- The site shows the real forecasts in `predictions/predictions.json`. If that file is missing, it falls back to
-  `web/data/mock_predictions.json`, made from **fake** data, with a yellow "Preview data" banner.
-  Mock titles get generated Japanese-print posters instead of covers, because their made-up ids collide with real AniList ids.
-- `--no-covers` skips the AniList lookup (offline) and keeps `covers.json` as it is. Covers are links to AniList's image servers,
-  not copies, and a cover that fails to load falls back to the generated poster.
-- Look at it locally: `python -m http.server -d web 8000`, then open <http://localhost:8000>.
-
-**Deploy on Vercel (about 2 minutes):**
-
-1. Push this repo to GitHub, then go to [vercel.com/new](https://vercel.com/new) and import it.
-2. Set **Root Directory** to `web`. Leave the framework as **Other** and the build and output settings empty.
-3. Click **Deploy**. Every push to the branch redeploys. Or from a terminal: `cd web && npx vercel --prod`.
-4. Optional: for link previews on social media, change `og:image` in `web/index.html` to the full address of
-   `img/og.png` on your domain (crawlers need an absolute URL).
-
-`web/vercel.json` adds a strict content-security policy. If you add a script or image from another site, allow it there.
-`tools/build_india_map.py` rebuilt `web/js/india-map.js` from district boundaries; you never need to rerun it.
-
-## Check these by hand
-
-Automatic matching makes mistakes. Before modelling, look through:
-
-- **`wiki_articles.csv`**: rows with `match_method` = `search` were guessed. Fix the article names by hand and rerun step 2
-  (the 62 `fixed` rows are earlier hand fixes, listed in `wiki_articles_fixes.csv`).
-  Rows with `match_method` = `fallback` are swapped automatically when the matched English article had no
-  views around launch (it was written later); `wiki_articles_fixes.csv` lists the old and new names (action
-  `fallback`). **That swap has not been run on the real data yet**, so the file has no `fallback` rows today.
-  A sequel swapped to its main article counts attention to the whole show, not only that season, so check them when they appear.
-- **`netflix_matches.csv`**: names are matched loosely, and live-action remakes (One Piece, Yu Yu Hakusho) share their anime's name.
-  To drop a wrong match, add a line `anilist_id,show_title,reason` to `data/netflix_match_exclusions.csv`
-  (first line: `anilist_id,show_title,reason`) and rerun step 3, then step 6. The ones found so far are already listed there.
-- **`netflix_countries.csv`**: the other countries' charts are matched more strictly (a film row only to an anime film,
-  by its exact name; a TV row only to a series; only within 180 days of the start), because a shared name is likelier
-  somewhere among 90-odd countries. The exclusions file applies here too; look through the busiest show names.
-- **`india_box_office.csv`**: India box office for 6 anime films, typed in by hand, for the money check in `reports/label.md`.
-  Each row says whether the figure is net or gross and links its source; some runs were still going. Only the ranking is used.
-  Add films as reliable figures turn up, then rerun `python -m yosoku.labels`.
-- **`youtube_videos.csv`**: a search can return the wrong video. To fix one, edit the list of video IDs in
-  `data/raw/youtube/search/<anilist_id>_trailer.json` (or `_hindi.json`) so the right video comes first, then rerun step 4.
-- **`reddit_posts.csv`**: posts are matched by name (`match_name`). Short or common names pull in unrelated posts,
-  and a sequel's name also matches posts about earlier seasons. Look through the busiest titles.
-- **`trends_terms.csv`**: the Trends topic used for each title. If one is wrong, find the right topic on
-  [trends.google.com](https://trends.google.com/): its ID is in the page address after `q=`, e.g. `%2Fg%2F11abc123`
-  means `/g/11abc123`. Add a line `anilist_id,term` with that ID (or a plain search phrase) to
-  `data/trends_overrides.csv` (first line: `anilist_id,term`), delete `data/raw/trends/<anilist_id>.json` and rerun step 5.
-
-## Know this before modelling
-
-- **Blank is not zero.** A blank cell means "no data": no Hindi Wikipedia article, not on Netflix, or
-  started before June 2021 when Netflix's country charts begin. Don't fill blanks with 0 in the India Demand Index.
-- **`popularity` and `average_score` are today's values**, so they include how well a title did. Fine for
-  choosing titles, but don't use them as model inputs. Choosing titles by popularity also favours hits, and for the
-  same reason whether a title was searched on YouTube (the top 200 by today's popularity) is not an input either.
-- **YouTube view counts are from the day you collected them**, not from launch. For backtesting, use the
-  dated comment counts (`yt_comments_pre`, `yt_comments_month1`).
-- **Comments are fetched newest first, up to 1,000 per video**, so a very popular trailer's launch-week comments may be missing.
-  Compare with the video's total in the `comments` column. 103 of the 600 trailers hit the limit: on 66 the comments
-  before the premiere are at least partly cut, and on 14 (13 titles) none of the index's 28 days is left. Collecting
-  those 103 in full costs at most about 6,700 quota units. Titles kept up to date with `--refresh` (the daily job) do
-  not have this gap: each run fetches only the comments newer than the cached ones.
-- **Labels are on a frozen scale.** Each part is a percentile among the titles in `labels/reference_v1.csv`; a title
-  collected later is placed among them without moving them. Delete that file only to start a new label version.
-- **Reddit is global attention, not India.** It has no country signal, so Reddit is not part of the India Demand
-  Index. It is a model input instead: `yosoku/features.py` reads `reddit_posts.csv` and adds `reddit_posts_<window>`
-  (log of the post count, same day windows and cutoffs as Wikipedia) to the T−28 and T+7 models, under "Global buzz".
-  It only runs when `reddit_posts.csv` exists, and that file is git-ignored and not in the repo today: the committed
-  results were made without it. Share it between laptops outside git, or the model silently runs without it.
-  Scores and comment counts are archived after the post's date, so only post counts are used.
-  The `reddit_*` columns in `dataset.csv` are for looking at the data.
-- **Trends values are relative** (0–100 within each request). `trends_month1_vs_anchor` puts titles on one scale by
-  dividing by the fixed anchor term; keep the same anchor (`--anchor`, default "Naruto") for the whole collection.
-  There is no Trends data in the current dataset, so the Search part of the index is left out.
-- **India comments** (`yt_india_*`, `yt_share_<hub>`) come from a word list in `collectors/india_signals.py`:
-  Indian scripts, Hinglish typed in Latin letters, or naming India. Only about 1 in 70 comments match, and fewer
-  than 1 in 2,000 use an Indian script. When `comment_languages.csv` exists, AI4Bharat's IndicLID also counts short
-  Hinglish the word rules miss ("Kab release hogi ye movie"): 858 Hinglish comments instead of 561, and in an earlier
-  hand check nearly all of the extra ones were real Hinglish. Every comment in Latin letters has an IndicLID label, and
-  the daily job labels new ones as they come.
-  IndicLID only knows Indian languages and English, so on its own it calls Spanish, Indonesian and emoji Indian,
-  and it often names the wrong Indian language. A comment therefore also needs two Hindi words, and its exact
-  language is not used. `comment_languages.csv` is committed, so only one person needs fastText and the model.
-  `yt_dub_share` is the share of a title's India comments that ask for or about an Indian-language dub
-  ("hindi dub kab aayega", "please dub in tamil"; comments with a link are left out, they are mostly channels announcing a dub).
-- **A missing measurement is blank, not 0.** 223 matched English Wikipedia articles have no pageviews around
-  launch, because they were written later (often "<show> season 1" pages), and comments were not collected for
-  92 of the 200 YouTube titles. `merge.py` and the models treat both as unknown, not as zero attention, and a title
-  needs two index parts to get a label: that cut the labelled titles from 336 to 234 (see `docs/decisions.md`).
-  Rerunning step 2 will swap the Wikipedia articles itself (see `fallback` above), and with the YouTube comments
-  finished, about 100 more titles should be labelled.
+`data/raw/` (the API cache) and `.env` (your keys) are git-ignored.
 
 ## Responsible data use
 
-Public data only: official APIs where they exist (AniList, Wikimedia, YouTube) and Netflix's published file.
-No usernames are stored. Google Trends has no open API, so `pytrends-modern` reads the public website;
-the script deliberately goes slowly, so please don't lower `--pause` much.
+- **Public data only:** official APIs where they exist (AniList, Wikimedia, YouTube) and Netflix's published weekly file.
+  No usernames are stored. Google Trends has no open API, so `pytrends-modern` reads the public website and goes slowly
+  on purpose. Reddit posts come from the public [Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift) archive,
+  not from reddit.com, and only a post's title, date, score, comment count and flair are kept.
+- **No comment text in the repo.** Comments are kept as per-day counts with no text (`data/youtube_comment_daily.csv`,
+  `data/youtube_ask_daily.csv`), and the whole pipeline runs from those. The raw text file stays on the laptops that
+  collected it and is git-ignored. Language detection runs on your own laptop (a one-off 230 MB model), so no comment
+  text is sent anywhere; only its verdict per comment is saved.
+- **A partner's figures are confidential.** `data/partner/` is git-ignored except its README and template, the amounts
+  fitted on the figures stay in `data/partner/money.json`, and nothing reaches the site without `--with-money`.
+- **Before charging anyone,** check the sources' commercial terms: AniList's API is free only below $150 a month of
+  revenue and forbids mass collection; YouTube's API policies limit how long API data may be kept (30 days without the
+  channel owner's authorisation, which is why the daily view-count log keeps 30 days). Section 7 of
+  [`docs/roadmap.md`](docs/roadmap.md) has the details.
 
-Reddit posts come from the public [Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift) archive, not from
-reddit.com, so nothing is scraped from Reddit's site. Arctic Shift is free and asks users to be considerate, so the
-script waits between requests; for large jobs it recommends the monthly dumps instead. Only a post's title, date,
-score, comment count and flair are kept, never usernames or post text.
+## Documentation
 
-The optional language step runs AI4Bharat's [IndicLID](https://github.com/AI4Bharat/IndicLID) model on your own laptop
-(a one-off 230 MB download), so no comment text is sent anywhere. Only its verdict per comment is saved.
+| Read | For |
+| --- | --- |
+| [`docs/operations.md`](docs/operations.md) | collecting data, the daily job, sealing, other markets, deploying, what to check by hand |
+| [`docs/decisions.md`](docs/decisions.md) | the six choices that shape the dataset, and the dated change log; read before changing a default |
+| [`docs/roadmap.md`](docs/roadmap.md) | a review of the model, scaling with daily data, what Japanese buyers need, licences, the plan |
+| [`docs/demo.md`](docs/demo.md) | the 3-minute demo, the business story and prepared answers |
+| [`docs/Yosoku_shecodes_deck.pdf`](docs/Yosoku_shecodes_deck.pdf) | the 10-slide pitch deck (editable: [`.pptx`](docs/Yosoku_shecodes_deck.pptx)) |
+| [`docs/Yosoku_shecodes_demo.mp4`](docs/Yosoku_shecodes_demo.mp4) | a 2:26 captioned demo video with voice-over |
+| [`reports/`](reports/) | the generated evidence: evaluation, ablation, decision clock, verdicts, label checks, alerts |
 
-**Comment text is not in the repo.** `data/youtube_comments.csv` (decision 6 in `docs/decisions.md`) is git-ignored and
-was taken out of the committed files; it stays on the laptops that collected it. `merge.py` keeps
-`data/youtube_comment_daily.csv`, the same comments counted per title, video and day with no text, and the whole
-pipeline runs from it. The text is still in git's history; removing it from there means rewriting that history, which is
-the repo owner's call.
+## Data and credits
 
-**A partner's figures are confidential.** `data/partner/` is git-ignored except its README and template, the amounts
-fitted on the figures stay in `data/partner/money.json`, and nothing reaches the site without `--with-money`.
+Built by **Team shecodes** for the Thapar Japan Hackathon (problem statement GEEK-PS-01).
 
-**Before charging anyone,** check the sources' commercial terms: AniList's API is free only below $150 a month of
-revenue and forbids mass collection; YouTube's API policies limit how long API data, statistics included, may be kept
-(30 days without the channel owner's authorisation, which is why the daily view-count log keeps 30 days). Section 7 of
-`docs/roadmap.md` has the details and what to do about each.
-
-## Layout
-
-```
-collectors/   the data collectors (common.py holds shared helpers, india_signals.py the word list for India comments)
-yosoku/       the model pipeline: labels, features, models, split, evaluate, ablation, clock, decision, daily, seal, travel, money,
-              plus guide and export_web for the site
-labels/       label_v1.csv: the India Demand Index of every labelled title (written by yosoku.labels); reference_v1.csv: the frozen ranking pool
-predictions/  predictions.json: forecasts and verdicts (written by yosoku.decision); history.csv: the daily forecast log (yosoku.daily);
-              sealed/: sealed forecasts and their fingerprints
-reports/      generated reports: label.md, evaluation.md / .json, ablation.md / .json, clock.md / .json, decision.md, alerts.md,
-              and final.md after --final; fix the code, not the report
-web/          the dashboard: a static site for Vercel (see "The website"); web/data/ is written by yosoku.export_web, and holds the mock forecasts;
-              web/js/ringi.js builds the Japanese 稟議書
-tools/        one-off generators (the India map outlines)
-tests/        pipeline, collector and website-export tests on fake data (tests/fake_data.py) and a fake YouTube API
-docs/         decisions.md: the six choices that shape the dataset, and the change log; read it before changing a default
-              demo.md: the 3-minute demo path and prepared answers
-              roadmap.md: the review, how it scales with daily data, what Japanese buyers need, licences, the plan
-data/         CSV outputs; data/raw/ is the cache and is git-ignored; data/upcoming/ holds unreleased titles;
-              data/partner/ holds a partner's figures, never committed (see its README)
-.env          your API key and contact (git-ignored; copy from .env.example)
-```
+Data from [AniList](https://anilist.co), [Wikimedia](https://www.wikimedia.org) (Wikidata and pageviews), the
+[YouTube Data API](https://developers.google.com/youtube/v3), [Netflix's Top 10](https://www.netflix.com/tudum/top10)
+lists and the [Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift) Reddit archive; Indian-language detection by
+AI4Bharat's [IndicLID](https://github.com/AI4Bharat/IndicLID). Check each source's terms before commercial use.
